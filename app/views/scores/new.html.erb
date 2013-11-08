@@ -1,0 +1,10 @@
+<h1>Ny scoreberegning</h1>
+
+<%= form_tag scores_path, :method => :post do %>
+  <%= render :partial => 'form' %>
+
+  <%= submit_tag t('create'), :class => 'button add' %>
+<% end %>
+
+<br>
+<%= back_button scores_path %>

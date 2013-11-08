@@ -1,0 +1,14 @@
+<% @subtitle = "Vælg spørgeskemaer der skal fjernes" %>
+<% @group = @score %>
+
+<h3>Fjern spørgeskemaer fra score-beregning <%= @score.title %></h3>
+
+<%= form_tag :action => :remove_survey do %>
+
+<%= render :partial => "shared/add_survey" %>
+
+
+<%= submit_tag "Fjern valgte", :name => 'submit[update]', :class => 'button remove' %>
+<%= back_button @score %>
+
+<% end %>

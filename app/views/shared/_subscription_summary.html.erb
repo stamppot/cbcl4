@@ -1,0 +1,57 @@
+<%# @subscription_summary = subscription_presenter.summary_view %>
+
+<% if @options %>
+	<% buttons = {"all" => "Alle", "active" => "Aktive", "paid" => "Betalte"} %>
+	<% buttons.each { |key, name| buttons[key] = "<strong class='highlight'>#{name}</strong>" if @options && @options[:show] == key } 	%>
+	<% buttons.each do |action, name| %>
+		<% link_button name, {:show => action}, "subscription_#{action}" %>
+		<% end %>
+<% end %>
+
+<table class="sortable list">
+	<tr>
+		<th>Periode</th>
+		<th class="number">Brugte skemaer</th>
+		<th>Betalt</th>
+		<th>Betalingsdato</th>
+	</tr>
+	<%
+	date1 = nil 
+	date2 = nil
+	subscription_summary[:periods].each do |summary|
+		if date1.nil?
+			date1 = summary[:start_on].to_date if summary[:used] == 0 && !summary[:paid]
+		elsif date2.nil?
+			date2 = summary[:start_on].to_date if summary[:used] == 0 && !summary[:paid]
+			summary[:date1] = date1
+			summary[:date2] = date2
+			date1, date2 = nil
+		end
+	end
+	
+	subscription_summary[:periods].each do |summary|
+		stopped_on = (summary[:stopped_on] || local_time).to_date
+		if !summary[:paid] && subscription_summary.to_a.last == summary
+			stopped_on = DateTime.now.to_date
+		end
+	%>
+	<tr>
+		<td><%= summary[:start_on].to_date.strftime("%e %b %y") %> - <%= stopped_on.strftime("%e %b %y") %></td>
+		<td class="number"><%= summary[:used] %></td>
+		<td class="number"><%= summary[:paid] ? t('yes') : t('no') %></td>
+		<td><% if summary[:paid_on] && summary[:paid] %>
+				<%= summary[:paid_on].to_date.strftime("%e %b %y") %>
+				<%# elsif summary[:used] > 0 && current_user.access?(:subscription_new_edit) %>
+				<%#= link_button t('subscription.pay'), pay_periods_url(@group, :start_date => summary[:start_on], :end_date => stopped_on), 'period_pay' %>
+				<%# end %>
+				<%# if summary[:date1] && summary[:date2] && current_user.access?(:subscription_new_edit) %>
+					<%#= link_button t('subscription.merge_periods'), {:controller => :centers, :action => 'merge_periods', :id => @group }, 'subscription_merge_periods', :title => t('subscription.merge_periods_title')  %>
+				<% end %>
+		</td>
+	</tr>
+	<% end %>
+	<tr>
+		<td>Total:</td>
+		<td class="number"><%= subscription_summary[:total_periods] %></td>
+	</tr>
+</table>

@@ -1,0 +1,81 @@
+<script type="text/javascript">
+ function toggle_export(value) {
+	// alert("toggle_export value: " + vaalue);
+ 	if(value == "rapport")
+ 		changeAction('export_form', "/score_exports/download");
+	else
+		changeAction('export_form', "/exports/download");
+	 // alert('action is: ' + $('export_form').action);
+ }
+ </script>
+
+
+<p>
+<img src="/images/excel_export_48.png" border=0 align="middle" /><span class="h3">Dataudtræk</span>
+</p>
+<br/>
+
+<%= form_tag(csv_download_path, :id => 'export_form') do %>
+
+<div id="export_type">
+	<input checked="checked" id="export_raw" name="export" onchange="toggle_export(this.value);" type="radio" value="raw">
+	<%= "<label for=\"export_raw\">Rå data</label> <br>" %>
+	<input id="export_rapport" name="export" onchange="toggle_export(this.value);" type="radio" value="rapport">
+	<%= "<label for=\"export_rapport\">Scorerapporter</label> <br>" %>
+</div>
+
+<div id='filter_fields'>
+
+  <% if current_user.centers.size > 1 %>
+		<h3>Center</h3>
+		<%= select(@center, 'center', @centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :onchange => remote_function(:update => "message_id",
+		:method => "put",
+		:with => "'id=' + value",  
+		:url => { :controller => :teams, :action => :index })) %>
+		<br/>
+
+		<div id="teams" style="display:none;"></div>
+	<% else %>
+		<% if @center.teams.any? %>
+				<div id="teams">
+					<h2>Team</h2>
+					<%= select(:team, :id, @center.teams.map {|t| [t.title, t.id]}, :include_blank => true) %>
+				</div>
+		<% end %>
+	<% end %>
+	<br/>
+
+<h3>Besvaret mellem</h3>
+	<label for='start_date'>Startdato</label>
+	<%= select_date(@start_date, :prefix => 'start_date', :order => [:day, :month, :year], :start_year => (@start_date.year), :end_year => @stop_date.year ) %>
+	<br>
+	<label for='stop_date'>Slutdato</label>
+	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (@stop_date.year), :end_year => @start_date.year ) %>
+	<br>
+	
+<h3>Alder</h3>
+	<%= render :partial => 'select_age' %>
+	
+	<p><h3>Vælg skema</h3></p>
+		<div id="survey_color" style='width: 25em;'>
+			<%= select(:survey, :id, @surveys.map {|s| [s.title, s.id]}, { :class => 'no_border' }) %>		
+		</div>
+	<br>
+</div>	
+
+	<div>
+		<img alt="spinner" id="filter_spinner" src="/images/spinner.gif" style="display:none;" >
+		<span id="results">Antal: <%= @count_survey_answers %></span>
+	</div>
+	<br>
+	
+<span style="padding: 3px;" id='send_form' class="btn-submit">
+	<span id='filter'>
+		<%= link_button_to_remote("Filtrer", 'filter', :submit => "filter_fields", :url => export_filter_path) %>
+	</span>
+</span>
+
+	<%= submit_tag 'Download', { :class => 'button download', :id => 'download' } %>
+<% end %>
+
+<br/>

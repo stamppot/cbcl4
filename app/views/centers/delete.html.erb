@@ -1,0 +1,16 @@
+
+<h2>Slet Center &quot;<%= @group.title %>&quot;</h2>
+
+<p>
+Er du sikker på at du vil slette centeret &quot;<%= @group.title %>&quot;?
+Alle brugere vil blive fjernet fra dette center og alle teams herunder vil blive slettet.
+Abonnementer og brugsdata vil også blive slettet!!
+<br/>
+<br/>
+ <strong>Denne handling kan ikke fortrydes</strong>.
+</p>
+
+<%= form_tag center_path(@group), :method => :delete do %>
+  <%= submit_tag 'Ja', :name => 'yes', :class => 'button accept' %>
+  <%= submit_tag 'Nej', :name => 'no', :class => 'button deny' %>
+<% end %>

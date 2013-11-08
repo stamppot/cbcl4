@@ -1,0 +1,57 @@
+<h2>Login-Bruger &quot;<%=h @user.login %>&quot;</h2>
+
+<!-- <h3>Bruger Data</h3> -->
+
+<dl>
+  <dt>Login/Brugernavn</dt>
+  <dd><%=h @user.login %></dd>
+
+  <dt>Email-adresse</dt>
+  <dd><%=h @user.email %></dd>
+
+  <dt>ID</dt>
+  <dd><%= @user.id %></dd>
+  
+  <dt><%= t('status.created') %></dt>
+  <dd><%= @user.created_at.to_formatted_s(:long) %></dd>
+
+  <dt><%= t('status.updated') %></dt>
+  <dd><%= @user.updated_at.to_formatted_s(:long) %></dd>
+
+  <dt>Sidste Login</dt>
+  <dd><%= @user.last_logged_in_at.to_formatted_s(:long) %></dd>
+
+<!--
+  <dt>Password Hash Type</dt>
+  <dd><%=h @user.password_hash_type %></dd>
+-->
+  <dt><%= t('state') %></dt>
+  <dd><%= User.states.invert[@user.state] %></dd>
+
+  <dt>Rolle</dt>
+  <% if @user.all_roles.empty? %>
+  <dd><%= t('no_roles') %></dd>
+  <% else %>
+  <dd><%= t("roles.#{@user.roles.first.title}") %></dd>
+  <% end %>
+
+  <dt>Journal</dt>
+  <% if @user.groups.empty? %>
+  <dd><%= t('no_groups') %></dd>
+  <% else %>
+  <dd><%= group = @user.groups.first
+  link_to(group.title, { :controller => group.class.to_s.underscore, :action => :show, :id => group }, :title => "Vis #{group.class.to_s}") %></dd>
+  <% end %>
+
+</dl>
+
+
+<div class="commands">
+<%= link_to t('edit'), { :action => :edit, :id => @user }, :title => "Slet "%>
+<%= link_to "Slet", { :action => :delete, :id => @user }, :title => "Rediger" %>
+</div>
+
+<div class="commands">
+	<%= link_to 'Login-bruger liste', { :action => :list}, :title => 'Vis login-bruger liste' %>
+	<%= link_to t('go_back_to_journal'), { :controller => :journal, :action => :show, :id => @user.groups.first }, :title => t('go_back_to_journal') %>
+</div>

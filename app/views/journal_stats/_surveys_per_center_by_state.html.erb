@@ -1,0 +1,32 @@
+<table id="journal_stat_list">
+	<tr>
+		<th class="wide" title="Sorter efter navn">Center</th>
+		<th title="" class="">Spørgeskema</th>
+		<th title="" class=""></th>
+		<th title="" class=""></th>
+		<th title="" class=""></th>
+		<th title="" class=""></th>
+	</tr>
+
+	<%- @journal_stats.each do |stats| %>
+	<%- center_shown = false %>
+	<%- stats.surveys.each do |state_per_survey| %>
+	<tr>
+		<td class="pj_name">
+			<a href="/journal_stats/<%= stats.center_id %>"><%= center_shown && "" || stats.center_title %></a>
+		</td>
+		<td class="pj small"><%= state_per_survey.survey_title %></td>
+		<% 0.upto(3) do |i| %>
+			<td class="pj small<%= i %>">
+		<% if state_per_survey.states.size > i
+				countperstate = state_per_survey.states[i] %>
+				<span class="nobr"><%= "#{countperstate.count} #{JournalEntry.states.invert[countperstate.state]}" %></span>
+		<% end %>
+		<%- center_shown = true %>
+		&nbsp;</td>
+		<%- end %>        
+	</tr>
+	<%- center_shown = false %>
+	<%- end %>    
+	<%- end %>
+</table>

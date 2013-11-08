@@ -1,0 +1,9 @@
+<h2><%= @page_title %></h2>
+
+<%= form_tag center_path(@group), :method => :put do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag t('save_changes'), :class => 'button center_edit' %>
+<% end %>
+
+<%= link_button t('show'), center_path(@group), 'center_show', :title => t('show') %> |
+<%= back_button centers_path %>

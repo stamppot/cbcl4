@@ -1,0 +1,17 @@
+<% if flash[:notice] -%>
+  <div id="notice" align="center"><%= flash[:notice] %></div>
+<% end -%>
+
+<h2><%= t('subscription.list') %></h2>
+
+<% if @subscription_presenters.any? %>
+
+	<% @subscription_presenters.each do |@subscription_presenter| %>
+		<h3><%= t('center.center') %>:
+ 		<%= link_to( h(@subscription_presenter.group.title), center_path(@subscription_presenter.group) ) %></h3>
+		<%= render :partial => 'subscriptions/subscriptions' %>
+	<% end %>
+
+  <% else %>
+  <h2>Intet fundet!</h2>
+<% end %>

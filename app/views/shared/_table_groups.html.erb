@@ -1,0 +1,25 @@
+<% unless @groups.empty? %>
+
+<table class="sortable list">
+	<tr>
+		<th><%= t('name') %></th>
+		<th><%= t('birthdate') %></th>
+		<th><%= t('age') %></th>
+		<th><%= t('gender') %></th>
+		<th><%= t('Nationality') %></th>
+		<th><%= t('team.team') %></th>
+	</tr>
+    <% @groups.each do |g| %>
+  <tr>
+    <td><%= g.title %></td>
+    <td><%= g.birthdate %></td>
+    <td><%= g.age %></td>
+    <td><%= g.sex_text %></td>
+    <td><%= g.nationality %></td>
+    <td><%= g.parent.title %></td>
+  <tr/>
+    <% end %>
+<% else %>
+    <%= t('none') %>
+<% end %>
+</table>

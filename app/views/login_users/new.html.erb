@@ -1,0 +1,9 @@
+<h2>Ny Login-bruger</h2>
+<%= params[:user] = @user %>
+<%= form_tag :action => :create, :id => @entry do %>
+<%= render :partial => 'form' %>
+
+<%= submit_tag t('create'), :name => 'submit[create]', :class => 'button user_create' %>
+<% end %>
+
+<%= back_button @group %>

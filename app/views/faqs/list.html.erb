@@ -1,0 +1,20 @@
+<h1>Spørgsmål &amp; svar</h1>
+
+<ol class="sections<%= @action == "order" ? " drag" : "" %>" id="section_list">
+	<% @sections.each do |@section| %>
+		<%= render :partial => 'section' %>
+	<% end %>
+</ol>
+
+<% if @action == 'order' %>
+<div id="sortable">
+	<%= sortable_element 'section_list', :url => faq_sort_path(@section),	:complete => visual_effect(:highlight, 'section_list')
+	%> 
+</div>
+	<%= link_to_remote 'Færdig!', :url => faq_done_order_path(@section), :class => 'faq_action' %>
+
+<% else %>
+	<%= link_button 'Reorganiser listen', faq_order_path(@section), 'faq_order' %>
+	<br>
+	<%= link_button 'Nyt afsnit', new_fag_section_path, 'faq_new_section' %>
+<% end %>

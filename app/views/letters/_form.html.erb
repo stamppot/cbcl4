@@ -1,0 +1,37 @@
+	<table class="letter_info">
+		<tr>
+			<td class="t_i"><label for="letter_name">Navn:</label></td>
+			<td class="t"><%= text_field "letter", "name" %></td>
+		</tr>
+		<tr>
+			<td class="t_i"><label for="letter_surveytype">Brev til:</label></td>
+			<td class="t_i"><%= select :letter, :surveytype, @role_types.map {|role| [t("roles.#{role}"), role]} %></td>
+		</tr>
+		<tr>
+			<td class="t_i"><label for="letter_group">Gruppe:</label></td>
+			<% group = @letter.group %>
+			<td class="t_i"><%= select :letter, :group_id, @groups %></td>
+		</tr>
+		<tr>
+			<td class="t_i"><label for="letter_follow_up">Opfølgning:</label></td>
+			<% follow_up = @letter.follow_up || -1 %>
+			<td class="t_i"><%= select :letter, :follow_up, @follow_ups, :include_blank => true %></td>
+		</tr>
+		<tr>
+			<td class="t_i">Indhold:</td>
+			<td class="t"><%= tinymce(:letter, :letter) %></td>
+		</tr>
+	</table>
+	
+	<div class="help">
+		<p>
+			Du kan indsætte nedenstående variable, som bliver erstattet af anden tekst.
+		</p>
+		<ul>
+			<li>{{login}} for at vise brugernavn</li>
+			<li>{{password}} for at vise kodeord</li>
+			<li>{{navn}} for at vise journalens fulde navn</li>
+			<li>{{fornavn}} for at vise journalens fornavn</li>
+			<li>{{parent}} for at vise forælders navn (hvis givet)</li>
+		</ul>
+	</div>

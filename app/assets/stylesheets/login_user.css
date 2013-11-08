@@ -1,0 +1,9 @@
+body {
+	font-family: arial, helvetica;
+	font-size: 12pt;
+	
+}
+
+hr {
+	page-break-after: always;
+}

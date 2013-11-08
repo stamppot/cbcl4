@@ -1,0 +1,40 @@
+<h1>Rediger variabel</h1>
+
+<% form_for(@variable, :method => :put) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :var %><br>
+    <%= f.text_field :var %>
+  </p>
+  <p>
+    <%= f.label :item %><br>
+    <%= f.text_field :item %>
+  </p>
+  <p>
+    <%= f.label :datatype %><br>
+    <%= f.select :datatype, ['Numeric', 'String'] %>
+  </p>
+  <p>
+    <%= f.label :row %><br>
+    <%= f.text_field :row %>
+  </p>
+  <p>
+    <%= f.label :col %><br>
+    <%= f.text_field :col %>
+  </p>
+  <p>
+    <%= f.label :survey_id %><br>
+    <%= f.text_field :survey_id %>
+  </p>
+  <p>
+    <%= f.label :question_id %><br>
+    <%= f.text_field :question_id %>
+  </p>
+  <p>
+    <%= f.submit "Opdater" %>
+  </p>
+<% end %>
+
+<%= link_button t('show'), @variable, 'variable_show' %> |
+<%= back_button variables_path %>

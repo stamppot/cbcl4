@@ -1,0 +1,14 @@
+
+<table>
+	
+	<tr>
+		<th>Nationalitet</th>
+	</tr>	
+	<tr>
+		<td><%=h @nationality.country %></td>
+		<td><%=h @nationality.country_code %></td>
+	</tr>
+</table>
+
+<%= link_button t('edit'), edit_nationality_path(@nationality), 'edit' %> |
+<%= back_button nationalities_path %>

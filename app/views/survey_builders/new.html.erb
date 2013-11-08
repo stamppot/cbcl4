@@ -1,0 +1,9 @@
+<h1>Nyt spørgeskema</h1>
+
+<%= form_tag :action => :create do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag t('create'), :class => 'button accept' %>
+<% end %>
+
+<p>
+<%= back_button main_path%>

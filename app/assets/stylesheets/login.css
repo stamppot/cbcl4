@@ -1,0 +1,93 @@
+body {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   12px;
+  line-height: 18px;
+  background: #eee;	
+}
+
+#bodylogin {
+  text-align: center;
+  float: center;
+}
+
+#cbcl-title {
+  text-align: center;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   18pt;
+  line-height: 18px;
+}
+
+#subtitle {
+  text-align: center;
+  font-size: 14pt;
+}
+
+div.form {
+  text-align: center;
+  width: 280px;
+  padding: 10px;
+  border: 1px solid #999;
+  background: #ff9;
+}
+
+form td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 12px;
+  text-align: left;
+  border: 0px;
+}
+
+.login_field {
+	font-size: 12px;
+	background-color: #fdfdfd;
+}
+
+.flash_error {
+	color: darkred;
+	border: 1px solid red;
+	padding: 6px 10px 6px 27px;
+	background:url('/images/exclamation.png') no-repeat 5px 7px;
+	background-color: #f77;
+	display: inline;
+}
+
+.flash_notice {
+	color: darkgreen;
+	border: 1px solid green;
+/*	padding: 6px 10px 6px 10px;
+	background: lightgreen;*/
+	padding: 6px 10px 6px 27px;
+	background:url('/images/check.png') no-repeat 5px 5px;
+	background-color: #CAE3F4;
+	display: inline;
+/*	float: right;*/
+}
+
+input.button {
+	background-color: #eee !important;
+	border: 1px solid #ccc;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	color:#555555;
+	font-weight:bold;
+	text-decoration:none;
+	padding-left: 16px;
+	line-height: 19px;
+	text-indent: 20px;
+	font-size: 12px;
+}
+input.button:hover {
+	color:#0066CC;
+	background-color: #ddd;
+	border: 1px solid #000;
+}
+input.button:active {
+	background-color: #aaa;
+	border: 1px solid #000;
+}
+input.login {
+	background:url('/images/door_in.png') no-repeat 10px 5px;
+}
+input.logout {
+	background:url('/images/door_out.png') no-repeat 10px 5px;
+}

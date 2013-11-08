@@ -1,0 +1,39 @@
+<table class="sortable list">
+	<tr>
+		<th>Spørgeskema</th>
+		<th>Noter</th>
+		<th><%= t('state') %></th>
+		<th class="number" title="Ubetalte">Ubetalte</th>
+		<th class="number" title="Betalte">Betalte</th>
+		<th class="number" title="Total"><%= t('subscription.total_used') %></th>
+	</tr>
+<%
+ total_used = subscription_list_new.sum {|v| v[:total] || 0}
+ active_used = subscription_list_new.sum {|v| v[:active] || 0}
+ %>
+
+<%		
+	for view in subscription_list_new
+			state = Subscription.states.invert[view[:state]]
+			# do not show inactive to others than admins
+			next if current_user.access? :subscription_show_inactive and state == "Inaktiv"
+		%>
+			<tr>
+				<td><%= link_to(view[:title], subscription_path(view[:subscription]), :title => 'Vis Abonnement') %></td>
+				<td><%= split_string view[:note] %></td>
+				<td><%= view[:state] %></td>
+				<td class="number"><%= view[:active] %></td>
+				<td class="number"><%= view[:paid] %></td>
+				<td class="number"><%= view[:total] %></td>
+			</tr>
+<% end %>
+	<tr>
+		<td>Total:</td>
+		<td></td>
+		<td></td>
+		<td class="number"><%= active_used %></td>
+		<td class="number"><%= total_used == 0 && 0 || total_used - active_used %></td>
+		<td class="number"><%= total_used %></td>
+	</tr>
+
+</table>

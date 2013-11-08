@@ -1,0 +1,23 @@
+<h2>Liste af grupper</h2>
+
+<p>
+Nedenstående er et komplet træ af alle grupper i systemet.
+</p>
+
+<div class="commands">
+<%= link_button 'Ny gruppe', (:action => :create), 'group_add' %>
+</div>
+
+<%= node_tree @groups do |group|
+      result = link_to(group.title, { :action => :show, :id => group }) + " "
+      result += "[" + group.users.length.to_s + '/' + group.all_users.length.to_s + " users, "
+      result += group.roles.length.to_s + '/' + group.all_roles.length.to_s + " roles]"
+      result += "(" + link_to(t('show'), { :action => :show, :id => group }, :title => t('show')) + " "
+      result += link_to(t('edit'), { :action => :update, :id => group }, :title => t('edit')) + " "
+      result += link_to(t('delete'), { :action => :delete, :id => group }, :title => t('delete')) + ")"
+    end
+    %>
+
+<div class="commands">
+<%= link_button 'Ny gruppe', (:action => :create), 'group_new' %>
+</div>

@@ -1,0 +1,29 @@
+<div id="centerlabel">&nbsp;
+</div>
+
+<table class="center_info">
+	<tr>
+		<td class="p">Sygehusafd-/institutionskode:</td>
+		<td class="p"><%=h @journal.qualified_code %></td>
+	</tr>
+	<tr>
+		<td class="p">Team/Projekt:</td>
+		<td class="p"><%=h @journal.team.title %></td>
+	</tr>
+	<tr>
+		<td class="p"><%= t('id') %>:</td>
+		<td class="p"><%=h @journal.qualified_id %></td>
+	</tr>
+	<tr>
+		<td class="p"><%= t('gender') %>:</td>
+		<td class="p"><%=h (@journal.sex_text || "").capitalize %></td>
+	</tr>
+	<tr>
+		<td class="p"><%= t('age') %></td>
+		<td class="p"><%=h @journal.age %></td>
+	</tr>
+	<tr>
+		<td class="p"><%= t('name') %>:</td>
+		<td class="p"><%=h @journal.name %></td>
+	</tr>
+</table>

@@ -1,0 +1,26 @@
+<html>
+<head>
+  <title>CBCL Online</title>
+
+	<%= stylesheet_link_tag 'login' %>
+	<%= stylesheet_link_tag 'cbcl' %>
+
+	<%= javascript_include_tag 'jquery-1.9.0.min' %>
+	<%= javascript_include_tag 'jquery.watermark.min' %>
+	<%= javascript_include_tag 'flash' %>
+
+    <!-- stylesheet_link_merged :login -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+</head>
+
+<body id="bodylogin" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 scroll="no" style="border: 0px; overflow: hidden; margin: 0pt; margin-bottom: 200px;">
+  <table cellpadding=0 cellspacing=0 border=0 width=100% height=100%>
+  	<tr>
+    <td width=100% height=100% align=center valing=middle>
+		<%= yield %>
+	</td>
+  </tr>
+  </table><br>
+  
+</body>
+</html>

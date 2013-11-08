@@ -1,0 +1,8 @@
+<h1>Ny nationalitet</h1>
+
+<%= form_tag nationality_path(@nationality), :method => :post do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag t('create'), :class => 'button add' %>
+<% end %>
+
+<%= back_button nationalities_path %>

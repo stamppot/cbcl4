@@ -1,0 +1,8 @@
+<p><span class="h3"><%= t('subscription.list') %></span></p>
+<br/>
+
+<% @subscription_presenters.each do |subscription_presenter| %>
+	<h3><%= link_to( h(subscription_presenter.group.title), center_path(subscription_presenter.group) ) %></h3>
+	<%= render :partial => 'subscriptions', :locals => {:subscription_presenter => subscription_presenter} %>
+	<%# @subscription_presenter.inspect %>
+<% end %>

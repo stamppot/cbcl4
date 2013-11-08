@@ -1,0 +1,9 @@
+<h2>Redigering af gruppe</h2>
+
+<%= form_tag :action => :update, :id => @group do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag t('save_changes'), { :class => 'normal' } %>
+<% end %>
+
+<%= link_button t('show'), group_path(@group), 'group_show' :title => t('show') %> |
+<%= back_button groups_path %>

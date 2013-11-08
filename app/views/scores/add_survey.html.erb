@@ -1,0 +1,14 @@
+<% @subtitle = "Vælg spørgeskemaer der skal tilføjes til scoreberegning" %>
+<% @group = @score %>
+
+<h3>Tilføj spørgeskemaer til score-beregning <%= @score.title %></h3>
+
+<%= form_tag :action => :add_survey do %>
+
+<%= render :partial => "shared/add_survey" %>
+
+
+<%= submit_tag "Tilføj", :name => 'submit[update]', :class => 'button add' %>
+<%= back_button @score %>
+
+<% end %>

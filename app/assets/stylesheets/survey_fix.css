@@ -1,0 +1,104 @@
+
+#centertitle {
+  position:absolute;
+	top:46px;
+	margin-left: 24%;
+	margin-bottom: 4px;
+}
+
+textarea {
+  width: 250px;
+  height: 80px;
+/*  width: 200px;*/
+}
+
+textarea.textfield {
+  height: 15px;
+  width: 200px;
+  vertical-align: middle;
+}
+td.textbox {
+  width: 200px;
+  padding-right: 0px;
+}
+td.filler {
+  width: 266px;
+}
+
+td.group {
+  width: 0px;
+  margin: 0;
+  padding: 0;
+  text-align: right;
+  border: 0;
+}
+td {
+  padding-left: 0;
+  padding-right: 0;
+  border: 0;
+}
+
+td.group span-1 {
+  margin-right: 0;
+}
+
+td.questiontext {
+/*  width: 100px;*/
+  border: 0;
+}
+
+td.description3lab4 {
+  width: 340px;
+}
+
+.itemquestiontext {
+/*  width: 15em;*/
+width: 200px;
+}
+.checkbox {
+width: 200px;
+}
+.selectoption {
+  padding-right: 0px;
+}
+
+.listitemtext {  /* without predefined text */
+/*  width: 0px;/*175px;*/*/
+}
+
+td.rating2lab1 {
+  width: 150px;
+}
+td.row {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.rating3.span-9 > .radio.span-3 {
+  text-align: center;
+}
+
+.description3lab2 .span-3 {
+  text-align: center;
+}
+
+.span-2_5 {
+  width: 90px;
+  float:left;margin-right:10px;
+  border-left-width:1px;border-right-width:1px;padding-left:5px;padding-right:5px;
+  width:70px;
+}
+
+.span-0_5 {
+  float:left;margin-right:10px;
+  border-left-width:1px;border-right-width:1px;padding-left:5px;padding-right:5px;
+  width:15px;
+}
+
+.group {
+/*  margin: 0;*/
+  padding: 0;
+  text-align: center;
+}
+.even { background:#e5ecf9; }
+.even div { background:#e5ecf9; }

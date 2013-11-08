@@ -1,0 +1,30 @@
+<% @subtitle = "Vælg spørgeskemaer der skal fjernes" %>
+
+<h3>Fjern spørgeskemaer fra journal <%= @group.get_title %></h3>
+
+<% if @entries.empty? %>
+<p>Der er ingen spørgeskemaer tilknyttet.</p>
+
+<% else %>
+
+<%= form_tag journal_remove_survey_path, :method => :post do %>
+
+<dl>
+	<dt><%= @subtitle || "" %></dt>
+	<dd>
+		<%= "<input id=\"group\" type=\"hidden\" name=\"id\" value=\"#{@group.id}\" checked=\"checked\" /> " %>
+		<% @entries.each do |entry| %>
+			<div style='background-color: #<%= entry.survey.color %>; width: 25em;'>
+				<%= check_box(:entry, entry.id) %>		
+				<%= "<label for=\"entry_#{entry.id}\">#{entry.survey.get_title}</label> <br>" %>
+			</div>
+		<% end %>
+	</dd>
+</dl>
+
+
+<%= submit_tag "Fjern valgte", :name => 'submit[update]', :class => 'button survey_remove' %>
+<% end %>
+<% end %>
+<%= back_button journal_path(@group) %>
+

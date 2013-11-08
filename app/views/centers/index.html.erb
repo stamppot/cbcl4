@@ -1,0 +1,18 @@
+<h2>Centre</h2>
+
+<% if flash[:error] -%>
+	<div id="errorExplanation"><%= flash[:error] %></div>
+<% end %>
+<% if flash[:notice] -%>
+	<div id="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<% @hide_team = true %>
+<%= render :partial => 'shared/group_list', :locals => {:groups_count => @groups_count} %>
+
+
+<% if current_user.access? :center_new %>
+	<div class="commands">
+		<%= link_button t('center.new'), new_center_path, 'center_new' %>
+	</div>
+<% end %>

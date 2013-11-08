@@ -1,0 +1,43 @@
+<% @groups = @group.teams if @group && @group.teams.count > 0 %>
+<table class="sortable list" class="groups">
+	<tr>
+		<th class="wide" title="Sorter efter navn"><%= center_or_team_text(@groups) %></th>
+		<th title="Sorter efter SKS-kode">ID</th>
+		<!-- <th class="narrow" title="Sorter efter antal brugere"><%# t('user.users') %></th> -->
+		<% unless @hide_team %>
+		<th class="half_wide" title="Sorter efter team"><%= any_teams_text %></th>
+		<% end %>
+		<% unless @hide_journals %>
+		<th class="half_wide" title="Sorter efter journal"><%= t('journal.journals') %></th>
+		<% end %>
+		<th title="Sorter efter oprettelsesdato"><%= t('status.created') %></th>
+		<% if current_user.access? :show_column_actions %>
+		<th class="nosort"><%= t('action') %></th>
+		<% end %>
+	</tr>	
+
+	<% can_center_delete = current_user.access? :center_delete %>
+	<% @groups.each do |group| %>
+	<tr>
+		<td><%= link_to( group.title, group.is_a?(Team) && team_path(group) || center_path(group),	:title => "Vis #{group.class.to_s}" ) %></td>
+		<td><%= group.code %></td>
+		<!-- <td style="text-align: right;"><%# group.users.size %></td> -->
+		<% unless @hide_team %>
+    <td style="text-align: left;"><%= group.class.to_s %></td>
+		<% end %>
+		<% unless @hide_journals %>
+    <td style="text-align: right;"><%= @groups_count[group.id] %></td>
+		<% end %>
+		
+		<td><%= group.created_at.strftime("%d-%m-%Y") %></td>
+		<% if can_center_delete %>
+		<td>
+			<a title="Rediger" href="/centers/<%= group.id %>/edit"><img border="0" title="Rediger center" src="/images/group_edit_24.png" class="icon" alt="Group_edit_24"></a>
+			<a title="Slet" href="/centers/delete/<%= group.id %>"><img border="0" title="Slet center" src="/images/group_delete_24.png" class="icon" alt="Group_delete_24"></a>
+			<%# link_to img_tag_html4('group_edit_24.png', :border => 0, :class => 'icon', :title => 'Rediger center'), edit_center_path(group), :title => t('edit') -%>
+			<%# link_to img_tag_html4('group_delete_24.png', :border => 0, :class => 'icon', :title => 'Slet center'), delete_center_path(group), :title => t('delete') -%>
+		</td>
+		<% end %>
+		<tr/>
+		<% end %>
+</table>

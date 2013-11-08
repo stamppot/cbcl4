@@ -1,0 +1,36 @@
+<h1>Alle variabler</h1>
+
+<%= link_button t('variable.new'), new_variable_path, 'variable_new' %>
+
+Variable: <%= @variables.size %>
+
+<table>
+  <tr>
+    <th>Var</th>
+    <th>Item</th>
+		<th>Datatype</th>
+    <th>Row</th>
+    <th>Col</th>
+    <th>Skema</th>
+    <th>Spg</th>
+  </tr>
+
+<% for variable in @variables %>
+  <tr>
+    <td><%= variable.var %></td>
+    <td><%= variable.item %></td>
+		<td><%= variable.datatype %></td>
+    <td><%= variable.row %></td>
+    <td><%= variable.col %></td>
+    <td><%= link_to(survey_short(variable.survey), {:action => 'show_survey', :id => variable.survey_id}, :style => 'text-decoration:underline;' ) %></td>
+    <td><%= link_to(variable.question.number.to_roman.downcase, {:action => 'show_question', :id => variable.question_id}, :style => 'text-decoration:underline;') %></td>
+    <td><%= link_to t('show'), variable %></td>
+    <td><%= link_to t('edit'), edit_variable_path(variable) %></td>
+    <td><%= link_to t('delete'), variable, :confirm => t('are_you_sure?'), :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br>
+
+<%= link_button t('variable.new'), new_variable_path, 'variable_new' %>

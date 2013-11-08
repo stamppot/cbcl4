@@ -1,0 +1,174 @@
+<% cache "menu_#{current_user.highest_role.title}" do %>
+
+<% if current_user.perms[:layout_show_menu] %>
+<div id="menu">
+
+	<% if current_user && current_user.perms[:layout_show_group_menu] %>
+	<div class="user_info" style="color: #eee; margin-bottom: -1.3em;">
+		<%# if false && current_user.last_logged_in_at == current_user.created_at %>
+			<!-- <span style="color: green; padding-left: 200px; padding-top: 100px;">Husk at skifte dit password</span> -->
+		<%# end %>
+		<%# if current_user.status =~ /password/ %>
+			<!-- <span style="color: red;"><%= link_to t('change_password'), edit_user_url(current_user), :style => "color: red;" %></span> -->
+		<%# end %>
+		</div>
+	<div id="group_menu" class="menu_section">
+		<div class="menu_title"><%= t("menu.centeradministration") %></div>
+
+		<%# form_tag(center_search_path, { :onSubmit => "Element.show('spinner');" }) do %>
+		
+		<%# if current_user.perms[:layout_show_center_search] %>
+		<!-- <div class="searchbox"> -->
+			<!-- <label for="search_centers"><font size="1"><b><%= t("menu.search_groups") %></b></font></label><br> -->
+			<%# text_field_tag_html4 :search_centers, "center", { :value => "" ,:size => 10, :class => 'search' } %>
+			<!-- <img alt="spinner" id="center_spinner" src="/images/spinner.gif" style="display:none;" > -->
+		<!-- </div> -->
+		<%# end %>
+
+		<%# if current_user.perms[:layout_show_center_search] %>
+			<%# observe_field(:search_centers,
+				:frequency => 1.0,
+				:update => :content,
+				:loading => "Element.show('center_spinner')",
+				:complete => "Element.hide('center_spinner');",
+				:url => center_search_path ) %>
+			<%# end %>
+		<%# end %>
+
+		<%= link_to (current_user.perms[:admin] ? t("menu.centers") : t("menu.center")), centers_path, :title => t('center.list') %>
+
+		<!-- Vis ikke teams/personer til admin -->
+		<% if current_user.perms[:team_show] %>
+			<%= link_to t("menu.teams"), teams_path, :title => t('team.list') %>
+		<% end %>
+
+		<% if current_user.perms[:layout_show_users]  %>
+		<%= link_to t('menu.users'), users_path, :title => t('user.show') %>
+			<%# if current_user.perms[:user_new] %>
+				<%# link_to t('menu.create_user'), new_user_path, :title => t('user.new') %>
+			<%# end %>
+		<% end %>
+		<%= form_tag(user_search_path, { :onSubmit => "Element.show('spinner');" }) do %>
+			<div class="searchbox">
+				<label for="search_users"><font size="1"><b><%= t('menu.search_users') %></b></font></label><br>
+				<%= text_field_tag :search_users, "", { :size => 10, :class => 'search', :placeholder => 'Søg bruger' } %>
+				<img alt="spinner" id="user_spinner" src="/images/spinner.gif" style="display:none;" >
+			</div>
+		<% end %>
+		TODO: observe_field
+		<%# observe_field(:search_users,
+			:frequency => 1.0,
+			:update => :content,
+			:loading => "Element.show('user_spinner')",
+			:complete => "Element.hide('user_spinner'); TableKit.reload();",
+			:url => user_search_path) %>
+			<div class="change_password" style="display:none;">
+				<%= link_to t('menu.change_password'), change_password_path(current_user), :title => t('menu.change_password_alt') %>
+			</div>
+		<br/>
+		<%= link_to t('menu.show_journals'), journals_path, :title => t('menu.show_journals') %>
+		<%= link_to t('menu.create_journal'), new_journal_path, :title => t('menu.create_journal') %>
+		
+		<br/>
+
+		<script type="javascript/text">
+
+		</script>
+
+		<%= form_tag(journal_search_path, { :onSubmit => "Element.show('spinner');" }) do %>
+			<div class="searchbox">
+				<label for="search_journals"><font size="1"><b><%= t('menu.search_journals') %></b></font></label><br>
+				<%= text_field_tag :search_journals, "", { :size => 10, :class => 'search', :placeholder => 'Søg journal' } %>
+				<img alt="spinner" id="journal_spinner" src="/images/spinner.gif" style="display:none;" >
+				<img alt="help" id="journal_help" onclick="javascript:search_help();" src="/images/help_comment.png" >
+				<span id="search_help" style="display:none;" onclick="javascript:hide_search_help();">
+					Søg på navn, fødselsdato eller journalkode.<br/>
+					<br/>
+					Dato uden bindestreger, fx: 010411<br/>
+					
+				</span>
+			</div>
+		<% end %>
+		<style type="text/css">
+			#search_help {
+				cursor: hand;
+				position: absolute;
+				top: 300px;
+				left: 135px;
+				width: 180px;
+				height: 150px;
+				border: 1px solid lightblue;
+				padding: 2px;
+				background-color: #ffb;
+			}
+		</style>
+		TODO: observe_field
+		<%# observe_field(:search_journals,
+			:frequency => 1.0,
+			:update => :content,
+			:loading => "Element.show('journal_spinner')",
+			:complete => "Element.hide('journal_spinner'); TableKit.reload();",
+			:url => journal_search_path) %>
+		
+		<br/>
+
+		<script type='text/javascript'>
+			$(document).ready(function() {
+			   $("#search_journals").bind("keyup", function() {
+   					data = {name: this.val()}; // the value of input that need to send to server
+   					$('#journal_spinner').show();
+					$.get('/journals/search', data, function(html) {
+ 				  		$('#journal_spinner').hide();
+ 				  		TableKit.reload();
+ 				    	$("#content").html(html);
+ 				    });
+ 				  });
+ 				});
+		</script>
+		<% if current_user.perms[:layout_show_subscriptions] %>
+		<%= link_to t('menu.subscriptions'), subscriptions_path, :title => t('menu.show_subscriptions') %>
+		<% end %>
+	</div>
+	<% end %>
+
+
+	 <% if current_user.perms[:layout_show_data_export] %>
+            <div id="settings_menu" class="menu_section">
+                <div class="menu_title"><%= 'Data' %></div>
+                <%= link_to t("menu.data_export"), exports_path %>
+                <% if current_user.perms[:layout_show_scores] %>
+				<%= link_to t("menu.scores"), scores_path, :title => t('menu.scores_alt') %>
+				<% end %>
+            </div>
+        <% end %>
+
+
+	<% if current_user.perms[:layout_show_letters] %>
+	<div id="letters_menu" class="menu_section">
+		<div class="menu_title"><%= 'Formularer' %></div>
+		<%# if current_user.perms[:layout_show_settings_menu] %>
+			<%# link_to t('menu.nationalities'), nationalities_path, :title => t('menu.nationalities') %>
+			<%# link_to t('menu.variables'), variables_path, :title => t('menu.variables') %>
+		<%# end %>
+		<%= link_to t('menu.letters'), letters_path, :title => t('menu.letters') %>
+		</div>
+	<% end %>
+	
+	<div id="logout_menu" class="menu_section">
+		<div class="menu_title"><%= t('menu.other') %></div>
+		<% manual_url = "/CBCL-manual.2011-08-01.pdf" %>
+		<%= link_to t('menu.manual'), manual_url, :class => "new_window", :onclick => "window.open(\"#{manual_url}\"); return false;",
+		:title => t('menu.manual') %>
+		<%= link_to t('menu.show_faq'), faqs_path, :title => t('menu.faq_alt') %>
+		<%# if shadow_user? %>
+			<%# link_to img_tag('door.png', :border => 0, :class => 'icon', :alt => t('logout_shadow'), :title => t('logout_shadow')), shadow_logout_path %>
+		<%# else %>
+			<%= link_to t('logout'), logout_path, :title => t('logout_alt') %>
+		<%# end %>
+	</div>
+
+</div>
+<% else %>
+<%= t('logout_please') %> <%= link_to t('here'), logout_url %>
+<% end %>
+<% end %>

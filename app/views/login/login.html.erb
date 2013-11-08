@@ -1,0 +1,64 @@
+<h1 id="cbcl-title"><!-- CBCL-online --></h1>
+	<div id="subtitle"></div>
+
+<%= form_tag :action => :login do %>
+
+<div title="Account login" id="loginform" class="form">
+
+    <h3>CBCL-online</h3>
+    
+    <table>
+      <tr>
+	      <tr>
+	        <td align='right width="50px"'>Brugernavn</td>
+	        <td width="200px"><input class="login_field" id="username" name="username" size="20" type="text" autocomplete="off" /></td>
+	      </tr>
+	      <tr> 
+	        <td align=right>Password</td>
+	        <td width="200px"><input class="login_field" id="password" name="password" size="20" type="password" autocomplete="off" /></td>
+	      </tr>
+    </table>
+   <div align="center">
+		<%= submit_tag "Login", :name => "login", :class => "button login"  %>
+
+     <br><small>
+     Har du mistet dit password? <%= link_to 'Få et nyt her.', lostpassword_url %>
+    </small>
+   </div>
+	  <p style="color: green"><%= flash[:notice] %></p>
+  	<%= render :partial => 'layouts/error_messages_flash' %>
+	<%#- if flash[:error] -%>
+	<p style="color: red"><%= flash[:error] %></p>
+	<br/>
+	<%#- end %>
+</div>
+<% end %>
+
+<style>
+input.watermark {
+	color: #C3C3C3; font-weight: 400;
+}
+</style>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	// 	var watermark = 'Password';
+
+  	// $('#password').blur(function(){
+   //      if ($(this).val().length == 0){
+   //          $(this).val(watermark).addClass('watermark');
+   //          $(this).attr('type', 'text');
+   //      }
+   //  });
+
+   //  //if focus and text is watermrk, set it to empty and remove the watermark class
+   //  $('#password').focus(function(){
+   //      if ($(this).val() == watermark){
+   //          $(this).val('').removeClass('watermark');
+   //          $(this).attr('type', 'password');
+   //      }
+   //  });
+		$('#username').watermark('Brugernavn', {className: 'loginField'});
+		$('#password').watermark('Password', {className: 'loginField'});
+  });
+</script>

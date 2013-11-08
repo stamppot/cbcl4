@@ -1,0 +1,9 @@
+<%= render :partial => 'shared/journals' %>
+
+<p>
+<br/>
+<% if current_user.access? :journal_new_edit_delete %>
+<div class="commands">
+	<%= link_button 'Ny Journal', new_journal_path, 'journal_add' %>
+</div>
+<% end %>

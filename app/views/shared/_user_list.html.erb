@@ -1,0 +1,40 @@
+<% can_edit_delete = current_user.access? :user_edit_delete %>
+<table id="user_list" class="sortable list" class="users">
+	<tr>
+	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
+	<th class="sortcol" title="<%= t('sort.role') %>"><%= t('role') %></th>
+	<th class="sortcol" title="<%= t('sort.group') %>"><%= t('groups') %></th>
+	<% if can_edit_delete %>
+	<th class="nosort" style="width: 92px;"><%= t('action') %><span style="width: 100px;">&nbsp;</span></th>
+	</tr>
+	<% end %>
+
+	<% @users.each do |user| %>
+	<tr>
+		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => (user.state != 2) && 'unconfirmed' || '' %></td>
+		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
+		<% if current_user.access?(:user_show_teams) and !(groups = user.groups.teams).empty?
+			   groups = groups.map { |g| g.title }.join(", ")
+			 else
+			 	 groups = user.center ? user.center.title : (user.centers.compact.empty? ? "" : user.centers.first.title)
+   		 end -%>
+		<td><%= groups %>&nbsp;</td>
+	<% if can_edit_delete %>
+	<td style="display:inline; width: 100px;">
+		<span style="display:inline;">
+			<a title="Rediger Bruger" href="/users/<%= user.id %>/edit"><img border="0" title="Rediger Bruger" src="/images/user_edit_female_24.png" class="icon" alt="User_edit_female_24"></a>
+			<a title="Slet Bruger" href="/users/delete/<%= user.id %>"><img border="0" title="Slet Bruger" src="/images/user_delete_24.png" class="icon" alt="Slet bruger"></a>
+		<span>&nbsp;</span>
+		<a title="Login som denne bruger" href="/login/shadow_login/<%= user.id %>"><img border="0" title="Login som denne bruger" src="/images/door_24.png" class="icon" alt="Login som denne bruger"></a>
+		<%# link_to_icon 'door_24.png', shadow_login_url(user), {:alt => t('shadow_login_alt'), :title => t('shadow_login_alt')}, (current_user.access?(:shadow_login) and user.id != current_user.id) %>
+	</span>
+	</td>
+	<% end %>
+	<tr/>
+	<% end %>
+</table>
+
+<% if @users.size > 1 %>
+	<div class="page_entries" > <%= page_entries_info(users) %> </div>
+	<%= will_paginate users, :remote => {:with => 'value', :update => 'user_list'}, :outer_window => 2 -%>
+<% end -%>

@@ -1,0 +1,4 @@
+<div class="teams">
+	<h2>Team</h2>
+	<%= select_tag(:team, options_for_select([["Vælg evt. et team", ""]] + @teams.map{|c| [c.title, c.id]}), {:class => 'teams'}) %>
+</div>

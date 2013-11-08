@@ -1,0 +1,42 @@
+<h1>Spørgeskema<%= "er" if @surveys && @surveys.size > 1 %></h1>
+<% if @surveys.nil? or @surveys.empty? %>
+	Centret abbonnerer ikke på nogen spørgeskemaer.
+	Kontakt Børne- og Ungdomspsykiatrisk Afdeling Odense.
+	
+	<p><%= link_button t('logout'), logout_path, 'logout' %></p>
+	
+<% else %>
+<table>
+<%	odd_or_even = 0
+for survey in @surveys
+	odd_or_even = 1 - odd_or_even
+	%>
+	<tr valign="top" class="ListLine<%= odd_or_even %>" style='background-color: #<%= survey.color %>;'>
+		<td class="surveyname">
+			<span class="survey_title"><%= link_to h(survey.get_title), :action => :show_only, :id => survey %></span><br>
+			<%= h(truncate(survey.description, {:length => 80})) %>
+		</td>
+
+		<% if current_user.access? :survey_new_edit %>
+		<td class="survey_actions">
+			<% link_to 'Vis 2', edit_survey_builder_url(survey) %><br>
+			<%= link_to t('survey.add_question'), add_question_survey_builder_url(survey) %><br>
+			<%= link_to t('edit'), edit_survey_builder_url(survey) %><br>
+			 <!-- link_to t('delete'), surveys_url(survey), :method => 'delete', :confirm => 'Er du sikker?' --><br>
+		</td>
+		<% end %>
+	</tr>
+	
+	<% end %>
+</table>
+<% end %>
+
+<br>
+
+<% if current_user.access? :survey_finish %>
+	<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
+<% end %>
+
+<% if current_user.access? :survey_new_edit %>
+	<%= link_button t('survey.new'), new_survey_builder_url, 'survey_add' %>
+<% end %>

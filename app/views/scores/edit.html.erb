@@ -1,0 +1,11 @@
+<h1>Rediger scoreberegning</h1>
+
+<%= form_tag score_path(@score), :method => :put do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag t('save_changes'), :class => 'button save' %>
+<% end %>
+
+<br>
+<%= link_button t('show'), score_path(@score), 'score_show' %> |
+<%= back_button scores_path %>
+

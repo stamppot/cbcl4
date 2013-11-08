@@ -1,0 +1,47 @@
+<p><img src="/images/users_48.png" border=0 align="middle" />
+<span class="h3">Brugere</span></a><p>
+</p>
+
+    <% if shadow_user? %>
+      <%= link_to img_tag_html4('door.png', :border => 0, :class => 'icon', :alt => t('logout_shadow'), :title => t('logout_shadow')), shadow_logout_path %>
+    <% end %>
+    
+	<div id="users">
+		<%= render :partial => 'shared/user_list', :locals => {:users => @users} %>
+	</div>
+<br/>
+<p>
+
+<div class="commands">
+<% if current_user.access? :user_new_in_center %>
+	<%= link_button t('user.new'), new_user_path(current_user.center), 'user_add', :title => 'Opret ny bruger i centeret' %>
+<% elsif current_user.access? :user_new %>
+	<%= link_button t('user.new'), new_user_path, 'user_add' %>
+<% end %>
+</div>
+
+<script type="text/javascript">
+document.observe("dom:loaded", function() {
+  var container = $(document.body)
+
+  if (container) {
+    var img = new Image
+    img.src = '/images/spinner.gif'
+    var spinner = null
+
+    function Spinner() {
+      spinner = new Element('img', { src: img.src, 'class': 'spinner' })
+      return spinner
+    }
+
+    container.observe('click', function(e) {
+      var el = e.element()
+      if (el.match('.pagination a')) {
+        el.up('.pagination').insert(Spinner())
+        new Ajax.Request(el.href, { method: 'get' })
+        e.stop()
+      }
+    })
+  }
+})
+</script>
