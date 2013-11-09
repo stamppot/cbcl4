@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-require 'ar-extensions/adapters/mysql'
-require 'ar-extensions/import/mysql'
+# require 'ar-extensions/adapters/mysql'
+# require 'ar-extensions/import/mysql'
 # require 'facets'
 
 class SurveyAnswer < ActiveRecord::Base

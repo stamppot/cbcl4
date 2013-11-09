@@ -1,15 +1,20 @@
 	<div id="select_age">
 		<label for='start_age'>Alder start</label>
 		
+		<script type='text/javascript'>
+			// $('#content').delegate('#start_age', 'change', function() {
+			// 	$.get('/exports/set_age_range/?id=up', function(data) {
+			// 		$('#message_id').html(data);
+			// 	});
+			// });
+		</script>
 		
 		<%= select_tag('start_age', options_for_select((1..28), selected_value = @start_age), 
-			:name => 'age[start]', :include_blank => "Vælg startalder", 
-			:onchange => remote_function(:submit => "select_age", :url => set_age_range_path("up")
-) ) %>
+			:name => 'age[start]', :include_blank => "Vælg startalder"
+) %>
 	<br>
 	
 	<label for='stop_age'>Alder slut</label>
 	<%= select_tag('stop_age', options_for_select((1..28), selected_value = @stop_age), 
-	:name => 'age[stop]', :value => @stop_age, :include_blank => "Vælg slutalder", 
-	:onchange => remote_function(:submit => "select_age", :url => set_age_range_path("down")) ) %>
+	:name => 'age[stop]', :value => @stop_age, :include_blank => "Vælg slutalder") %>
 	</div>

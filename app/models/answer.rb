@@ -1,6 +1,6 @@
 require 'lib/hashery'
-require 'ar-extensions/adapters/mysql'
-require 'ar-extensions/import/mysql'
+# require 'ar-extensions/adapters/mysql'
+# require 'ar-extensions/import/mysql'
 
 class Answer < ActiveRecord::Base
   belongs_to :survey_answer

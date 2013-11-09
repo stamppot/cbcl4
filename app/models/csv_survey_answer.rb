@@ -1,4 +1,4 @@
-require 'fastercsv'
+require 'csv'
 
 class CsvSurveyAnswer < ActiveRecord::Base
   belongs_to :survey_answer
@@ -19,7 +19,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
   scope :from_date, lambda { |start| { :conditions => { :created_at  => start...(Date.now) } } }
   scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)...stop } } }
   # scope :for_survey, lambda { |survey_id| { :conditions => { :survey_id => survey_id } } }
-  scope :for_survey, lambda { |survey_id| { :conditions => ["csv_survey_answers.survey_id = ?", survey_id] } }
+  scope :for_survey, lambda { |survey_id| where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
   scope :for_center, lambda { |center_id| { :conditions => ["csv_survey_answers.center_id = ?", center_id] } }
   scope :for_team, lambda { |team_id| { :conditions => ["csv_survey_answers.team_id = ?", team_id] } }
 

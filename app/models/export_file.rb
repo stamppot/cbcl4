@@ -2,7 +2,7 @@ class ExportFile < ActiveRecord::Base
 
   has_one :task
   
-  EXPORT_FILES_STORAGE_PATH = "#{RAILS_ROOT}/files"
+  EXPORT_FILES_STORAGE_PATH = "#{Rails.root}/files"
 
   # run write_file after save to db
   after_save :write_file

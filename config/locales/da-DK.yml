@@ -57,6 +57,10 @@ da-DK:
       - torsdag
       - fredag
       - "lørdag"
+      :order:
+      - :day
+      - :month
+      - :year
     code: Kode
     go_back_to_list: Tilbage til liste
     user: 

@@ -181,7 +181,7 @@ Cbcl4::Application.routes.draw do
   
   get 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download'
   get 'exports/set_age_range/(/:id)', :to => 'exports#set_age_range', :as => 'set_age_range'
-  get 'exports/filter', :to => 'exports#filter', :as => 'export_filter'
+  get 'exports/filter/(/:id)', :to => 'exports#filter', :as => 'export_filter'
   get 'exports/generating_export/(/:id)', :to => 'exports#generating_export', :as => 'generating'
 
   get 'score_exports/download/(/:id)', :to => 'score_exports#download', :as => 'csv_score_rapport_download'

@@ -19,38 +19,43 @@
 
 <div id="export_type">
 	<input checked="checked" id="export_raw" name="export" onchange="toggle_export(this.value);" type="radio" value="raw">
-	<%= "<label for=\"export_raw\">Rå data</label> <br>" %>
+	<label for=\"export_raw\">Rå data</label> <br>
 	<input id="export_rapport" name="export" onchange="toggle_export(this.value);" type="radio" value="rapport">
-	<%= "<label for=\"export_rapport\">Scorerapporter</label> <br>" %>
+	<label for=\"export_rapport\">Scorerapporter</label> <br>
 </div>
 
 <div id='filter_fields'>
 
-  <% if current_user.centers.size > 1 %>
-		<h3>Center</h3>
-		<%= select(@center, 'center', @centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :onchange => remote_function(:update => "message_id",
-		:method => "put",
-		:with => "'id=' + value",  
-		:url => { :controller => :teams, :action => :index })) %>
-		<br/>
 
-		<div id="teams" style="display:none;"></div>
-	<% else %>
-		<% if @center.teams.any? %>
-				<div id="teams">
-					<h2>Team</h2>
-					<%= select(:team, :id, @center.teams.map {|t| [t.title, t.id]}, :include_blank => true) %>
-				</div>
-		<% end %>
-	<% end %>
+<% if current_user.centers.size > 1 %>
+	<script type='text/javascript'>
+		$('#content').delegate('#_center', 'change', function() {
+			$.get('/teams/?id='+ $('#_center').val(), function(data) {
+				$('#message_id').html(data);
+			});
+		});
+	</script>
+	<h3>Center</h3>
+	<%= select(nil, 'center', current_user.centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
 	<br/>
+
+	<div id="teams" style="display:none;"></div>
+<% else %>
+	<% if @center.teams.any? %>
+			<div id="teams">
+				<h2>Team</h2>
+				<%= select(:team, :id, @center.teams.map {|t| [t.title, t.id]}, :include_blank => true) %>
+			</div>
+	<% end %>
+<% end %>
+<br/>
 
 <h3>Besvaret mellem</h3>
 	<label for='start_date'>Startdato</label>
-	<%= select_date(@start_date, :prefix => 'start_date', :order => [:day, :month, :year], :start_year => (@start_date.year), :end_year => @stop_date.year ) %>
+	<%= select_date(@start_date, {:prefix => 'start_date', :order => [:day, :month, :year], :start_year => 2003, :end_year => Date.today.year } ) %>
 	<br>
 	<label for='stop_date'>Slutdato</label>
-	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (@stop_date.year), :end_year => @start_date.year ) %>
+	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (Date.today.year-10), :end_year => Date.today.year-20 ) %>
 	<br>
 	
 <h3>Alder</h3>
@@ -70,8 +75,20 @@
 	<br>
 	
 <span style="padding: 3px;" id='send_form' class="btn-submit">
+	<script>
+		function filter_button() {
+			var url = '/exports/filter/' + $('#center_selector').val()
+			var team = $('#team_selector').val();
+			if((typeof team) !== 'undefined')
+				url += '&team=' + $('#team_selector').val();
+			$.get(url, $('#export_form').serialize('filter_fields'), function(data) {
+				$('#result').html(data.text).fadeIn();
+			});
+		};
+	</script>
 	<span id='filter'>
-		<%= link_button_to_remote("Filtrer", 'filter', :submit => "filter_fields", :url => export_filter_path) %>
+		<a class='button' id='filter_button' onclick='filter_button(); return false;'><span class="filter">Filtrer</span></a>
+		<%# link_button_to_remote("Filtrer", 'filter', :submit => "filter_fields", :url => export_filter_path) %>
 	</span>
 </span>
 

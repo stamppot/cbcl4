@@ -1,4 +1,4 @@
-require 'fastercsv'
+require 'csv'
 
 class CsvScoreRapport < ActiveRecord::Base
   belongs_to :journal

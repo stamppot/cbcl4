@@ -33,7 +33,7 @@ class ScoreExportsController < ApplicationController
     center = Center.find params[:center] unless params[:center].blank?
     args = params
     params = filter_date(args)
-    params = Query.filter_age(params)
+    params = FilterArgs.filter_age(params)
     
     center = current_user.center if current_user.centers.size == 1
     
@@ -77,7 +77,7 @@ class ScoreExportsController < ApplicationController
       stop  = args.delete(:stop_date)
     end
     puts "filter_date: start: #{start.inspect}, stop: #{stop.inspect}"
-    Query.set_time_args(start, stop, args) # TODO: move to better place/helper?! also used in Query
+    FilterArgs.set_time_args(start, stop, args) # TODO: move to better place/helper?! also used in Query
   end
 
   def surveys_default_selected(surveys, params)

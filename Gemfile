@@ -7,6 +7,7 @@ gem 'rails', '4.0.1'
 gem 'sqlite3'
 
 gem 'mysql2'
+gem 'activerecord-import'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
