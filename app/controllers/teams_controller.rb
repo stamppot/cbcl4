@@ -31,7 +31,10 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     @teams = current_user.teams
 
     respond_to do |format|
-      format.html
+      # format.json {
+      #   @teams = Team.all(:conditions => ['parent_id = ?', params[:id]], :order => "title")
+      #   render :json => @teams
+      # }
       format.js {
         @teams = Team.all(:conditions => ['parent_id = ?', params[:id]], :order => "title")
         render :update do |page|
@@ -44,6 +47,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
           end
         end
       }
+      format.html
     end
   end
 
@@ -194,19 +198,23 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
   end
   
   def center
-    @group = Center.find params[:center_id]
-    @teams = @group.teams
-    
-    # respond_to do |format|
-      # format.html {
-        render :partial => 'center'
+    respond_to do |format|
+      format.json {
+        @teams = Team.all(:conditions => ['parent_id = ?', params[:id]], :order => "title")
+        render :json => @teams
+      }
+      format.html { 
+        @group = Center.find params[:center_id]
+        @teams = @group.teams
+        render :partial => 'center' 
+      }
          # redirect_to team_path(@group) and return if @group.instance_of?(Team) }
       # format.rjs {
         # render :update do |page|
           # page.replace_html 'teams_content', :partial => 'center'
         # end
       # }
-    # end
+    end
   end
 
   def select_move_journals # nb. :id is Team id!

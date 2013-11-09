@@ -29,18 +29,29 @@
 
 <% if current_user.centers.size > 1 %>
 	<script type='text/javascript'>
-		$('#content').delegate('#_center', 'change', function() {
-			$.get('/teams/?id='+ $('#_center').val(), function(data) {
-				$('#message_id').html(data);
+		$('#content').delegate('#center_selector', 'change', function() {
+			$.ajax({
+				url: '/teams/center/' + $('#center_selector').val() + '.json', 
+				dataType: 'json',
+				success: function(data) {
+					$('#team_selector').find('option').remove().end()
+					$(data).each(function() {
+						$('#team_selector').append($("<option>").attr('value',this.id).text(this.title));
+					});
+					$('#team_selector').toggle(data.length > 0);
+				}
 			});
 		});
 	</script>
 	<h3>Center</h3>
 	<%= select(nil, 'center', current_user.centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
 	<br/>
-
-	<div id="teams" style="display:none;"></div>
+	<div>
+		<br/>
+		<select name="[team]" id="team_selector" style="display:none;"></select>
+	</div>
 <% else %>
+	TODO: user with one center
 	<% if @center.teams.any? %>
 			<div id="teams">
 				<h2>Team</h2>
@@ -55,7 +66,7 @@
 	<%= select_date(@start_date, {:prefix => 'start_date', :order => [:day, :month, :year], :start_year => 2003, :end_year => Date.today.year } ) %>
 	<br>
 	<label for='stop_date'>Slutdato</label>
-	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (Date.today.year-10), :end_year => Date.today.year-20 ) %>
+	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (Date.today.year), :end_year => Date.today.year-20 ) %>
 	<br>
 	
 <h3>Alder</h3>

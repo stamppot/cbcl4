@@ -133,6 +133,7 @@ Cbcl4::Application.routes.draw do
   get 'centers/merge_periods/(/:id)', :controller => 'centers',                   :action => 'merge_periods'
   
   get '/teams/delete/(/:id)', :to => 'teams#delete', :as => 'delete_team'
+  get '/teams/center/(/:id)', :to => 'teams#center' #, :as => 'teams_in_center'
   get '/journals/center/(/:id)', :to => 'journals#center', :as => 'journals_for_center'
   get '/journals/select/(/:id)', :to => 'journals#select', :as => 'select_journals'
   get '/journals/move/(/:id)', :to => 'journals#move', :as => 'move_journals'
