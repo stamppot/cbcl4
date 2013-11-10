@@ -22,7 +22,7 @@
 			<td class="col" id="col0"><%= link_to h(file.filename), :action => 'download', :id => file.id, :format => 'csv' %></td>
 			<td class="col" id="col1"><%= file.created_at.to_s(:long) %></td>
 			<td class="col" id="col2"><%= case file.content_type
-				 when /excel/: img_tag_html4("icon_excel.png", :size => "20x20", :alt => "Excel-fil")
+				 when /excel/: image_tag("icon_excel.png", :size => "20x20", :alt => "Excel-fil")
 				 else file.content_type
 				 end %></td>
 			<td class="col action" id="col4"><%= link_to "Slet", export_file_path(file), :method => :delete, :confirm => "Er du sikker??"   %></td>

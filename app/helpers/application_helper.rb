@@ -50,7 +50,7 @@ module ApplicationHelper
   def link_to_icon(icon, url, options = {}, condition = true)
     method = options.delete(:method)
     confirm = options.delete(:confirm)
-    link_to_if condition, img_tag_html4(icon, options.merge(:border => 0, :class => 'icon')), url,
+    link_to_if condition, image_tag(icon, options.merge(:border => 0, :class => 'icon')), url,
       :title => options[:title],
       :method => method,
       :confirm => confirm
@@ -59,10 +59,6 @@ module ApplicationHelper
   # correctly close/open html 4.01 tags
   def stylesheet_link_tag_html4( _n, options = {} )
     return stylesheet_link_tag( _n, options ).gsub( ' />', '>' )
-  end  
-
-  def img_tag_html4( a, b )
-    return image_tag( a, b ).gsub( ' />', '>' )
   end  
 
   def text_field_tag_html4(name, value = nil, options = {})

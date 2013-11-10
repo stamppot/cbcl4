@@ -27,20 +27,20 @@ module ActiveRbacMixins
       def self.included(base)
         base.class_eval do
           # static permissions have n:m relations to roles
-          has_and_belongs_to_many :roles, :uniq => true
+          # has_and_belongs_to_many :roles, :uniq => true
 
           # This method returns all roles this permission has been granted 
           # to and all of their children.
-          def all_roles
-            result = []
+          # def all_roles
+          #   result = []
 
-            self.roles.each { |role| result << role.descendants_and_self }
+          #   self.roles.each { |role| result << role.descendants_and_self }
 
-            result.flatten!
-            result.uniq!
+          #   result.flatten!
+          #   result.uniq!
 
-            return result
-          end
+          #   return result
+          # end
 
           # We want to validate a static permission's title pretty thoroughly.
           validates_uniqueness_of :title, 

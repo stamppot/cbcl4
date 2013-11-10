@@ -35,7 +35,7 @@
 				<td class="t_i"><%= t('letter.login') %>:</td>
 				<td class="t">
 					<% if @group.letters.any? %>
-						<%= link_to img_tag_html4('mail_24.png', :border => 0, :align => "middle", :class => 'icon', :title => t('letter.letters') + t('letter.letters'), :alt => t('letter.letters')), letters_path  -%>
+						<%= link_to image_tag('mail_24.png', :border => 0, :align => "middle", :class => 'icon', :title => t('letter.letters') + t('letter.letters'), :alt => t('letter.letters')), letters_path  -%>
 				
 						<%# link_to t('letter.letters'), letters_path %>
 					<% else %>

@@ -23,8 +23,8 @@ class User < ActiveRecord::Base
           has_and_belongs_to_many :roles #, -> { where uniq: true }
 
   validates_associated :center # center must be valid
-  validates_associated :roles
-  validates_presence_of :roles#, :message => "skal angives"
+  # validates_associated :roles
+  # validates_presence_of :roles#, :message => "skal angives"
   # user must belong to a group unless he's superadmin or admin
   validates_associated :groups, :if => Proc.new { |user| !user.has_role?(:superadmin, :admin) }
   validates_presence_of :groups, :if => Proc.new { |user| !user.has_role?(:superadmin, :admin) }
@@ -40,7 +40,11 @@ class User < ActiveRecord::Base
 	# 	# attributes
 	# 	has center_id, created_at #, login_user
 	# end
-  
+
+  # def roles
+  #   @roles ||= Role.get_all_by_ids(role_ids_str.split(',').map &:to_i)
+  # end
+
   def access?(permission)
     self.perms && self.perms.include?(permission)
   end  
@@ -49,8 +53,7 @@ class User < ActiveRecord::Base
     role_titles = Access.roles(right) # << "SuperAdmin"  # SuperAdmin has access to everything
     return false if role_titles.nil?
 
-    _all_roles = self.all_roles # TODO: cache # cache_fetch("user_roles_#{self.id}") do self.all_roles end
-    _all_roles.map.any? do |role| 
+    roles.any? do |role| 
       role_titles.include?(role.title.to_sym)
     end
   end
@@ -59,19 +62,25 @@ class User < ActiveRecord::Base
     login_user
   end
 
-  scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) } # { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
+  scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
   scope :users, where(:login_user => false).order("users.created_at")
   scope :login_users, where(:login_user => true)
 
-  scope :with_roles, lambda { |role_ids| joins(:roles).where('role_id IN (?)', role_ids) } # { :select => "users.*", :joins => "INNER JOIN roles_users ON roles_users.user_id = users.id",
+  scope :with_roles, lambda { |role_ids| joins(:roles).where('role_id IN (?)', role_ids) } 
+  # scope :with_roles, lambda { |role_ids| where("FIND_IN_SET('#{role_ids.join(',')}', #{role_ids_str})") }
+   # { :select => "users.*", :joins => "INNER JOIN roles_users ON roles_users.user_id = users.id",
     # :conditions => ["roles_users.role_id IN (?)", role_ids] } }
-  scope :in_journals, lambda { |journal_ids| joins(:journal_entries).where('journal_entry_id IN(?)', journal_ids) } # { :select => "users.*", :joins => "INNER JOIN journal_entries ON journal_entries.user_id = users.id",
+  scope :in_journals, lambda { |journal_ids| joins(:journal_entries).where('journal_entry_id IN(?)', journal_ids) } 
     # :conditions => ["journal_entries.journal_id IN (?)", journal_ids] } }
 
   # scope :with_roles, lambda { |role_ids| { :select => "users.*", :joins => "INNER JOIN roles_users ON roles_users.user_id = users.id",
   #   :conditions => ["roles_users.role_id IN (?)", role_ids] } }
   # scope :in_journals, lambda { |journal_ids| { :select => "users.*", :joins => "INNER JOIN journal_entries ON journal_entries.user_id = users.id",
   #   :conditions => ["journal_entries.journal_id IN (?)", journal_ids] } }
+
+  # def condition_with_roles(role_ids)
+  #   roles.map(&:id).any? {|r| role_ids.include?(r) };
+  # end
 
 	def self.run_rake(task_name)
 		# load File.join(RAILS_ROOT, 'lib', 'tasks', 'thinking_sphinx_tasks.rake')
@@ -128,7 +137,7 @@ class User < ActiveRecord::Base
   end
 
   def highest_role
-    self.all_roles.sort_by {|r| r.id}.first
+    self.roles.sort_by {|r| r.id}.first
   end
 
   def update_user(user, params) # user is the user who is being updated
@@ -427,7 +436,7 @@ class User < ActiveRecord::Base
     
   # roles a user can pass on
   def pass_on_roles
-    r = self.all_roles
+    r = self.roles
     if self.has_access?(:superadmin)
       r = Role.get(Access.roles(:all_users))
     elsif self.has_access?(:admin)
@@ -511,8 +520,7 @@ class User < ActiveRecord::Base
 
   def all_roles
     return @_all_roles unless @_all_roles.blank?
-    result = self.roles.map { |role| role.ancestors_and_self }
-
+    result = self.roles #.map { |role| role.ancestors_and_self }
     result.flatten!
     @_all_roles = result.uniq!
 
@@ -537,12 +545,8 @@ class User < ActiveRecord::Base
   # This method returns true if the user is assigned the role with one of the
   # role titles given as parameters. False otherwise.
   def has_role?(*role_titles)
-    roles = role_titles.map { |role| role.respond_to?(:title) && role.title.to_sym || role.to_sym }
-    obj = all_roles.detect do |role|
-            roles.include?(role.title.to_sym)
-          end
-    
-    return !obj.nil?
+    titles = role_titles.map { |role| role.respond_to?(:title) && role.title.to_s || role.to_s }
+    (roles.map(&:title) & titles).any?
   end
 
 
@@ -559,13 +563,13 @@ class User < ActiveRecord::Base
 
   # This static method removes all users with state "unconfirmed" and expired
   # registration tokens.
-  def self.purge_users_with_expired_registration
-    registrations = UserRegistration.find :all,
-                                          :conditions => [ 'expires_at < ?', Time.now.ago(2.days) ]
-    registrations.each do |registration|
-      registration.user.destroy
-    end
-  end
+  # def self.purge_users_with_expired_registration
+  #   registrations = UserRegistration.find :all,
+  #                                         :conditions => [ 'expires_at < ?', Time.now.ago(2.days) ]
+  #   registrations.each do |registration|
+  #     registration.user.destroy
+  #   end
+  # end
 
   # This static method tries to find a user with the given login and password
   # in the database. Returns the user or nil if he could not be found

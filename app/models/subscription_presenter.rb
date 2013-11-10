@@ -7,13 +7,13 @@ class SubscriptionPresenter
 
   def initialize(group, surveys = nil, subscriptions = nil, params = {}) # for a group
     subscriptions ||= group.subscriptions(:include => :periods).to_a
-    surveys ||= group.surveys.to_a
+    surveys ||= group.surveys
     @group = group
     @params = params
     @detailed_view = [] #{}
     @summary_view = {:periods => [], :total_periods => 0}
     @subscriptions = subscriptions.sort_by { |s| s.survey_id }
-    puts "surveys: #{surveys.inspect}"
+    puts "surveys: #{surveys.inspect}" 
     @surveys = surveys.to_a.to_hash_with_key { |s| s.id }
     self.periods_summary
     self.details

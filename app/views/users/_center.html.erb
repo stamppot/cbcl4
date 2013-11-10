@@ -8,7 +8,7 @@
 	<% if current_user.access? :user_new_leader %>
 	<p/>
 	<div class="commands">
-	<%= link_button t('user.center.admin'), new_user_path(@group), 'center_admin_new', :title => t('user.new') %><br>
+	<%= link_button t('user.center.admin'), new_user_path(group), 'center_admin_new', :title => t('user.new') %><br>
 	</div>
 	<% end %>
 	<% else %>
@@ -18,6 +18,6 @@
 	<% end %>
 	</ul>
 	<% end %>
-	<%= render :partial => 'shared/users' %>
+	<%= render :partial => 'shared/users', locals: { group: group} %>
 
 <%# end %>

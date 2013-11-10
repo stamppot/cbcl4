@@ -80,20 +80,20 @@ module ActiveRbacMixins
 
           # This method returns all roles assigned to this group or any of its
           # ancessors.
-          def all_roles
-            result = []
+          # def all_roles
+          #   result = []
 
-            self.roles.each do |role|
-              result << role.ancestors_and_self
-            end
+          #   self.roles.each do |role|
+          #     result << role.ancestors_and_self
+          #   end
     
-            result << parent.all_roles unless parent.nil?
+          #   result << parent.all_roles unless parent.nil?
 
-            result.flatten!
-            result.uniq!
+          #   result.flatten!
+          #   result.uniq!
 
-            return result
-          end
+          #   return result
+          # end
   
           # This method returns all users that have been assigned to this role. It
           # will all users directly assigned to this group and all users assigned to

@@ -12,12 +12,13 @@
 	<% @users.each do |user| %>
 	<tr>
 		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => (user.state != 2) && 'unconfirmed' || '' %></td>
-		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
-		<% if current_user.access?(:user_show_teams) and !(groups = user.groups.teams).empty?
+		<td><%# (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
+
+		<% 	if current_user.access?(:user_show_teams) and !(groups = user.groups.teams).empty?
 			   groups = groups.map { |g| g.title }.join(", ")
-			 else
+			else
 			 	 groups = user.center ? user.center.title : (user.centers.compact.empty? ? "" : user.centers.first.title)
-   		 end -%>
+   		 	end -%>
 		<td><%= groups %>&nbsp;</td>
 	<% if can_edit_delete %>
 	<td style="display:inline; width: 100px;">
@@ -37,4 +38,5 @@
 <% if @users.size > 1 %>
 	<div class="page_entries" > <%= page_entries_info(users) %> </div>
 	<%= will_paginate users, :remote => {:with => 'value', :update => 'user_list'}, :outer_window => 2 -%>
+	<div id="spinner" style='display:none;'><img border=0 src='/images/spinner.gif' /></div>
 <% end -%>

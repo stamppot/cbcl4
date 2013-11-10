@@ -17,14 +17,24 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @page_title = "CBCL - Liste af Brugere"
     @users = current_user.get_users(:page => params[:page], :per_page => Journal.per_page)
 
-    respond_to do |format|
-      format.html
-      format.js {
-        render :update do |page|
-          page.replace_html 'users', :partial => 'users/users'
-        end
-      }
-     end
+    if params[:partial].blank?
+      render
+    else
+      render :partial => 'users/users', :layout => params[:partial].blank?
+    end
+    # respond_to do |format|
+    #   format.html { if params[:partial].blank?
+    #                   render :partial => 'users/users', :layout => true
+    #                 else
+    #                   render :partial => 'users/users', :layout => false
+    #                 end
+    #               }
+      # format.json { render :text => render(:partial => 'users/users', :layout => false) }
+        # render :update do |page|
+        #   page.replace_html 'users', :partial => 'users/users'
+        # end
+      # }
+     # end
   end
 
   # Show a user identified by the +:id+ path fragment in the URL. Before_filter find_user
@@ -135,9 +145,9 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
   
   def center
-    @group = Center.find params[:center_id]
-    @users = User.users.in_center(@group).paginate(:page => params[:page], :per_page => 15)
-    render :partial => 'center'
+    group = Center.find params[:id]
+    @users = User.users.in_center(group).paginate(:page => params[:page], :per_page => 15)
+    render :partial => 'center', locals: {group: group}
   end
 
   protected

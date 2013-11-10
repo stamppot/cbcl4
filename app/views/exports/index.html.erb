@@ -44,11 +44,11 @@
 		});
 	</script>
 	<h3>Center</h3>
-	<%= select(nil, 'center', current_user.centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
+	<%= select('center', "", current_user.centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
 	<br/>
 	<div>
 		<br/>
-		<select name="[team]" id="team_selector" style="display:none;"></select>
+		<select name="team" id="team_selector" style="display:none;"></select>
 	</div>
 <% else %>
 	TODO: user with one center

@@ -114,6 +114,7 @@ Cbcl4::Application.routes.draw do
   get "logout" => "login#logout", :as => "logout"
   match "login" => "login#login", :via => [:get, :post] #, :as => "login"
   get "signup" => "users#new", :as => "signup"
+  get "/users/delete/(/:id)" => "users#delete", :as => "delete_user"
   # get "main" => "main#index", :as => "index"
   # user
   get 'change_password/(/:id)', :to => 'user#change_password', :as => 'change_password'
@@ -191,6 +192,7 @@ Cbcl4::Application.routes.draw do
   # get 'reminders/download/(/:id)', :to => 'reminders#download', :as => 'download'
   get 'reminders/download/:id.:format', :to => 'reminders#download', :as => 'csv_entry_status_download', :format => 'csv'
 
+  get 'export_files/show/(/:id)', :to => 'export_files#show', :as => 'export_login'
   get 'export_files/download/(/:id)', :to => 'export_files#download', :as => 'file_download'
   get 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv'
 

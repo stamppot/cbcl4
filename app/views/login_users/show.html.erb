@@ -29,7 +29,7 @@
   <dd><%= User.states.invert[@user.state] %></dd>
 
   <dt>Rolle</dt>
-  <% if @user.all_roles.empty? %>
+  <% if @user.roles.empty? %>
   <dd><%= t('no_roles') %></dd>
   <% else %>
   <dd><%= t("roles.#{@user.roles.first.title}") %></dd>

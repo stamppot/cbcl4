@@ -1,50 +1,57 @@
 <p><span class="h3"><%=h @group.title %></span><br/></p>
 
-<ul class="tabs" class="center_tabs">
-	<li class="tab" id="info_tab"><a href="#info">Info</a></li>
-	<li class="tab" id="teams_tab"><a href="#center_teams"><%= t('menu.teams') %></a></li>
-	<li class="tab" id="users_tab"><a href="#center_users"><%= t('menu.users') %></a></li>
-	<% if false && show_journals? %>
-	<li class="tab"><a href="#center_journals"><%= t('menu.journals') %></a>
-	<% end %>
-	<% if current_user.access? :subscription_new_edit %>
-	<li class="tab" id="subscription_tab"><a href="#center_subscriptions"><%= t('menu.subscriptions') %></a></li>
-	<% end %>
-</ul>
-<div class="tab_canvas" id="tab_canvas_<%= @group.id %>">
-<br/>
-
-<div class="center_info" id="info">
-	<%= render :partial => 'info' %>
-</div>
-
-<div class="center_teams" id="center_teams">
-	<div id="teams_content"></div>
-		<div class="button">
-			<%= link_button t('team.new'), new_team_in_center_path(@group), 'team_new', :title => t('team.new') %>
-		</div>	
+<div id="tab-container">
+	<ul class="tabs" class="center_tabs">
+		<li class="tab" id="info_tab"><a href="#info">Info</a></li>
+		<li class="tab" id="teams_tab"><a href="#center_teams"><%= t('menu.teams') %></a></li>
+		<li class="tab" id="users_tab"><a href="#center_users"><%= t('menu.users') %></a></li>
+		<% if false && show_journals? %>
+		<li class="tab"><a href="#center_journals"><%= t('menu.journals') %></a></li>
+		<% end %>
+		<% if current_user.access? :subscription_new_edit %>
+		<li class="tab" id="subscription_tab"><a href="#center_subscriptions"><%= t('menu.subscriptions') %></a></li>
+		<% end %>
+	</ul>
+	<div class="tab_canvas" id="tab_canvas_<%= @group.id %>">
+	<br/>
 	
-		<%= render :partial => 'commands' %>
+	<div class="center_info" id="info">
+		<%= render :partial => 'info' %>
 	</div>
 	
-	<div class="center_users" id="center_users">
-		<div id="users_content"></div>
-	</div>
-	
-	<% if false && show_journals? %>
-	<div class="center_journals" id="center_journals">
-	<%= render :partial => 'shared/journals' %>
-	</div>
-	<% end %>
-	
-	<div class="center_subscriptions" id="center_subscriptions">
-		<div id="subscription_content">	</div>
-	<%# render :partial => 'subscriptions' %>
+	<div class="center_teams" id="center_teams">
+		<div id="teams_content"></div>
+			<div class="button">
+				<%= link_button t('team.new'), new_team_in_center_path(@group), 'team_new', :title => t('team.new') %>
+			</div>	
+		
+			<%= render :partial => 'commands' %>
+		</div>
+		
+		<div class="center_users" id="center_users">
+			<div id="users_content"></div>
+		</div>
+		
+		<% if false && show_journals? %>
+		<div class="center_journals" id="center_journals">
+		<%= render :partial => 'shared/journals' %>
+		</div>
+		<% end %>
+		
+		<div class="center_subscriptions" id="center_subscriptions">
+			<div id="subscription_content">	</div>
+		<%# render :partial => 'subscriptions' %>
+		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
-$$('.tabs').easytabs();
+	$(document).ready(function() {
+		$('#tab-container').easytabs({  
+			animate: true,
+		  	animationSpeed: "fast"
+		});
+	});
 
 $(document).ready(function() {
 	var groupId = <%= @group.id %>;

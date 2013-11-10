@@ -2,8 +2,8 @@
 class Center < Group
   has_many :teams, :dependent => :destroy
   has_many :journals #, :dependent => :destroy  # should never delete journals. TODO: some way to reclaim deleted/dangling journals
-  has_many :subscriptions, :include => [:survey, :periods], :dependent => :destroy, :uniq => true
-  has_many :surveys, :through => :subscriptions, :order => :position, :uniq => true
+  has_many :subscriptions #, -> { includes(:periods) } #, :include => [:survey, :periods], :dependent => :destroy
+  has_many :surveys, -> { order('position').uniq }, :through => :subscriptions
   has_one  :center_info
   has_many :users,
            :class_name => 'User',
@@ -72,16 +72,16 @@ class Center < Group
   end
 
   # returns subscription for the specified survey
-  def get_subscription(survey_id)
+  def get_subscription(survey_id) # TODO: include periods
     (s = self.subscriptions.by_survey(survey_id)) && s.first
   end
   
   # returns subscribed surveys
-  def subscribed_surveys
+  def subscribed_surveys # TODO: include periods
     subscriptions.active.map { |sub| sub.survey }.sort_by { |s| s.position }
   end
   
-  def subscribed_surveys_in_age_group(age)
+  def subscribed_surveys_in_age_group(age) # TODO: include periods
     subscribed_surveys.select do |survey|
       # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
       age_flex = (survey.age =~ /16|17|18/) && 4 || 1
@@ -90,7 +90,7 @@ class Center < Group
   end
     
   # increment subscription count - move to journal_entry, higher abstraction
-  def use_subscribed(survey)
+  def use_subscribed(survey) # TODO: include periods
     # find subscription to increment, must be same as is journal_entry
     subscription = self.subscriptions.by_survey(survey) 
     return false unless Subscription
@@ -98,8 +98,13 @@ class Center < Group
   end
 
   # shows no. used questionnaires in subscriptions
-  def used_subscriptions
+  def used_subscriptions # TODO: include periods
     self.subscriptions.inject(0) { |memo,sub| sub.copies_used + memo;  }
+  end
+
+  # did center ever pay a subscription?
+  def paid_subscriptions? # TODO: include periods
+    !self.subscriptions.map { |sub| sub.periods.paid }.flatten.empty?
   end
 
   def subscription_presenter(surveys = nil)
@@ -110,10 +115,6 @@ class Center < Group
     @subscription_service ||= SubscriptionService.new(self)
   end
 
-  # did center ever pay a subscription?
-  def paid_subscriptions?
-    !self.subscriptions.map { |sub| sub.periods.paid }.flatten.empty?
-  end
   
   # return the next team id. Id must be highest id so far plus 1, and if doesn't exist
   def next_team_code

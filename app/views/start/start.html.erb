@@ -9,7 +9,7 @@ Du skal besvare nedenstående spørgeskema. Du begynder ved at trykke på start.
 	<span style="font-size: 14pt;"><%= @survey.description %></span>
 	<span>&nbsp;&nbsp;&nbsp;&nbsp;
 	<% url = "/survey_#{@survey.id}.pdf" %>
-	<%= link_to img_tag_html4("printer-42x.png", :align => "center", :border=>0, :alt => 'Udskriv spørgeskema', :class => "new_window", :title => 'Udskriv spørgeskema' ),
+	<%= link_to image_tag("printer-42x.png", :align => "center", :border=>0, :alt => 'Udskriv spørgeskema', :class => "new_window", :title => 'Udskriv spørgeskema' ),
 						url, :onclick => "window.open(\"#{url}\"); return false;", :title => 'Udskriv spørgeskema' %></span>
 </div>
 

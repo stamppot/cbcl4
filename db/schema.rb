@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
   create_table "groups", force: true do |t|
     t.timestamp "created_at",                            null: false
     t.timestamp "updated_at",                            null: false
-    t.string    "title",      limit: 200, default: "",   null: false
+    t.string    "title",      limit: 200
     t.integer   "code"
     t.string    "type",       limit: 16,  default: "",   null: false
     t.integer   "parent_id"
@@ -547,6 +547,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer   "center_id"
     t.boolean   "login_user",                      default: false
     t.integer   "delta"
+    t.string    "role_ids"
   end
 
   add_index "users", ["center_id"], name: "users_center_id_index", using: :btree

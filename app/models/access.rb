@@ -5,7 +5,7 @@ class Access
   end
 
   def self.for_user(user)
-    user && user.all_roles.map {|role| self.for(role.title.to_sym) }.foldl(:merge)
+    user && user.roles.map {|role| self.for(role.title.to_sym) }.foldl(:merge)
   end
   
   def self.for(role)

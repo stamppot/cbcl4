@@ -8,7 +8,7 @@ class AnswerCell < ActiveRecord::Base
   end
 	
   belongs_to :answer
-  set_primary_key "id"
+  # set_primary_key "id"
   scope :ratings, :conditions => ['cell_type = ?', AnswerCell.answer_types['Rating']]
   scope :not_answered, :conditions => ["(value = ? OR value = NULL)", '9']
   scope :items, :conditions => ["item != ? ", ""]

@@ -33,23 +33,21 @@ class ExportsController < ApplicationController
   end
   
   def filter
+    params[:center] = params[:id].first.to_i
     center = Center.find params[:id] unless params[:id].blank?
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)
+    puts "params: #{params.inspect}"
     params = FilterArgs.filter_age(params)
-    params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
+    puts "params: #{params.inspect}"
+    # params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
     journals = center && center.journals.count || Journal.count
 
     count_survey_answers = CsvSurveyAnswer.with_options(current_user, params).count
 
     render :json => {:text => "Journaler: #{journals}  Skemaer: #{count_survey_answers.to_s}"}
-    # render :update do |page|
-    #   page.replace_html 'results', "Journaler: #{journals}  Skemaer: #{count_survey_answers.to_s}"
-    #   page.visual_effect :shake, 'results'
-    #   page.replace_html 'centertitle', center.title if center
-    # end
   end
 
   def download
@@ -65,14 +63,6 @@ class ExportsController < ApplicationController
     @task = Task.create(:status => "In progress")
     @task.create_survey_answer_export(params[:survey][:id], csv_survey_answers)
   end
-
-  # def get_params(params)
-  #   args = params
-  #   params = filter_date(args)
-  #   params = Query.filter_age(params)
-  #   params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
-  #   params
-  # end
 
   # a periodic updater checks the progress of the export data generation 
   def generating_export

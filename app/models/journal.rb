@@ -66,8 +66,8 @@ class Journal < ActiveRecord::Base #< Group
   scope :and_entries, :include => :journal_entries
   # scope :and_login_users, :include => { :journal_entries => :login_user }
   scope :and_person_info, :include => :person_info
-  scope :for_parent, lambda { |group| where(:team_id => (group.is_a?(Group) ? group.id : group).order('created_at desc')) }
-  scope :for_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group).order('created_at desc')) }
+  scope :for_parent, lambda { |group| where(:team_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
+  scope :for_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group)).order('created_at desc') }
   scope :by_code, :order => 'code ASC'
   scope :for_groups, lambda { |group_ids| where(:parent_id => group_ids) }  # { :conditions => ['parent_id IN (?)', group_ids] } }
   scope :for, lambda { |journal_id| where(:id => journal_id) }

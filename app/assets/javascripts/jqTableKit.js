@@ -327,7 +327,7 @@
 							downElement.addClass("resize-handle-active");
 
 							//TODO: find better solution than all elements
-							if ($.browser.msie) {	
+							if (navigator.appName === 'Microsoft Internet Explorer') {	
 								$('*').attr('unselectable', 'on');
 							}else{
 								$('*').addClass('jqTableKitNoneselectable');
@@ -360,7 +360,7 @@
 								resizeChangeCursor($(this), e.pageX);
 							});
 	
-							if ($.browser.msie) {	
+							if (navigator.appName === 'Microsoft Internet Explorer') {	
 								$('*').attr('unselectable', 'off');
 							}else{
 								$('*').removeClass('jqTableKitNoneselectable');

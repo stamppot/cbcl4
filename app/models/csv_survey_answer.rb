@@ -39,6 +39,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
     options[:stop_age]    ||= 28
 
     options[:center] = user.center.id if !user.access?(:superadmin)
+    puts "filter_params options: #{options.inspect}"
     if !options[:center].blank?
       center = Center.find(options[:center])
       options[:conditions] = ['center_id = ?', center.id]

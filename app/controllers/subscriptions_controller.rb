@@ -126,15 +126,16 @@ class SubscriptionsController < ApplicationController
   end
   
   def center
-    @group = Center.find params[:center_id]
-    @subscription_presenter = @group.subscription_presenter
-    @subscriptions = @group.subscriptions(:include => :periods)
+    group = Center.find params[:id]
+    subscription_presenter = group.subscription_presenter
+    @subscriptions = group.subscriptions(:include => :periods)
     @surveys = current_user.surveys.group_by {|s| s.id}
 
     # respond_to do |format|
       # format.html {
-        render :partial => 'center'
+        render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
          # redirect_to team_path(@group) and return if @group.instance_of?(Team) }
+        
       # format.rjs {
       #   render :update do |page|
       #     page.replace_html 'subscription_content', :partial => 'center'
