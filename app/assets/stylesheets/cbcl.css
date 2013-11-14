@@ -24,7 +24,7 @@ a:visited { color: #666; }
 	display: inline;
 }
 
-.flash_notice {
+.flash_notice, #notice {
 	color: darkgreen;
 	border: 1px solid green;
 	padding: 6px 10px 6px 27px;

@@ -3,7 +3,7 @@ class MoveJournalsToOwnTable
     run_sql = true
     commands = []
     Journal.all.map do |j|
-    	sql = %{REPLACE INTO journals (id, created_at, updated_at, title, code, team_id, center_id, delta) 
+    	sql = %{REPLACE INTO journals (id, created_at, updated_at, title, code, group_id, center_id, delta) 
     		VALUES (#{j.id}, '#{j.created_at.to_s(:db)}', '#{j.updated_at.to_s(:db)}', "#{j.title}", '#{j.code}', #{j.parent_id}, #{j.center_id}, 0)
     	}
     	puts sql
@@ -11,7 +11,7 @@ class MoveJournalsToOwnTable
     	commands << sql
     end
 
-   	ActiveRecord::Base.connection.execute("update journals set team_id = NULL where team_id = center_id") if run_sql
+   	ActiveRecord::Base.connection.execute("update journals set group_id = center_id where team_id IS NULL") if run_sql
 
     Journal.delete_all if run_sql
     puts commands.join("; ")

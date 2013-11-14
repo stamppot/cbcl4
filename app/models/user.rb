@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   after_save    :expire_cache # delete cached roles, # groups
   after_destroy :expire_cache
   
+  has_many :roles, :through => :user_role
+
   belongs_to :center
           
           has_and_belongs_to_many(:groups) do #, -> { where uniq: true }) do

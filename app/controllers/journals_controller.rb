@@ -56,10 +56,11 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   def new
     @page_title = "Opret ny journal"
-    @group = Journal.new
+    @journal = Journal.new
+    @journal.group_id = current_user.teams.first || current_user.centers.first
     # if journal is created from Team.show, then team is set to parent
     @groups = current_user.my_groups # Group.get_teams_or_centers(params[:id], current_user)
-    @group.team, @group.center = @groups.first, @groups.first.center if @groups.any?
+    # @group.team, @group.center = current_user.center, @groups.first, @groups.first.center if @groups.any?
     alt_ids = []
     alt_id = alt_ids.any? && alt_ids.first || ""
     @alt_id_name = "Projektnr" # alt_id && alt_id.value || "Projektnr"

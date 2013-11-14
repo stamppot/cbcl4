@@ -4,7 +4,7 @@
 # require 'hashery'
 class Journal < ActiveRecord::Base #< Group
   belongs_to :center
-  belongs_to :team
+  belongs_to :group #, :class_name => 'Group'
 
   has_one :person_info #, :dependent => :destroy
   # has_many :journal_entries, :order => 'created_at', :dependent => :destroy
@@ -116,6 +116,10 @@ class Journal < ActiveRecord::Base #< Group
     #load File.join(RAILS_ROOT, 'lib', 'tasks', 'thinking_sphinx_tasks.rake')
     #Rake::Task[task_name].invoke
   end
+
+  # def parent=(group)
+
+  # end
 
   def update_birthdate!(params)
     new_birthdate = Date.new params["birthdate(1i)"].to_i, params["birthdate(2i)"].to_i, params["birthdate(3i)"]
