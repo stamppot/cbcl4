@@ -2,7 +2,7 @@ class CreateJournals < ActiveRecord::Migration
   def self.up
     create_table :journals do |t|
       t.string :title, :code
-      t.integer :parent_id, :center_id, :delta
+      t.integer :group_id, :center_id, :delta
       t.timestamps
     end
   end

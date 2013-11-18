@@ -53,8 +53,8 @@ class Journal < ActiveRecord::Base #< Group
   validates_presence_of :name#, :message => "Navn skal angives"
   validates_presence_of :sex #, :message => "Køn skal angives"
   validates_presence_of :nationality #, :message => "Nationalitet skal angives"
-  validates_associated :team #, :message => "Et Center eller team skal angives"
-  # validates_presence_of :team
+  validates_associated :group #, :message => "Et Center eller team skal angives"
+  # validates_presence_of :group
   validates_associated :center
   validates_presence_of :center
   # validates_presence_of :person_info
@@ -66,10 +66,10 @@ class Journal < ActiveRecord::Base #< Group
   scope :and_entries, :include => :journal_entries
   # scope :and_login_users, :include => { :journal_entries => :login_user }
   scope :and_person_info, :include => :person_info
-  scope :for_parent, lambda { |group| where(:team_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
+  scope :for_parent, lambda { |group| where(:group_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
   scope :for_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group)).order('created_at desc') }
   scope :by_code, :order => 'code ASC'
-  scope :for_groups, lambda { |group_ids| where(:parent_id => group_ids) }  # { :conditions => ['parent_id IN (?)', group_ids] } }
+  scope :for_groups, lambda { |group_ids| where(:group_id => group_ids) }  # { :conditions => ['parent_id IN (?)', group_ids] } }
   scope :for, lambda { |journal_id| where(:id => journal_id) }
   
   
@@ -81,8 +81,8 @@ class Journal < ActiveRecord::Base #< Group
      indexes person_info.alt_id, :as => :person_info_alt_id
 		 # indexes center_id
      # attributes
-     # has parent_id, center_id, created_at, updated_at
-     has team_id, center_id, created_at, updated_at
+     # has group_id, center_id, created_at, updated_at
+     has group_id, center_id, created_at, updated_at
      set_property :delta => true
    end
 
@@ -107,7 +107,7 @@ class Journal < ActiveRecord::Base #< Group
       end
     else
       user.group_ids.inject([]) do |result, id|
-        result += Journal.search(phrase, :with => {:team_id => id }, :order => "created_at DESC", :include => :person_info, :per_page => 40)
+        result += Journal.search(phrase, :with => {:group_id => id }, :order => "created_at DESC", :include => :person_info, :per_page => 40)
       end
     end
   end
@@ -160,7 +160,7 @@ class Journal < ActiveRecord::Base #< Group
     Rails.cache.delete_matched(/journals_groups_(#{self.center_id})/)
     Rails.cache.delete_matched(/journals_all_paged_(.*)_#{Journal.per_page}/)
     # Rails.cache.delete_matched(/journal_ids_user_(.*)/)
-		self.team.users.map {|user| user.expire_cache}
+		self.group.users.map {|user| user.expire_cache}
   end
   
   def destroy_journal_entries
@@ -223,15 +223,15 @@ class Journal < ActiveRecord::Base #< Group
   
   # code of center and team
   def qualified_code
-    team_id = team.code unless team.instance_of? Center
-    "%04d" % center.code + "-" + "%04d" % team_id #  team.code.to_s.rjust(3, "0")
+    team_id = group.code unless group.instance_of? Center
+    "%04d" % center.code + "-" + "%04d" % team_id #  group.code.to_s.rjust(3, "0")
   end
   
   # creates entries with logins
   def create_journal_entries(surveys, follow_up = 0)
     return true if surveys.empty?
     surveys.each do |survey|
-      entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up, :group_id => self.team_id || self.center_id})
+      entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up, :group_id => self.group_id || self.center_id})
       entry.journal_id = self.id
       # login_number = "#{self.code}#{survey.id}"
       entry.make_login_user
@@ -261,7 +261,7 @@ class Journal < ActiveRecord::Base #< Group
     c = Dictionary.new # ActiveSupport::OrderedHash.new
     c["ssghafd"] = self.parent.group_code
     c["ssghnavn"] = self.center.title
-    c["safdnavn"] = self.team.title
+    c["safdnavn"] = self.group.title
     c["pid"] = settings && eval("self.#{settings.value}") || self.code
     c["projekt"] = self.person_info.alt_id || ""
     c["pkoen"] = self.sex
@@ -277,7 +277,7 @@ class Journal < ActiveRecord::Base #< Group
   #   c = {}
   #   c[:ssghafd] = self.parent.group_code
   #   c[:ssghnavn] = self.center.title
-  #   c[:safdnavn] = self.team.title
+  #   c[:safdnavn] = self.group.title
   #   c[:pid] = settings && eval("self.#{settings.value}") || self.code
   #   c[:projekt] = self.person_info.alt_id
   #   c[:pkoen] = self.sex

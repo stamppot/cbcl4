@@ -4103,6 +4103,7 @@ Object.extend(document, {
     if (document.loaded) return;
     if (timer) window.clearInterval(timer);
     document.fire("dom:loaded");
+    // alert('hest')
     document.loaded = true;
   }
 

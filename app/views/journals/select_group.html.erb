@@ -23,6 +23,8 @@
 
   <dt><label>Vælg center/team:</label></dt>
   <dd>
+  <%= render 'shared/groups_tree', :locals => {:groups => @groups} %>
+  <div>Tralalla: old</div>
     <%= node_tree(@groups) do |group|
 					onclick = 
           result = "<input class=\"group_center\" id=\"group_parent_#{group.id}\" type=\"radio\" name=\"group[parent]\" value=\"#{group.id}\" checked=\"checked\" /> " if @group.parent == group

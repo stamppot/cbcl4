@@ -11,7 +11,7 @@ class AddJournalEntryTeamId < ActiveRecord::Migration
   
   def self.update
     JournalEntry.find_each() do |entry|
-      entry.group_id = entry.journal.parent_id
+      entry.group_id = entry.journal.group_id
       entry.save
     end
   end

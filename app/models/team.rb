@@ -6,7 +6,7 @@ class Team < Group
   
   scope :with_center, :include => :center
   scope :with_journals, :include => {:journals => :person_info}
-  scope :for_center, lambda { |center| { :conditions => ['parent_id = ?', (center.is_a?(Center) ? center.id : center)] } }
+  scope :for_center, lambda { |center| where(:parent_id => (center.is_a?(Center) ? center.id : center)) }
   
   # scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
 

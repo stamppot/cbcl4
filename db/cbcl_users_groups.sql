@@ -35,11 +35,11 @@ CREATE TABLE `groups` (
   `title` varchar(200) NOT NULL default '',
   `code` int(4) unsigned default NULL,
   `type` varchar(16) NOT NULL default '',
-  `parent_id` int(10) unsigned default NULL,
+  `group_id` int(10) unsigned default NULL,
 	`center_id` int(10) unsigned default NULL,
   PRIMARY KEY  (`id`),
-  KEY `groups_parent_id_index` (`parent_id`),
-  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION,
+  KEY `groups_group_id_index` (`group_id`),
+  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION,
 	KEY `groups_center_id_index` (`center_id`),
 	CONSTRAINT `groups_ibfk_2` FOREIGN KEY (`center_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8 COLLATE=utf8_danish_ci;
@@ -167,9 +167,9 @@ CREATE TABLE `user_registrations` (
 #
 ALTER TABLE `groups` DISABLE KEYS;
 LOCK TABLES `groups` WRITE;
-INSERT INTO `groups` (`id`, `created_at`, `updated_at`, `title`, `parent_id`, `center_id`, `code`, `type`) VALUES ('1','2008-03-20 10:27:32','2008-03-20 10:27:32','Det børne- og ungdomspsykiatriske Hus',NULL,NULL,'4202','Center');
-INSERT INTO `groups` (`id`, `created_at`, `updated_at`, `title`, `parent_id`, `center_id`, `code`, `type`) VALUES ('2','2007-01-17 18:38:16','2007-01-17 18:38:16','BUPH',NULL,NULL,'1000','Center');
-INSERT INTO `groups` (`id`, `created_at`, `updated_at`, `title`, `parent_id`, `center_id`, `code`, `type`) VALUES ('3','2008-03-20 10:29:40','2008-03-20 10:29:40','Forskningsteam','1','1','350','Team');
+INSERT INTO `groups` (`id`, `created_at`, `updated_at`, `title`, `group_id`, `center_id`, `code`, `type`) VALUES ('1','2008-03-20 10:27:32','2008-03-20 10:27:32','Det børne- og ungdomspsykiatriske Hus',NULL,NULL,'4202','Center');
+INSERT INTO `groups` (`id`, `created_at`, `updated_at`, `title`, `group_id`, `center_id`, `code`, `type`) VALUES ('2','2007-01-17 18:38:16','2007-01-17 18:38:16','BUPH',NULL,NULL,'1000','Center');
+INSERT INTO `groups` (`id`, `created_at`, `updated_at`, `title`, `group_id`, `center_id`, `code`, `type`) VALUES ('3','2008-03-20 10:29:40','2008-03-20 10:29:40','Forskningsteam','1','1','350','Team');
 UNLOCK TABLES;
 ALTER TABLE `groups` ENABLE KEYS;
 #

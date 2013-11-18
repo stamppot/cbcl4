@@ -39,7 +39,7 @@
 		<% end %>
 		
 		<div class="center_subscriptions" id="center_subscriptions">
-			<div id="subscription_content">	</div>
+			<div id="subscription_content"></div>
 		<%# render :partial => 'subscriptions' %>
 		</div>
 	</div>
@@ -55,48 +55,80 @@
 
 $(document).ready(function() {
 	var groupId = <%= @group.id %>;
-	$.get("/teams/center/" + groupId, function(data) {
-		$('#teams_content').html(data);
-		jqTableKit.reload();
+
+	$('#teams_tab').click(function() {
+		if($('#teams_content').is(':empty')) {
+			$.get("/teams/center/" + groupId, function(data) {
+				$('#teams_content').html(data);
+				$.jqTableKit.reload();
+			});
+		}
+	})
+	if(location.href.indexOf('#center_teams') > 0) $('#teams_tab').click();
+
+
+	$('#users_tab').click(function() {
+		if($('#users_content').is(':empty')) {
+			$.get("/users/center/" + groupId, function(data) {
+				$('#users_content').html(data);
+				$.jqTableKit.reload();
+			});
+		}
 	});
+	if(location.href.indexOf('#center_users') > 0) $('#users_tab').click();
+
+
 	<% if current_user.access? :subscription_new_edit %>
-	$.get("/subscriptions/center/" + groupId, function(data) {
-		$('#subscription_content').html(data);
-		jqTableKit.reload();
+	$('#subscription_tab').click(function() {
+		if($('#subscription_content').is(':empty')) {
+			$.get("/subscriptions/center/" + groupId, function(data) {
+				$('#subscription_content').html(data);
+				$.jqTableKit.reload();
+			});
+		}
 	});
+	if(location.href.indexOf('#center_subscriptions') > 0) $('#subscriptions_tab').click();
 	<% end %>
-	$.get("/users/center/" + groupId, function(data) {
-		$('#users_content').html(data);
-		jqTableKit.reload();
-	});
 });
 
 </script>
 
 <script type="text/javascript">
-document.observe("dom:loaded", function() {
-  var container = $(document.body)
-
-  if (container) {
-    var img = new Image
-    img.src = '/images/spinner.gif'
-    var spinner = null
-
-    function Spinner() {
-      spinner = new Element('img', { src: img.src, 'class': 'spinner' })
-      return spinner
-    }
-
-    container.observe('click', function(e) {
-      var el = e.element()
-      if (el.match('.pagination a')) {
-        el.up('.pagination').insert(Spinner())
-        new Ajax.Request(el.href, { method: 'get' })
-        e.stop()
-      }
-    })
-  }
+$(document).ready(function() {
+  $('#content').delegate('.pagination a', 'click', function() {
+    $('#spinner').show();
+    $.get('users/?page='+ $(this).text() + '&partial=true',
+        function(data) {
+          $('#users').html(data);
+          $('#spinner').hide();
+        });
+    return false;
+  });
 })
+
+// document.observe("dom:loaded", function() {
+//   var container = $(document.body)
+
+//   if (container) {
+//     var img = new Image
+//     img.src = '/images/spinner.gif'
+//     var spinner = null
+
+//     function Spinner() {
+//       spinner = new Element('img', { src: img.src, 'class': 'spinner' })
+//       return spinner
+//     }
+
+//     container.observe('click', function(e) {
+//       var el = e.element()
+//       if (el.match('.pagination a')) {
+//         el.up('.pagination').insert(Spinner())
+//         new Ajax.Request(el.href, { method: 'get' })
+//         e.stop()
+//       }
+//     })
+//   }
+// })
 </script>
 <br/>
 <div class="commands">

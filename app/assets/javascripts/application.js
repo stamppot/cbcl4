@@ -34,7 +34,6 @@ function get_journal_entry_id() {
     $('login_box').show();
   }
 }
-// document.observe("dom:loaded", handle_login_box);
 
 
 // call a method that updates the dynamic parts of a survey 
@@ -224,6 +223,7 @@ function hide_search_help() {
 }
 
 function update_reminder_status(group_id) {
+	alert("TODO: update_reminder_status group_id: " + group_id);
 	var params = $("reminders").serialize();
 	params += "&id=" + group_id;
 

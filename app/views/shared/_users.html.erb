@@ -3,7 +3,7 @@
 		<% if @users.empty? %>
 		<p><%= t('none') %></p>
 		<% else %>
-		<%= render :partial => 'shared/user_list' %>
+		<%= render :partial => 'shared/user_list', :locals => {:users => @users} %>
 		<% end %>
 	</div>
 

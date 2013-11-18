@@ -1,31 +1,37 @@
 <h2><%=h @group.title %></h2>
 
-<ul class="tabs" id="subscription_tabs" class="team_tabs">  
-	<li class="tab"><a href="#info">Info</a></li>  
-	<li class="tab"><a href="#team_users"><%= t('user.users') %></a></li> 
-	<li class="tab"><a href="#team_journals"><%= t('journal.journals') %></a></li> 
-</ul>
-<div class="tab_canvas" id="tab_canvas_<%= @group.id %>">
-	<br/>
+<div id="tab-container">
+  <ul class="tabs" id="subscription_tabs" class="team_tabs">  
+	  <li class="tab"><a href="#info">Info</a></li>  
+	  <li class="tab"><a href="#team_users"><%= t('user.users') %></a></li> 
+  	<li class="tab"><a href="#team_journals"><%= t('journal.journals') %></a></li> 
+  </ul>
+  
+  <div class="tab_canvas" id="tab_canvas_<%= @group.id %>">
+  	<br/>
 
-	<div class="team_info" id="info">
-		<%= render :partial => 'info' %>
-	</div>
+	 <div class="team_info" id="info">
+	 <%= render :partial => 'info' %>
+	 </div>
 
 
-	<div class="team_users" id="team_users">
-		<%= render :partial => 'shared/users' %>
-	</div>
+	 <div class="team_users" id="team_users">
+		<%= render :partial => 'shared/users', :locals => {:group => @group} %>
+	 </div>
 
-	<div class="team_journals" id="team_journals">
+	 <div class="team_journals" id="team_journals">
 		<%= render :partial => 'journals' %>
-	</div>
-
+	 </div>
+  </div>
 </div>
+
 <script type="text/javascript">
-	$$('.tabs').each(function(tab_group){  
-    new Control.Tabs(tab_group);  
-	});
+  $(document).ready(function() {
+    $('#tab-container').easytabs({  
+      animate: true,
+      animationSpeed: "fast"
+    });
+  });
 </script>
 
 <br/>
@@ -40,27 +46,38 @@
 </div>
 
 <script type="text/javascript">
-document.observe("dom:loaded", function() {
-  var container = $(document.body)
-
-  if (container) {
-    var img = new Image
-    img.src = '/images/spinner.gif'
-    var spinner = null
-
-    function Spinner() {
-      spinner = new Element('img', { src: img.src, 'class': 'spinner' })
-      return spinner
-    }
-
-    container.observe('click', function(e) {
-      var el = e.element()
-      if (el.match('.pagination a')) {
-        el.up('.pagination').insert(Spinner())
-        new Ajax.Request(el.href, { method: 'get' })
-        e.stop()
-      }
-    })
-  }
+$(document).ready(function() {
+  $('#content').delegate('.pagination a', 'click', function() {
+    $('#spinner').show();
+    $.get('/users/?page='+ $(this).text() + '&partial=true',
+        function(data) {
+          $('#users').html(data);
+          $('#spinner').hide();
+        });
+    return false;
+  });
 })
+// document.observe("dom:loaded", function() {
+//   var container = $(document.body)
+
+//   if (container) {
+//     var img = new Image
+//     img.src = '/images/spinner.gif'
+//     var spinner = null
+
+//     function Spinner() {
+//       spinner = new Element('img', { src: img.src, 'class': 'spinner' })
+//       return spinner
+//     }
+
+//     container.observe('click', function(e) {
+//       var el = e.element()
+//       if (el.match('.pagination a')) {
+//         el.up('.pagination').insert(Spinner())
+//         new Ajax.Request(el.href, { method: 'get' })
+//         e.stop()
+//       }
+//     })
+//   }
+// })
 </script>

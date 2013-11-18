@@ -933,4 +933,6 @@ TableKit.Bench = {
 	}
 } */
 
+alert('dom:loaded TableKit.load');
 document.observe("dom:loaded", TableKit.load);
+// alert('dom:loaded tablekit.load');

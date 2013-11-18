@@ -313,7 +313,7 @@ class User < ActiveRecord::Base
     if self.has_access?(:team_show_all)
       Team.find(:all, options)
     elsif self.has_access?(:team_show_admin)
-      Team.in_center(self.center_id).sort_by &:title # Team.find(:all, :conditions => ['parent_id = ?', self.center_id])
+      Team.in_center(self.center_id).sort_by &:title
     elsif self.has_access?(:team_show_member)
       Team.direct_groups(self).sort_by &:title
     else

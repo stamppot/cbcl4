@@ -97,7 +97,7 @@ class ScoreRapport < ActiveRecord::Base
       :variables => vals.keys.join(';;'),
       :journal_id => self.survey_answer.journal_id,
       :survey_answer_id => self.survey_answer_id,
-      :team_id => journal.parent_id,
+      :team_id => journal.group_id,
       :center_id => self.center_id,
       :survey_id => self.survey_id,
       :age => self.age,

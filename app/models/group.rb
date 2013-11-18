@@ -18,7 +18,7 @@ class Group < ActiveRecord::Base
    scope :direct_groups, lambda { |user| { :joins => "INNER JOIN `groups_users` ON `groups`.id = `groups_users`.group_id",
     :conditions => ["groups_users.user_id = ?", user.is_a?(User) ? user.id : user] } }
 
-  scope :all_parents, lambda { |parent| { :conditions => parent.is_a?(Array) ? ["parent_id IN (?)", parent] : ["parent_id = ?", parent] } }
+  scope :all_parents, lambda { |parent| { :conditions => parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent] } }
   scope :center_and_teams, :conditions => ['type != ?', "Journal"]
   scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
   scope :and_parent, :include => [:parent]
@@ -26,7 +26,7 @@ class Group < ActiveRecord::Base
   has_many :letters
   
   def self.this_or_parent(id)
-    Group.find(:all, :conditions => [ 'id = ? OR parent_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
+    Group.find(:all, :conditions => [ 'id = ? OR group_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
   end
 
   # returns Team or Center for id, or if not exists, all teams and centers of user
@@ -37,6 +37,10 @@ class Group < ActiveRecord::Base
 
   def get_title
     title # .force_encoding("UTF-8")
+  end
+  
+  def parent_or_self
+    self.is_a?(Center) && self || self.parent
   end
   
   # all ascendants/parents

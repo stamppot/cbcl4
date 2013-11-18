@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+require 'export_csv_helper'
 # require 'iconv'
 # require 'excelinator'
   
@@ -41,7 +42,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   
   def index
-    options = { :include => :team, :page => params[:page], :per_page => Journal.per_page }
+    options = { :include => :group, :page => params[:page], :per_page => Journal.per_page }
     @journals = current_user.journals(options) || [] # TODO: Move to configuration option
   end
 
