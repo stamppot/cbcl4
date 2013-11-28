@@ -56,7 +56,7 @@ class JournalEntry < ActiveRecord::Base
                              :surveytype => self.survey.surveytype,
                              :center_id => self.journal.center_id)
     self.survey_answer.alt_id = self.journal.person_info.alt_id if self.journal.person_info
-    self.survey_answer.team_id = self.journal.group_id if self.journal.parent.is_a?(Team)
+    self.survey_answer.team_id = self.journal.group_id if self.journal.group.is_a?(Team)
     self.survey_answer.journal_entry = self
     self.survey_answer
   end
@@ -191,8 +191,8 @@ class JournalEntry < ActiveRecord::Base
     self.save
   end
   
-  def JournalEntry.for_parent_with_state(parent, states)
-    JournalEntry.for_states(states).with_cond(:conditions => ['group_id = ?', parent.is_a?(Group) && parent.id || parent], :joins => :journal)
+  def JournalEntry.for_parent_with_state(group, states)
+    JournalEntry.for_states(states).with_cond(:conditions => ['group_id = ?', group.is_a?(Group) && group.id || group], :joins => :journal)
   end
   
   def JournalEntry.states  # ikke besvaret, besvaret, venter på svar (login-user)
@@ -266,8 +266,8 @@ class JournalEntry < ActiveRecord::Base
   end
 
   def make_login_user(password = nil)
-    login = journal.parent.login_prefix
-    group_name = journal.parent.group_name_abbr
+    login = journal.group.login_prefix
+    group_name = journal.group.group_name_abbr
     params = LoginUser.create_params(login, group_name)
     pw = password && {:password => password, :password_confirmation => password} || PasswordService.generate_password
     login_user = LoginUser.new(params)

@@ -27,7 +27,9 @@
 
 	<% if @score.score_refs.size > 0 %>
 		<table class="sortable">
-			<%= @score_refs_header.map { |h| "<th>#{h}</th>" }.join %>
+			<% @score_refs_header.each do |h| %>
+				<th><%= h %></th>
+			<% end %>
 
 		<b>Referenceværdier</b>
 			<%= render :partial => "scores/show_score_ref", :collection => @score.score_refs %>
@@ -40,13 +42,14 @@
 
 	<% if @score.score_items.size > 0 %>
 	<table class="sortable">
-		<%= @score_items_header.map { |h| "<th>#{h}</th>" }.join %>
-
+		<% @score_items_header.each do |h| %>
+			<th><%= h %></th>
+		<% end %>
 		<b>Score items</b>
 		<%= render :partial => "scores/show_score_item", :collection => @score.score_items %>
 	</table>
 	<% end %>
-
+	<br/>
 
 <%= link_button t('edit'), edit_score_path(@score), 'score_edit' %> |
 <%= link_button t('go_back_to_list'), scores_path, 'go_back' %>

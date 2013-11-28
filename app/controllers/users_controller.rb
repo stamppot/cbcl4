@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class UsersController < ApplicationController # ActiveRbac::ComponentController
-  layout 'cbcl'
+  layout 'cbcl', :except => [:center]
   
   # The RbacHelper allows us to render +acts_as_tree+ AR elegantly
   helper RbacHelper
@@ -147,7 +147,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def center
     group = Center.find params[:id]
     @users = User.users.in_center(group).paginate(:page => params[:page], :per_page => 15)
-    render :partial => 'center', locals: {group: group}
+    render :partial => 'center', locals: {group: group}, :layout => false
   end
 
   protected

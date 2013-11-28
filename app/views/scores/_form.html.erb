@@ -47,7 +47,9 @@
 			<% if @score.score_refs.empty? %>
 				<table id="score_refs">
 					<tr>
-					<%= @score_refs_header.map { |h| "<th>#{h}</th>" }.join	%>
+					<% @score_refs_header.each do |h| %>
+						<th><%= h %></th>
+					<% end %>
 					</tr>
 				</table>
 					<!-- Ingen scoreberegninger -->				

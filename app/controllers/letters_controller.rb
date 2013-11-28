@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class LettersController < ApplicationController
-  layout 'wysiwyg'
+  # layout 'wysiwyg'
   
   def index
     if current_user.admin?  # vis ikke alle breve til admin, kun i dennes center

@@ -70,7 +70,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def create
-    parent = Group.find(params[:group][:parent])
+    parent = Group.find(params[:group].delete(:group))
+    params[:group][:group] = parent
     params[:person_info][:name] = params[:group][:title]
     params[:group][:center_id] = parent.is_a?(Team) && parent.center_id || parent.id
     @group = Journal.new(params[:group])
@@ -262,7 +263,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     flash[:error] = 'Ingen gruppe er valgt' if params[:group].blank?
     redirect_to journal if flash[:error]
 
-    dest = Group.find(params[:group][:parent])
+    dest = Group.find(params[:group][:group])
     if dest.is_a?(Team)
       journal.team = dest
     elsif dest.is_a?(Center)
