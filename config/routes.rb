@@ -127,6 +127,9 @@ Cbcl4::Application.routes.draw do
   get 'subscriptions/new_period/(/:id)', :to => 'centers#new_subscription_period', :as => 'subscriptions_new_period'
   get 'subscriptions/undo_new_period/(/:id)', :to => 'centers#undo_new_subscription_period', :as => 'subscriptions_undo_last_period'
 
+  get 'users/center/(/:id)/partial=:partial', :to => 'users#center', :as => 'users_center'
+
+
   get 'centers/pay_subscriptions/(/:id)', :to => 'centers#pay_subscriptions', :as => 'pay_subscriptions'
   get 'centers/undo_pay_subscriptions/(/:id)', :to => 'centers#undo_pay_subscriptions', :as => 'undo_pay_subscriptions'
   get 'centers/pay_periods/(/:id)', :controller => 'centers',                       :action => 'pay_periods'

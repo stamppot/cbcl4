@@ -4,7 +4,7 @@ class Role < ActiveRecord::Base
   # include ActiveModel::Validations
   # include ActiveRbacMixins::RoleMixins::Core
   
-  # has_and_belongs_to_many :users #, -> { where uniq: true }
+  has_and_belongs_to_many :users #, -> { where uniq: true }
   # has_many :survey_answers
   
   # attr_accessor :id, :title
@@ -13,6 +13,28 @@ class Role < ActiveRecord::Base
   #   self.id = id
   #   self.title = name
   # end
+  # has_many :users, :through => :role_user
+  # belongs_to :role_user
+
+  # scope :for_users, lambda { |user_ids| joins(:users).where("roles_users.user_id IN ( #{user_ids.join(',')} )") }
+  # scope :with_user, joins(:users), :include => :user
+
+  def self.for_users(user_ids)
+    query =
+    "SELECT user_id, title FROM roles r
+    inner join roles_users ru on ru.role_id = r.id
+    where user_id IN (#{user_ids.join(',')})"
+    # group by user_id"
+
+    ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
+      # puts r.inspect
+      user_id = r["user_id"]
+      role = r["title"]
+      col[user_id] = [] if col[user_id].nil?
+      col[user_id] << role
+      col
+    end
+  end
 
   def self.get(*roles)
     roles = roles.shift if roles.first.is_a?(Array)

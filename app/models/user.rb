@@ -8,21 +8,22 @@ class User < ActiveRecord::Base
   after_save    :expire_cache # delete cached roles, # groups
   after_destroy :expire_cache
   
-  has_many :roles, :through => :user_role
+  # has_many :roles, :through => :role_user
+  # has_and_belongs_to_many :roles
 
   belongs_to :center
           
-          has_and_belongs_to_many(:groups) do #, -> { where uniq: true }) do
-            def teams
-              self.select { |g| g.is_a?(Team) }
-            end
-            def centers
-              self.select { |g| g.is_a?(Center) }
-            end
-          end
+  has_and_belongs_to_many(:groups) do #, -> { where uniq: true }) do
+    def teams
+      self.select { |g| g.is_a?(Team) }
+    end
+    def centers
+      self.select { |g| g.is_a?(Center) }
+    end
+  end
           
           # users have a n:m relation to roles
-          has_and_belongs_to_many :roles #, -> { where uniq: true }
+  has_and_belongs_to_many :roles #, -> { where uniq: true }
 
   validates_associated :center # center must be valid
   # validates_associated :roles

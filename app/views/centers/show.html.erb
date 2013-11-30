@@ -69,7 +69,7 @@ $(document).ready(function() {
 
 	$('#users_tab').click(function() {
 		if($('#users_content').is(':empty')) {
-			$.get("/users/center/" + groupId, function(data) {
+			$.get("/users/center/" + groupId + "/partial=true", function(data) {
 				$('#users_content').html(data);
 				$.jqTableKit.reload();
 			});

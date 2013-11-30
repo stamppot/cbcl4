@@ -9,7 +9,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # We force users to use POST on the state changing actions.
   # verify :method       => :delete, :only => :destroy, :redirect_to => :show, :add_flash => { :error => 'Wrong request type: cannot delete'}
 
-  before_filter :find_user, :except => [:index, :new, :create ]
+  before_filter :find_user, :except => [:index, :new, :create, :center ]
   before_filter :check_access, :except => [:index, :list]
 
   # 31-12 Administrators cannot see other users
@@ -145,16 +145,20 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
   
   def center
-    group = Center.find params[:id]
-    @users = User.users.in_center(group).paginate(:page => params[:page], :per_page => 15)
-    render :partial => 'center', locals: {group: group}, :layout => false
+    @group = Center.find params[:id]
+    @userlist = UserList.new(@group, {:page => params[:page], :per_page => 15})
+    # @users = User.users.in_center(@group).paginate(:page => params[:page], :per_page => 15)
+    # puts "params: #{params.inspect} #{params[:partial]}"
+
+    # render :partial => 'center', locals: {group: @group}, :layout => false
+    render :partial => 'user_list', locals: {group: @group, user_list: @userlist}, :layout => false
   end
 
   protected
   before_filter :login_access
 
   def User::per_page
-    REGISTRY[:default_users_paginate]
+    20 # REGISTRY[:default_users_paginate]
   end
    
   def find_user

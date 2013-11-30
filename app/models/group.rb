@@ -25,6 +25,23 @@ class Group < ActiveRecord::Base
   
   has_many :letters
   
+  def self.for_users(user_ids)
+    query =
+    "SELECT user_id, title FROM groups g
+    inner join groups_users gu on gu.group_id = g.id
+    where user_id IN (#{user_ids.join(',')})"
+    # group by user_id"
+
+    ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
+      # puts r.inspect
+      user_id = r["user_id"]
+      role = r["title"]
+      col[user_id] = [] if col[user_id].nil?
+      col[user_id] << role
+      col
+    end
+  end
+
   def self.this_or_parent(id)
     Group.find(:all, :conditions => [ 'id = ? OR group_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
   end
