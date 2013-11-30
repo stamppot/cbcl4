@@ -1,7 +1,7 @@
 	<% group = subscription_presenter.group %>
 	<% group_id = group.id %>
 
-<div id="tab-container">
+<div class="tab-container">
 	<ul class="tabs" id="subscription_tabs_<%= group_id %>" class="subsection_tabs">  
 	    <li class="tab"><a href="#summary_view_<%= group_id %>"><%= t('subscription.overview') %></a></li>  
 	    <li class="tab"><a href="#detailed_view_<%= group_id %>"><%= t('subscription.details') %></a></li> 
@@ -22,13 +22,13 @@
 	</div>
 	<br/>
 	<% if current_user.access?(:subscription_new_edit) || (@options && !@options[:hide_buttons] || false) %>
-			<%= link_button t('subscription.change_subscription'), new_subscription_path(group), 'subscription_edit', :title => 'Forandr abonnementer' %>
+			<%= link_button t('subscription.change_subscription'), new_subscription_in_group_path(group), 'subscription_edit', :title => 'Forandr abonnementer' %>
 	<% end %>
 	</div>
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#tab-container').easytabs({  
+		$('.tab-container').easytabs({  
 			animate: true,
 		  	animationSpeed: "fast"
 		});

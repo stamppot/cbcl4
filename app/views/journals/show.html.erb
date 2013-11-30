@@ -1,7 +1,7 @@
-<%# cache @group.cache_key do  %>
-	<h2>Journal &quot;<%=h @group.get_name %>&quot;</h2>
+<%# cache @journal.cache_key do  %>
+	<h2>Journal &quot;<%=h @journal.get_name %>&quot;</h2>
 	
-	<%# cache "#{@group.cache_key}_info" do %>
+	<%# cache "#{@journal.cache_key}_info" do %>
 		<%= render :partial => 'journal_info' %>
 	<%# end %>
 	
@@ -19,8 +19,8 @@
 			 	 <tr id='<%= "entry" + entry.id.to_s %>'>
 					 <% survey = entry.survey %>
 					 <td style='background-color: #<%= survey.color %>; min-width: 320px;'>
-					  <%# link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), survey_show_fast_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
-					<%= link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), journal_entry_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
+					  <%# link_to img_tag_html4("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), survey_show_fast_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
+					<%= link_to img_tag_html4("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), journal_entry_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
             <%= link_to entry.get_title, journal_entry_path(entry), :title => 'Besvar' %>&nbsp;&nbsp;
         	</td>
             <td style="max-width: 200px;"><%= entry.notes %> <%# t("roles.#{survey.surveytype}") %></td>
@@ -28,17 +28,17 @@
 					 <td><%= entry.status %></td>
 					 <td style="min-width: 100px;">
 					<% @entry = entry %>
-					<%= entry.login_user.nil? ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : link_to(image_tag('icon_edit_mailbox.gif', :border => 0, 
+					<%= entry.login_user.nil? ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : link_to(img_tag_html4('icon_edit_mailbox.gif', :border => 0, 
 										:class => 'icon', :title => 'Vis login-info'), show_login_letter_path(entry) + ".pdf", :popup => ['new_window, height=800,width=700']) %>
-					<%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret opfølgning", :title => "Ret opfølgning"), edit_journal_entry_path(entry) %>
+					<%= link_to img_tag_html4("pencil.png", :border => 0, :alt => "Ret opfølgning", :title => "Ret opfølgning"), edit_journal_entry_path(entry) %>
 					<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
 						<img src="/images/tag_blue.png" alt="Noter" title="Noter" border=0 align="right" />
 					</a>
 
-					<%= link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
+					<%= link_to_remote((img_tag_html4('icon_delete_survey.gif', :border => 0, 
 										:class => 'icon icon_delete', :title => 'Fjern skema')), 
 							:update => ('entry'<<entry.id.to_s), 
-							:confirm => "Vil du fjerne spørgeskemaet '#{entry.survey.get_title}'\n fra journalen #{@group.get_name}?",
+							:confirm => "Vil du fjerne spørgeskemaet '#{entry.survey.get_title}'\n fra journalen #{@journal.get_name}?",
 					 		:url => entry_remove_path(entry)) %></td>
 				 </tr>
 		<% end %>
@@ -48,9 +48,9 @@
 	<p/>
 	
 	<div class="commands">
-		<%= link_button t('survey.add'), journal_add_survey_path(@group), 'journal_add_surveys', :title => 'Tilføj skemaer' %>
-		<%= link_button t('survey.remove'), journal_remove_survey_path(@group), 'journal_remove_surveys', :title => 'Fjern skemaer' %>
-		<%= link_button t('letter.print'), print_letters_path(@group) + ".pdf", 'letters_print', :title => 'Udskriv breve', :popup => ['new_window, height=800,width=800'] %>
+		<%= link_button t('survey.add'), journal_add_survey_path(@journal), 'journal_add_surveys', :title => 'Tilføj skemaer' %>
+		<%= link_button t('survey.remove'), journal_remove_survey_path(@journal), 'journal_remove_surveys', :title => 'Fjern skemaer' %>
+		<%= link_button t('letter.print'), print_letters_path(@journal) + ".pdf", 'letters_print', :title => 'Udskriv breve', :popup => ['new_window, height=800,width=800'] %>
 	</div>
 	<br/>
 	
@@ -58,8 +58,8 @@
 		<br/>
 		<hr/>
 		<h4><%= t('survey.answered') %></h4>
-		<form action="/answer_reports/show/<%= @group.id %>.pdf<%= '?random=' << rand(10000000).to_s %>" id="show_score_rapports" method="post">
-			<%= hidden_field_tag 'journal_id', @group.id %>
+		<form action="/answer_reports/show/<%= @journal.id %>.pdf<%= '?random=' << rand(10000000).to_s %>" id="show_score_rapports" method="post">
+			<%= hidden_field_tag 'journal_id', @journal.id %>
 			<%= hidden_field_tag 'random_for_ie', rand(1000000) %>
 		<div id="answered_surveys">
 		<table id="answered" class="surveys">
@@ -79,23 +79,23 @@
 						<%# link_to entry.get_title, survey_answer_path(entry), :title => 'Vis Besvarelse' %>
 					</td>
 					 <td style="min-width: 100px;"><%= entry.answered_at.strftime "%-d-%-m-%Y" %> 
-						 <%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret besvarelsesdato", :title => "Ret besvarelsesdato", :align => "right"), edit_date_survey_answers_path(entry) %>
+						 <%= link_to img_tag_html4("pencil.png", :border => 0, :alt => "Ret besvarelsesdato", :title => "Ret besvarelsesdato", :align => "right"), edit_date_survey_answers_path(entry) %>
 					 </td>
 					 <td style="max-width: 200px;"><%= entry.notes %></td>
 					 <td><%= entry.status %></td>
 					 <td>
 						<%= entry.answered_by && t("roles.#{entry.answered_by}") || entry.status %>
 					 </td>
-					 <td style="min-width: 100px;"><%= link_to image_tag("printer.png", :border=>0, :alt => 'Udskriv besvarelse', :title => 'Udskriv besvarelse' ),
-									(print_survey_answer_path(entry) + ".pdf"), :format => 'pdf', :title => 'Udskriv besvarelse' %>
+					 <td style="min-width: 100px;"><%= link_to img_tag_html4("printer.png", :border=>0, :alt => 'Udskriv besvarelse', :title => 'Udskriv besvarelse' ),
+									('/survey_answers/print/' + entry.id.to_s + ".pdf"), :format => 'pdf', :title => 'Udskriv besvarelse' %>
 						<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
 							<img src="/images/tag_blue.png" alt="Noter" title="Noter" border=0 align="right" />
 						</a>
-							<%= link_to image_tag("icon_input.gif", :border=>0, :alt => 'Ret besvarelse', :title => 'Ret besvarelse' ), edit_survey_answer_path(entry), :title => 'Ret besvarelse' %>
- 							<%= link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
+							<%= link_to img_tag_html4("icon_input.gif", :border=>0, :alt => 'Ret besvarelse', :title => 'Ret besvarelse' ), edit_survey_answer_path(entry), :title => 'Ret besvarelse' %>
+ 							<%= link_to_remote((img_tag_html4('icon_delete_survey.gif', :border => 0, 
 										:class => 'icon icon_delete', :title => 'Fjern besvarelse')), 
 							:update => ('entry_answer' << entry.id.to_s), 
-							:confirm => "Vil du fjerne besvarelsen '#{entry.survey.get_title}'\n fra journalen #{@group.get_title}?",
+							:confirm => "Vil du fjerne besvarelsen '#{entry.survey.get_title}'\n fra journalen #{@journal.title}?",
 					 		:url => entry_remove_answer_path(entry)) %>      
 						</td>
 	
@@ -108,7 +108,7 @@
 		<% if answered_count %>
 		  <div class="commands">
 				<div class="button">
-					<%# link_button t('score.show_report'), answer_report_path(@group), :class => 'button score_calculate',  :title => 'Tilføj skemaer' %>
+					<%# link_button t('score.show_report'), answer_report_path(@journal), :class => 'button score_calculate',  :title => 'Tilføj skemaer' %>
 		
 					<%= submit_tag t('score.show_report'), :class => 'button score_calculate', :format => 'pdf' %>
 					<label><input type="checkbox" checked="checked" name="extended_scorereport" id="select_scorereport" onchange="toggleReportType('show_score_rapports', 'select_scorereport');">Med besvarelser</label>&nbsp;&nbsp;
@@ -124,7 +124,7 @@
 	<% end %>
 
 	<div class="commands">
-		<%= link_button t('edit'), edit_journal_path(@group), 'journal_edit', :title => t('edit') %>
+		<%= link_button t('edit'), edit_journal_path(@journal), 'journal_edit', :title => t('edit') %>
 		<%= back_button journals_path %>
 	</div>
 	

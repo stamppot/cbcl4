@@ -123,6 +123,7 @@ Cbcl4::Application.routes.draw do
   # center
   get '/centers/delete/(/:id)', :to => 'centers#delete', :as => 'delete_center'
   get '/centers/live_search/(/:id)', :to => 'centers#live_search', :as => 'center_search'
+  get 'subscriptions/new/(/:id)', :to => 'subscriptions#new', :as => 'new_subscription_in_group'
   get 'subscriptions/new_period/(/:id)', :to => 'centers#new_subscription_period', :as => 'subscriptions_new_period'
   get 'subscriptions/undo_new_period/(/:id)', :to => 'centers#undo_new_subscription_period', :as => 'subscriptions_undo_last_period'
 

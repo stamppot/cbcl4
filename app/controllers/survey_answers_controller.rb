@@ -125,7 +125,7 @@ class SurveyAnswersController < ApplicationController
     save_draft_url = "/survey_answers/save_draft/#{@journal_entry.id}"
     @journal = @journal_entry.journal
     
-    logger.info "dynamic json: current_user: #{current_user.inspect} center: #{@journal.center.get_title} entry: #{@journal_entry.inspect}  journal: #{@journal.inspect}"
+    # logger.info "dynamic json: current_user: #{current_user.inspect} center: #{@journal.center.get_title} entry: #{@journal_entry.inspect}  journal: #{@journal.inspect}"
     json = {}
     json[:logged_in] = !current_user.nil?
     json[:login_user] = current_user && current_user.login_user
