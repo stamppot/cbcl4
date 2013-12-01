@@ -68,7 +68,7 @@ Cbcl4::Application.routes.draw do
   resources :variables
   resources :subscriptions
   resources :centers
-  resources :teams
+  resources :teams, :except => [:new]
   resources :journals
   resources :journal_entries, :only => [:show]
   resources :export_files
@@ -163,6 +163,7 @@ Cbcl4::Application.routes.draw do
   # get 'users/new/(/:id)', :to => 'users#new', :as => 'new_user'
   # get '/users/delete/(/:id)', :to => 'users#delete', :as => 'delete_user'
   get '/centers/new_team/(/:id)', :to => 'centers#new_team', :as => 'new_team_in_center'
+  get '/teams/new/(/:id)', :to => 'teams#new', :as => 'new_team'
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   get 'start', :to => 'start#start', :as => 'survey_start'

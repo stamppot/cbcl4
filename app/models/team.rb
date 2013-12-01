@@ -5,7 +5,7 @@ class Team < Group
   has_many :journals
   
   scope :with_center, :include => :center
-  scope :with_journals, :include => {:journals => :person_info}
+  scope :with_journals, :include => :journals
   scope :for_center, lambda { |center| where(:parent_id => (center.is_a?(Center) ? center.id : center)) }
   
   # scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
@@ -45,18 +45,14 @@ class Team < Group
 
   def survey_answers
     # get all journals in team, journal_entries, then survey_answers
-    self.children.map { |journal| journal.journal_entries(:include => :survey_answer).answered.map {|je| je.survey_answer} }
+    self.journals.map { |j| j.journal_entries(:include => :survey_answer).answered.map {|je| je.survey_answer} }
     # or just get journal_ids directly
   end
 
   def login_users
-    self.children.map { |journal| journal.journal_entries }.flatten.map {|entry| entry.login_user}.compact
+    self.journals.map { |j| j.journal_entries }.flatten.map {|entry| entry.login_user}.compact
   end
   
-  def journals
-    self.children
-  end
-
   def journals_needing_reminders
     self.journals
   end

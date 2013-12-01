@@ -54,7 +54,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
   def show
     @group = Team.find(params[:id])
     @page_title = "CBCL - Center " + @group.parent.title + ", team " + @group.title
-    @journals = Journal.for_parent(@group).by_code.and_person_info.paginate(:page => params[:page], :per_page => journals_per_page) || []
+    @journals = Journal.for_parent(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page) || []
     @journal_count = Journal.for_parent(@group).count
     @users = @group.users
     @user_count = @users.count
@@ -76,32 +76,34 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     redirect_to teams_url
   end
 
-  # Displays a form to create a new group. Posts to the #create action.
   def new
     # if team is created from Center.show, then center is set to parent
     @groups = []
     if params[:id]  # center id is parameter
-      @groups += Group.all(:conditions => [ 'id = ?', params[:id] ])
+      @groups += Group.all(:conditions => [ 'id = ? and type != "Journal"', params[:id] ])
+      puts "@groups: #{@groups.inspect}"
     else
       @groups = current_user.centers # + current_user.center  # teams can only be subgroup of center, not of teams
       @groups.compact.uniq  # if superadmin, center is nil
     end
 
     @group = Team.new(params && params[:group] || {})
-    @group.parent = @groups.first if @groups.size == 1
-    # set suggested team code if only one center possible
-    @group.code = @groups.first.next_team_code if @groups.size == 1 # for superadmin, no code is set
+    if @groups.size == 1
+      @group.parent = @groups.first 
+      # set suggested team code if only one center possible
+      @group.code = @groups.first.next_team_code  # for superadmin, no code is set
+    end
   end
 
   def create
     @group = Team.new(params[:group])
     if !params[:group][:parent]
-      flash[:error] = 'Du skal vælge et center'
-      render teams_url
-    else
-      @center = Group.find(params[:group][:parent])
-      @group.parent = @center
+       flash[:error] = 'Du skal vælge et center'
+       render teams_url
+     else
+      @center = Center.find(params[:group][:parent])
       @group.center = @center
+      @group.parent = @center
     end
     
     if @group.save
@@ -112,8 +114,8 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
       if params[:group][:code].include? "-"
         flash[:error] = "Kode skal være uden centerkode: #{params[:group][:code]}"
       end
-      @groups = current_user.centers || Center.find(:all)  # last is for superadmins
-      redirect_to new_team_in_center_url(@group, params)
+      @groups = current_user.centers || Center.all  # last is for superadmins
+      redirect_to new_team_url(@group.parent)
     end
       
   rescue ActiveRecord::RecordNotFound
@@ -223,7 +225,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
   def select_move_journals # nb. :id is Team id!
     @group = Team.find(params[:id])
     @page_title = "CBCL - Center " + @group.parent.title + ", team " + @group.title
-    @groups = Journal.for_parent(@group).by_code.and_person_info.paginate(:page => params[:page], :per_page => journals_per_page*2, :order => 'title') || []
+    @groups = Journal.for_parent(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page*2, :order => 'title') || []
     @teams = current_user.teams
     @journal_count = Journal.for_parent(@group).count
 

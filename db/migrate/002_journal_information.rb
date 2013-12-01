@@ -1,15 +1,15 @@
 class JournalInformation < ActiveRecord::Migration
   def self.up
-    create_table :person_infos do |t|
-      t.column :journal_id, :int, :null => false
-      t.column :name, :string, :size => 200, :null => false
-      t.column :sex, :int, :null => false
-      t.column :birthdate, :date, :null => false
-      t.column :nationality, :string, :size => 40, :null => false
-      t.column :parent_email, :string
-      t.column :parent_name, :string
-      t.column :project_id, :string
-    end
+    # create_table :person_infos do |t|
+    #   t.column :journal_id, :int, :null => false
+    #   t.column :name, :string, :size => 200, :null => false
+    #   t.column :sex, :int, :null => false
+    #   t.column :birthdate, :date, :null => false
+    #   t.column :nationality, :string, :size => 40, :null => false
+    #   t.column :parent_email, :string
+    #   t.column :parent_name, :string
+    #   t.column :project_id, :string
+    # end
     # journal entries relate journals with surveys, answers, and login users
     create_table :journal_entries do |t|
       t.column :journal_id, :int, :null => false

@@ -32,13 +32,10 @@
   <% if !@any_answered_entries %>
   <dt><label>Vælg center/team:</label></dt>
   <dd>
-    <%= node_tree(@groups) do |group|
-          onclick = 
-          result = "<input class=\"journal_center\" id=\"journal_group_#{group.id}\" type=\"radio\" name=\"journal[group]\" value=\"#{group.id}\" checked=\"checked\" /> " if @journal.group == group
-          result = "<input class=\"journal_center\" id=\"journal_group_#{group.id}\" type=\"radio\" name=\"journal[group]\" value=\"#{group.id}\" /> " if @journal.group != group
-          result += "<label for=\"journal_group_#{group.id}\">#{group.title}</label> "
-          result
-        end %>
+    <%= node_tree(@groups) do |group| %>
+      <input class="journal_center" id="journal_group_<%= group.id %>" type="radio" name="journal[group]" value="<%= group.id %>" <%= @journal.group == group && 'checked="checked"' || '' %> />
+      <label for="journal_group_<%= group.id %>"><%= group.title %> Hello</label>
+      <% end %>
   </dd>
 </dl>
 

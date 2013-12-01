@@ -12,6 +12,7 @@ module RbacHelper
     
     # top level nodes first, then others
     for node in nodes
+      next if node.instance_of?(Center) || node.instance_of?(Team)
       next unless node.parent == nil
       printed_nodes << node
       result += "<li>"

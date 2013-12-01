@@ -30,10 +30,9 @@ class SubscriptionsQuery
       joins.each {|a,b| clause << "AND #{a} = #{b}"}
       clause
     else
-      ["FROM journal_entries, groups, survey_answers, person_infos ",
+      ["FROM journal_entries, groups, survey_answers, journals ",
         "WHERE journal_entries.journal_id = groups.id AND groups.type = 'Journal' ",
-        "AND journal_entries.survey_answer_id = survey_answers.id ",
-        "AND journal_entries.journal_id = person_infos.journal_id "]
+        "AND journal_entries.survey_answer_id = survey_answers.id "]
     end.join(' ')
   end
 

@@ -49,6 +49,7 @@ class CentersController < ApplicationController
   end
 
   def new_team
+    # @group = Center.find(params[:id])
     redirect_to new_team_path(params[:id])
   end
 

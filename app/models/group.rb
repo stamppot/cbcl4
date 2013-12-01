@@ -15,7 +15,9 @@
 class Group < ActiveRecord::Base
   include ActiveRbacMixins::GroupMixins::Core
 
-   scope :direct_groups, lambda { |user| { :joins => "INNER JOIN `groups_users` ON `groups`.id = `groups_users`.group_id",
+  attr_accessible :title, :code, :parent
+  
+  scope :direct_groups, lambda { |user| { :joins => "INNER JOIN `groups_users` ON `groups`.id = `groups_users`.group_id",
     :conditions => ["groups_users.user_id = ?", user.is_a?(User) ? user.id : user] } }
 
   scope :all_parents, lambda { |parent| { :conditions => parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent] } }

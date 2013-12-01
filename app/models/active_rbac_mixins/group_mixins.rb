@@ -72,7 +72,7 @@ module ActiveRbacMixins
             result = [self]
     
             for child in children
-              result << child.descendants_and_self
+                result << child.descendants_and_self
             end
     
             return result.flatten

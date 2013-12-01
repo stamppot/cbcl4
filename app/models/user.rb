@@ -333,25 +333,25 @@ class User < ActiveRecord::Base
       if options[:page].to_i < 4 # only cache first pages, since they're used more often
         # TODO: cache
         # cache_fetch("journals_all_paged_#{options[:page]}_#{options[:per_page]}") do
-          Journal.and_person_info.paginate(options)
+          Journal.paginate(options)
         # end
       else
-        Journal.and_person_info.paginate(options)
+        Journal.paginate(options)
       end
     elsif self.has_access?(:journal_show_centeradm)
       # TODO: cache
       # cache_fetch("journals_groups_#{self.center_id}_paged_#{options[:page]}_#{options[:per_page]}", :expires_in => 10.minutes) do
-        Journal.and_person_info.in_center(self.center).paginate(options)
+        Journal.in_center(self.center).paginate(options)
       # end
     elsif self.has_access?(:journal_show_member)
       group_ids = self.group_ids(options[:reload]) # get teams and center ids for this user
       if options[:page].to_i < 4 # only cache first 5 pages
         # TODO: cache
         journals = # cache_fetch("journals_groups_#{group_ids.join("_")}_paged_#{options[:page]}_#{options[:per_page]}") do
-          Journal.and_person_info.all_parents(group_ids).paginate(options)
+          Journal.all_parents(group_ids).paginate(options)
         # end
       else 
-        Journal.and_person_info.all_parents(group_ids).paginate(options)
+        Journal.all_parents(group_ids).paginate(options)
       end
     elsif self.has_access?(:login_user)
       entry = JournalEntry.find_by_user_id(self.id)

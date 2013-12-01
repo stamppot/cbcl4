@@ -36,6 +36,8 @@ gem 'actionpack-page_caching'
 
 gem 'dalli'
 
+# gem 'debugger'
+
 # gem 'handlebars_assets'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes

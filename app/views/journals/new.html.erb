@@ -13,23 +13,23 @@
   <dt><label for="journal_title"><%= t('name') %></label></dt>
   <dd><%= text_field 'journal', 'title'  %></dd>
 
-  <dt><label for="person_info_sex"><%= t('gender') %></label></dt>
-  <dd><%= select 'person_info', 'sex', PersonInfo.sexes.to_a %></dd>
+  <dt><label for="journal_sex"><%= t('gender') %></label></dt>
+  <dd><%= select 'journal', 'sex', Journal.sexes.to_a %></dd>
 
-  <dt><label for="person_info_birthdate"><%= t('birthdate') %></label></dt>
-  <dd><%= date_select 'person_info', 'birthdate', {:start_year => Date.today.year-25, :end_year => Date.today.year, :order => [:day, :month, :year] } %></dd>
+  <dt><label for="journal_birthdate"><%= t('birthdate') %></label></dt>
+  <dd><%= date_select 'journal', 'birthdate', {:start_year => Date.today.year-25, :end_year => Date.today.year, :order => [:day, :month, :year] } %></dd>
 
-  <dt><label for="person_info_nationality"><%= t('nationality') %></label></dt>
-  <dd><%= collection_select('person_info', 'nationality', @nationalities, :country, :country) %></dd>
+  <dt><label for="journal_nationality"><%= t('nationality') %></label></dt>
+  <dd><%= collection_select('journal', 'nationality', @nationalities, :country, :country) %></dd>
 
-  <dt><label for="person_info_parent_name"><%= 'Forælder' %></label></dt>
-  <dd><%= text_field('person_info', 'parent_name', {:size => 40}) %></dd>
+  <dt><label for="journal_parent_name"><%= 'Forælder' %></label></dt>
+  <dd><%= text_field('journal', 'parent_name', {:size => 40}) %></dd>
 
-  <dt><label for="person_info_parent_email"><%= 'Forælder-email' %></label></dt>
-  <dd><%= text_field('person_info', 'parent_email', {:size => 25}) %></dd>
+  <dt><label for="journal_parent_email"><%= 'Forælder-email' %></label></dt>
+  <dd><%= text_field('journal', 'parent_email', {:size => 25}) %></dd>
 
-  <dt><label for="person_info_alt_id"><%= 'Projektnr' %></label></dt>
-  <dd><%= text_field('person_info', 'alt_id', {:size => 25}) %></dd>
+  <dt><label for="journal_alt_id"><%= 'Projektnr' %></label></dt>
+  <dd><%= text_field('journal', 'alt_id', {:size => 25}) %></dd>
 
 	<br/>
 

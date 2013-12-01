@@ -45,9 +45,8 @@ class SurveyAnswersController < ApplicationController
     @page_title = "CBCL - Udskriv Svar: " << @survey.get_title
   end
 
-  # updates survey page with dynamic data. Consider moving to separate JavascriptsController
   def dynamic_data
-    @journal_entry = JournalEntry.find(params[:id], :include => {:journal => :person_info})
+    @journal_entry = JournalEntry.find(params[:id], :include => :journal)
     save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
     save_draft_url = "/survey_answers/save_draft/#{@journal_entry.id}"
 
@@ -120,7 +119,7 @@ class SurveyAnswersController < ApplicationController
 	end
   
   def json_dynamic_data
-    @journal_entry = JournalEntry.find(params[:id], :include => {:journal => :person_info})
+    @journal_entry = JournalEntry.find(params[:id], :include => :journal)
     save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
     save_draft_url = "/survey_answers/save_draft/#{@journal_entry.id}"
     @journal = @journal_entry.journal

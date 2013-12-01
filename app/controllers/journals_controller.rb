@@ -28,7 +28,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   def center
     options = { :include => :team, :page => params[:page], :per_page => per_page }
     @group = Group.find params[:id]
-    @journals = Journal.for_center(@group).by_code.and_person_info.paginate(:page => 1, :per_page => (Journal.per_page || 20))
+    @journals = Journal.for_center(@group).by_code.paginate(:page => 1, :per_page => (Journal.per_page || 20))
 
     respond_to do |format|
       format.html { render :index }
@@ -69,20 +69,19 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def create
-    parent = Group.find(params[:group].delete(:group))
-    params[:group][:group] = parent
-    params[:person_info][:name] = params[:group][:title]
-    params[:group][:center_id] = parent.is_a?(Team) && parent.center_id || parent.id
-    @group = Journal.new(params[:group])
-    @group.person_info = @group.build_person_info(params[:person_info])
-    @group.person_info.delta = true
-    @group.delta = true # force index
+    parent = Group.find(params[:journal][:group])
+    params[:journal][:group] = parent
+    params[:journal][:center_id] = parent.is_a?(Team) && parent.center_id || parent.id
+    @journal = Journal.new(params[:journal])
+    @journal.delta = true # force index
 
-    if @group.person_info.valid? && @group.save
-      @group.expire_cache
+    if @journal.save
+      @journal.expire_cache
       flash[:notice] = 'Journalen er oprettet.'
-      redirect_to journal_path(@group) and return
+      logger.info "Created journal, go to group: #{@journal.id}"
+      redirect_to journal_path(@journal) and return
     else
+      flash[:error] = @journal.errors.inspect
       @groups = Group.get_teams_or_centers(params[:id], current_user)
       @nationalities = Nationality.find(:all)
       @surveys = current_user.subscribed_surveys
@@ -90,19 +89,17 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     end
 
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = 'Du sendte en ugyldig forespørgsel. ' + params.inspect + "<br>" + @group.errors.inspect
+    flash[:error] += 'Du sendte en ugyldig forespørgsel. ' + params.inspect + "<br>" + (@journal && @journal.errors.inspect || "")
     redirect_to journals_path
   end
 
   def edit
     @page_title = "Rediger journal"
-
-    @group = Journal.find(params[:id], :include => [:person_info])
-    @person_info = @group.person_info
+    @journal = Journal.find(params[:id])
     @nationalities = Nationality.all
-    alt_id = @group.center.center_settings.first(:conditions => ["name = 'alt_id_name'"])
+    alt_id = @journal.center.center_settings.first(:conditions => ["name = 'alt_id_name'"])
     @alt_id_name = alt_id && alt_id.value || "Projektnr"
-    @any_answered_entries = @group.answered_entries.any?
+    @any_answered_entries = @journal.answered_entries.any?
 
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'Journalen kunne ikke findes.'
@@ -110,19 +107,16 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def update
-    params[:person_info][:name] = params[:group][:title]    # save name in person_info too                                    
-
-    @group = Journal.find(params[:id], :include => :journal_entries)
-    @group.person_info.update_attributes(params[:person_info])
-    @group.update_attributes(params[:group])
+    @journal = Journal.find(params[:id], :include => :journal_entries)
+    @journal.update_attributes(params[:journal])
         
-    if @group.save
+    if @journal.save
       flash[:notice] = 'Journalen er opdateret.'
-      redirect_to journal_path(@group)
+      redirect_to journal_path(@journal)
     else
       @nationalities = Nationality.all
-      @groups = Group.get_teams_or_centers(params[:id], current_user)
-      render edit_journal_path(@group)
+      @groups = current_user.my_groups
+      render edit_journal_path(@journal)
     end
 
   rescue ActiveRecord::RecordNotFound
@@ -133,10 +127,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   # displays a "Do you really want to delete it?" form. It
   # posts to #destroy.
   def delete
-    @group = # cache_fetch("j_#{params[:id]}") do  # TODO: cache
-      Journal.find(params[:id], :include => :journal_entries) 
-    # end #Journal.find(params[:id].to_i)
-
+    @journal = Journal.find(params[:id])
+  
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'Journalen kunne ikke findes.'
     redirect_to journals_path
@@ -147,9 +139,9 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   # Removes survey_answer for all journal_entries
   def destroy
     if not params[:yes].nil?   # slet journal gruppe
-      @group = Journal.find(params[:id], :include => :journal_entries) 
-      @group.destroy
-      flash[:notice] = "Journalen #{@group.title} er blevet slettet."
+      @journal = Journal.find(params[:id], :include => :journal_entries)
+      @journal.destroy
+      flash[:notice] = "Journalen #{@journal.title} er blevet slettet."
       redirect_to journals_path
     else
       flash[:notice] = 'Journalen blev ikke slettet.'
@@ -157,7 +149,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     end
 
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = 'Journalen kunne ikke findes.' << "  id: " << params[:id] << "   entry: " << @group.journal_entries.inspect
+    flash[:error] = 'Journalen kunne ikke findes.' << "  id: " << params[:id] << "   entry: " << @journal.journal_entries.inspect
     redirect_to journals_path
   rescue => e
     flash[:error] = "Exception: #{e}"
@@ -292,11 +284,11 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @journals = @project.journals
   end
 
-  def update_journals_email
+  def update_journals_email # TODO: check where this is used, update params (was person_info, now group)
     params[:journals].each do |journal_params|
       journal = Journal.find(journal_params[:id])
-      journal.person_info.parent_email = journal_params[:person_info][:parent_email]
-      journal.person_info.save
+      journal.parent_email = journal_params[:group][:parent_email]
+      journal.save
     end
     flash[:notice] = "Forældre-mails er rettet"
     redirect_to project_path(params[:project][:id])

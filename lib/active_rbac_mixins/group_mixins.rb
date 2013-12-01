@@ -72,7 +72,9 @@ module ActiveRbacMixins
             result = [self]
     
             for child in children
-              result << child.descendants_and_self
+              if(child.instance_of?(Team))
+                result << child.descendants_and_self
+              end
             end
     
             return result.flatten

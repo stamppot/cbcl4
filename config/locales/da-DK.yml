@@ -383,10 +383,9 @@ da-DK:
       :errors: 
         :journal: 
           :attributes: 
-            :person_info: 
-              :nationality: Nationalitet skal angives
-              :name: Navn skal angives
-              :birthdate: tjah
+            :nationality: Nationalitet skal angives
+            :title: Navn skal angives
+            :birthdate: tjah
             :parent: 
               :blank: En gruppe skal angives
             :center: 
@@ -396,7 +395,7 @@ da-DK:
               :taken: "bruges allerede. Vælg andet ID."
               :blank: ID skal angives
             :sex: Dreng eller pige skal angives
-            :name: 
+            :title: 
               :blank: skal angives
         :team: 
           :attributes: 
@@ -430,9 +429,8 @@ da-DK:
                 :too_long: "Navn må maksimalt være 50 bogstaver"
           :journal: 
             :attributes: 
-              :person_info: 
-                :blank: 
-                  :Sex: skal angives
+              :blank: 
+                :Sex: skal angives
               :nationality: 
                 :blank: skal angives
               :code: 
