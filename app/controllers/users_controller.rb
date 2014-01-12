@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class UsersController < ApplicationController # ActiveRbac::ComponentController
-  layout 'cbcl', :except => [:center]
+  layout 'cbcl', :except => [:center, :live_search]
   
   # The RbacHelper allows us to render +acts_as_tree+ AR elegantly
   helper RbacHelper
@@ -9,8 +9,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # We force users to use POST on the state changing actions.
   # verify :method       => :delete, :only => :destroy, :redirect_to => :show, :add_flash => { :error => 'Wrong request type: cannot delete'}
 
-  before_filter :find_user, :except => [:index, :new, :create, :center ]
-  before_filter :check_access, :except => [:index, :list]
+  before_filter :find_user, :except => [:index, :new, :create, :center, :live_search ]
+  before_filter :check_access, :except => [:index, :list, :live_search]
 
   # 31-12 Administrators cannot see other users
   def index
@@ -125,7 +125,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
   
   def live_search
-    @raw_phrase = request.raw_post.gsub("&_=", "") || params[:id]
+    @raw_phrase = params[:name] # request.raw_post.gsub("&_=", "") || params[:id]
+    puts "#{@raw_phrase}"
     @phrase = @raw_phrase.sub(/\=$/, "").sub(/%20/, " ")
 
     @users =
@@ -138,9 +139,11 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     end
 		@users.delete_if { |user| user.login_user }
 		
+    # render @users.to_json, :layout => false
+    # render :layout => false
     respond_to do |wants|
-      wants.html  { render(:template  => "users/searchresults" )}
-      wants.js    { render(:layout   =>  false, :template =>  "users/searchresults" )}
+      wants.html  { render(:layout => false )}
+      wants.js    { render(:layout => false, :template =>  "users/searchresults" )}
     end
   end
   

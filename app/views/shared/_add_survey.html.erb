@@ -1,16 +1,16 @@
 <dl>
 	<dt><%= @subtitle || "" %></dt>
 	<dd>
-		<%= "<input id=\"group\" type=\"hidden\" name=\"group[id]\" value=\"#{@group.id}\" checked=\"checked\" /> " %>
+		<input id="group" type="hidden" name="group[id]" value="<%= @group.id %>" checked="checked" />
 		<% @surveys.each do |survey| %>
 			<div style='background-color: #<%= survey.color %>; width: 25em;'>
 				<%= check_box( :survey, survey.id, { :class => 'no_border'}) %>		
-				<%= "<label for=\"survey_#{survey.id}\">#{survey.title}</label> <br>" %>
+				<label for="survey_<%= survey.id %>"><%= survey.title %></label> <br>
 			</div>
 		<% end %>
 		<br/>
 		<div>
-			<%= "<label for=\"survey_follow_up\">" %>
+			<label for="survey_follow_up">
 			<%= select :journal_entry, "follow_up", @follow_ups, :selected => @follow_up %>
 		</div>
 	</dd>

@@ -4,10 +4,25 @@ class LoginUser < User
   
   default_scope :order => 'id DESC'
 
+  attr_accessible :login, :name, :email, :state, :login_user
+
+
   def journal
     self.all_groups.select { |group| group.instance_of? Journal }.first
   end
-  
+
+  def journals
+    []
+  end
+
+  def get_journal
+    query = "select group_id from groups_users where user_id = #{id}"
+    j = ActiveRecord::Base.connection.execute(query).each(:as => :hash).map do |row| 
+      group_id = row['group_id']
+      journal = Journal.find_by_id(group_id)
+    end
+  end
+
   def survey
     self.journal_entry.survey
   end
@@ -41,5 +56,9 @@ class LoginUser < User
       :login_user => true
     }
   end
-  
+
+def login_user_params
+  params.permit(:login, :name, :email, :state, :login_user)
+end
+
 end

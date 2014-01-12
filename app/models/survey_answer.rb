@@ -9,7 +9,7 @@ class SurveyAnswer < ActiveRecord::Base
   belongs_to :journal
   belongs_to :center
   belongs_to :team
-  has_many :answers, :dependent => :destroy, :include => [ :answer_cells ], :order => :number
+  has_many :answers, -> { includes :answer_cells, order: :number, :dependent: :destroy
   #belongs_to :journal_entry
   has_one :journal_entry
   has_one :score_rapport, :dependent => :destroy, :include => [ :score_results ]

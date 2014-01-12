@@ -11,7 +11,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   cache_sweeper :journal_sweeper, :only => [:create, :update, :destroy, :add_survey, :remove_survey, :move]
   
-  before_filter :check_access, :except => [:index, :list, :per_page, :new, :live_search]
+  before_filter :check_access, :except => [:index, :list, :per_page, :new, :search]
 
   # after_save :expire_after, :on => [:create, :update, :add_survey, :remove_survey, :move]
   # after_destroy :expire_after, :on => [:destroy, :remove_survey]
@@ -47,12 +47,12 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def show
-    @group = Journal.find(params[:id]) # cache_fetch("j_#{params[:id]}") {  }
+    @journal = Journal.find(params[:id]) # cache_fetch("j_#{params[:id]}") {  }
     alt_ids = [] # @group.center.center_settings.find(:conditions => ["name = 'alt_id_name'"])
     alt_id = alt_ids.any? && alt_ids.first || ""
     @alt_id_name = "Projektnr" # alt_id && alt_id.value || "Projektnr"
-		@answered_entries = @group.answered_entries
-		@not_answered_entries = @group.not_answered_entries
+		@answered_entries = @journal.answered_entries
+		@not_answered_entries = @journal.not_answered_entries
   end
 
   def new
@@ -161,8 +161,10 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     if request.post?
       surveys = params[:survey].select { |k,v| v.to_i == 1 }.map &:first
       @surveys = Survey.find(surveys)
-      flash[:error] = "Logins blev ikke oprettet!" unless valid_entries = @group.create_journal_entries(@surveys, params[:journal_entry][:follow_up])
-      flash[:notice] = (@surveys.size > 1 && "Spørgeskemaer " || "Spørgeskemaet ") + "er oprettet." if @group.save && valid_entries
+      entries = @group.create_journal_entries(@surveys, params[:journal_entry][:follow_up])
+      valid = entries.any? {|e| e.errors.size > 0 }
+      flash[:error] = "Logins blev ikke oprettet!" unless valid
+      flash[:notice] = (@surveys.size > 1 && "Spørgeskemaer " || "Spørgeskemaet ") + "er oprettet." if @group.save && valid
       redirect_to @group
     else       # can only add surveys in age group of person
       @follow_ups = JournalEntry.follow_ups
@@ -170,6 +172,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
       @surveys = @group.center.subscribed_surveys_in_age_group(@group.age)
       @page_title = "Journal #{@group.title}: Tilføj spørgeskemaer"      
     end
+
+    puts "surveys: #{@surveys.size}"
   end
 
   # removing is a bit different than adding. This should remove the entries, the entry ids should be given in the form  # removes login-users too
@@ -192,8 +196,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     end
   end
 
-  def live_search
-    raw_phrase = request.raw_post.gsub("&_=", "") || params[:id]
+  def search
+    raw_phrase = params[:name]
     phrase = raw_phrase.sub(/\=$/, "").sub(/%20/, " ")
     # cpr.nr. søgning. Reverse
     logger.info "includes ø: " + phrase if phrase.include? "Ã¸"
@@ -207,7 +211,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @journals = Journal.search_journals(current_user, phrase)
 
     respond_to do |wants|
-      wants.html  { render(:template => "journals/searchresults" )}
+      wants.html  { render(:template => "journals/searchresults", :layout => false )}
       wants.js    { render(:layout => false, :template => "journals/searchresults" )}
     end
   end

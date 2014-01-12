@@ -211,26 +211,34 @@ class Journal < ActiveRecord::Base #< Group
   
   # code of center and team
   def qualified_code
-    team_id = group.code unless group.instance_of? Center
-    "%04d" % center.code + "-" + "%04d" % team_id #  group.code.to_s.rjust(3, "0")
+    team_id = group.instance_of?(Center) && 0 || group.code
+    "%04d" % 
+    center.code + 
+    "-" + 
+    "%04d" % 
+    team_id #  group.code.to_s.rjust(3, "0")
   end
   
   # creates entries with logins
   def create_journal_entries(surveys, follow_up = 0)
     return true if surveys.empty?
-    surveys.each do |survey|
+    surveys.map do |survey|
       entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up, :group_id => self.group_id || self.center_id})
       entry.journal_id = self.id
       # login_number = "#{self.code}#{survey.id}"
-      entry.make_login_user
+      login_user = entry.make_login_user
+      unless login_user.valid?
+        puts "login_user errors: #{login_user.errors.inspect}"
+      end
       entry.login_user.save && entry.save
+      entry
       # if entry.valid?
       #   entry.print_login!
       #   entry.login_user.save
       # end
       # entry.expire_cache(current_user) # expire journal_entry_ids
     end
-    return self
+    # return self
   end
     
   def header_data
@@ -275,6 +283,10 @@ class Journal < ActiveRecord::Base #< Group
   #   c[:pfoedt] = self.birthdate.strftime("%d-%m-%Y")  # TODO: translate month to danish
   #   c
   # end
+
+  def age
+    ( (Date.today - self.birthdate).to_i / 365.25).floor
+  end
 
   def get_age(birth_date, end_date)
     ( (end_date.to_datetime - birth_date).to_i / 365.25).floor

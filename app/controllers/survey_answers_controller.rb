@@ -229,7 +229,7 @@ class SurveyAnswersController < ApplicationController
 		else 
 			journal_entry.answered_paper!
       if !journal_entry.valid?
-        puts "journal_entry.errors: #{journal_entry.errors.inspect}  \n login_user.groups: #{journal_entry.login_user.groups.maps {|g| g.errors}.flatten.inspect}"
+        puts "journal_entry.errors: #{journal_entry.errors.inspect}"
       end
 		end
 		

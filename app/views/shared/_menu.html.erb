@@ -55,7 +55,26 @@
 				<img alt="spinner" id="user_spinner" src="/images/spinner.gif" style="display:none;" >
 			</div>
 		<% end %>
-		TODO: observe_field
+		
+		<script type='text/javascript'>
+		
+		$('#search_users').keyup(function() { 
+			var search = $(this).val();
+			channel.publish( "Search.Users", { value: search   } );
+			// console.log(search);
+			// $('#user_spinner').show();
+			// if(search.length == 0) return;
+			// $.ajax({url: '/users/live_search/' + search, 
+			// 	dataType: 'json',
+			// 	success: function(response) {
+			// 		console.dir(response);
+			// 		$('content').html(response);
+			// 		$('#user_spinner').hide();
+			// 	}
+			// });
+		 });
+	
+		</script>
 		<%# observe_field(:search_users,
 			:frequency => 1.0,
 			:update => :content,
@@ -102,7 +121,6 @@
 				background-color: #ffb;
 			}
 		</style>
-		TODO: observe_field
 		<%# observe_field(:search_journals,
 			:frequency => 1.0,
 			:update => :content,
@@ -115,15 +133,10 @@
 		<script type='text/javascript'>
 			$(document).ready(function() {
 			   $("#search_journals").bind("keyup", function() {
-   					data = {name: this.val()}; // the value of input that need to send to server
-   					$('#journal_spinner').show();
-					$.get('/journals/search', data, function(html) {
- 				  		$('#journal_spinner').hide();
- 				  		TableKit.reload();
- 				    	$("#content").html(html);
- 				    });
- 				  });
- 				});
+			   		var search = $(this).val();
+					channel.publish( "Search.Journals", { value: search   } );
+				})
+			});
 		</script>
 		<% if current_user.perms[:layout_show_subscriptions] %>
 		<%= link_to t('menu.subscriptions'), subscriptions_path, :title => t('menu.show_subscriptions') %>

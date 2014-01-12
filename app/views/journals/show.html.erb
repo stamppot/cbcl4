@@ -16,11 +16,11 @@
 				<th class="nosort"><%= t('action') %></th>
 			</tr>
 		<% @not_answered_entries.each do |entry| %>
-			 	 <tr id='<%= "entry" + entry.id.to_s %>'>
+			 	 <tr id='<%= "entry" + entry.id.to_s %>' class="entry_survey" data-entry="<%= entry.id %>" data-survey="<%= entry.survey.title %>">
 					 <% survey = entry.survey %>
 					 <td style='background-color: #<%= survey.color %>; min-width: 320px;'>
-					  <%# link_to img_tag_html4("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), survey_show_fast_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
-					<%= link_to img_tag_html4("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), journal_entry_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
+					  <%# link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), survey_show_fast_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
+					<%= link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), journal_entry_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
             <%= link_to entry.get_title, journal_entry_path(entry), :title => 'Besvar' %>&nbsp;&nbsp;
         	</td>
             <td style="max-width: 200px;"><%= entry.notes %> <%# t("roles.#{survey.surveytype}") %></td>
@@ -28,14 +28,15 @@
 					 <td><%= entry.status %></td>
 					 <td style="min-width: 100px;">
 					<% @entry = entry %>
-					<%= entry.login_user.nil? ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : link_to(img_tag_html4('icon_edit_mailbox.gif', :border => 0, 
-										:class => 'icon', :title => 'Vis login-info'), show_login_letter_path(entry) + ".pdf", :popup => ['new_window, height=800,width=700']) %>
-					<%= link_to img_tag_html4("pencil.png", :border => 0, :alt => "Ret opfølgning", :title => "Ret opfølgning"), edit_journal_entry_path(entry) %>
+					<%= entry.login_user.nil? ? "" : link_to(image_tag('icon_edit_mailbox.gif', :border => 0, 
+										:class => 'icon', :title => 'Vis login-info'), login_letter_path(entry) + ".pdf", :popup => ['new_window, height=800,width=700']) %>
+					<%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret opfølgning", :title => "Ret opfølgning"), edit_journal_entry_path(entry) %>
 					<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
 						<img src="/images/tag_blue.png" alt="Noter" title="Noter" border=0 align="right" />
 					</a>
 
-					<%= link_to_remote((img_tag_html4('icon_delete_survey.gif', :border => 0, 
+					<a class="delete_entry" href="javascript:void(0);"><%= image_tag('icon_delete_survey.gif', :border => 0, :class => 'icon icon_delete', :title => 'Fjern skema') %></a>
+					<%# link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
 										:class => 'icon icon_delete', :title => 'Fjern skema')), 
 							:update => ('entry'<<entry.id.to_s), 
 							:confirm => "Vil du fjerne spørgeskemaet '#{entry.survey.get_title}'\n fra journalen #{@journal.get_name}?",
@@ -71,7 +72,7 @@
 			<th><%= "af" %></th>
 			<th class="nosort"><%= t('action') %></th>
 			<% @answered_entries.each do |entry| %>
-		 	 	<tr id='<%= "entry_answer" + entry.id.to_s %>'>
+		 	 	<tr id='<%= "entry_answer" + entry.id.to_s %>' class="entry_answer" data-entry="<%= entry.id %>">
 					 <td class="no_border" style='background-color: #<%= entry.survey.color %>; min-width: 320px;'>
 						<%= check_box "answers", entry.id, { :class => 'no_border'} %>
 						<%= link_to entry.get_title, journal_entry_path(entry), :title => 'Vis Besvarelse' %>
@@ -79,20 +80,24 @@
 						<%# link_to entry.get_title, survey_answer_path(entry), :title => 'Vis Besvarelse' %>
 					</td>
 					 <td style="min-width: 100px;"><%= entry.answered_at.strftime "%-d-%-m-%Y" %> 
-						 <%= link_to img_tag_html4("pencil.png", :border => 0, :alt => "Ret besvarelsesdato", :title => "Ret besvarelsesdato", :align => "right"), edit_date_survey_answers_path(entry) %>
+						 <%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret besvarelsesdato", :title => "Ret besvarelsesdato", :align => "right"), edit_date_survey_answers_path(entry) %>
 					 </td>
 					 <td style="max-width: 200px;"><%= entry.notes %></td>
 					 <td><%= entry.status %></td>
 					 <td>
 						<%= entry.answered_by && t("roles.#{entry.answered_by}") || entry.status %>
 					 </td>
-					 <td style="min-width: 100px;"><%= link_to img_tag_html4("printer.png", :border=>0, :alt => 'Udskriv besvarelse', :title => 'Udskriv besvarelse' ),
+					 <td style="min-width: 100px;"><%= link_to image_tag("printer.png", :border=>0, :alt => 'Udskriv besvarelse', :title => 'Udskriv besvarelse' ),
 									('/survey_answers/print/' + entry.id.to_s + ".pdf"), :format => 'pdf', :title => 'Udskriv besvarelse' %>
 						<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
 							<img src="/images/tag_blue.png" alt="Noter" title="Noter" border=0 align="right" />
 						</a>
-							<%= link_to img_tag_html4("icon_input.gif", :border=>0, :alt => 'Ret besvarelse', :title => 'Ret besvarelse' ), edit_survey_answer_path(entry), :title => 'Ret besvarelse' %>
- 							<%= link_to_remote((img_tag_html4('icon_delete_survey.gif', :border => 0, 
+							<%= link_to image_tag("icon_input.gif", :border=>0, :alt => 'Ret besvarelse', :title => 'Ret besvarelse' ), edit_survey_answer_path(entry), :title => 'Ret besvarelse' %>
+
+
+						<a class="delete_answer" href="javascript:void(0);"><%= image_tag('icon_delete_survey.gif', :border => 0, :class => 'icon icon_delete', :title => 'Fjern besvarelse') %></a>
+
+ 							<%= link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
 										:class => 'icon icon_delete', :title => 'Fjern besvarelse')), 
 							:update => ('entry_answer' << entry.id.to_s), 
 							:confirm => "Vil du fjerne besvarelsen '#{entry.survey.get_title}'\n fra journalen #{@journal.title}?",
@@ -128,4 +133,46 @@
 		<%= back_button journals_path %>
 	</div>
 	
+	<script type="text/javascript">
+		var journal_name = '<%= @journal.get_name %>';
+		function ask_delete_entry(entry_id, survey_title, journal) {
+			if(confirm("Vil du fjerne spørgeskemaet " + survey_title + "\n fra journalen " + journal + "?")) {
+				$.post('/journal_entries/remove/' + entry_id, function(response) {
+					$('#entry'+ entry_id).fadeOut();
+				});
+			}
+		}
+
+		function ask_delete_answer(entry_id, survey_title, journal) {
+			if(confirm("Vil du fjerne besvarelsen " + survey_title + '\n fra journalen ' + journal + "?")) {
+				$.post('/journal_entries/remove_answer/' + entry_id, function(response) {
+					$('#entry'+ entry_id).fadeOut();
+				});
+			}
+		}
+		
+
+		$(document).ready(function() {
+			$('.entry_survey .delete_entry').each(function () {
+				var entry_id = $(this).closest("tr").attr('data-entry');
+				var survey = $(this).closest("tr").attr('data-survey');
+
+				$(this).click(function () {
+					ask_delete_entry(entry_id, survey, journal_name);
+				});
+			});
+
+			$('.entry_answer .delete_answer').each(function () {
+				var entry_id = $(this).closest("tr").attr('data-entry');
+				var survey = $(this).closest("tr").attr('data-survey');
+
+				$(this).click(function () {
+					ask_delete_answer(entry_id, survey, journal_name);
+				});
+			});
+
+		});
+
+
+	</script>
 <%# end %>  <!-- end of cache -->

@@ -35,14 +35,14 @@ class User < ActiveRecord::Base
   
   attr_accessor :perms
 
-	# define_index do
-	# 	# fields
-	# 	indexes :name, :sortable => true
-	# 	indexes center.title, :as => :center_title
-	# 	indexes center.code, :as => :center_code
-	# 	# attributes
-	# 	has center_id, created_at #, login_user
-	# end
+	define_index do
+		# fields
+		indexes :name, :sortable => true
+		indexes center.title, :as => :center_title
+		indexes center.code, :as => :center_code
+		# attributes
+		has center_id, created_at #, login_user
+	end
 
   # def roles
   #   @roles ||= Role.get_all_by_ids(role_ids_str.split(',').map &:to_i)
@@ -312,7 +312,7 @@ class User < ActiveRecord::Base
     options = {:include => [:center, :users], :order => "title"}
     teams =
     if self.has_access?(:team_show_all)
-      Team.find(:all, options)
+      Team.includes([:center, :users]).order(:title) #all(options)
     elsif self.has_access?(:team_show_admin)
       Team.in_center(self.center_id).sort_by &:title
     elsif self.has_access?(:team_show_member)
@@ -391,7 +391,7 @@ class User < ActiveRecord::Base
 
   def has_journal?(journal_id)
     group_ids = [center_id] + teams.map(&:id)
-    journals_count = Journal.for_groups(group_ids).for(journal_id).count(:select => "id")
+    journals_count = Journal.for_groups(group_ids).for(journal_id).count #(:select => "id")
   end
 
   # returns journal ids that this user can access. Used by check_access. SQL optimized
@@ -557,10 +557,10 @@ class User < ActiveRecord::Base
     false
   end
 
-  def self.human_attribute_name (attr)
+  def self.human_attribute_name (attr, options = {})
     return case attr
            when 'login' then 'User name'
-           else attr.humanize
+           else attr.to_s.humanize
            end
   end
 

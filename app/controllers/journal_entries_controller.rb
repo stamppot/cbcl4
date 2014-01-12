@@ -33,13 +33,14 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     elem = "entry" << params[:id]
     # must also remove login-user
     entry = JournalEntry.find(params[:id])
-    entry.remove_login!
-   
-    if entry.destroy
-      render :update do |page|
-        page.remove elem
-      end
-    end
+    entry.remove_login! && entry.destroy
+
+    render :json => {:ok => true}
+    # if entry.destroy
+    #   render :update do |page|
+    #     page.remove elem
+    #   end
+    # end
   end
 
   # remove an answer and the associated login-user. Remove entries from the journal_entry
@@ -54,12 +55,15 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     end
 
     # delete all answers and answer cells, delete login for journal_entry
-    if entry.destroy
-      render :update do |page|
-        page.visual_effect :slide_up, elem
-        page.remove elem
-      end
-    end
+    entry.destroy
+
+    render :json => {:ok => true}
+    # if entry.destroy
+    #   render :update do |page|
+    #     page.visual_effect :slide_up, elem
+    #     page.remove elem
+    #   end
+    # end
   end
 
   def edit # edit follow_up
@@ -99,4 +103,9 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     redirect_to login_path if !current_user
   end
 
+  private
+
+  def journal_entry_params
+    params.permit(:survey, :state, :journal, :follow_up, :group_id)
+  end
 end

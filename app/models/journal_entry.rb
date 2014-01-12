@@ -7,6 +7,7 @@ class JournalEntry < ActiveRecord::Base
   validates_associated :login_user
   # validates_uniqueness_of :follow_up, :scope => :journal_id #, :message => "bruges allerede. Vælg andet ID."
   # validate :follow_up_validation
+  attr_accessible :survey, :state, :journal, :follow_up, :group_id
 
   scope :and_login_user, :include => :login_user
   scope :and_survey_answer, :include => [:survey, :survey_answer]
@@ -274,15 +275,17 @@ class JournalEntry < ActiveRecord::Base
     # set protected fields explicitly
     login_user.center_id = journal.center_id
     login_user.roles << Role.get(:login_bruger)
-    login_user.groups << journal
+    login_user.groups << journal.group
     login_user.password, login_user.password_confirmation = pw.values
     login_user.password_hash_type = "md5"
     login_user.last_logged_in_at = 10.years.ago
     self.password = pw[:password]
     self.login_user = login_user
-    unless login_user.valid?
-      raise InvalidUserException("invalid LoginUser: #{login_user.inspect}")
-    end
+    # unless login_user.valid?
+    #   raise RuntimeError("invalid LoginUser: #{login_user.inspect}")
+    # end
     return login_user
   end
+
 end
+

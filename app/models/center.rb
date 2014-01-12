@@ -78,7 +78,7 @@ class Center < Group
   
   # returns subscribed surveys
   def subscribed_surveys # TODO: include periods
-    subscriptions.active.map { |sub| sub.survey }.sort_by { |s| s.position }
+    subscriptions.where(:state => 1).map { |sub| sub.survey }.sort_by { |s| s.position }
   end
   
   def subscribed_surveys_in_age_group(age) # TODO: include periods

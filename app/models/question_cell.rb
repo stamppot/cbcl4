@@ -139,6 +139,7 @@ class QuestionCell < ActiveRecord::Base
 
 	# switches are an array of identifiers
 	def switch_source(options = {})
+		return "" if preferences.blank?
 		if options[:disabled]
 			""
 		elsif preferences && preferences[:switch]
@@ -202,10 +203,11 @@ class QuestionCell < ActiveRecord::Base
 
 	def set_validation(validation)
 		self.preferences ||= Hash.new
-		self.preferences[:validation] = validation
+		self.preferences[:validation] = validation unless validation.blank?
 	end
 
 	def validation
+		return "" if preferences.blank?
 		self.preferences && self.preferences[:validation]
 	end
 
@@ -215,6 +217,8 @@ class QuestionCell < ActiveRecord::Base
 	end
 
 	def switch_target(options = {})
+		return "" if preferences.blank?
+
 		if options[:disabled]
 			""
 		elsif preferences && preferences[:targets]

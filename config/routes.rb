@@ -70,7 +70,7 @@ Cbcl4::Application.routes.draw do
   resources :centers
   resources :teams, :except => [:new]
   resources :journals
-  resources :journal_entries, :only => [:show]
+  resources :journal_entries, :only => [:show, :edit]
   resources :export_files
   resources :exports
   resources :users
@@ -141,17 +141,17 @@ Cbcl4::Application.routes.draw do
   get '/journals/select/(/:id)', :to => 'journals#select', :as => 'select_journals'
   get '/journals/move/(/:id)', :to => 'journals#move', :as => 'move_journals'
 
-  get 'journals/live_search/(/:id)', :to => 'journals#live_search', :as => 'journal_search'
+  get 'journals/search/(/:name)', :to => 'journals#search', :as => 'journal_search'
   # get 'journals/new/(/:id)', :to => 'journals#new', :as => 'new_journal'
   get '/journals/delete/(/:id)', :to => 'journals#delete', :as => 'delete_journal'
   get '/journals/destroy/(/:id)', :to => 'journals#destroy', :as => 'destroy_journal'
-  get '/journals/add_survey/(/:id)', :to => 'journals#add_survey', :as => 'journal_add_survey'
+  match '/journals/add_survey/(/:id)', :to => 'journals#add_survey', :as => 'journal_add_survey', :via => [:get, :post]
   get '/journals/remove_survey/(/:id)', :to => 'journals#remove_survey', :as => 'journal_remove_survey'
 
   # journal entries
   get 'journal_entries/show_answer/(/:id)', :to => 'journal_entries#show_answer', :as => 'entry_show_answer'
-  get 'journal_entries/remove/(/:id)', :to => 'journal_entries#remove', :as => 'entry_remove', :only => :post
-  get 'journal_entries/remove_answer/(/:id)', :to => 'journal_entries#remove_answer', :as => 'entry_remove_answer', :only => :post
+  post 'journal_entries/remove/(/:id)', :to => 'journal_entries#remove', :as => 'entry_remove', :only => :post
+  post 'journal_entries/remove_answer/(/:id)', :to => 'journal_entries#remove_answer', :as => 'entry_remove_answer', :only => :post
   get 'letters/show_login/(/:id)', :to => 'letters#show_login', :as => 'login_letter'
   get 'letters/show_logins/(/:id)', :to => 'letters#show_logins', :as => 'print_letters'
   # get 'letters/new/(/:id)', :to => 'letters#new', :as => 'new_letter'
@@ -159,7 +159,7 @@ Cbcl4::Application.routes.draw do
   # get 'journal_entries/destroy_login/(/:id)', :to => 'journal_entries#destroy_login', :as => 'destroy_login', :only => :post
   
   # get 'users/list', :to => 'users#list', :as => 'user_list'
-  get 'users/live_search/(/:id)', :to => 'users#live_search', :as => 'user_search'
+  get '/users/live_search/(/:name)', :to => 'users#live_search', :as => 'user_search'
   # get 'users/new/(/:id)', :to => 'users#new', :as => 'new_user'
   # get '/users/delete/(/:id)', :to => 'users#delete', :as => 'delete_user'
   get '/centers/new_team/(/:id)', :to => 'centers#new_team', :as => 'new_team_in_center'

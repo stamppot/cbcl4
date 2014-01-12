@@ -1,4 +1,5 @@
-require 'lib/hashery'
+# require 'lib/hashery'
+require 'hashery'
 # require 'ar-extensions/adapters/mysql'
 # require 'ar-extensions/import/mysql'
 

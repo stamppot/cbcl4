@@ -22,6 +22,12 @@
  	<%# javascript_include_tag 'effects' %>
  	<%# javascript_include_tag 'controls' %>
 
+	<%= javascript_include_tag 'underscore' %>
+	<%= javascript_include_tag 'postal.min' %>
+	<%= javascript_include_tag 'postal.diagnostics.min' %>
+
+	<%= javascript_include_tag 'curvy-corners' %>
+
  	<%= javascript_include_tag 'css_browser_selector' %>
  	<% javascript_include_tag 'validation' %>
 
@@ -62,13 +68,44 @@
 	<%= yield %>
 </div>
 <script type="text/javascript">
+	var channel = postal.channel();
+	
 	$(document).ready(function() {
-	var user_name = Cookies.get('user_name');
-	if((typeof(user_name) !== "undefined")) {
-		var elem = getElemns('user_info');
-		elem.innerHTML = decodeURIComponent(user_name.replace(/\+/g, " "));
-	}
-});
+		var user_name = Cookies.get('user_name');
+		if((typeof(user_name) !== "undefined")) {
+			var elem = getElemns('user_info');
+			elem.innerHTML = decodeURIComponent(user_name.replace(/\+/g, " "));
+		}
+	});
+
+	channel.subscribe("Search.Users", function ( data ) {
+		console.log(data.value);
+		$('#user_spinner').show();
+		if(data.value == 0) return;
+		$.ajax({url: '/users/live_search/' + data.value, 
+			// dataType: 'json',
+			success: function(response) {
+				console.dir(response);
+				$('#content').html(response);
+				$('#user_spinner').hide();
+			}
+		});
+	}).distinctUntilChanged().withDelay( 500 );
+
+	channel.subscribe("Search.Journals", function ( data ) {
+		// console.log(data.value);
+		$('#journal_spinner').show();
+		if(data.value == 0) return;
+		$.ajax({url: '/journals/search/' + data.value, 
+			// dataType: 'json',
+			success: function(response) {
+				console.dir(response);
+				$('#content').html(response);
+				$('#journal_spinner').hide();
+				// TableKit.reload();
+			}
+		});
+	}).distinctUntilChanged().withDelay( 500 );
 
 </script>
 </body>

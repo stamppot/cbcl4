@@ -14,3 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require jquery
+//= require underscore
+//= require postal.min
+//= require postal.diagnostics.min
