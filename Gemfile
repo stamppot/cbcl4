@@ -36,6 +36,7 @@ gem 'actionpack-page_caching'
 
 gem 'dalli'
 
+gem 'spawnling', :git => 'git://github.com/tra/spawnling'
 # gem 'debugger'
 
 # gem 'handlebars_assets'

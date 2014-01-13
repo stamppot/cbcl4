@@ -6,8 +6,12 @@ require 'hashery'
 class Answer < ActiveRecord::Base
   belongs_to :survey_answer
   belongs_to :question
-  has_many :answer_cells, :dependent => :delete_all, :order => 'row, col ASC'  # order by row, col
+  has_many :answer_cells, :dependent => :delete_all
   has_many :variables
+
+  attr_accessible :survey_answer_id, :question_id, :number
+
+  default_scope order('number')
   validates_presence_of :question_id, :survey_answer_id
 
   # before_save :update_ratings_count

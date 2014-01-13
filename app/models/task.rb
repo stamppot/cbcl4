@@ -2,7 +2,7 @@ class Task < ActiveRecord::Base
   belongs_to :export_file
 
   def create_survey_answer_export(survey_id, survey_answers)
-    spawn do
+    Spawnling.new(:method => :thread) do
       logger.info "EXPORT create_survey_answer_export: survey: #{survey_id} #{survey_answers.size}"
       data = ExportAnswersHelper.new.export_survey_answers(survey_answers, survey_id)  # TODO: add csv generation on save_answer & change_answer
       logger.info "create_survey_answer_export: created data survey: #{survey_id} #{survey_answers.size}"
@@ -57,7 +57,7 @@ class Task < ActiveRecord::Base
   # end
 
   def create_csv_survey_answer(survey_answer)
-    spawn do
+    Spawnling.new(:method => :thread) do
       save_csv(survey_answer)
     end
   end

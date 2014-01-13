@@ -199,9 +199,9 @@ class SurveyAnswersController < ApplicationController
     je = journal_entry
     logger.info "save_draft journal: #{j.id} kode: #{j.code} entry cookie: '#{session[:journal_entry]}' entry: '#{je.id}' survey: #{je.survey_id} luser: '#{je.user_id}' #{request.env['HTTP_USER_AGENT']}"
 
-    spawn do
+    # Spawnling.new(:method => :thread) do
       journal_entry.survey_answer.save_draft(params)
-    end
+    # end
   end
   
   def create

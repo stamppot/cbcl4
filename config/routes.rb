@@ -172,7 +172,7 @@ Cbcl4::Application.routes.draw do
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
   get 'surveys/show_only/(/:id)', :to => 'surveys#show_only', :as => 'survey_show_only' # :id is entry
   # get 'surveys/show_only_fast/(/:id)', :to => 'surveys#show_only_fast', :as => 'survey_show_only_fast' # :id is entry
-  get 'survey_answers/save_draft/(/:id)', :to => 'survey_answers#save_draft', :as => 'survey_save_draft' # :id is entry
+  match 'survey_answers/save_draft/(/:id)', :to => 'survey_answers#save_draft', :as => 'survey_save_draft', :via => :post # :id is entry
   get 'survey_answers/create/(/:id)', :to => 'survey_answers#create', :as => 'survey_answer_create'
   get 'survey_answers/done/(/:id)', :to => 'survey_answers#done', :as => 'survey_answer_done' # :id is entry
   

@@ -9,12 +9,14 @@ class SurveyAnswer < ActiveRecord::Base
   belongs_to :journal
   belongs_to :center
   belongs_to :team
-  has_many :answers, -> { includes :answer_cells, order: :number, :dependent: :destroy
+  has_many :answers, -> { includes :answer_cells }, dependent: :destroy
   #belongs_to :journal_entry
   has_one :journal_entry
   has_one :score_rapport, :dependent => :destroy, :include => [ :score_results ]
   has_one :csv_survey_answer, :dependent => :destroy
   has_one :csv_score_rapport, :dependent => :destroy
+
+  attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id
   
   scope :finished, :conditions => ['done = ?', true]
   scope :for_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
@@ -74,7 +76,7 @@ class SurveyAnswer < ActiveRecord::Base
       answers.each {|a| a.save!}
     end
       # survey_answer.add_missing_cells unless current_user.login_user # 11-01-10 not necessary with ratings_count
-    spawn do
+    Spawnling.new(:method => :thread) do
       score_rapport = self.generate_score_report(update = true) # generate score report
       self.save_csv_survey_answer
       score_rapport.save_csv_score_rapport
@@ -287,7 +289,11 @@ class SurveyAnswer < ActiveRecord::Base
       # puts "q_id: #{q_id}, q_no: #{q_number}"
 
       an_answer = self.answers.find_by_question_id(q_id)
-      an_answer ||= self.answers.create(:survey_answer_id => self.id, :question_id => q_id, :number => q_number)
+      an_answer ||= self.answers.build(:survey_answer_id => self.id, :question_id => q_id, :number => q_number)
+      an_answer.valid?
+      puts "#{an_answer.errors.inspect}"
+      an_answer.save
+
       new_cells ||= {}
       q_cells.each do |cell, value|
         if cell =~ /q(\d+)_(\d+)_(\d+)/   # match col, row

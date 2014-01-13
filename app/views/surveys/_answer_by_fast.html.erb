@@ -15,9 +15,9 @@
 	<span class="span-9 last">
 		Hvis andet, skriv hvem: <input type='text' id='answer_person_other' name='answer[person_other]' >
 		<% help = roles.map { |r| "#{r.last} = #{r.first}<br>"}.join %>	
-		<%= help_tip(help, "answered_by")%>
+		<%= help_tip(help, "answered_by").html_safe %>
 	</span>
 	
-<%= script %>
+<%= script.html_safe %>
 
 </div>

@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 
-	var answer_cells = <%= @survey_answer_json %>;
+	var answer_cells = <%= @survey_answer_json.html_safe %>;
 
 	function urldecode(url) {
   		return decodeURIComponent(url.toString().gsub(/\+/, ' '));
@@ -14,7 +14,6 @@
 			var cell = answer_cells[i];
 			//console.log(cell.css_id + ": " + cell.val + " " + urldecode(cell.val));
 			$(cell.css_id).setValue(urldecode(cell.val));
-
 		}
 	});
 </script>
@@ -81,10 +80,22 @@
 	</script>
 	
 	<% unless @options[:action] =~ /show|edit/ && !@options[:show_only] %>
-		<%= observe_form "surveyform",
+		<%# observe_form "surveyform",
 				 :url => survey_save_draft_path(@journal_entry),
 				 :update => "draft-message",
 				 :frequency => save_draft_interval %>
+		<script type='text/javascript'>
+		//<![CDATA[
+		new Form.Observer('surveyform', 60, function(element, value) {new Ajax.Updater('draft-message', '/survey_answers/save_draft/<%= @journal_entry.id %>', {asynchronous:true, evalScripts:true, parameters:value})})
+		//]]> 
+		// $('#surveyform').delayedObserver(function() {
+		// 	console.log('Sending "' + $(this).val() + '" to the server.');
+		// 	$.post('survey_answers/save_draft/' + '<%= @journal_entry.id %>', function(response) {
+		// 		$('#draft_message').html(response);
+		// 	});
+		// },
+		// '<%= save_draft_interval %>');
+		</script>
 	<% end %>
 <% end %>
 

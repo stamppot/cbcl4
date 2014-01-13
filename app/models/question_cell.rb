@@ -139,7 +139,7 @@ class QuestionCell < ActiveRecord::Base
 
 	# switches are an array of identifiers
 	def switch_source(options = {})
-		return "" if preferences.blank?
+		return {} if preferences.blank?
 		if options[:disabled]
 			""
 		elsif preferences && preferences[:switch]
@@ -188,7 +188,7 @@ class QuestionCell < ActiveRecord::Base
 	end
 
 	def required?
-		self.preferences && self.preferences[:required]
+		!self.preferences.blank? && self.preferences && self.preferences[:required]
 	end
 	alias :required :required?
 
@@ -207,7 +207,7 @@ class QuestionCell < ActiveRecord::Base
 	end
 
 	def validation
-		return "" if preferences.blank?
+		return {} if preferences.blank?
 		self.preferences && self.preferences[:validation]
 	end
 
