@@ -9,8 +9,8 @@ class Variable < ActiveRecord::Base
   validates_uniqueness_of :var
   # validates_uniqueness_of :survey, :scope => [:question, :col, :row], :message => 'A variable for this cell already exists'
   
-  scope :and_survey, :include => :survey
-  scope :and_question, :include => :question
+  scope :and_survey, -> { includes(:survey) }
+  scope :and_question, -> { includes(:question) }
   scope :for_survey, lambda { |survey_id| { :conditions => ["survey_id = ?", survey_id] } }
   scope :for_cell, lambda { |cell| { :conditions => ['question_id = ? and row = ? and col = ?', cell.question_id, cell.row, cell.col] } }
 

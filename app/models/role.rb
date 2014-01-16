@@ -228,21 +228,6 @@ class Role < ActiveRecord::Base
   #   return result
   # end
 
-  # We're overriding "parent=" below. So we alias the one from the acts_as_tree
-  # mixin to "old_parent=".
-  # alias_method :old_parent=, :parent=
-
-  # We protect the parent attribute here. If a group is given as a parent, that
-  # is a descendant from this group, we raise a RecursionInTree error and stop
-  # assignment.
-  # def parent=(value)
-  #   if descendants_and_self.include?(value)
-  #     raise RecursionInTree, "Trying to set parent to descendant", caller
-  #   else
-  #     self.old_parent = value
-  #   end
-  # end
-
   # # This method blocks destroying a role if it still has children. This method
   # # raises a CantDeleteWithChildren exception if this error occurs. It is an 
   # # ActiveRecord event hook. 

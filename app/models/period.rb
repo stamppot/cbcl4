@@ -1,9 +1,9 @@
 class Period < ActiveRecord::Base
   belongs_to :subscription
 
-  scope :active, :conditions => ['active = ?', true]
-  scope :inactive, :conditions => ['active = ?', false]
-  scope :paid, :conditions => ['paid = ?', true], :order => 'paid_on DESC'
+  scope :active, -> { where('active = ?', true) }
+  scope :inactive, -> { where('active = ?', false) }
+  scope :paid, -> { where('paid = ?', true).order('paid_on DESC') }
 
   attr_accessor :survey_id, :center_id, :state
 

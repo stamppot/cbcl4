@@ -45,7 +45,7 @@ module ActiveRbacMixins
       def self.included(base)
         base.class_eval do 
           # groups are arranged in a tree
-          acts_as_tree :order => 'title'
+          acts_as_tree -> { order('title') }
           # groups have a n:m relation to user
           has_and_belongs_to_many :users, :uniq => true
           # groups have a n:m relation to groups

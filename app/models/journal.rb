@@ -7,7 +7,7 @@ class Journal < ActiveRecord::Base #< Group
   belongs_to :group #, :class_name => 'Group'
 
   # has_many :journal_entries, :order => 'created_at', :dependent => :destroy
-  has_many :journal_entries, :order => 'created_at', :dependent => :destroy
+  has_many :journal_entries, -> { order('created_at') }, :dependent => :destroy
   has_many :login_users, :through => :journal_entries, :source => :journal_entries
   has_many :surveys, :through => :journal_entries
   has_many :survey_answers
@@ -15,24 +15,24 @@ class Journal < ActiveRecord::Base #< Group
   has_many :score_rapports, :through => :survey_answers
   has_many :journal_click_counters # has one per user  
   
-  has_many :answered_entries_by_personnel,
-           :class_name => 'JournalEntry',
-           :include => [:survey],
-           :conditions => 'journal_entries.state = 5',  # answered
-           :order => 'journal_entries.answered_at'
-  has_many :answered_entries_by_login_user,
-           :class_name => 'JournalEntry',
-           :conditions => 'journal_entries.state = 6',  # answered
-           :order => 'journal_entries.answered_at'
-	has_many :answered_entries,
-	         :class_name => 'JournalEntry',
-	         :conditions => 'journal_entries.state >= 5',  # answered
-	         :order => 'journal_entries.answered_at'
-  has_many :not_answered_entries,
-           :class_name => 'JournalEntry',
-           :conditions => 'journal_entries.state < 5',  # not answered
-           :order => 'journal_entries.answered_at'
-  default_scope :order => 'created_at DESC'               
+  has_many :answered_entries_by_personnel, -> { includes(:survey).where('journal_entries.state = 5').order('journal_entries.answered_at') },
+           :class_name => 'JournalEntry' #,
+           # :include => [:survey],
+           # :conditions => 'journal_entries.state = 5',  # answered
+           # :order => 'journal_entries.answered_at'
+  has_many :answered_entries_by_login_user, -> { where('journal_entries.state = 6').order('journal_entries.answered_at') },
+           :class_name => 'JournalEntry' #,
+           #:conditions => 'journal_entries.state = 6',  # answered
+           #:order => 'journal_entries.answered_at'
+	has_many :answered_entries, -> { where('journal_entries.state >= 5').order('journal_entries.answered_at') },
+	         :class_name => 'JournalEntry' #,
+	         # :conditions => 'journal_entries.state >= 5',  # answered
+	         # :order => 'journal_entries.answered_at'
+  has_many :not_answered_entries, -> { where('journal_entries.state < 5').order('journal_entries.answered_at') },
+           :class_name => 'JournalEntry' #,
+           # :conditions => 'journal_entries.state < 5',  # not answered
+           # :order => 'journal_entries.answered_at'
+  default_scope -> { order('created_at DESC') }
 
   after_save    :expire_cache
 	after_create  :index_search, :expire_cache
@@ -55,14 +55,14 @@ class Journal < ActiveRecord::Base #< Group
   validates_presence_of :sex, :message => "Køn skal angives"
   validates_presence_of :nationality, :message => "Nationalitet skal angives"
 
-  scope :and_entries, :include => :journal_entries
+  scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
   scope :for_parent, lambda { |group| where(:group_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
   scope :for_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group)).order('created_at desc') }
-  scope :by_code, :order => 'code ASC'
+  scope :by_code, -> { order('code ASC') }
   scope :for_groups, lambda { |group_ids| where(:group_id => group_ids) }  # { :conditions => ['parent_id IN (?)', group_ids] } }
   scope :for, lambda { |journal_id| where(:id => journal_id) }
-  scope :all_parents, lambda { |group_ids| { :conditions => ['group_id IN (?)', group_ids]}}
+  scope :all_parents, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
   
   define_index do
      # fields

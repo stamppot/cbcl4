@@ -3,12 +3,12 @@
 
 class Question < ActiveRecord::Base
   belongs_to :survey
-  has_many :question_cells, :dependent => :destroy, :order => 'row, col ASC'  # order by row, col
+  has_many :question_cells, -> { order('row, col ASC') }, :dependent => :destroy #, :order => 'row, col ASC'  # order by row, col
   has_many :answers
   has_many :score_items
   has_many :variables
-  scope :by_survey, lambda { |survey| { :conditions => ['survey_id = ?', survey.is_a?(Survey) ? survey.id : survey] } }
-  scope :and_question_cells, :include => :question_cells
+  scope :by_survey, lambda { |survey| where('survey_id = ?', (survey.is_a?(Survey) ? survey.id : survey)) }
+  scope :and_question_cells, -> { includes :question_cells }
 
   after_save :update_ratings_count
   

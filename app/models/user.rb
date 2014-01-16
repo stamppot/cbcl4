@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   end
 
   scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
-  scope :users, where(:login_user => false).order("users.created_at")
+  scope :users, -> { where(:login_user => false).order("users.created_at") }
   scope :login_users, where(:login_user => true)
 
   scope :with_roles, lambda { |role_ids| joins(:roles).where('role_id IN (?)', role_ids) } 

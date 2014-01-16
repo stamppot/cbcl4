@@ -14,6 +14,10 @@ class LoginController < ApplicationController
   def maintenance
   end
 
+  def heartbeat
+    render :text => "OK"
+  end
+
   def login
     cookies.delete :journal_entry
     # redirect_to login_path and return if request.get?
@@ -138,7 +142,7 @@ class LoginController < ApplicationController
   end
 
   def check_access
-    if params[:action] =~ /index|login/
+    if params[:action] =~ /index|login|heartbeat/
       return true
     else
       redirect_to login_path

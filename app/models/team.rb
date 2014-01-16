@@ -4,8 +4,8 @@ class Team < Group
   belongs_to :center
   has_many :journals
   
-  scope :with_center, :include => :center
-  scope :with_journals, :include => :journals
+  scope :with_center, -> { includes(:center) }
+  scope :with_journals, -> { includes(:journals) }
   scope :for_center, lambda { |center| where(:parent_id => (center.is_a?(Center) ? center.id : center)) }
   
   # scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }

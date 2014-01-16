@@ -2,7 +2,7 @@
 # Do not obsolete, but use as abstraction/facade of user has role("login_bruger")
 class LoginUser < User
   
-  default_scope :order => 'id DESC'
+  default_scope -> { order('id DESC') }
 
   attr_accessible :login, :name, :email, :state, :login_user
 

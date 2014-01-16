@@ -8,7 +8,19 @@
 	<% @surveys.each do |survey| %>
 	<% 	 sub = @subscribed.detect { |subsc| subsc.survey_id == survey.id }	%>
 
-  <%=   result = "<div style='background-color: #{survey.color}; width: 25em;'>" + 
+  	<div style='background-color: <%= survey.color %>; width: 25em;'> 
+  	<% if !sub.nil? %>
+	<input id="group_surveys_<%= survey.id %>" type="checkbox" name="group[surveys][]" value="<%= survey.id %>" checked="checked" />
+	<% end %>
+
+	<% if sub.nil? %>
+        <div style='background-color: <%= survey.color %>; width: 25em;'>
+			<input id="group_surveys_<%= survey.id %>" type="checkbox" name="group[surveys][]" value="<%= survey.id %>" />
+
+        	<label for="group_surveys_<%= survey.id %>"><%= survey.get_title %></label>
+        </div>
+    <% end %>
+  	<%# result = "<div style='background-color: #{survey.color}; width: 25em;'>" + 
 	"<input id=\"group_surveys_#{survey.id}\" type=\"checkbox\" name=\"group[surveys][]\" value=\"#{survey.id}\" checked=\"checked\" /> " if !sub.nil?
         result = "<div style='background-color: #{survey.color}; width: 25em;'>" +
 				"<input id=\"group_surveys_#{survey.id}\" type=\"checkbox\" name=\"group[surveys][]\" value=\"#{survey.id}\" /> " if sub.nil?

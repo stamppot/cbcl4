@@ -9,19 +9,19 @@ class JournalEntry < ActiveRecord::Base
   # validate :follow_up_validation
   attr_accessible :survey, :state, :journal, :follow_up, :group_id
 
-  scope :and_login_user, :include => :login_user
-  scope :and_survey_answer, :include => [:survey, :survey_answer]
+  scope :and_login_user, -> { includes(:login_user) }
+  scope :and_survey_answer, -> { includes([:survey, :survey_answer]) }
 	scope :for_center, lambda { |center_id| { :joins => :journal, :conditions => ["center_id = ?", center_id] } }
   scope :with_surveys, lambda { |survey_ids| { :joins => :survey_answer,
    :conditions => ["survey_answers.survey_id IN (?)", survey_ids] } }
-  scope :for_surveys, lambda { |survey_ids| { :conditions => ["survey_id IN (?)", survey_ids] } }
-  scope :unanswered, :conditions => ['state < ?', 5]
-  scope :answered, :conditions => ['state = ?', 5]
-  scope :answered_by_login_user, :conditions => ['state = ?', 6]
+  scope :for_surveys, lambda { |survey_ids| where("survey_id IN (?)", survey_ids) }
+  scope :unanswered, -> { where('state < 5') }
+  scope :answered, -> { where('state = 5') }
+  scope :answered_by_login_user, -> { where('state = 6') }
   scope :for_states, lambda { |states| { :conditions => ["state IN (?)", states]}}
   scope :with_cond, lambda { |cond| cond }
-  scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
-  scope :first_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'answered_at asc', :limit => 1}}
+  scope :between, lambda { |start, stop| where(:created_at => start..stop) } 
+  scope :first_answered, -> { where('answered_at is not null').order('answered_at asc').limit(1) }
   scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'answered_at desc', :limit => 1}}
 
   def self.follow_ups

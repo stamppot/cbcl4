@@ -17,13 +17,13 @@ class Group < ActiveRecord::Base
 
   attr_accessible :title, :code, :parent
   
-  scope :direct_groups, lambda { |user| { :joins => "INNER JOIN `groups_users` ON `groups`.id = `groups_users`.group_id",
-    :conditions => ["groups_users.user_id = ?", user.is_a?(User) ? user.id : user] } }
+  scope :direct_groups, lambda { |user| joins("INNER JOIN `groups_users` ON `groups`.id = `groups_users`.group_id").
+    where("groups_users.user_id = ?", user.is_a?(User) ? user.id : user) }
 
-  scope :all_parents, lambda { |parent| { :conditions => parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent] } }
-  scope :center_and_teams, :conditions => ['type != ?', "Journal"]
-  scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
-  scope :and_parent, :include => [:parent]
+  scope :all_parents, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
+  scope :center_and_teams, -> { where('type != ?', "Journal") }
+  scope :in_center, lambda { |center| where('center_id = ?', center.is_a?(Center) ? center.id : center) }
+  scope :and_parent, -> { includes(:parent) }
   
   has_many :letters
   

@@ -49,7 +49,6 @@ class CentersController < ApplicationController
   end
 
   def new_team
-    # @group = Center.find(params[:id])
     redirect_to new_team_path(params[:id])
   end
 
@@ -64,6 +63,7 @@ class CentersController < ApplicationController
       flash[:notice] = 'Centeret er blevet oprettet.'
       redirect_to center_path(@group)
     else
+      # flash[:error] = @group.errors.to_a.join(', ')
       render new_center_url
     end
   end

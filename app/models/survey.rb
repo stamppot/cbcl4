@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Survey < ActiveRecord::Base
-  has_many :questions, :dependent => :destroy, :include => [ :question_cells ], :order => 'number ASC'
+  has_many :questions, -> { includes(:question_cells).order('number ASC') }, dependent: :destroy #, order: 'number ASC'
   has_many :subscriptions  # this not needed?
   has_many :centers, :through => :subscriptions
   has_many :survey_answers, :through => :journal_entries
@@ -9,8 +9,8 @@ class Survey < ActiveRecord::Base
   has_many :scores
   has_many :variables # not needed
 
-  scope :and_questions, :include => {:questions => :question_cells}
-  scope :and_q, :include => :questions
+  scope :and_questions, -> { includes({:questions => :question_cells}) }
+  scope :and_q, -> { includes(:questions) }
   scope :selected, lambda { |ids| { :conditions => (ids ? ['id IN (?)', ids] : []) } }
   # scope :by_question_id, lambda {|question| { :conditions => ['id = ?', question.is_a?(Question) ? question.id : question] } }
   

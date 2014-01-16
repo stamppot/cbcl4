@@ -157,9 +157,6 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
       render edit_team_url(@group) and return
     end
 
-  # rescue RecursionInTree
-  #   @role.errors.add :parent, "must not be a descendant of itself"
-  #   render edit_team_url(@group)
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'You sent an invalid request.'
     redirect_to teams_url

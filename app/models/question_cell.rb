@@ -9,10 +9,10 @@ class QuestionCell < ActiveRecord::Base
 
   PROPERTIES = %w{input report}
   
-	scope :ratings, :conditions => ['type = ?', 'Rating']
-	scope :answerable, :conditions => ['type IN (?)', ['Rating', 'Checkbox', 'ListItemComment', 'SelectOption', 'Textbox']]  # and ListItem???? TODO: check if this can be answered, otherwise answerable part should be extracted to other type
-	scope :unanswerable, :conditions => ['type not IN (?)', ['Rating', 'Checkbox', 'ListItemComment', 'ListItem', 'SelectOption', 'Textbox']]
-  scope :with_property, lambda { |prop| { :conditions => "prop_mask & #{2**PROPERTIES.index(prop.to_s)} > 0" } }
+	scope :ratings, -> { where('type = ?', 'Rating') }
+	scope :answerable, -> { where(['type IN (?)', ['Rating', 'Checkbox', 'ListItemComment', 'SelectOption', 'Textbox']]) }  # and ListItem???? TODO: check if this can be answered, otherwise answerable part should be extracted to other type
+	scope :unanswerable, -> { where(['type not IN (?)', ['Rating', 'Checkbox', 'ListItemComment', 'ListItem', 'SelectOption', 'Textbox']]) }
+	scope :with_property, lambda { |prop| where("prop_mask & #{2**PROPERTIES.index(prop.to_s)} > 0") }
 
   def prop_index(p) 2**PROPERTIES.index(p) end
 

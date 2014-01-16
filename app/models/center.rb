@@ -6,22 +6,23 @@ class Center < Group
   has_many :surveys, -> { order('position').uniq }, :through => :subscriptions
   has_one  :center_info
   has_many :users,
-           :class_name => 'User',
-           :conditions => 'users.login_user = 0',
-           :dependent => :destroy
+           -> { where login_user: 0 }, class_name: 'User', dependent: :destroy
+           # :class_name => 'User',
+           # :conditions => 'users.login_user = 0',
+           # :dependent => :destroy
   has_many :login_users,
-           :class_name => 'User',
-           :conditions => 'users.login_user = 1',
-           :dependent => :destroy
-  has_many :all_users,
-           :class_name => 'User',
-           :dependent => :destroy
+           -> { where login_user: 1 }, class_name: 'User', dependent: :destroy
+           # :class_name => 'User',
+           # :conditions => 'users.login_user = 1',
+           # :dependent => :destroy
+  has_many :all_users, class_name: 'User', dependent: :destroy
   has_many :survey_answers           
 	has_many :center_settings
 	
   validates_format_of :code, :with => /\A[0-9][0-9][0-9][0-9]\z/ #:is => 4 #, :message => "skal være 4 cifre"
   validates_uniqueness_of :code #, :message => "skal være unik"
-  
+  validates_uniqueness_of :title
+
   scope :search_title_or_code, lambda { |phrase| { :conditions => ["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase] } }
   
   attr_accessor :subscription_service, :subscription_presenter

@@ -12,26 +12,26 @@ class SurveyAnswer < ActiveRecord::Base
   has_many :answers, -> { includes :answer_cells }, dependent: :destroy
   #belongs_to :journal_entry
   has_one :journal_entry
-  has_one :score_rapport, :dependent => :destroy, :include => [ :score_results ]
-  has_one :csv_survey_answer, :dependent => :destroy
-  has_one :csv_score_rapport, :dependent => :destroy
+  has_one :score_rapport, -> { includes :score_results }, dependent: :destroy #, :include => [ :score_results ]
+  has_one :csv_survey_answer, dependent: :destroy
+  has_one :csv_score_rapport, dependent: :destroy
 
   attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id
   
-  scope :finished, :conditions => ['done = ?', true]
+  scope :finished, -> { where('done = ?', true) }
   scope :for_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
 
   scope :order_by, lambda { |column| { :order => column } }
-  scope :and_answer_cells, :include => { :answers => :answer_cells }
-  scope :and_questions, :include => { :survey => :questions }
+  scope :and_answer_cells, -> { includes ({ answers: :answer_cells }) }
+  scope :and_questions, -> { includes( { survey: :questions }) }
   scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
   scope :from_date, lambda { |start| { :conditions => { :created_at  => start..(Date.now) } } }
   scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)..stop } } }
   scope :for_surveys, lambda { |survey_ids| { :conditions => { :survey_id => survey_ids } } }
   scope :for_survey, lambda { |survey_id| { :conditions => ["survey_answers.survey_id = ?", survey_id] } }
-  scope :with_journals, :joins => "INNER JOIN `journal_entries` ON `journal_entries`.journal_id = `journal_entries`.survey_answer_id", :include => {:journal_entry => :journal}
-  scope :for_entries, lambda { |entry_ids| { :conditions => { :journal_entry_id => entry_ids } } } # ["survey_answers.journal_entry_id IN (?)", 
+  scope :with_journals, -> { joins("INNER JOIN `journal_entries` ON `journal_entries`.journal_id = `journal_entries`.survey_answer_id").includes({:journal_entry => :journal}) }
+  scope :for_entries, lambda { |entry_ids| where({ :journal_entry_id => entry_ids }) } # ["survey_answers.journal_entry_id IN (?)", 
 
   def answered_by_role
     return Role.get(self.answered_by)

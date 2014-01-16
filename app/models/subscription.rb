@@ -8,13 +8,15 @@ class Subscription < ActiveRecord::Base
   before_validation :set_totals
   after_create :new_period!
 
+  attr_accessible :total_used, :total_paid, :active_used
+
   scope :for_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
   scope :by_survey, lambda { |survey| { :conditions => ['survey_id = ?', survey.is_a?(Survey) ? survey.id : survey] } }
   
-  scope :active, :conditions => [ 'state = ?', 1 ]
-  scope :inactive, :conditions => [ 'state = ?', 2 ]
-  scope :locked, :conditions => [ 'state = ?', 3 ]
-  scope :deleted, :conditions => [ 'state = ?', 4 ]
+  scope :active, -> { where('state = ?', 1) }
+  scope :inactive, -> { where('state = ?', 2) }
+  scope :locked, -> { where('state = ?', 3) }
+  scope :deleted, -> { where('state = ?', 4) }
   
   validates_presence_of :survey
   validates_presence_of :center
