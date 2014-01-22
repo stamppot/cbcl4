@@ -145,9 +145,11 @@ class User < ActiveRecord::Base
     end
 
     # only update password when given
-    unless params[:password].blank?
-      user.password = params.delete(:password)
-      user.password_confirmation = params.delete(:password_confirmation)
+    pw = params.delete :password
+    pw_conf = params.delete :password_confirmation
+    unless pw.blank?
+      user.password = pw
+      user.password_confirmation = pw_conf
     end
     user.update_attributes(params)
   end
@@ -165,7 +167,7 @@ class User < ActiveRecord::Base
 
       user.center = groups.first.center unless groups.empty? or user.has_role?(:superadmin)
       user.valid?
-      puts ":erros: #{user.errors.inspect}"
+      puts ":erros: #{user.errors.inspect}" unless user.valid?
       user.save
       
       return user

@@ -89,11 +89,14 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
 
   def update
     @user = User.find(params[:id])
-    
-    if current_user.update_user(@user, params[:user]) && @user.save
+
+    if current_user.update_user(@user, params[:user])
+      save = @user.save
+      puts "saved: #{save}, #{@user.inspect}"
       flash[:notice] = 'Brugeren er ændret.'
       redirect_to user_url(@user)
     else
+      puts "update user failed: #{@user.inspect}"
       @user.password = ""
       @roles  = current_user.pass_on_roles || []  # logged-in user can give his own roles to new user
       @groups = current_user.center_and_teams
@@ -197,7 +200,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
   
   def check_access
-    puts "ACTION " + params[:action]
+    # puts "ACTION " + params[:action]
     # return true if params[:action] == "center"
 
     id = params[:id].to_i
