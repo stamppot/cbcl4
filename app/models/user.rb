@@ -54,6 +54,10 @@ class User < ActiveRecord::Base
   #   @roles ||= Role.get_all_by_ids(role_ids_str.split(',').map &:to_i)
   # end
 
+  def set_perms
+    self.perms = Access.for_user(self)
+  end
+
   def access?(permission)
     self.perms && self.perms.include?(permission)
   end  

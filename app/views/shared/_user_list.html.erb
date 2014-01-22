@@ -14,10 +14,13 @@
 		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => (user.state != 2) && 'unconfirmed' || '' %></td>
 		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
 
-		<% 	if current_user.access?(:user_show_teams) and !(groups = user.groups.teams).empty?
-			   groups = groups.map { |g| g.title }.join(", ")
+		<% 	user.set_perms
+			if user.access?(:user_show_all)
+				groups = "Alle"
+			elsif current_user.access?(:user_show_teams) and !(groups = user.teams).empty?
+			   	groups = groups.map { |g| g.title }.join(", ")
 			else
-			 	 groups = user.center ? user.center.title : (user.centers.compact.empty? ? "" : user.centers.first.title)
+				groups = user.center ? user.center.title : (user.centers.compact.empty? ? "" : user.centers.first.title)
    		 	end -%>
 		<td><%= groups %>&nbsp;</td>
 	<% if can_edit_delete %>
