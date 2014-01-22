@@ -19,7 +19,7 @@ class SurveyAnswer < ActiveRecord::Base
   attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id
   
   scope :finished, -> { where('done = ?', true) }
-  scope :for_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
+  scope :in_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
 
   scope :order_by, lambda { |column| { :order => column } }
   scope :and_answer_cells, -> { includes ({ answers: :answer_cells }) }
@@ -121,9 +121,9 @@ class SurveyAnswer < ActiveRecord::Base
     j = self.journal
     # settings = CenterSetting.find_by_center_id_and_name(self.center_id, "use_as_code_column")
     c = Dictionary.new # ActiveSupport::OrderedHash.new
-    c["ssghafd"] = j.parent.group_code
+    c["ssghafd"] = j.group.group_code
     c["ssghnavn"] = self.center.title
-    c["safdnavn"] = j.parent.title
+    c["safdnavn"] = j.group.title
     c["pid"] = j.code #settings && eval("self.#{settings.value}") || j.code
     c["projekt"] = j.alt_id || ""
     c["pkoen"] = j.sex

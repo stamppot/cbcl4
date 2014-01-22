@@ -11,7 +11,7 @@ class Answer < ActiveRecord::Base
 
   attr_accessible :survey_answer_id, :question_id, :number
 
-  default_scope order('number')
+  default_scope { order('number') }
   validates_presence_of :question_id, :survey_answer_id
 
   # before_save :update_ratings_count

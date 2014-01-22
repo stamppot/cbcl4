@@ -10,7 +10,7 @@ class Subscription < ActiveRecord::Base
 
   attr_accessible :total_used, :total_paid, :active_used
 
-  scope :for_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
+  scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
   scope :by_survey, lambda { |survey| { :conditions => ['survey_id = ?', survey.is_a?(Survey) ? survey.id : survey] } }
   
   scope :active, -> { where('state = ?', 1) }

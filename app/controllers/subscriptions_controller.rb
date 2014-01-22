@@ -38,7 +38,7 @@ class SubscriptionsController < ApplicationController
   def new
     @group = Group.find(params[:id])
     @surveys = Survey.find(:all)
-    @subscribed = Subscription.active.for_center(@group)
+    @subscribed = Subscription.active.in_center(@group)
   end
 
    # TODO 31-1-9: possible to rewrite to use subscription id?
@@ -46,7 +46,7 @@ class SubscriptionsController < ApplicationController
     @group = Group.find(params[:group][:id])
     if @group.valid?
       surveys = params[:group][:surveys] || []
-      subscriptions = Subscription.for_center(@group)
+      subscriptions = Subscription.in_center(@group)
       subscriptions.each do |sub|
         if surveys.include? sub.survey_id.to_s   # in survey and in db
           sub.activate! unless sub.active?

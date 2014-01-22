@@ -9,7 +9,7 @@
           result = "<input id=\"team_#{team.id}\" type=\"radio\" name=\"team\" value=\"#{team.id}\" checked=\"checked\" /> " if @group == team
           result = "<input id=\"team_#{team.id}\" type=\"radio\" name=\"team\" value=\"#{team.id}\" /> " if @group != team
           result += "<label for=\"team_#{team.id}\">#{team.title}</label> "
-          result
+          result.html_safe
         end %>
   <% unless @group.errors[:parent].nil? %></div><% end %>
 </div>

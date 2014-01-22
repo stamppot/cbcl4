@@ -1,10 +1,15 @@
 <%= error_messages_for 'user' %>
 
 <!--[form:user]-->
+			<% if flash[:error] -%>
+				<div id="errorExplanation"><%= flash[:error] %></div>
+			<% end %>
+
 <table>
 	<tbody>
 		<tr>
-			<td>
+			<td valign="top">
+
 <dl>
 	<dt><label for="user_login">Login</label></dt>
 	<dd><%= text_field 'user', 'login'  %></dd>
@@ -28,36 +33,33 @@
 
 	<dt><label><%= t('roles.Roles') %></label></dt>
 	<dd>
-		<% roles = []
-			@roles.each do |role|
-			result = if @user.has_role?(role)
-				"<input id=\"user_roles_#{role.id}\" type=\"checkbox\" name=\"user[roles][]\" value=\"#{role.id}\" checked=\"checked\" /> "
-			else
-				"<input id=\"user_roles_#{role.id}\" type=\"checkbox\" name=\"user[roles][]\" value=\"#{role.id}\" /> "
-			end
-			result += "<label for=\"user_roles_#{role.id}\">" + t("roles.#{role.title}") + "</label> "
-			roles << result << "<br>"
-			end %>
-		 <%= roles.join %>
+		<% @roles.each do |role|
+			if @user.has_role?(role) %>
+				<input id="user_roles_<%= role.id %>" type="checkbox" name="user[roles][]" value="<%= role.id %>" checked="checked" />
+			<% else %>
+				<input id="user_roles_<%= role.id %>" type="checkbox" name="user[roles][]" value="<%= role.id %>" />
+			<% end %>
+			<label for="user_roles_<%= role.id %>"><%= t("roles.#{role.title}") %></label>
+			<br>
+		<% end %>
 	</dd>
 
 </dl>
 </td>
 
-<td rowspan="3">
+<td rowspan="300">
 
 	<dl>
 	<dt><label><%= t('groups') %></label></dt>
 	<dd>
-		<%= node_tree(@groups) do |group|
-			result = if @user.groups.include? group
-				"<input id=\"user_groups_#{group.id}\" type=\"checkbox\" name=\"user[groups][]\" value=\"#{group.id}\" checked=\"checked\" /> " 
-			else
-				"<input id=\"user_groups_#{group.id}\" type=\"checkbox\" name=\"user[groups][]\" value=\"#{group.id}\" /> "
-			end
-			result += "<label for=\"user_groups_#{group.id}\">#{group.title}</label> "
-			result
-		end %>
+		<% to_tree(@groups).to_a.each do |groups| %>
+			<% groups.flatten.each do |g| %>
+			<div class="<%= !g.parent_id.nil? ? 'indent' : '' %>">
+				<input id="user_groups_<%= g.id %>" type="checkbox" name="user[groups][]" value="<%= g.id %>" <%= @user.groups.include?(g) ? 'checked="checked"' : '' %> />
+				<label for="user_groups_<%= g.id %>"><%= g.title %></label>
+			</div>
+			<% end %>
+		<% end %>
 	</dd>
 </dl>
 </td>

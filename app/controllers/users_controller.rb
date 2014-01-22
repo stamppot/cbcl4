@@ -40,13 +40,14 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # Show a user identified by the +:id+ path fragment in the URL. Before_filter find_user
   def show
     @page_title = "CBCL - Detaljer om bruger " + @user.login
-    # show all groups for current user
-    @groups = @user.center_and_teams || []
-    query = "select center_id, count(*) as count from journals where center_id IN (#{@groups.map(&:id).join(',')}) group by center_id"
+    @groups = @user.center_and_teams
+
+    group_ids = @groups.map {|g| g.id }.join(',')
+    query = "select center_id, count(*) as count from journals where center_id IN (#{group_ids}) group by center_id"
+    puts query
     @groups_count = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 
       col[j['center_id']] = j['count']; col
     end
-
   end
 
   # Displays a form to create a new user. Posts to the #create action.
@@ -71,15 +72,18 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       flash[:notice] = 'Brugeren blev oprettet.'
       redirect_to user_url(@user)
     else
+      puts "ERRORS: #{@user.errors.inspect}"
       @roles = current_user.pass_on_roles || []
       @groups = current_user.center_and_teams
-      render :new
+      # render :new
+      render :new #, :flash => { :error => @user.errors.to_a.join }
     end
   end
   
   def edit
     @roles = current_user.pass_on_roles
     @groups = current_user.center_and_teams
+    puts "CENTER_AND_TEAMS: #{@groups.map &:title}"
     @user.password = ""
   end
 

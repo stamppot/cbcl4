@@ -17,10 +17,10 @@ class JournalStatsController < ApplicationController
 	def show
 		options = { :page => params[:page], :per_page => per_page }
 		@center = Center.find(params[:id])
-  	@answered_by_login_users = JournalEntry.for_center(params[:id]).answered_by_login_user.count(:conditions => ['answered_at > ?', DateTime.new(2011,01,15)])
-		@answered_by_personnel = JournalEntry.for_center(params[:id]).answered.count(:conditions => ['answered_at > ?', DateTime.new(2011,01,15)])
-  	@answered_by_login_users_total = JournalEntry.for_center(params[:id]).answered_by_login_user.count
-		@answered_by_personnel_total = JournalEntry.for_center(params[:id]).answered.count
+  	@answered_by_login_users = JournalEntry.in_center(params[:id]).answered_by_login_user.count(:conditions => ['answered_at > ?', DateTime.new(2011,01,15)])
+		@answered_by_personnel = JournalEntry.in_center(params[:id]).answered.count(:conditions => ['answered_at > ?', DateTime.new(2011,01,15)])
+  	@answered_by_login_users_total = JournalEntry.in_center(params[:id]).answered_by_login_user.count
+		@answered_by_personnel_total = JournalEntry.in_center(params[:id]).answered.count
 		options.merge!(:conditions => ['center_id = ?', params[:id]])
 	  @groups = Journal.paginate(options) || [] # TODO: Move to configuration option
 	end

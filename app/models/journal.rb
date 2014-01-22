@@ -57,13 +57,14 @@ class Journal < ActiveRecord::Base #< Group
 
   scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
-  scope :for_parent, lambda { |group| where(:group_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
-  scope :for_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group)).order('created_at desc') }
+  scope :for_group, lambda { |group| where(:group_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
+  scope :in_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group)).order('created_at desc') }
   scope :by_code, -> { order('code ASC') }
   scope :for_groups, lambda { |group_ids| where(:group_id => group_ids) }  # { :conditions => ['parent_id IN (?)', group_ids] } }
   scope :for, lambda { |journal_id| where(:id => journal_id) }
-  scope :all_parents, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
-  
+  scope :all_groups, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
+  scope :all_groups, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
+
   define_index do
      # fields
      indexes :title, :sortable => true
@@ -255,7 +256,7 @@ class Journal < ActiveRecord::Base #< Group
   def info
 		settings = CenterSetting.find_by_center_id_and_name(self.center_id, "use_as_code_column")
     c = Dictionary.new # ActiveSupport::OrderedHash.new
-    c["ssghafd"] = self.parent.group_code
+    c["ssghafd"] = self.group.group_code
     c["ssghnavn"] = self.center.title
     c["safdnavn"] = self.group.title
     c["pid"] = settings && eval("self.#{settings.value}") || self.code
@@ -263,7 +264,7 @@ class Journal < ActiveRecord::Base #< Group
     c["pkoen"] = self.sex
     c["palder"] = get_age(self.birthdate, self.created_at)  # alder på oprettelsesdato
     c["pnation"] = self.nationality
-    c["besvarelsesdato"] = "--" # self.created_at.strftime("%d-%m-%Y")
+    c["besvarelsesdato"] = self.created_at.strftime("%d-%m-%Y")
     c["pfoedt"] = self.birthdate.strftime("%d-%m-%Y")  # TODO: translate month to danish
     c
   end

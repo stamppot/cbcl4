@@ -7,7 +7,7 @@ class SubscriptionService
   end
 
   def update_subscriptions(surveys)
-    subscriptions = Subscription.for_center(@center)
+    subscriptions = Subscription.in_center(@center)
     subscriptions.each do |sub|
       if surveys.include? sub.survey_id.to_s   # in survey and in db
         sub.activate!
@@ -33,7 +33,7 @@ class SubscriptionService
 
   # finds all periods for all subscriptions
   def subscription_summary(options = {})
-    periods = SubscriptionsQuery.new.query_subscription_periods_for_centers(@center.id)
+    periods = SubscriptionsQuery.new.query_subscription_periods_in_centers(@center.id)
     periods.group_by {|c| c["created_on"] }
   end
   

@@ -14,9 +14,9 @@ class User < ActiveRecord::Base
   belongs_to :center
           
   has_and_belongs_to_many(:groups) do #, -> { where uniq: true }) do
-    def teams
-      self.select { |g| g.is_a?(Team) }
-    end
+    # def teams
+    #   self.select { |g| g.is_a?(Team) }
+    # end
     def centers
       self.select { |g| g.is_a?(Center) }
     end
@@ -25,6 +25,12 @@ class User < ActiveRecord::Base
           # users have a n:m relation to roles
   has_and_belongs_to_many :roles #, -> { where uniq: true }
 
+  attr_accessible :login, :name, :email
+  attr_accessible :password, :password_confirmation, :roles, :groups
+
+  # scope :centers, -> { groups.where('groups.type == ?', 'Center')}
+  # scope :teams, -> { groups.where('groups.type == ?', 'Team')}
+  
   validates_associated :center # center must be valid
   # validates_associated :roles
   # validates_presence_of :roles#, :message => "skal angives"
@@ -67,7 +73,7 @@ class User < ActiveRecord::Base
 
   scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
   scope :users, -> { where(:login_user => false).order("users.created_at") }
-  scope :login_users, where(:login_user => true)
+  scope :login_users, -> { where(:login_user => true) }
 
   scope :with_roles, lambda { |role_ids| joins(:roles).where('role_id IN (?)', role_ids) } 
   # scope :with_roles, lambda { |role_ids| where("FIND_IN_SET('#{role_ids.join(',')}', #{role_ids_str})") }
@@ -111,8 +117,10 @@ class User < ActiveRecord::Base
     params[:name] = params[:login] if params[:name].blank?
 
     roles  = params.delete(:roles)
+    # roles = Role.all(role_ids)
+    # params[:roles] = roles
     groups = params.delete(:groups)
-    # TODO: check parameters for SQL/HTML etc
+    # params[:groups] = Group.all(group_ids)
     pw     = params.delete(:password)
     pwconf = params.delete(:password_confirmation)
     user = User.new(params)
@@ -124,23 +132,6 @@ class User < ActiveRecord::Base
     user.last_logged_in_at = 10.years.ago
     
     return user
-  end
-
-
-  def access_to_roles?(roles)
-    roles = Role.find(roles || [])
-    owner_roles = self.pass_on_roles
-    roles.all? { |role| owner_roles.include?(role) }
-  end
-
-  def access_to_groups?(groups)
-    groups = Group.find(groups || [])
-    owner_groups = self.center_and_teams
-    groups.all? { |group| owner_groups.include?(group) }
-  end
-
-  def highest_role
-    self.roles.sort_by {|r| r.id}.first
   end
 
   def update_user(user, params) # user is the user who is being updated
@@ -165,12 +156,16 @@ class User < ActiveRecord::Base
   def update_roles_and_groups(user, roles, groups)
     if self.access_to_roles?(roles) && self.access_to_groups?(groups)
       roles = Role.find(roles || [])
+      puts "groups; #{groups.inspect}"
       groups = Group.find(groups || [])
+      puts "groups: #{groups.inspect}"
 
       user.roles = roles if roles.any?
       user.groups = groups if groups.any?
 
       user.center = groups.first.center unless groups.empty? or user.has_role?(:superadmin)
+      user.valid?
+      puts ":erros: #{user.errors.inspect}"
       user.save
       
       return user
@@ -178,6 +173,22 @@ class User < ActiveRecord::Base
     return false
   end
 
+
+  def access_to_roles?(roles)
+    roles = Role.find(roles || [])
+    owner_roles = self.pass_on_roles
+    roles.all? { |role| owner_roles.include?(role) }
+  end
+
+  def access_to_groups?(groups)
+    groups = Group.find(groups || [])
+    owner_groups = self.center_and_teams
+    groups.all? { |group| owner_groups.include?(group) }
+  end
+
+  def highest_role
+    self.roles.sort_by {|r| r.id}.first
+  end
   
   def access
     return Access.instance
@@ -247,14 +258,15 @@ class User < ActiveRecord::Base
   def center_and_teams
     if(self.has_access?(:admin))
       # puts "CENTER_AND_TEAMS: admin"
-      Group.center_and_teams
+      # Group.center_and_teams
+      [centers.first] + centers.first.teams
     else
-      puts "CENTER_AND_TEAMS: #{self.roles.map &:title}"
+      puts "CENTER_AND_TEAMS: roles #{self.roles.map &:title}"
 
       groups = self.centers
-      groups.each do |center| 
-        center.children.each { |team| groups << team if team.instance_of? Team }
-      end
+      puts "Centers: #{groups.inspect}"
+      groups.each {|c| groups += c.teams }
+      groups
     end
   end
     
@@ -294,7 +306,7 @@ class User < ActiveRecord::Base
     options ||= {:include => :users}
     centers =
     if self.has_access?(:center_show_all)
-      Center.find(:all, options) #.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }    # filtrer teams fra
+      Center.includes(:users).to_a #.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }    # filtrer teams fra
     elsif self.has_access?(:center_show_admin)
       self.groups.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }
     elsif self.has_access?(:center_show_member)
@@ -348,10 +360,10 @@ class User < ActiveRecord::Base
       if options[:page].to_i < 4 # only cache first 5 pages
         # TODO: cache
         journals = # cache_fetch("journals_groups_#{group_ids.join("_")}_paged_#{options[:page]}_#{options[:per_page]}") do
-          Journal.all_parents(group_ids).paginate(options)
+          Journal.all_groups(group_ids).paginate(options)
         # end
       else 
-        Journal.all_parents(group_ids).paginate(options)
+        Journal.all_groups(group_ids).paginate(options)
       end
     elsif self.has_access?(:login_user)
       entry = JournalEntry.find_by_user_id(self.id)
@@ -404,7 +416,7 @@ class User < ActiveRecord::Base
       journal_ids = Journal.in_center(self.center).all(:select => "id")
     elsif self.has_access?(:journal_show_member)
       group_ids = self.group_ids(:reload => true) # get teams and centers for this users
-      journal_ids = Journal.for_groups(group_ids).all_parents(group_ids).all(:select => "id")
+      journal_ids = Journal.for_groups(group_ids).all_groups(group_ids).all(:select => "id")
     elsif self.has_access?(:journal_show_none)
       []
     else  # for login-user

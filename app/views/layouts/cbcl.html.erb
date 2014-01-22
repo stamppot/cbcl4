@@ -43,6 +43,10 @@
  	<%= javascript_include_tag 'jqTableKit' %>
 	<script type="text/javascript">
 		var curvyCornersVerbose = false;
+
+		$(document).ready(function() {
+			$.ajaxSetup({dataType: 'json'});
+		});
 	</script>
 
 	<% end %>

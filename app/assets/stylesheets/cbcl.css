@@ -1251,6 +1251,10 @@ a:active.bigbutton {
   cursor: pointer;
 }
 
+.indent {
+	margin-left: 30px;
+}
+
 @media print {  
     body { background-color: #FFF; }
 		body, p, ol, ul, td { font-size: 9px; }

@@ -20,7 +20,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
   scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)...stop } } }
   # scope :for_survey, lambda { |survey_id| { :conditions => { :survey_id => survey_id } } }
   scope :for_survey, lambda { |survey_id| where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
-  scope :for_center, lambda { |center_id| { :conditions => ["csv_survey_answers.center_id = ?", center_id] } }
+  scope :in_center, lambda { |center_id| { :conditions => ["csv_survey_answers.center_id = ?", center_id] } }
   scope :for_team, lambda { |team_id| { :conditions => ["csv_survey_answers.team_id = ?", team_id] } }
 
 
@@ -61,7 +61,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
     # puts "options.: #{options.inspect}"
     # puts "options[:team]: #{options[:team].inspect}"
     options.delete(:team) if options[:team].blank?
-    query = query.for_center(options[:center]) if !options[:center].blank?
+    query = query.in_center(options[:center]) if !options[:center].blank?
     query = query.for_team(options[:team]) if !options[:team].blank?
     query
   end

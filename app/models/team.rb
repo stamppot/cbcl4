@@ -3,10 +3,10 @@
 class Team < Group
   belongs_to :center
   has_many :journals
-  
+
   scope :with_center, -> { includes(:center) }
   scope :with_journals, -> { includes(:journals) }
-  scope :for_center, lambda { |center| where(:parent_id => (center.is_a?(Center) ? center.id : center)) }
+  scope :in_center, lambda { |center| where(:parent_id => (center.is_a?(Center) ? center.id : center)) }
   
   # scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
 
@@ -30,17 +30,17 @@ class Team < Group
   
   # member of center AND NOT member of team
   def only_center_has_member?(user)
-    !self.has_member?(user) and self.parent.all_users.include?(user)
+    !self.has_member?(user) and self.center.all_users.include?(user)
   end
     
   # center (and possible team) has member
   def center_has_member?(user)
-    self.parent.all_users.include? user
+    self.center.all_users.include? user
   end
   
   # returns full code (center-team)
   def team_code
-    "#{parent.code}-#{self.code}"
+    "#{center.code}-#{self.code}"
   end
 
   def survey_answers
@@ -71,7 +71,7 @@ class Team < Group
   validates_numericality_of :code, 
                             :message => 'skal være 1-4 cifre.'
                                                                                 
-  validates_presence_of   :parent,
-                          :message => ': overordnet gruppe skal vælges',
+  validates_presence_of   :center,
+                          :message => ': center skal vælges',
                           :if => Proc.new { |group| group.class.to_s != "Center" }
 end

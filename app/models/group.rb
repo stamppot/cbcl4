@@ -13,20 +13,76 @@
 # A group then has no roles anymore.
 # 
 class Group < ActiveRecord::Base
-  include ActiveRbacMixins::GroupMixins::Core
+  # include ActiveRbacMixins::GroupMixins::Core
 
-  attr_accessible :title, :code, :parent
+  attr_accessible :title, :code, :parent_id
   
   scope :direct_groups, lambda { |user| joins("INNER JOIN `groups_users` ON `groups`.id = `groups_users`.group_id").
     where("groups_users.user_id = ?", user.is_a?(User) ? user.id : user) }
 
-  scope :all_parents, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
+  # scope :all_parents, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
   scope :center_and_teams, -> { where('type != ?', "Journal") }
   scope :in_center, lambda { |center| where('center_id = ?', center.is_a?(Center) ? center.id : center) }
   scope :and_parent, -> { includes(:parent) }
-  
+  scope :children, -> { where(:center_id => id) }
+  scope :teams, -> { where(:center_id => id) }
+  # scope :teams, -> { groups.where('groups.type == ?', 'Team')}
+  # acts_as_tree :order => 'title'
+          
+  # belongs_to :parent
   has_many :letters
+  has_and_belongs_to_many :users, :uniq => true
   
+
+  def self.to_tree(groups)
+    h = {}
+    groups.each do |group|
+      if group.center_id
+        h[group.center] ||= []
+        h[group.center] << group
+        # puts "add t: #{group.title} c: #{group.center.title}"
+      else
+        # puts "add c: #{group.title}"
+        h[group] ||= []
+      end
+    end
+    h
+  end
+
+  def ancestors_and_self
+    result = [self]
+    if parent != nil
+      result << parent.ancestors_and_self
+    end
+
+    return result.flatten
+  end
+
+  def descendants_and_self
+    result = [self]
+    for child in children
+      result << child.descendants_and_self
+    end
+    return result.flatten
+  end
+
+  def children
+
+  end
+
+  def all_users
+    result = []
+    self.teams.each {|t| result << t.users }
+    result.flatten!
+    result.uniq!
+    result
+    # self.descendants_and_self.each { |group| result << group.users }
+    #   result.flatten!
+    #   result.uniq!
+    # return result
+  end
+
+
   def self.for_users(user_ids)
     query =
     "SELECT user_id, title FROM groups g
@@ -45,7 +101,7 @@ class Group < ActiveRecord::Base
   end
 
   def self.this_or_parent(id)
-    Group.find(:all, :conditions => [ 'id = ? OR group_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
+    Group.where(['id = ? OR parent_id = ?', id, id]).delete_if { |group| group.instance_of? Journal } # find(:all, :conditions => [ 'id = ? OR group_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
   end
 
   # returns Team or Center for id, or if not exists, all teams and centers of user
@@ -59,19 +115,19 @@ class Group < ActiveRecord::Base
   end
   
   def parent_or_self
-    self.is_a?(Center) && self || self.parent
+    self.is_a?(Center) && self || self.center
   end
   
   # all ascendants/parents
-  def ascendants
-    groups = []
-    parent = self.parent
-    while (!parent.nil?)
-      groups << parent
-      parent = parent.parent
-    end
-    groups
-  end
+  # def ascendants
+  #   groups = []
+  #   parent = self.center
+  #   while (!parent.nil?)
+  #     groups << parent
+  #     parent = parent.center
+  #   end
+  #   groups
+  # end
   
   def group_code
     if self.is_a?(Team)

@@ -28,7 +28,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   def center
     options = { :include => :team, :page => params[:page], :per_page => per_page }
     @group = Group.find params[:id]
-    @journals = Journal.for_center(@group).by_code.paginate(:page => 1, :per_page => (Journal.per_page || 20))
+    @journals = Journal.in_center(@group).by_code.paginate(:page => 1, :per_page => (Journal.per_page || 20))
 
     respond_to do |format|
       format.html { render :index }

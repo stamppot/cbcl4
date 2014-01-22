@@ -5,7 +5,7 @@ class CsvScoreRapport < ActiveRecord::Base
   belongs_to :survey_answer
   
   scope :for_survey, lambda { |survey_id| { :conditions => ["csv_score_rapports.survey_id = ?", survey_id] } }
-  scope :for_center, lambda { |center_id| { :conditions => ["csv_score_rapports.center_id = ?", center_id] } }
+  scope :in_center, lambda { |center_id| { :conditions => ["csv_score_rapports.center_id = ?", center_id] } }
   scope :for_team, lambda { |team_id| { :conditions => ["csv_score_rapports.team_id = ?", team_id] } }
   scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
@@ -17,7 +17,7 @@ class CsvScoreRapport < ActiveRecord::Base
       between(o[:start_date], o[:stop_date]).
       aged_between(o[:start_age], o[:stop_age])
       
-    query = query.for_center(options[:center]) if !options[:center].blank?
+    query = query.in_center(options[:center]) if !options[:center].blank?
     query = query.for_team(options[:team]) if !options[:team].blank?
     query
   end

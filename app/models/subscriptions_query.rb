@@ -75,7 +75,7 @@ class SubscriptionsQuery
    #       age_filter(age_low, age_high) << survey_filter(surveys) << entries << group_by("survey_answer_id")).join
    # end
    
-   def subscription_periods_for_center(center = nil, options = {})
+   def subscription_periods_in_center(center = nil, options = {})
      joins = ['subscriptions', 'periods']
      conditions = { 'subscriptions.id' => 'periods.subscription_id', 'subscriptions.state' => 1}
      conditions["periods.active"] = 1 if options["active"] #options["active"]
@@ -91,12 +91,12 @@ class SubscriptionsQuery
      self.select(["periods.id, subscriptions.center_id, subscriptions.total_used as total_used, subscriptions.active_used as active_used, survey_id, state, subscription_id, used, active, paid as paid, paid_on as paid_on, periods.created_on"])
      self.join_clause(joins, conditions)
      self.query = (self.select_clause << self.from_where).join(' ')
-     # puts "subscription_periods_for_center: query: #{self.query}"
+     # puts "subscription_periods_in_center: query: #{self.query}"
 		self.query
    end
 
-   def query_subscription_periods_for_centers(center = nil, options = {})
-     self.subscription_periods_for_center(center, options)
+   def query_subscription_periods_in_centers(center = nil, options = {})
+     self.subscription_periods_in_center(center, options)
      self.do_query
    end
 

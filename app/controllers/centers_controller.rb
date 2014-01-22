@@ -14,7 +14,7 @@ class CentersController < ApplicationController
   def show
     @group = Center.find(params[:id])
     @page_title = "CBCL - Center " + @group.title
-    @team_count = Team.for_center(@group).count
+    @team_count = Team.in_center(@group).count
     @journals = []    
     @hide_team = true
     page, per_page = (params[:page] || 1), (params[:per_page] || 40)
@@ -43,7 +43,7 @@ class CentersController < ApplicationController
     @group.build_center_info unless @group.center_info
     
     @surveys = Survey.find(:all)
-    @subscribed = Subscription.active.for_center(@group).find(:all)
+    @subscribed = Subscription.active.in_center(@group).find(:all)
 
     @page_title = params[:id].nil? && "Nyt Center" || "Redigering af Center"
   end
@@ -72,7 +72,7 @@ class CentersController < ApplicationController
     @group = Center.find_by_id(params[:id])
     @group.build_center_info unless @group.center_info
     @surveys = Survey.find(:all)
-    @subscribed = Subscription.active.for_center(@group).find(:all)
+    @subscribed = Subscription.active.in_center(@group).find(:all)
     @page_title = "Redigering af Center"
   end
 

@@ -11,7 +11,7 @@ class JournalEntry < ActiveRecord::Base
 
   scope :and_login_user, -> { includes(:login_user) }
   scope :and_survey_answer, -> { includes([:survey, :survey_answer]) }
-	scope :for_center, lambda { |center_id| { :joins => :journal, :conditions => ["center_id = ?", center_id] } }
+	scope :in_center, lambda { |center_id| { :joins => :journal, :conditions => ["center_id = ?", center_id] } }
   scope :with_surveys, lambda { |survey_ids| { :joins => :survey_answer,
    :conditions => ["survey_answers.survey_id IN (?)", survey_ids] } }
   scope :for_surveys, lambda { |survey_ids| where("survey_id IN (?)", survey_ids) }

@@ -69,7 +69,7 @@ class ScoreRapport < ActiveRecord::Base
       between(o[:start_date], o[:stop_date]).
       aged_between(o[:start_age], o[:stop_age])
       
-    query = query.for_center(options[:center]) if !options[:center].blank?
+    query = query.in_center(options[:center]) if !options[:center].blank?
     query = query.for_team(options[:team]) if !options[:team].blank?
     query
   end

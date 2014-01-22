@@ -1,5 +1,21 @@
 # TODO: Escape node titles with the equivalent of RoR's h()
 module RbacHelper
+
+  def to_tree(groups)
+    h = {}
+    groups.each do |group|
+      if group.center_id
+        h[group.center] ||= []
+        h[group.center] << group
+        # puts "add t: #{group.title} c: #{group.center.title}"
+      else
+        # puts "add c: #{group.title}"
+        h[group] ||= []
+      end
+    end
+    h
+  end
+
   # This method helps the rbac/* controller to render a ActiveRecord tree.
   # that uses "acts_as_tree". You only pass the record array with the nodes 
   # to display and optionally a block to format the node output.
@@ -45,7 +61,7 @@ module RbacHelper
         result += node.title
       end
 
-      children = node.children.dup
+      children = node.children #.dup
       children.delete_if { |r| not nodes.include?(r) }
 
       if not children.empty?

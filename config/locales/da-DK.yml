@@ -410,14 +410,15 @@ da-DK:
                 :blank: skal angives
               :groups: 
                 :blank: "Center eller team skal vælges"
-              :password: 
+              :password:
                 :confirmation: "Bekræftelse er forkert"
                 :empty: Password skal angives
+                :blank: skal angives
                 :invalid_length: "Password skal være mellem 6 og 20 tegn"
                 :confirmation_does_not_match: "Bekræftelsen af password er forskellig fra password"
               :email: 
                 :taken: Denne email-adresse bruges af en anden bruger
-                :blank: Email skal angives
+                :blank: skal angives
                 :invalid: Ugyldig email-adresse
               :login: 
                 :too_short: "Login skal være på minimum fire bogstaver"
