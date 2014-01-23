@@ -7,7 +7,7 @@
     <% end %>
     
 	<div id="users">
-		<%= render :partial => 'shared/user_list', :locals => {:users => @users} %>
+		<%= render :partial => 'users', :locals => {:users => @users} %>
 	</div>
 <br/>
 <p>
@@ -21,15 +21,7 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
-  $('#content').delegate('.pagination a', 'click', function() {
-    $('#spinner').show();
-    $.get('users/?page='+ $(this).text() + '&partial=true',
-        function(data) {
-          $('#users').html(data);
-          $('#spinner').hide();
-        });
-    return false;
-  });
-})
+$(function() {
+  $.setAjaxPagination('#users');
+});
 </script>

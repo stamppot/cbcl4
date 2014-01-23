@@ -2,7 +2,7 @@
 
 class UsersController < ApplicationController # ActiveRbac::ComponentController
   layout 'cbcl', :except => [:center, :live_search]
-  
+  # layout 'empty', :only => [:users]
   # The RbacHelper allows us to render +acts_as_tree+ AR elegantly
   helper RbacHelper
   
@@ -10,31 +10,18 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # verify :method       => :delete, :only => :destroy, :redirect_to => :show, :add_flash => { :error => 'Wrong request type: cannot delete'}
 
   before_filter :find_user, :except => [:index, :new, :create, :center, :live_search ]
-  before_filter :check_access, :except => [:index, :list, :live_search]
+  before_filter :check_access, :except => [:index, :list, :live_search, :page]
 
   # 31-12 Administrators cannot see other users
   def index
     @page_title = "CBCL - Liste af Brugere"
     @users = current_user.get_users(:page => params[:page], :per_page => Journal.per_page)
 
-    if params[:partial].blank?
+    if !params[:partial]
       render
     else
-      render :partial => 'users/users', :layout => params[:partial].blank?
+      render :partial => 'users/users', :layout => false
     end
-    # respond_to do |format|
-    #   format.html { if params[:partial].blank?
-    #                   render :partial => 'users/users', :layout => true
-    #                 else
-    #                   render :partial => 'users/users', :layout => false
-    #                 end
-    #               }
-      # format.json { render :text => render(:partial => 'users/users', :layout => false) }
-        # render :update do |page|
-        #   page.replace_html 'users', :partial => 'users/users'
-        # end
-      # }
-     # end
   end
 
   # Show a user identified by the +:id+ path fragment in the URL. Before_filter find_user

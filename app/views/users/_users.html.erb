@@ -12,7 +12,10 @@
 	<tr>
 		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => (user.state != 2) && 'unconfirmed' || '' %></td>
 		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
-		<% if current_user.access?(:user_show_teams) and !(groups = user.groups.teams).empty?
+		<% user.set_perms
+			if user.access?(:user_show_all)
+				groups = "Alle"
+			elsif current_user.access?(:user_show_teams) and !(groups = user.teams).empty?
 			   groups = groups.map { |g| g.title }.join(", ")
 			 else
 			 	 groups = user.center ? user.center.title : (user.centers.compact.empty? ? "" : user.centers.first.title)
@@ -32,5 +35,5 @@
 
 <% if @users.size > 1 %>
 	<div class="page_entries" > <%= page_entries_info(@users) %> </div>
-	<%= will_paginate @users, :remote => {:with => 'value', :update => 'users'}, :outer_window => 2 -%>
+	<%= will_paginate @users, :params => {:partial => true}, :outer_window => 2 -%>
 <% end -%>
