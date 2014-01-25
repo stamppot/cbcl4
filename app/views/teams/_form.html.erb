@@ -21,7 +21,7 @@
     <ul>
       <% @groups.each do |group| %>
         <li>
-          <% checked = @group.parent == group && "checked='checked'" || "" %>
+          <% checked = @group.center == group && "checked='checked'" || "" %>
           <input class="group_parent" id="group_parent_<%= group.id %>" type="radio" name="group[parent]" value="<%= group.id %>" <%= checked %> />
           <label for="group_parent_<%= group.id %>"><%= group.title %></label>
         </li>

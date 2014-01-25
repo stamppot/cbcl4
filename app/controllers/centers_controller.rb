@@ -64,7 +64,9 @@ class CentersController < ApplicationController
       redirect_to center_path(@group)
     else
       # flash[:error] = @group.errors.to_a.join(', ')
-      render new_center_url
+      @surveys = Survey.all
+      @subscribed = Subscription.active.in_center(@group).find(:all)
+      render :new
     end
   end
   

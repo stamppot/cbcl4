@@ -21,7 +21,7 @@ class Center < Group
 	
   validates_format_of :code, :with => /\A[0-9][0-9][0-9][0-9]\z/ #:is => 4 #, :message => "skal være 4 cifre"
   validates_uniqueness_of :code #, :message => "skal være unik"
-  validates_uniqueness_of :title
+  # validates_uniqueness_of :title
 
   scope :search_title_or_code, lambda { |phrase| { :conditions => ["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase] } }
   

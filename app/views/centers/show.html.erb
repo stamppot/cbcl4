@@ -58,10 +58,19 @@ $(document).ready(function() {
 
 	$('#teams_tab').click(function() {
 		if($('#teams_content').is(':empty')) {
-			$.get("/teams/center/" + groupId, function(data) {
-				$('#teams_content').html(data);
-				$.jqTableKit.reload();
-			});
+			$.getHtml("/teams/center/" + groupId, function(data) {
+						$('#teams_content').html(data);
+						// $.jqTableKit.reload();
+					});
+			// $.ajax(
+			// 	{
+			// 		url: "/teams/center/" + groupId,
+			// 		dataType: 'html',
+			// 		success: function(data) {
+			// 			$('#teams_content').html(data);
+			// 			$.jqTableKit.reload();
+			// 		}
+			// 	});
 		}
 	})
 	if(location.href.indexOf('#center_teams') > 0) $('#teams_tab').click();
@@ -69,9 +78,9 @@ $(document).ready(function() {
 
 	$('#users_tab').click(function() {
 		if($('#users_content').is(':empty')) {
-			$.get("/users/center/" + groupId + "/partial=true", function(data) {
+			$.getHtml("/users/center/" + groupId + "/partial=true", function(data) {
 				$('#users_content').html(data);
-				$.jqTableKit.reload();
+				// $.jqTableKit.reload();
 			});
 		}
 	});
@@ -81,9 +90,9 @@ $(document).ready(function() {
 	<% if current_user.access? :subscription_new_edit %>
 	$('#subscription_tab').click(function() {
 		if($('#subscription_content').is(':empty')) {
-			$.get("/subscriptions/center/" + groupId, function(data) {
+			$.getHtml("/subscriptions/center/" + groupId, function(data) {
 				$('#subscription_content').html(data);
-				$.jqTableKit.reload();
+				// $.jqTableKit.reload();
 			});
 		}
 	});

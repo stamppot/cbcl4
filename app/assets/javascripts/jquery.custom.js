@@ -1,4 +1,3 @@
-//$(function() {
   $.setAjaxPagination = function(update_id) {
     return $('.pagination a').click(function(event) {
       $('.pagination a').off('click');
@@ -17,5 +16,11 @@
       return false;
     });
   };
-  // return $.setAjaxPagination();
-// });
+
+$.getHtml = function(url, update_fn) {
+  $.ajax({
+          url: url,
+          dataType: 'html',
+          success: update_fn
+        });
+}

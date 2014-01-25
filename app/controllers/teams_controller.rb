@@ -53,9 +53,9 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
 
   def show
     @group = Team.find(params[:id])
-    @page_title = "CBCL - Center " + @group.parent.title + ", team " + @group.title
-    @journals = Journal.for_parent(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page) || []
-    @journal_count = Journal.for_parent(@group).count
+    @page_title = "CBCL - Center " + @group.center.title + ", team " + @group.title
+    @journals = Journal.in_center(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page) || []
+    @journal_count = Journal.in_center(@group).count
     @users = @group.users
     @user_count = @users.count
     @users = WillPaginate::Collection.create(1, 10000) do |pager|
@@ -80,16 +80,15 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     # if team is created from Center.show, then center is set to parent
     @groups = []
     if params[:id]  # center id is parameter
-      @groups += Group.all(:conditions => [ 'id = ? and type != "Journal"', params[:id] ])
-      puts "@groups: #{@groups.inspect}"
+      @groups += Group.where(:id => params[:id]) #(:conditions => [ 'id = ? and type != "Journal"', params[:id] ])
     else
       @groups = current_user.centers # + current_user.center  # teams can only be subgroup of center, not of teams
       @groups.compact.uniq  # if superadmin, center is nil
     end
 
-    @group = Team.new(params && params[:group] || {})
+    @group = Team.new(params[:group])
     if @groups.size == 1
-      @group.parent = @groups.first 
+      @group.center = @groups.first 
       # set suggested team code if only one center possible
       @group.code = @groups.first.next_team_code  # for superadmin, no code is set
     end
@@ -103,7 +102,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
      else
       @center = Center.find(params[:group][:parent])
       @group.center = @center
-      @group.parent = @center
+      # @group.group = @center
     end
     
     if @group.save
@@ -115,7 +114,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
         flash[:error] = "Kode skal være uden centerkode: #{params[:group][:code]}"
       end
       @groups = current_user.centers || Center.all  # last is for superadmins
-      redirect_to new_team_url(@group.parent)
+      redirect_to new_team_url(@group.center)
     end
       
   rescue ActiveRecord::RecordNotFound
@@ -146,7 +145,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     # @group.roles = roles
 
     # set parent manually
-    # @group.parent = params[:group][:parent].blank? && nil || Center.find(params[:group][:parent])
+    # @group.center = params[:group][:parent].blank? && nil || Center.find(params[:group][:parent])
 
     # Bulk-Assign the other attributes from the form.
     if @group.update_attributes(params[:group])
@@ -177,8 +176,8 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
   def destroy
     @group = Team.find(params[:id])
     if not params[:yes].nil?
-      if @group.journals.any?
-        @group.journals.each { |journal| journal.parent = @group.parent; journal.save }
+      if @group.journals.any?  # move journals to center when deleting team
+        @group.journals.each { |journal| journal.group = @group.center; journal.save }
       end
       @group.destroy
       flash[:notice] = 'Teamet er slettet.'
@@ -221,10 +220,10 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
 
   def select_move_journals # nb. :id is Team id!
     @group = Team.find(params[:id])
-    @page_title = "CBCL - Center " + @group.parent.title + ", team " + @group.title
-    @groups = Journal.for_parent(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page*2, :order => 'title') || []
+    @page_title = "CBCL - Center " + @group.center.title + ", team " + @group.title
+    @groups = Journal.in_center(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page*2, :order => 'title') || []
     @teams = current_user.teams
-    @journal_count = Journal.for_parent(@group).count
+    @journal_count = Journal.in_center(@group).count
 
      respond_to do |format|
        format.html { render "select" }
@@ -243,7 +242,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     
     dest_team = Team.find params[:team]
     journals = Journal.find(params[:journals])
-    journals.each { |journal| journal.parent = dest_team; journal.save }
+    journals.each { |journal| journal.group = dest_team; journal.save }
 
     flash[:notice] = "Journaler er flyttet fra #{team.title} til team #{dest_team.title}"
     redirect_to select_journals_path(team) and return

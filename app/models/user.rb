@@ -120,16 +120,15 @@ class User < ActiveRecord::Base
     # if user name not provided, it's same as login
     params[:name] = params[:login] if params[:name].blank?
 
-    roles  = params.delete(:roles)
-    # roles = Role.all(role_ids)
-    # params[:roles] = roles
-    groups = params.delete(:groups)
-    # params[:groups] = Group.all(group_ids)
+    role_ids  = params.delete(:roles)
+    group_ids = params.delete(:groups)
     pw     = params.delete(:password)
     pwconf = params.delete(:password_confirmation)
     user = User.new(params)
-    
-    self.update_roles_and_groups(user, roles, groups)
+    user.state = 2
+    if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
+      user.update_roles_and_groups(role_ids, group_ids)
+    end
     user.password_hash_type = "md5"
     user.password = pw
     user.password_confirmation = pwconf
@@ -139,11 +138,12 @@ class User < ActiveRecord::Base
   end
 
   def update_user(user, params) # user is the user who is being updated
-    roles  = params.delete(:roles) || []
-    groups = params.delete(:groups) || []
-    
-    if self.access_to_roles?(roles) && self.access_to_groups?(groups)
-      self.update_roles_and_groups(user, roles, groups)
+    role_ids  = params.delete(:roles) || []
+    group_ids = params.delete(:groups) || []
+
+    # TODO: needed? check user/edit
+    if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
+      user.update_roles_and_groups(role_ids, group_ids)
     else
       return false
     end
@@ -159,24 +159,19 @@ class User < ActiveRecord::Base
   end
 
   # helper method used by methods above
-  def update_roles_and_groups(user, roles, groups)
-    if self.access_to_roles?(roles) && self.access_to_groups?(groups)
-      roles = Role.find(roles || [])
-      puts "groups; #{groups.inspect}"
-      groups = Group.find(groups || [])
-      puts "groups: #{groups.inspect}"
+  def update_roles_and_groups(role_ids, group_ids)
+    # if self.access_to_roles?(roles) && self.access_to_groups?(groups)
+    roles = Role.where(id: role_ids).to_a
+    g = Group.where(id: group_ids).to_a
+    puts "g; #{g.inspect}"
+    groups += g
+    puts "groups: #{groups.inspect}"
 
-      user.roles = roles if roles.any?
-      user.groups = groups if groups.any?
-
-      user.center = groups.first.center unless groups.empty? or user.has_role?(:superadmin)
-      user.valid?
-      puts ":erros: #{user.errors.inspect}" unless user.valid?
-      user.save
-      
-      return user
-    end
-    return false
+    self.center = self.groups.first.center # unless groups.empty? # or user.has_role?(:superadmin)
+    # self.valid?
+    # puts ":erros: #{self.errors.inspect}" unless self.valid?
+    # self.save
+    return self
   end
 
 

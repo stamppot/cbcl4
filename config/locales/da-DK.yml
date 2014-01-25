@@ -1,4 +1,11 @@
 da-DK:
+    :will_paginate:
+      :page_gap: "..."
+      :page_entries_info:
+        :multi_page: "Viser %{model} %{from} - %{to} af %{count} i alt"
+        :multi_page_html: "Viser <b>%{from}&nbsp;-&nbsp;%{to}</b> af <b>%{count}</b>"
+        :single_page:
+          :zero:  "Ingen %{model} fundet"
     :filelist: "Filliste"
     :id: "Id"
     :no: "Nej"
@@ -446,17 +453,14 @@ da-DK:
           :center: 
             :attributes: 
               :code: 
-                :invalid: "skal være på 4 cifre"
-        :center: 
-          :attributes: 
-            :code: 
-              :taken: Centerkode bruges af andet center
-              :blank: Centerkode skal angives
-              :invalid: "Centerkode skal være på 4 cifre"
-            :title: 
-              :too_short: "Titel skal være mindst 5 bogstaver"
-              :blank: Titel skal angives
-              :too_long: "Titel skal være højst 100 bogstaver"
+                :invalid: "Centerkode skal være på 4 cifre"
+                :taken: Centerkode bruges af andet center
+                :blank: Centerkode skal angives
+              :title: 
+                :too_short: "Titel skal være mindst 5 bogstaver"
+                :blank: Titel skal angives
+                :too_long: "Titel skal være højst 100 bogstaver"
+                :taken: "Navnet bruges allerede af et andet center"
         :login: 
           :email_or_password_not_correct: "Brugernavn eller password er forkert. Prøv igen"
           :blocked_account: "{{countx}} forkerte loginforsøg. Din konto er blokkeret i {{hours}} timer"

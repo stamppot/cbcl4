@@ -20,11 +20,14 @@ class Role < ActiveRecord::Base
   # scope :with_user, joins(:users), :include => :user
 
   def self.for_users(user_ids)
+    user_ids << 0 if !user_ids.any?
     query =
     "SELECT user_id, title FROM roles r
     inner join roles_users ru on ru.role_id = r.id
     where user_id IN (#{user_ids.join(',')})"
     # group by user_id"
+
+    puts "for_users query: #{query}"
 
     ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
       # puts r.inspect

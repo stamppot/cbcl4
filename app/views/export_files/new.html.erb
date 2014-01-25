@@ -1,7 +1,7 @@
 <% @page_title = "Upload file" %>
 
 <%= error_messages_for :upload_file %> 
-<% form_for(:upload_file, :url => { :action => 'create'}, :html => { :multipart => true }) do |f| %> 
+<%= form_for(:upload_file, :url => { :action => 'create'}, :html => { :multipart => true }) do |f| %> 
 
 <p> 
 <%= f.file_field :file_data %> 

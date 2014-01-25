@@ -61,8 +61,11 @@ class SubscriptionsController < ApplicationController
         flash[:notice] = "Abonnementer for center #{@group.title} blev ændret."
         redirect_to center_path(@group)
       else
-        flash[:error] = "Kunne ikke oprette abonnement: #{@group.errors.map &:inspect}"
-        redirect_to new_subscription_path(@group)
+        @surveys = Survey.find(:all)
+        @subscribed = Subscription.active.in_center(@group)
+        # flash[:error] = "Kunne ikke oprette abonnement: #{@group.errors.map &:inspect}"
+        # redirect_to new_subscription_path(@group)
+        render :new
       end
     else
       flash[:error] = "Der er en fejl i centerets oplysninger. Check centerets kode (skal være 4 cifre)."

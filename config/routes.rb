@@ -73,7 +73,7 @@ Cbcl4::Application.routes.draw do
   resources :journal_entries, :only => [:show, :edit]
   resources :export_files
   resources :exports
-  resources :users
+  resources :users, :except => [:new]
   resources :roles
   resources :letters
   resources :login_users
@@ -111,7 +111,7 @@ Cbcl4::Application.routes.draw do
 
   get "logout" => "login#logout", :as => "logout"
   match "login" => "login#login", :via => [:get, :post] #, :as => "login"
-  get "signup" => "users#new", :as => "signup"
+  # get "signup" => "users#new", :as => "signup"
   get "/users/delete/(/:id)" => "users#delete", :as => "delete_user"
   # get "main" => "main#index", :as => "index"
   # user
@@ -128,6 +128,7 @@ Cbcl4::Application.routes.draw do
   get 'subscriptions/undo_new_period/(/:id)', :to => 'centers#undo_new_subscription_period', :as => 'subscriptions_undo_last_period'
 
   get 'users/center/(/:id)/partial=:partial', :to => 'users#center', :as => 'users_center'
+  get 'users/new/(/:id)', :to => 'users#new', :as => 'new_user'
   # get 'users/(/:page)?partial=true', :to => 'users#indexjs', :as => 'users_indexjs'
 
   get 'centers/pay_subscriptions/(/:id)', :to => 'centers#pay_subscriptions', :as => 'pay_subscriptions'
@@ -135,6 +136,7 @@ Cbcl4::Application.routes.draw do
   get 'centers/pay_periods/(/:id)', :controller => 'centers',                       :action => 'pay_periods'
   get 'centers/merge_periods/(/:id)', :controller => 'centers',                   :action => 'merge_periods'
   
+  get '/teams/new/(/:id)', :to => 'teams#new', :as => 'new_team'
   get '/teams/delete/(/:id)', :to => 'teams#delete', :as => 'delete_team'
   get '/teams/center/(/:id)', :to => 'teams#center' #, :as => 'teams_in_center'
   get '/journals/center/(/:id)', :to => 'journals#center', :as => 'journals_for_center'
@@ -163,7 +165,6 @@ Cbcl4::Application.routes.draw do
   # get 'users/new/(/:id)', :to => 'users#new', :as => 'new_user'
   # get '/users/delete/(/:id)', :to => 'users#delete', :as => 'delete_user'
   get '/centers/new_team/(/:id)', :to => 'centers#new_team', :as => 'new_team_in_center'
-  get '/teams/new/(/:id)', :to => 'teams#new', :as => 'new_team'
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   get 'start', :to => 'start#start', :as => 'survey_start'

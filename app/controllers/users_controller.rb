@@ -44,6 +44,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     
     if !params[:id].nil?   # create new user for specific center/team
       @groups = Group.this_or_parent(params[:id])
+      @group = Group.find(params[:id])
       @user.groups += @groups
     else
       @group = current_user.center || current_user.centers.first
@@ -53,17 +54,34 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
 
 
   def create
+    group_id = params[:user][:groups].first
+    role_ids = params[:user][:roles]
+    group_ids = params[:user][:groups]
+    
     @user = current_user.create_user(params[:user])
-    # assign properties to user
+
+    if !(current_user.access_to_roles?(role_ids) && current_user.access_to_groups?(group_ids))
+      flash[:error] = "No access to role or group"
+      redirect_to users_path and return
+    end
+
+    roles = Role.where(id: role_ids).to_a
+    g = Group.where(id: group_ids).to_a
+    @user.groups = g
+    @user.roles = roles
+    @user.center = @user.groups.first.center
+
     if @user.save
       flash[:notice] = 'Brugeren blev oprettet.'
-      redirect_to user_url(@user)
+      redirect_to user_url(@user) and return
     else
+      puts "user.groups: #{@user.groups.inspect}"
       puts "ERRORS: #{@user.errors.inspect}"
       @roles = current_user.pass_on_roles || []
-      @groups = current_user.center_and_teams
-      # render :new
-      render :new #, :flash => { :error => @user.errors.to_a.join }
+      @group = Group.find(group_id)
+      @groups = Group.this_or_parent(group_id)
+      render :new
+      # redirect_to new_user_url(group_id) #, :flash => { :error => @user.errors.to_a.join }
     end
   end
   

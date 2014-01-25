@@ -18,3 +18,4 @@
 //= require underscore
 //= require postal.min
 //= require postal.diagnostics.min
+//= require tinymce-jquery

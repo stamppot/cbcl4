@@ -240,7 +240,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @group = Journal.find(params[:id])
     @page_title = "CBCL - Center " + @group.center.title + ", team " + @group.title
     @groups = current_user.my_groups # Group.get_teams_or_centers(params[:id], current_user)
-    @journal_count = Journal.for_parent(@group).count
+    @journal_count = Journal.in_center(@group).count
 
      respond_to do |format|
        format.html { render "select_group" }

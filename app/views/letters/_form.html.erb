@@ -1,6 +1,8 @@
+<%= tinymce_assets %>
+
 	<table class="letter_info">
 		<tr>
-			<td class="t_i"><label for="letter_name">Navn:</label></td>
+			<td class="t_i"><label for="letter_name">Neavn:</label></td>
 			<td class="t"><%= text_field "letter", "name" %></td>
 		</tr>
 		<tr>
@@ -18,11 +20,23 @@
 			<td class="t_i"><%= select :letter, :follow_up, @follow_ups, :include_blank => true %></td>
 		</tr>
 		<tr>
+		<%# text_area_tag :letter, "letter", :class => "aaatinymce", :rows => 40, :cols => 120 %>
 			<td class="t_i">Indhold:</td>
-			<td class="t"><%= tinymce(:letter, :letter) %></td>
+			<td class="t"><%= text_area_tag :letter, @letter.letter, :class => "tinymce", :rows => 40, :cols => 120, :value => @letter.letter %>
+			<%= tinymce %>
+			</td>
 		</tr>
 	</table>
 	
+	<script type="text/javascript">
+	  // tinyMCE.init({
+   //  	mode: 'textareas',
+	  //  // theme: 'advanced'
+  	//   });
+
+	tinyMCE.activeEditor.setContent('<%= @letter.letter');
+	</script>
+
 	<div class="help">
 		<p>
 			Du kan indsætte nedenstående variable, som bliver erstattet af anden tekst.

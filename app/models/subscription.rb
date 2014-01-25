@@ -8,7 +8,7 @@ class Subscription < ActiveRecord::Base
   before_validation :set_totals
   after_create :new_period!
 
-  attr_accessible :total_used, :total_paid, :active_used
+  attr_accessible :total_used, :total_paid, :active_used, :center, :survey_id, :state
 
   scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
   scope :by_survey, lambda { |survey| { :conditions => ['survey_id = ?', survey.is_a?(Survey) ? survey.id : survey] } }

@@ -7,7 +7,9 @@ module ApplicationHelper
   LINE_LENGTH = 78 unless defined? LINE_LENGTH
 
   def back_button(url, options = {})
-    link_button t('go_back'), url, 'go_back', options.merge(:title => t('go_back')).merge(:onclick => 'history.go(-1);return false;')
+    options = options.merge(:onclick => 'history.go(-1);return false;') if(options.blank?) 
+    options = options.merge(:title => t('go_back'))
+    link_button t('go_back'), url, 'go_back', options
   end
 
   def back_to_button(url, options = {})
@@ -35,7 +37,8 @@ module ApplicationHelper
     link_to_if condition, image_tag(icon, options.merge(:border => 0, :class => 'icon')), url,
       :title => options[:title],
       :method => method,
-      :confirm => confirm
+      :data => { :confirm => true }
+      # :confirm => confirm
 	end
 	
   # correctly close/open html 4.01 tags
