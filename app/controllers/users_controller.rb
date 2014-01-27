@@ -15,7 +15,10 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # 31-12 Administrators cannot see other users
   def index
     @page_title = "CBCL - Liste af Brugere"
-    @users = current_user.get_users(:page => params[:page], :per_page => Journal.per_page)
+    @sort = params[:sort] || 'users.created_at'
+    @order = params[:order] || "asc"
+
+    @users = current_user.get_users(:page => params[:page], :per_page => Journal.per_page, :sort => params[:sort], :order => params[:order])
 
     if !params[:partial]
       render

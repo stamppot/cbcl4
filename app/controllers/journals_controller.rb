@@ -237,10 +237,10 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def select_group # nb. :id is Team id!
-    @group = Journal.find(params[:id])
-    @page_title = "CBCL - Center " + @group.center.title + ", team " + @group.title
+    @journal = Journal.find(params[:id])
+    @page_title = "CBCL - Center " + @journal.center.title + ", team " + @journal.title
     @groups = current_user.my_groups # Group.get_teams_or_centers(params[:id], current_user)
-    @journal_count = Journal.in_center(@group).count
+    @journal_count = Journal.in_center(@journal.center).count
 
      respond_to do |format|
        format.html { render "select_group" }
@@ -254,16 +254,13 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   
   def move
     journal = Journal.find(params[:id])
-    team = journal.team
-    flash[:error] = 'Ingen gruppe er valgt' if params[:group].blank?
+    team = journal.group
+    flash[:error] = 'Ingen gruppe er valgt' if params[:journal][:group].blank?
     redirect_to journal if flash[:error]
 
-    dest = Group.find(params[:group][:group])
-    if dest.is_a?(Team)
-      journal.team = dest
-    elsif dest.is_a?(Center)
-      journal.center = dest
-    end
+    dest = Group.find(params[:journal][:group])
+    journal.group = dest if dest.is_a?(Team)
+    # journal.center = dest.center # can't move journal to other center anyway
     journal.save    
     flash[:notice] = "Journalen '#{journal.title}' er flyttet fra #{team.title} til #{dest.title}"
     redirect_to journal_path(journal) and return

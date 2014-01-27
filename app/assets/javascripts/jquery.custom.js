@@ -23,4 +23,22 @@ $.getHtml = function(url, update_fn) {
           dataType: 'html',
           success: update_fn
         });
+  }
+
+$.setsortHeader = function() {
+  return $('table.sortable th').click(function(event) {
+    $('th.active').removeClass('active').removeClass('sortasc').removeClass('sortdesc');
+    sort = $(this).attr('data-sort');
+    order = toggleOrder();
+  });
 }
+
+function toggleOrder() {
+  return order == 'asc' ? 'desc' : 'asc';
+}
+
+function getPageNo() {
+  return parseInt($('.pagination em').text());
+}
+
+function getSortedPage() {}

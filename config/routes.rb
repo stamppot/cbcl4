@@ -143,6 +143,8 @@ Cbcl4::Application.routes.draw do
   get '/journals/select/(/:id)', :to => 'journals#select', :as => 'select_journals'
   get '/journals/move/(/:id)', :to => 'journals#move', :as => 'move_journals'
 
+  get '/journals/move_journal_to_group/(:id)', :to => 'journals#select_group', :as => 'move_journal_to_group'
+  put '/journals/move_journal/(:id)', :to => 'journals#move', :as => 'move_journal'
   get 'journals/search/(/:name)', :to => 'journals#search', :as => 'journal_search'
   # get 'journals/new/(/:id)', :to => 'journals#new', :as => 'new_journal'
   get '/journals/delete/(/:id)', :to => 'journals#delete', :as => 'delete_journal'

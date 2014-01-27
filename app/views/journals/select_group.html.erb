@@ -1,6 +1,6 @@
 <h2>Flyt Journal</h2>
 
-<%= form_tag move_journal_url(@group), :method => :put do %>
+<%= form_tag move_journal_url(@journal), :method => :put do %>
 
 <%= error_messages_for 'group' %>
 
@@ -9,29 +9,23 @@
 <dl>
   <dt><<%= t('code') %></label></dt>
 
+<br/>
+
 <span>For at undgå at to journaler har samme kode i et team, kan journalkoden kan blive ændret ved valg af nyt team.</span>
   <dt><label for="group_code"><%= t('code') %></label></dt>
-  <dd><%= @group.code %>&nbsp;&nbsp;Ny kode:<%= text_field :group, :code, :size => 5 %></dd>
+  <dd><%= @journal.code %>&nbsp;&nbsp;Ny kode:<%= text_field :journal, :code, :size => 5 %></dd>
 
   <dt><label for="group_title"><%= t('name') %></label></dt>
-  <dd><%= @group.title %></dd>
+  <dd><%= @journal.title %></dd>
 
   <dt><label for="group_group"><%= t('group') %></label></dt>
-  <dd><%= @group.group.title %></dd>
+  <dd><%= @journal.group.title %></dd>
 
 	<br/>
 
   <dt><label>Vælg center/team:</label></dt>
   <dd>
   <%= render 'shared/groups_tree', :locals => {:groups => @groups} %>
-  <div>Tralalla: old</div>
-    <%= node_tree(@groups) do |group|
-					onclick = 
-          result = "<input class=\"group_center\" id=\"group_group_#{group.id}\" type=\"radio\" name=\"group[group]\" value=\"#{group.id}\" checked=\"checked\" /> " if @group.group == group
-          result = "<input class=\"group_center\" id=\"group_group_#{group.id}\" type=\"radio\" name=\"group[group]\" value=\"#{group.id}\" /> " if @group.group != group
-          result += "<label for=\"group_group_#{group.id}\">#{group.title}</label> "
-          result
-        end %>
   </dd>
 
 </dl>
@@ -47,7 +41,7 @@ Event.observe(window, 'load', function() {
 	   {asynchronous:true, evalScripts:true, parameters: {id: selectedGroup}});
   }
   });
-  var journal_id = <%= @group.id %>;
+  var journal_id = <%= @journal.id %>;
 $$(".group_center").each(function(center){
 	center.observe('click', function(){
 		new Ajax.Updater('group_code', '/centers/next_journal_code',
@@ -62,4 +56,4 @@ $('group_code').focus();
   <%= submit_tag t('save_changes'), :class => 'button journal_edit' %>
 <% end %>
 
-<%= back_button journal_url(@group) %>
+<%= back_button journal_url(@journal) %>

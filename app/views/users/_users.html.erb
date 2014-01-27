@@ -1,8 +1,13 @@
+<script type="text/javascript">
+	var sortcol = '<%= @sort %>';
+	var order = '<%= @order %>'; 	
+</script>
+
 <table id="user_list" class="sortable list" class="users">
 	<tr>
-	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
-	<th class="sortcol" title="<%= t('sort.role') %>"><%= t('role') %></th>
-	<th class="sortcol" title="<%= t('sort.group') %>"><%= t('groups') %></th>
+	<th class="wide sortcol <%= "active sort" + @order if(@sort == "users.name") %>" data-sort="users.name" title=<%= t('sort.name') %>><%= t('name') %></th>
+	<th class="sortcol <%= "active sort" + @order if(@sort == "roles.title") %>" data-sort="roles.title" title="<%= t('sort.role') %>"><%= t('role') %></th>
+	<th class="sortcol <%= "active sort" + @order if(@sort == "groups.title") %>" data-sort="groups.title" title="<%= t('sort.group') %>"><%= t('groups') %></th>
 	<% if current_user.access? :user_edit_delete %>
 	<th class="nosort" style="width: 75px;"><%= t('action') %></th>
 	</tr>

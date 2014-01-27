@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
 
   def rescue_action_in_public(exception)
     case exception
-    when ActiveRecord::RecordNotFound, ActionController::UnknownAction, ActionController::RoutingError
+    when ActiveRecord::RecordNotFound, ActionController::RoutingError #ActionController::UnknownAction, 
       redirect_to errors_path(404), :status=>301
     else
       redirect_to errors_path(500)

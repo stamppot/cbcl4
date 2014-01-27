@@ -404,6 +404,8 @@ da-DK:
             :sex: Dreng eller pige skal angives
             :title: 
               :blank: skal angives
+            :center:
+              :blank: Center eller team skal angives
         :team: 
           :attributes: 
             :title: 

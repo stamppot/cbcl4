@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
 
   scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
-  scope :users, -> { where(:login_user => false).order("users.created_at") }
+  scope :users, -> { where(:login_user => false) } #.order("users.created_at") }
   scope :login_users, -> { where(:login_user => true) }
 
   scope :with_roles, lambda { |role_ids| joins(:roles).where('role_id IN (?)', role_ids) } 
@@ -126,6 +126,7 @@ class User < ActiveRecord::Base
     pwconf = params.delete(:password_confirmation)
     user = User.new(params)
     user.state = 2
+
     if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
       user.update_roles_and_groups(role_ids, group_ids)
     end
@@ -438,12 +439,16 @@ class User < ActiveRecord::Base
     options[:include] = [:roles, :groups, :center]
     options[:page]  ||= 1
     options[:per_page] ||= 20
+    sort = options.delete(:sort) || "users.id"
+    order = options.delete(:order) || "asc"
+    order_by = "#{sort} #{order}"
+    puts "order_by #{order_by}"
     users = if self.has_access?(:user_show_all)  # gets all users which are not login-users
-      User.users.with_roles(Role.get_ids(Access.roles(:all_real_users))).paginate(options).uniq
+      User.users.with_roles(Role.get_ids(Access.roles(:all_real_users))).order(order_by).paginate(options).uniq
     elsif self.has_access?(:user_show_admins)
-      User.users.with_roles(Role.get_ids(Access.roles(:user_show_admins))).paginate(options)
+      User.users.with_roles(Role.get_ids(Access.roles(:user_show_admins))).order(order_by).paginate(options)
     elsif self.has_access?(:user_show)
-      User.users.in_center(self.center).paginate(options)
+      User.users.in_center(self.center).order(order_by).paginate(options)
     else
       WillPaginate::Collection.new(options[:page], options[:per_page])
     end
