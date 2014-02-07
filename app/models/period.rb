@@ -1,6 +1,8 @@
 class Period < ActiveRecord::Base
   belongs_to :subscription
 
+  attr_accessible :active, :used
+  
   scope :active, -> { where('active = ?', true) }
   scope :inactive, -> { where('active = ?', false) }
   scope :paid, -> { where('paid = ?', true).order('paid_on DESC') }

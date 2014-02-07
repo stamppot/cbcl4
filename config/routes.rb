@@ -196,8 +196,8 @@ Cbcl4::Application.routes.draw do
   # get 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download'
 
   # get 'reminders/download/(/:id)', :to => 'reminders#download', :as => 'download'
-  get 'reminders/download/:id.:format', :to => 'reminders#download', :as => 'csv_entry_status_download', :format => 'csv'
-
+  match 'reminders/download/(:id).:format', :to => 'reminders#download', :as => 'csv_entry_status_download', :format => 'csv', :via => [:get, :post]
+  get 'reminders/show/(:id)/(:state)', :to => 'reminders#show', :as => 'answer_status'
   get 'export_files/show/(/:id)', :to => 'export_files#show', :as => 'export_login'
   get 'export_files/download/(/:id)', :to => 'export_files#download', :as => 'file_download'
   get 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv'

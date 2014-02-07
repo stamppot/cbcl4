@@ -33,26 +33,27 @@ class ScoreItemsController < ApplicationController
     end
 
     # show score item form in page
-    render :update do |page|
-      if @score.survey.nil?
-        page.alert "Tilføj først et skema"
-      else
-        page.show 'score_items'
-        page.hide 'new_score_item_button'
-        page.insert_html :bottom, 'score_items', :partial => 'new_score_item'
-        page.visual_effect :blind_down, 'add_new_score_item', :duration => 2
-      end
-    end
+    render :partial => 'new_score_item', :layout => false
+  #   render :update do |page|
+  #     if @score.survey.nil?
+  #       page.alert "Tilføj først et skema"
+  #     else
+  #       page.show 'score_items'
+  #       page.hide 'new_score_item_button'
+  #       page.insert_html :bottom, 'score_items', :partial => 'new_score_item'
+  #       page.visual_effect :blind_down, 'add_new_score_item', :duration => 2
+  #     end
+  #   end
   end
   
-  def cancel
-    render :update do |page|
-      # page.hide 'score_items'
-      page.replace 'add_new_score_item', ''  # remove both rows for new score item and the create/cancel buttons
-      page.replace 'create_score_item_button', ''
-      page.show 'new_score_item_button'
-    end  
-  end
+  # def cancel
+  #   render :update do |page|
+  #     # page.hide 'score_items'
+  #     page.replace 'add_new_score_item', ''  # remove both rows for new score item and the create/cancel buttons
+  #     page.replace 'create_score_item_button', ''
+  #     page.show 'new_score_item_button'
+  #   end  
+  # end
   
   def create # create_score_item
     @score = Score.find(params[:id])
@@ -97,7 +98,7 @@ class ScoreItemsController < ApplicationController
 
   
   def admin_access
-    if !current_user.access?(:admin)
+    if !current_user.access?(:superadmin)
       flash[:notice] = "Du har ikke adgang til denne side"
       redirect_to login_path
     end

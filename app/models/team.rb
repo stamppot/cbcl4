@@ -2,7 +2,7 @@
 
 class Team < Group
   belongs_to :center
-  has_many :journals
+  has_many :journals, :foreign_key => :group_id
 
   scope :with_center, -> { includes(:center) }
   scope :with_journals, -> { includes(:journals) }

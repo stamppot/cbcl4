@@ -18,7 +18,7 @@ class JournalEntry < ActiveRecord::Base
   scope :unanswered, -> { where('state < 5') }
   scope :answered, -> { where('state = 5') }
   scope :answered_by_login_user, -> { where('state = 6') }
-  scope :for_states, lambda { |states| { :conditions => ["state IN (?)", states]}}
+  scope :for_states, lambda { |states| where("state IN (?)", states) }
   scope :with_cond, lambda { |cond| cond }
   scope :between, lambda { |start, stop| where(:created_at => start..stop) } 
   scope :first_answered, -> { where('answered_at is not null').order('answered_at asc').limit(1) }
@@ -193,7 +193,8 @@ class JournalEntry < ActiveRecord::Base
   end
   
   def JournalEntry.for_parent_with_state(group, states)
-    JournalEntry.for_states(states).with_cond(:conditions => ['group_id = ?', group.is_a?(Group) && group.id || group], :joins => :journal)
+    puts "for_parent_with_state states: #{states}"
+    JournalEntry.for_states(states).where('journal_entries.group_id = ?', (group.is_a?(Group) && group.id || group)).joins(:journal) #, :joins => :journal)
   end
   
   def JournalEntry.states  # ikke besvaret, besvaret, venter på svar (login-user)

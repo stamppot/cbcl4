@@ -10,10 +10,7 @@
 	<td><%= text_field 'score_item[]', 'range', { :size => 5 } %></td>
 	<td><%= select 'score_item[]', 'qualifier', @score.item_qualifiers.to_a %></td>
 	<td><%= text_field 'score_item[]', 'items', { :size => 38 } %></td>
-	<td><%= link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
-						:class => 'icon icon_delete', :title => 'Fjern score')), 
-			:update => ('score_item_'<<@score_item.id.to_s), 
-			:confirm => "Vil du fjerne denne fra scoren #{@score.title}?",
-	 		:url => score_item_url(@score_item), :method => :delete ) %> <!-- :controller => 'score', :action => :remove_score_item, :id => @score_item -->
+	<td><a onclick="destroy_score_item(<%= score_item.id %>, <%= @score.title %>); return false;" href="#">
+		<%= image_tag('icon_delete_survey.gif', :border => 0, :class => 'icon icon_delete', :title => 'Fjern score') %></a>
 	</td>
 </tr>

@@ -83,11 +83,11 @@ $('.tabs').each(function(tab_group){
 
 $(document).ready(function() {
 	$('.answer_state').click(function(element) {
-		var selected_state = e.href;
+		var selected_state = $(this).href;
 		console.log("selected_state: " + selected_state)
 		//alert("hello: " + selected_state);
-		// console.log("setting selected: " + selected_state);
-		$("input[name='selected_state']")[0].setValue(selected_state);
+		 console.log($("input[name='selected_state']"));
+		$("input[name='selected_state']").val(selected_state);
 	});
 	$('#select_all_box').click(function() {
 		var isChecked = select_all_box.checked;

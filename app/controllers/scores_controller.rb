@@ -155,5 +155,8 @@ class ScoresController < ApplicationController
       redirect_to login_path
     end
   end
-  
+
+  def check_controller_access(controller, action)
+    current_user && current_user.access?(:superadmin)
+  end
 end

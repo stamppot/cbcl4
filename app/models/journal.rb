@@ -4,7 +4,7 @@
 # require 'hashery'
 class Journal < ActiveRecord::Base #< Group
   belongs_to :center
-  belongs_to :group #, :class_name => 'Group'
+  belongs_to :group
 
   # has_many :journal_entries, :order => 'created_at', :dependent => :destroy
   has_many :journal_entries, -> { order('created_at') }, :dependent => :destroy
@@ -119,6 +119,10 @@ class Journal < ActiveRecord::Base #< Group
     []
   end
 
+  def parent_or_self
+    self.is_a?(Center) && self || self.center
+  end
+  
   def set_cpr_nr
     dato = self.birthdate.to_s.split("-")
     dato[0] = dato[0][2..3]

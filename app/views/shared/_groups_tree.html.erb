@@ -3,14 +3,14 @@
     <% grouped.each do |center, teams| %>
       <% group = center %>
         <li>
-          <% checked = @journal.group == group && "checked='checked'" || "" %>
+          <% checked = @journal == group && "checked='checked'" || "" %>
           <input class="journal_center" id="journal_group_<%= group.id %>" type="radio" name="journal[group]" value="<%= group.id %>" <%= checked %> />
             <label for="journal_group_<%= group.id %>"><%= group.title %></label>
           </li>
 
           <ul>
           <% teams.each do |group| %>
-            <% checked = @journal.group == group && "checked='checked'" || "" %>
+            <% checked = @journal == group && "checked='checked'" || "" %>
             <li>
               <input class="journal_center" id="journal_group_<%= group.id %>" type="radio" name="journal[group]" value="<%= group.id %>" <%= checked %> />
               <label for="journal_group_<%= group.id %>"><%= group.title %></label>

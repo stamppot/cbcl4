@@ -13,7 +13,7 @@ class RemindersController < ApplicationController
     # puts "#{params[:state]}"
     set_params_and_find(params)
     
-    @surveys = Survey.all.to_hash(&:id).invert
+    @surveys = Survey.all.to_a.inject({}) { |h,elem| h[elem.id] = elem; h }.invert #to_h(&:id).invert
     @states = {'Alle' => 0, 'Ubesvaret' => 2, 'Besvaret' => "5,6", 'Kladde' => 4} #JournalEntry.states
     respond_to do |format|
       format.html
@@ -115,10 +115,11 @@ class RemindersController < ApplicationController
 
   def set_params_and_find(params)
     # puts "#{params[:state].inspect}"
-    params[:state] ||= "2\/4"
-    states = params[:state].split("\/")
+    params[:state] ||= "2-4"
+    states = params[:state].split("-")
     # puts "states: #{states.inspect}"
     params[:state] = states.map &:to_i
+    params[:selected_state] = params[:state]
     # puts "#{params[:state].inspect}"
     params[:state] = params[:journal_entry][:state] if params[:journal_entry] && params[:journal_entry][:state] 
     puts "selected_state: #{params[:selected_state].inspect} state: #{params[:state].inspect}"
@@ -129,10 +130,11 @@ class RemindersController < ApplicationController
     @state = JournalEntry.states.values if params[:state] == "0"
     @start_date = @group.created_at.beginning_of_day
     @stop_date = DateTime.now.end_of_day
+    puts "@state: #{@state}"
     @journal_entries_count = JournalEntry.for_parent_with_state(@group, @state).
       between(@start_date, @stop_date).count
     @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).all(:order => 'created_at desc', :include => :journal) unless @state.empty?
+      between(@start_date, @stop_date).all(:order => 'journal_entries.created_at desc', :include => :journal) unless @state.empty?
     @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
   end
 end

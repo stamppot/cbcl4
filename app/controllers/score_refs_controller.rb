@@ -1,6 +1,6 @@
 class ScoreRefsController < ApplicationController
 
-  layout 'cbcl'
+  layout 'cbcl', :except => [:new, :cancel]
   
   # show new row with score_ref initialized to values of the previous. ajax method                                        
   def new
@@ -10,32 +10,34 @@ class ScoreRefsController < ApplicationController
 
     # set values from previous score ref                                                                                  
     @score_ref = ScoreRef.new
-    unless @score_ref2.nil?
-      @score_ref.survey = @score_ref2.survey
+    if @score_ref2
+      # @score_ref.score.survey = @score_ref2.score.survey
       @score_ref.gender = @score_ref2.gender % 2 + 1
       @score_ref.age_group = @score_ref2.age_group
     end
 
     @surveys = [@score.survey.get_title, @score.survey.id]
 
+
+    render :partial => 'add_new_score_ref', :layout => false
     # show score ref form in page                                                                                         
-    render :update do |page|
-      page.show 'score_refs'
-      page.insert_html :bottom, 'score_refs', :partial => 'new_score_ref'
-      page.hide 'new_score_ref_button'
-      page.visual_effect :blind_down, 'add_new_score_ref', :duration => 2
-    end
+    # render :update do |page|
+    #   page.show 'score_refs'
+    #   page.insert_html :bottom, 'score_refs', :partial => 'new_score_ref'
+    #   page.hide 'new_score_ref_button'
+    #   page.visual_effect :blind_down, 'add_new_score_ref', :duration => 2
+    # end
   end
 
 
-  def cancel
-    render :update do |page|
-      # page.hide 'score_refs'                                                                                            
-      page.replace 'add_new_score_ref', ''  # remove both rows for new score ref and the create/cancel buttons            
-      page.replace 'create_score_ref_button', ''
-      page.show 'new_score_ref_button'
-    end
-  end
+  # def cancel
+  #   render :update do |page|
+  #     # page.hide 'score_refs'                                                                                            
+  #     page.replace 'add_new_score_ref', ''  # remove both rows for new score ref and the create/cancel buttons            
+  #     page.replace 'create_score_ref_button', ''
+  #     page.show 'new_score_ref_button'
+  #   end
+  # end
 
 
   def create #create_score_ref
@@ -77,9 +79,12 @@ class ScoreRefsController < ApplicationController
   # hvem har adgang til at definere scoreberegninger?  Kun superadmin og admin
   before_filter :admin_access
 
+  def check_access
+    current_user && current_user.access?(:superadmin)
+  end
   
   def admin_access
-    if !current_user.access?(:admin)
+    if !current_user.access?(:superadmin)
       flash[:notice] = "Du har ikke adgang til denne side"
       redirect_to login_path
     end
