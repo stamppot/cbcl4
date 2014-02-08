@@ -47,6 +47,8 @@ class ScoresController < ApplicationController
 
   def edit
     @score = Score.find(params[:id], :include => :survey)
+    puts "score: #{@score.inspect}"
+    puts "score_refs: #{@score.score_refs}"
     @page_title = @score.title + " " + @score.short_name
     @score_items_header = %w(Spørgsmål Range Kvalifikator Items)
     @score_refs_header = %w(Køn Alder Mean 95% 98%)

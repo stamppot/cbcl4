@@ -63,33 +63,33 @@ Cbcl4::Application.routes.draw do
   # map.resources :skemas
   # resource  :home
   # resources :logins
-  resources :surveys
-  resources :survey_answers
-  resources :variables
-  resources :subscriptions
+  resources :answer_reports
   resources :centers
-  resources :teams, :except => [:new]
-  resources :journals
-  resources :journal_entries, :only => [:show, :edit]
+  resources :code_books
   resources :export_files
   resources :exports
-  resources :users, :except => [:new]
-  resources :roles
+  resources :journal_entries, :only => [:show, :edit]
+  resources :journal_stats
+  resources :journals
   resources :letters
   resources :login_users
   resources :nationalities
-  resources :scores
-  resources :score_scales
-  resources :score_items
-  resources :score_refs
-  resources :answer_reports
-  resources :score_reports
-  resources :score_exports
-  resources :survey_builders
-  resources :journal_stats
-  resources :code_books
   resources :reminders
+  resources :roles
+  resources :score_exports
+  resources :score_items, :except => [:create]
+  resources :score_refs, :except => [:create]
+  resources :score_reports
+  resources :score_scales
+  resources :scores
   resources :sessions
+  resources :subscriptions
+  resources :survey_answers
+  resources :survey_builders
+  resources :surveys
+  resources :teams, :except => [:new]
+  resources :users, :except => [:new]
+  resources :variables
   
   namespace(:active_rbac) do |active_rbac|
     resources :roles
@@ -212,8 +212,8 @@ Cbcl4::Application.routes.draw do
   get 'faq_sections/done_order/(/:id)', :to => 'faq_sections#done_order', :as => 'faq_done_order'
   
   # get 'scores/edit/(/:id)', :to => 'scores#edit', :as => 'edit_score'
-  get 'score_items/create/(/:id)', :to => 'score_items#create', :as => 'create_score_item', :method => :post
-  get 'score_refs/create/(/:id)', :to => 'score_refs#create', :as => 'create_score_ref', :method => :post
+  post 'score_items/create/(/:id)', :to => 'score_items#create', :as => 'create_score_item' #, :method => :post
+  post 'score_refs/create/(/:id)', :to => 'score_refs#create', :as => 'create_score_ref' #, :method => :post
 
   get 'score_scales/edit_survey', :to => 'scores#edit_survey', :as => 'scores_edit_survey'
 

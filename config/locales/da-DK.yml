@@ -70,6 +70,8 @@ da-DK:
       - :year
     code: Kode
     go_back_to_list: Tilbage til liste
+    boy: "Dreng"
+    girl: "Pige"
     user: 
       :edit: Rediger Bruger
       :user: Bruger

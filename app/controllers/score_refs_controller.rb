@@ -19,7 +19,7 @@ class ScoreRefsController < ApplicationController
     @surveys = [@score.survey.get_title, @score.survey.id]
 
 
-    render :partial => 'add_new_score_ref', :layout => false
+    render :partial => 'new_score_ref', :layout => false
     # show score ref form in page                                                                                         
     # render :update do |page|
     #   page.show 'score_refs'
@@ -46,16 +46,18 @@ class ScoreRefsController < ApplicationController
     @score.score_refs << @score_ref
 
     if @score.save
-      render :update do |page|
-        # page.remove 'create_score_ref_button'
-        page.replace 'create_score_ref_button', ''
-        page.replace 'add_new_score_ref', ''
-        page.insert_html :bottom, 'score_refs', :partial => 'scores/score_ref'
-        page.visual_effect :blind_down, "score_ref_#{@score_ref.id}"
-        page.visual_effect :highlight, "score_ref_#{@score_ref.id}"
-        page.show 'new_score_ref_button'
-      end
-    end    
+      render :partial => 'scores/score_ref' #, :locals => {:score_ref => @score_ref}
+    end
+    #   render :update do |page|
+    #     # page.remove 'create_score_ref_button'
+    #     page.replace 'create_score_ref_button', ''
+    #     page.replace 'add_new_score_ref', ''
+    #     page.insert_html :bottom, 'score_refs', :partial => 'scores/score_ref'
+    #     page.visual_effect :blind_down, "score_ref_#{@score_ref.id}"
+    #     page.visual_effect :highlight, "score_ref_#{@score_ref.id}"
+    #     page.show 'new_score_ref_button'
+    #   end
+    # end    
   end
 
   def destroy

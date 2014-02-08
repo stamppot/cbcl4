@@ -44,7 +44,8 @@ function getPageNo() {
 function getSortedPage() {}
 
 function add_score_ref(score_id) {
-  $.ajax({url: '/score_refs/new/' + score_id,
+  $.ajax({
+    url: '/score_refs/new/' + score_id,
     dataType: 'html',
     success: function(response) {
       console.log(response);
@@ -52,7 +53,37 @@ function add_score_ref(score_id) {
       $('#score_refs').append(response);
       $('#new_score_ref_button').hide();
       $('#add_new_score_ref').fadeIn();
+    }
+  });
+}
+
+function create_score_ref(score_id) {
+  var params = $('#add_new_score_ref :input').serialize();
+  params.id = score_id;
+  console.log(params);
+  $.ajax({url: '/score_refs/create/' + score_id, 
+    data: params,
+    dataType: 'html',
+    method: 'post',
+    success: function(response) {
+      console.log(response);
+      $('#score_refs').append(response);
+        $('#create_score_ref_button').remove();
+        $('#add_new_score_ref').remove();
+        // page.insert_html :bottom, 'score_refs', :partial => 'scores/score_ref'
+        $('#new_score_ref_button').show()  
   }})
+}
+
+function create_score_item(score_id) {
+  $.post('/score_items/create/' + score_id, $('#add_new_score_item :input').serialize(),
+    function(response) {
+      console.log(response);
+      $('#score_items').show();
+      $('#score_items').append(response);
+      $('#new_score_item_button').hide();
+      $('#add_new_score_item').fadeIn();
+  })
 }
 
 function add_score_item(score_id) {
@@ -65,6 +96,12 @@ function add_score_item(score_id) {
       $('#new_score_item_button').hide();
       $('#add_new_score_item').fadeIn();
   }})
+}
+
+function remove_new_score_item() {
+  $('#add_new_score_ref').remove()  //remove both rows for new score ref and the create/cancel buttons            
+  $('#create_score_ref_button').remove()
+  $('#new_score_ref_button').show();
 }
 
 function destroy_score_ref(score_ref_id, title) {

@@ -28,13 +28,17 @@ module Enumerable
   end
 
   # creates a hash with elem as key, result of block as value
-  def to_hash
-    result = {}
-    each do |elt|
-      result[elt] = yield(elt)
-    end
-    result
-  end
+  # def to_hash
+  #   result = {}
+  #   each do |elt|
+  #     if block_given?
+  #       result[elt] = yield(elt)
+  #     else
+  #       result[elt] = elt
+  #     end
+  #   end
+  #   result
+  # end
   
   # creates a hash with result of block as key, elem as value
   def to_hash_with_key

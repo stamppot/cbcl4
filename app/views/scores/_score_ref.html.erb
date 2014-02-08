@@ -1,12 +1,32 @@
-<% @score_ref = score_ref %>
+<%# @score_ref = score_ref %>
 <% surveys = [@score.survey.get_title, @score.survey.get_title] %>
 <tr id='score_ref_<%= score_ref.id %>'>
-        <td><%= select 'score_ref[]', 'gender', @score_ref.genders.to_a %></td>
-        <td><%= text_field 'score_ref[]', 'age_group', { :size => 6 } %></td>
-        <td><%= text_field 'score_ref[]', 'mean', { :size => 4 } %></td>
-        <td><%= text_field 'score_ref[]', 'percent95', { :size => 4 } %></td>
-        <td><%= text_field 'score_ref[]', 'percent98', { :size => 4 } %></td>
-        <td><a href="#" onclick="return destroy_score_ref(<%= @score_ref.id %>, <%= @score.title %>);">
+        <td>
+        <select id="score_ref_<%= @score.id %>" name="score_ref[<%= @score.id %>][gender]">
+        <% [["boy", 1], ["girl", 2]].each do |a| %>
+            <option value="<%= a.last %>" <%= score_ref.gender == a.last ? " selected='selected' " : "" %>>
+                <%= t(a.first) %>
+            </option>
+        <% end %>
+        </select>
+        <%# select_tag '' 'score_ref[]', 'gender', [["Dreng", 1], ["Pige", 2]] %>
+        </td>
+        <td>
+            <input type="text" value="<%= score_ref.age_group %>" size="6" name="score_ref[<%= score_ref.id %>][age_group]" id="score_ref_<%= score_ref.id %>_age_group">
+            <%# text_field 'score_ref[]', 'age_group', { :size => 6 } %>
+        </td>
+        <td>
+            <input type="text" value="<%= score_ref.mean %>" size="4" name="score_ref[<%= score_ref.id %>][mean]" id="score_ref_<%= score_ref.id %>_mean">
+            <%# text_field 'score_ref[]', 'mean', { :size => 4 } %>
+        </td>
+        <td>
+            <input type="text" value="<%= score_ref.percent95 %>" size="4" name="score_ref[<%= score_ref.id %>][percent95]" id="score_ref_<%= score_ref.id %>_percent95">
+            <%# text_field 'score_ref[]', 'percent95', { :size => 4 } %>
+        </td>
+        <td>
+            <input type="text" value="<%= score_ref.percent98 %>" size="4" name="score_ref[<%= score_ref.id %>][percent98]" id="score_ref_<%= score_ref.id %>_percent98">
+            <%# text_field 'score_ref[]', 'percent98', { :size => 4 } %></td>
+        <td><a href="#" onclick="return destroy_score_ref(<%= score_ref.id %>, '<%= @score.title %>');">
                 <%= image_tag('icon_delete_survey.gif', :border => 0,
                                         :class => 'icon icon_delete', :title => 'Fjern reference værdi') %>
                 </a></td>
