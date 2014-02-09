@@ -31,7 +31,7 @@
 	
 	subscription_summary[:periods].each do |summary|
 		stopped_on = (summary[:stopped_on] || local_time).to_date
-		if !summary[:paid] && subscription_summary.to_a.last == summary
+		if !summary[:paid] # && subscription_summary.to_a.last == summary
 			stopped_on = DateTime.now.to_date
 		end
 	%>

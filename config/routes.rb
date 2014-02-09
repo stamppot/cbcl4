@@ -99,7 +99,7 @@ Cbcl4::Application.routes.draw do
   # get '/user/:action/(/:id)', :controller => 'active_rbac/user'
   get '/admin/groups/:action/(/:id)', :to => 'active_rbac/groups'
   get '/admin/roles/:action/(/:id)', :to => 'active_rbac/roles'
-  get '/admin/static_permission/:action/(/:id)', :controller => 'active_rbac/static_permission'
+  # get '/admin/static_permission/:action/(/:id)', :controller => 'active_rbac/static_permission'
   
   # map the login and registration controller somewhere prettier
   # get '/login', :to => 'login#index', :as => 'login'

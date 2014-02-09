@@ -13,7 +13,7 @@ class SubscriptionPresenter
     @detailed_view = [] #{}
     @summary_view = {:periods => [], :total_periods => 0}
     @subscriptions = subscriptions.sort_by { |s| s.survey_id }
-    puts "surveys: #{surveys.inspect}" 
+    # puts "surveys: #{surveys.inspect}" 
     @surveys = surveys.to_a.to_hash_with_key { |s| s.id }
     self.periods_summary
     self.details

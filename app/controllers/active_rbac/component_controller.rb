@@ -8,6 +8,6 @@ class ActiveRbac::ComponentController < ApplicationController
   require_dependency "user"
   require_dependency "role"
   require_dependency "group"
-  require_dependency "static_permission" # was: model
+  # require_dependency "static_permission" # was: model
   helper :rbac
 end

@@ -163,6 +163,10 @@ class SubscriptionsController < ApplicationController
     end
   end
 
+  def check_access
+    current_user && current_user.access?(:superadmin)
+  end
+  
   def subscription_show
     if !(current_user && current_user.access?(:subscription_show))
       flash[:notice] = "Du har ikke adgang til denne side"
