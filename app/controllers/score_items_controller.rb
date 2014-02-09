@@ -1,6 +1,8 @@
 class ScoreItemsController < ApplicationController
 
-  layout 'cbcl'
+  layout 'cbcl', :except => [:new, :cancel]
+  
+  attr_accessible :question_id, :range, :qualifier, :items, :number
   
   # show new row with score_item initialized to values of the previous. ajax method
   def new #add_score_item
@@ -63,15 +65,17 @@ class ScoreItemsController < ApplicationController
     @score.score_items << @score_item
     
     if @score.save
-      render :update do |page|
-        page.replace 'create_score_item_button', ''
-        page.replace 'add_new_score_item', :partial => 'scores/score_item'
-        # page.insert_html :after, 'score_items', :partial => 'score_item'
-        page.visual_effect :blind_down, "score_item_#{@score_item.id}"
-        page.visual_effect :highlight, "score_item_#{@score_item.id}"
-        page.show 'new_score_item_button'
-      end
-    end    
+      render :partial => 'scores/score_item'
+    end
+    #   render :update do |page|
+    #     page.replace 'create_score_item_button', ''
+    #     page.replace 'add_new_score_item', :partial => 'scores/score_item'
+    #     # page.insert_html :after, 'score_items', :partial => 'score_item'
+    #     page.visual_effect :blind_down, "score_item_#{@score_item.id}"
+    #     page.visual_effect :highlight, "score_item_#{@score_item.id}"
+    #     page.show 'new_score_item_button'
+    #   end
+    # end    
   end
   
   # deletes and updates page with ajax call
@@ -96,6 +100,9 @@ class ScoreItemsController < ApplicationController
   # hvem har adgang til at definere scoreberegninger?  Kun superadmin og admin
   before_filter :admin_access
 
+  def check_access
+    current_user && current_user.access?(:superadmin)
+  end
   
   def admin_access
     if !current_user.access?(:superadmin)

@@ -212,8 +212,8 @@ Cbcl4::Application.routes.draw do
   get 'faq_sections/done_order/(/:id)', :to => 'faq_sections#done_order', :as => 'faq_done_order'
   
   # get 'scores/edit/(/:id)', :to => 'scores#edit', :as => 'edit_score'
-  post 'score_items/create/(/:id)', :to => 'score_items#create', :as => 'create_score_item' #, :method => :post
-  post 'score_refs/create/(/:id)', :to => 'score_refs#create', :as => 'create_score_ref' #, :method => :post
+  match 'score_items/create/(/:id)', :to => 'score_items#create', :as => 'create_score_item', :via => [:get, :post]
+  match 'score_refs/create/(/:id)', :to => 'score_refs#create', :as => 'create_score_ref', :via => [:get, :post]
 
   get 'score_scales/edit_survey', :to => 'scores#edit_survey', :as => 'scores_edit_survey'
 
