@@ -41,14 +41,14 @@ class User < ActiveRecord::Base
   
   attr_accessor :perms
 
-	define_index do
-		# fields
-		indexes :name, :sortable => true
-		indexes center.title, :as => :center_title
-		indexes center.code, :as => :center_code
-		# attributes
-		has center_id, created_at #, login_user
-	end
+	# define_index do
+	# 	# fields
+	# 	indexes :name, :sortable => true
+	# 	indexes center.title, :as => :center_title
+	# 	indexes center.code, :as => :center_code
+	# 	# attributes
+	# 	has center_id, created_at #, login_user
+	# end
 
   # def roles
   #   @roles ||= Role.get_all_by_ids(role_ids_str.split(',').map &:to_i)

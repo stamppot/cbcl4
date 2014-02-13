@@ -26,7 +26,8 @@ gem 'acts_as_list'
 
 gem 'protected_attributes'
 
-gem 'thinking-sphinx', '2.0.10'
+# gem 'thinking-sphinx', '2.0.10'
+gem 'thinking-sphinx', '3.1.0'
 
 gem 'dynamic_form'
 

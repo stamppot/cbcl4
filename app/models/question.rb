@@ -10,6 +10,8 @@ class Question < ActiveRecord::Base
   scope :by_survey, lambda { |survey| where('survey_id = ?', (survey.is_a?(Survey) ? survey.id : survey)) }
   scope :and_question_cells, -> { includes :question_cells }
 
+  attr_accessible :number, :ratings_count, :columns, :survey
+
   after_save :update_ratings_count
   
   def update_ratings_count

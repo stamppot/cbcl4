@@ -6,7 +6,8 @@ class QuestionCell < ActiveRecord::Base
 	serialize :preferences
 	attr_accessor :value, :number, :question_items  # must be accessed through self.question_items
 	attr_accessor :question_text, :options
-
+	attr_accessible :question, :col, :row, :answer_item, :items, :preferences, :prop_mask
+	
   PROPERTIES = %w{input report}
   
 	scope :ratings, -> { where('type = ?', 'Rating') }

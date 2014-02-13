@@ -5,7 +5,7 @@ class SurveysController < ApplicationController
   layout 'cbcl', :except => [ :show, :show_fast, :show_answer, :show_answer2 ]
   layout "jsurvey", :only  => [ :show, :show_fast, :show_answer, :edit, :show_answer2, :change_answer ]
 
-  caches_page :show, :if => Proc.new { |c| entry = c.request.env['HTTP_COOKIE'].split(";").last; entry =~ /journal_entry=(\d+)/ }
+ # caches_page :show, :if => Proc.new { |c| entry = c.request.env['HTTP_COOKIE'].split(";").last; entry =~ /journal_entry=(\d+)/ }
   
   # 19-2-8 TODO: replace in_place_edit with some other edit function
   # in_place_edit_for :question, :number
@@ -36,6 +36,7 @@ class SurveysController < ApplicationController
     @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
     @color = @survey.color
     @page_title = @survey.get_title
+    @answer_by = @survey.answer_by
     # flash[:notice] = "Denne side viser ikke et brugbart spørgeskema. Du har tilgang til besvarelser gennem journaler."
     render :template => 'surveys/show', :layout => "layouts/survey"
   end
@@ -44,6 +45,7 @@ class SurveysController < ApplicationController
     @options = {:show_all => true, :show_only => true, :action => 'show_answer'}
     @survey = Survey.and_questions.find(params[:id])
     @page_title = @survey.get_title
+    @answer_by = @survey.answer_by
     render :template => 'surveys/show_fast', :layout => "layouts/survey_fast"
   end
 
@@ -63,7 +65,8 @@ class SurveysController < ApplicationController
     @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
     @color = @survey.color
     @page_title = @survey.get_title
-
+    @answer_by = @survey.answer_by
+    puts "SURVEY: #{@survey.inspect}"
       rescue ActiveRecord::RecordNotFound
    end
 
@@ -77,6 +80,7 @@ class SurveysController < ApplicationController
     survey_id = @journal_entry.survey_id
     @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
     @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
+    @answer_by = @survey.answer_by
 
     @page_title = @survey.get_title
   
