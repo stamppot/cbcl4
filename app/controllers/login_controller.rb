@@ -64,8 +64,11 @@ class LoginController < ApplicationController
       write_user_to_session(user)    # Write the user into the session object.
       
       journal_entry = JournalEntry.find_by_user_id(user.id)
-      session[:journal_entry] = journal_entry.id if user.login_user
-      
+      if user.login_user
+        session[:journal_entry] = journal_entry.id
+        session[:journal_id] = journal_entry.journal_id
+      end
+
       unless user.login_user?
         cookies[:user_name] = user.name
         flash[:notice] = "Velkommen #{user.name}, du er logget ind."
@@ -127,6 +130,7 @@ class LoginController < ApplicationController
     if to_user.login_user
       journal_entry = JournalEntry.find_by_user(to_user)
       session[:journal_entry] = journal_entry.id
+      session[:journal_id] = journal_entry.journal_id
       cookies[:user_name] = to_user.name
     end
     flash[:notice] = "Logget ind som #{to_user.name}"

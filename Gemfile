@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.1'
+# gem 'rails', '3.2.16'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -26,8 +27,8 @@ gem 'acts_as_list'
 
 gem 'protected_attributes'
 
-# gem 'thinking-sphinx', '2.0.10'
-gem 'thinking-sphinx', '3.1.0'
+gem 'thinking-sphinx', '2.0.10'
+# gem 'thinking-sphinx', '3.1.0'
 
 gem 'dynamic_form'
 
@@ -36,6 +37,7 @@ gem 'actionpack-action_caching'
 gem 'actionpack-page_caching'
 
 gem 'dalli'
+# gem 'memcache-client'
 
 gem 'spawnling', :git => 'git://github.com/tra/spawnling'
 # gem 'debugger'

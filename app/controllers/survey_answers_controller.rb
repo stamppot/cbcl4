@@ -11,6 +11,7 @@ class SurveyAnswersController < ApplicationController
     @options = {:answers => true, :disabled => false, :action => "show"}
     @journal_entry = JournalEntry.and_survey_answer.find(params[:id])
     cookies[:journal_entry] = @journal_entry.id
+    cookies[:journal_id] = @journal_entry.journal_id
     @survey_answer = SurveyAnswer.and_answer_cells.find(@journal_entry.survey_answer_id)
     @@surveys[@journal_entry.survey_id] ||= Survey.and_questions.find(@survey_answer.survey_id)
     @survey = @@surveys[@journal_entry.survey_id]
@@ -32,7 +33,8 @@ class SurveyAnswersController < ApplicationController
 
   def edit
     journal_entry = JournalEntry.find(params[:id])
-    session[:journal_entry] = params[:id]
+    session[:journal_entry] = journal_entry.id
+    session[:journal_id] = journal_entry.journal_id
     redirect_to survey_path(journal_entry.survey_id)
   end
 
@@ -119,9 +121,11 @@ class SurveyAnswersController < ApplicationController
 	end
   
   def json_dynamic_data
-    @journal_entry = JournalEntry.find(params[:id], :include => :journal)
+    journal_id = params[:journal_id]
+    @journal_entry = JournalEntry.where('id = ? AND journal_id = ?', params[:id], journal_id).includes(:journal).first
+   
     save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
-    save_draft_url = "/survey_answers/save_draft/#{@journal_entry.id}"
+    save_draft_url = "/survey_answers/save_draft/#{journal_id}/#{@journal_entry.id}"
     @journal = @journal_entry.journal
     
     # logger.info "dynamic json: current_user: #{current_user.inspect} center: #{@journal.center.get_title} entry: #{@journal_entry.inspect}  journal: #{@journal.inspect}"
@@ -146,7 +150,7 @@ class SurveyAnswersController < ApplicationController
     respond_to do |format|
       format.json { render :text => json.to_json}
     end
-  rescue RecordNotFound
+  rescue ActiveRecord::RecordNotFound
     render :update do |page|
       logger.info "dynamic_data: fejl! #{@journal_entry.id} journal id/kode: #{@journal.id}/#{@journal.code}"
       page.alert "Der er sket en fejl, du skal logge ud og ind igen", @journal.center.get_title
@@ -155,7 +159,8 @@ class SurveyAnswersController < ApplicationController
   end
 
   def json_draft_data
-    journal_entry = JournalEntry.find(params[:id], :include => {:survey_answer => {:answers => :answer_cells}})
+    journal_id = params[:journal_id]
+    journal_entry = JournalEntry.where('id = ? AND journal_id = ?', params[:id], journal_id).includes(:survey_answer => {:answers => :answer_cells}).first
     show_fast = params[:fast] || false
 
     cell_count = 0
@@ -184,8 +189,11 @@ class SurveyAnswersController < ApplicationController
 
   def save_draft
     return if request.get?
-    journal_entry = JournalEntry.and_survey_answer.find(params[:id])
-    journal_entry.draft! # unless journal_entry.answered?
+    journal_id = params[:journal_id]
+    journal_entry = JournalEntry.and_survey_answer.where('id = ? AND journal_id = ?', params[:id], journal_id).first
+    journal_entry.center_id ||= Group.find(journal_entry.group_id).center_id
+
+    journal_entry.draft! unless journal_entry.answered? && journal_entry.answered_at > 1.minutes.ago
     return if journal_entry.answered?
 
     request.session_options[:id] # touch (lazy) session
@@ -209,7 +217,8 @@ class SurveyAnswersController < ApplicationController
       params[:id] = journal_entry # login user can access survey with survey_id instead of journal_entry_id
     end
     id = params.delete("id")
-    journal_entry = JournalEntry.find(id)
+    journal_id = params[:journal_id]
+    journal_entry = JournalEntry.by_id_and_journal(id, journal_id).first
     # puts "SURVEY AnSWER create #{journal_entry.inspect}"
     center = journal_entry.journal.center
     subscription = center.subscriptions.detect { |sub| sub.survey_id == journal_entry.survey_id }
@@ -224,13 +233,11 @@ class SurveyAnswersController < ApplicationController
       Survey.and_questions.find(journal_entry.survey_id)
     # end
     survey_answer = journal_entry.make_survey_answer
+
 		if current_user.login_user?
 			journal_entry.answered! 
 		else 
-			journal_entry.answered_paper!
-      if !journal_entry.valid?
-        puts "journal_entry.errors: #{journal_entry.errors.inspect}"
-      end
+      journal_entry.answered_paper!
 		end
 		
     if !survey_answer.save_final(params)

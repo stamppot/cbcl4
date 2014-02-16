@@ -4,6 +4,7 @@ class ScoreResult < ActiveRecord::Base
   belongs_to :score_scale
   belongs_to :score
 
+  attr_accessible :title, :score_id, :scale, :survey, :result, :percentile_98, :percentile_95, :deviation, :score_rapport, :mean, :position, :score_scale_id, :hits, :missing, :missing_percentage, :valid_percentage
   attr_accessor :standard_deviation
   
   def to_report

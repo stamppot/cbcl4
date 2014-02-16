@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
           # users have a n:m relation to roles
   has_and_belongs_to_many :roles #, -> { where uniq: true }
 
-  attr_accessible :login, :name, :email
+  attr_accessible :login, :name, :email, :sex
   attr_accessible :password, :password_confirmation, :roles, :groups
 
   # scope :centers, -> { groups.where('groups.type == ?', 'Center')}
@@ -35,8 +35,8 @@ class User < ActiveRecord::Base
   # validates_associated :roles
   # validates_presence_of :roles#, :message => "skal angives"
   # user must belong to a group unless he's superadmin or admin
-  validates_associated :groups, :if => Proc.new { |user| !user.has_role?(:superadmin, :admin) }
-  validates_presence_of :groups, :if => Proc.new { |user| !user.has_role?(:superadmin, :admin) }
+  validates_associated :groups, :if => Proc.new { |user| !user.login_user && !user.has_role?(:superadmin, :admin) }
+  validates_presence_of :groups, :if => Proc.new { |user| !user.login_user && !user.has_role?(:superadmin, :admin) }
   validates_presence_of :password
   
   attr_accessor :perms

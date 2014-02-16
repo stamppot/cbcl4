@@ -21,7 +21,7 @@
 					 <td style='background-color: #<%= survey.color %>; min-width: 320px;'>
 					  <%# link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), survey_show_fast_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
 					<%= link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), journal_entry_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
-            <%= link_to entry.get_title, journal_entry_path(entry), :title => 'Besvar' %>&nbsp;&nbsp;
+            <%= link_to entry.get_title, show_survey_path(entry), :title => 'Besvar' %>&nbsp;&nbsp;
         	</td>
             <td style="max-width: 200px;"><%= entry.notes %> <%# t("roles.#{survey.surveytype}") %></td>
 					 <td><%= entry.created_at.strftime "%d-%m-%Y" %>
@@ -75,7 +75,7 @@
 		 	 	<tr id='<%= "entry_answer" + entry.id.to_s %>' class="entry_answer" data-entry="<%= entry.id %>">
 					 <td class="no_border" style='background-color: #<%= entry.survey.color %>; min-width: 320px;'>
 						<%= check_box "answers", entry.id, { :class => 'no_border'} %>
-						<%= link_to entry.get_title, journal_entry_path(entry), :title => 'Vis Besvarelse' %>
+						<%= link_to entry.get_title, show_survey_path(entry), :title => 'Vis Besvarelse' %>
 						&nbsp;&nbsp;
 						<%# link_to entry.get_title, survey_answer_path(entry), :title => 'Vis Besvarelse' %>
 					</td>
@@ -97,7 +97,8 @@
 
 						<a class="delete_answer" href="javascript:void(0);"><%= image_tag('icon_delete_survey.gif', :border => 0, :class => 'icon icon_delete', :title => 'Fjern besvarelse') %></a>
 
- 							<%= link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
+							
+ 							<%# link_to_remote((image_tag('icon_delete_survey.gif', :border => 0, 
 										:class => 'icon icon_delete', :title => 'Fjern besvarelse')), 
 							:update => ('entry_answer' << entry.id.to_s), 
 							:confirm => "Vil du fjerne besvarelsen '#{entry.survey.get_title}'\n fra journalen #{@journal.title}?",

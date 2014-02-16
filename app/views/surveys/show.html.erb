@@ -5,7 +5,6 @@
 <div class="span24">&nbsp;</div>
 <br/>
 
-
 <%= render :partial => 'surveys/survey_header' %>
 
 <br>
@@ -52,6 +51,7 @@
 				</a>
 			</span>
 		</div>
+		<input type="hidden" name="journal_id" id="journal_id" />
 	</form>
 </div>
 
@@ -140,12 +140,12 @@ function onReceivedDynamicData(data) {
     }
 }
 
-function auto_save(id, changed_items) {
+function auto_save(id, changed_items, journal_id) {
 	// console.log("auto save: " + new Date().toString());
 	var params = $('#surveyform').serialize();
 	// console.log("params: " + params);
 	// console.dir(params);
-	$.post('/survey_answers/save_draft/' + id, params)
+	$.post('/survey_answers/save_draft/' + id + "?journal_id=" + journal_id, params)
 	.done(function() { $('#surveyform').effect("highlight", {}, 500); });
 };
 
@@ -195,19 +195,29 @@ jQuery(document).ready(function ($) {
 		if((typeof(journal_entry) === "undefined")) {
 			alert("Fejl: Kan ikke hente brugerinformation: ");
 		}
+		console.log("journal_entry: " + journal_entry);
+
+		var journal_id = $.cookie('journal_id');
+		$('#journal_id').val(journal_id);
+
+		if((typeof(journal_entry) === "undefined")) {
+			alert("Fejl: Kan ikke hente journal brugerinformation: ");
+		}
 
 		var save_draft_url = '/survey_answers/save_draft/0';
 		
 		if((typeof(journal_entry) !== "undefined")) {
 			params['id'] = journal_entry;
 
+			var ts = new Date().getTime();
 			var draft_params = {
-					url: "/survey_answers/json_draft_data/" + params['id'] + ".json", 
-					method: "GET",
-					dataType: 'json',
-					parameters: params,
-					contentType: "application/json"
-				};
+				url: "/survey_answers/json_draft_data/" + params['id'] + ".json" + "?journal_id=" + journal_id + "&" + ts, 
+				cache: false,
+				type: "POST",
+				dataType: 'json',
+				parameters: params,
+				contentType: "application/json"
+			};
 			$.ajax(draft_params).done(function(data) {
 				// console.log("got draft_data: ");
 				setDraftData(data, params['id'] );
@@ -216,7 +226,8 @@ jQuery(document).ready(function ($) {
 		}
 
 		var set_values_interval = 2;
-		save_draft_url = '/survey_answers/save_draft/' + params['id'];
+		save_draft_url = '/survey_answers/save_draft/' + params['id'] + "?journal_id=" + journal_id;
+		console.log("save_draft_url: " + save_draft_url);
  		// set values in params every 5 seconds, so when clicking save_draft, the values can be saved
 
 		/// observe any changes to input fields, set 
@@ -236,9 +247,11 @@ jQuery(document).ready(function ($) {
 		});
 
 
+		var ts = new Date().getTime();
 		var dynamic_params = {
-			url: "/survey_answers/json_dynamic_data/" + params['id'] + ".json", 
-			method: "GET",
+			url: "/survey_answers/json_dynamic_data/" + params['id'] + ".json" + "?journal_id=" + journal_id + "&" + ts, 
+			cache: false,
+			type: "POST",
 			dataType: 'json',
 			parameters: params,
 			contentType: "application/json"
@@ -252,10 +265,10 @@ jQuery(document).ready(function ($) {
 
         $('body').delegate('#save_draft', 'click', function() {
         	timer.reset();
-        	auto_save(params['id'], changed_items);
+        	auto_save(params['id'], changed_items, journal_id);
         });
 
-        changeAction('surveyform', '/survey_answers/create/' + params['id']);
+        changeAction('surveyform', '/survey_answers/create/' + params['id'] + "/" + journal_id);
 
         initMakeItCount();
     }

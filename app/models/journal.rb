@@ -42,10 +42,10 @@ class Journal < ActiveRecord::Base #< Group
   after_destroy :destroy_journal_entries
   
   # ID is mandatory
-  validates_presence_of :code #, :message => "ID skal gives"
+  # validates_presence_of :code #, :message => "ID skal gives"
   validates_presence_of :name#, :message => "Navn skal angives"
-  validates_presence_of :sex #, :message => "Køn skal angives"
-  validates_presence_of :nationality #, :message => "Nationalitet skal angives"
+  # validates_presence_of :sex #, :message => "Køn skal angives"
+  # validates_presence_of :nationality #, :message => "Nationalitet skal angives"
   validates_associated :group #, :message => "Et Center eller team skal angives"
   # validates_presence_of :group
   validates_associated :center
@@ -230,8 +230,10 @@ class Journal < ActiveRecord::Base #< Group
   def create_journal_entries(surveys, follow_up = 0)
     return true if surveys.empty?
     surveys.map do |survey|
-      entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up, :group_id => self.group_id || self.center_id})
+      entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up})
+      entry.group_id = self.group_id || self.center_id
       entry.journal_id = self.id
+      entry.center_id = self.center_id
       # login_number = "#{self.code}#{survey.id}"
       login_user = entry.make_login_user
       unless login_user.valid?

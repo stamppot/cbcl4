@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class SurveysController < ApplicationController
+  ActionController::Base.perform_caching = false
   helper SurveyHelper
   layout 'cbcl', :except => [ :show, :show_fast, :show_answer, :show_answer2 ]
   layout "jsurvey", :only  => [ :show, :show_fast, :show_answer, :edit, :show_answer2, :change_answer ]
@@ -36,7 +37,6 @@ class SurveysController < ApplicationController
     @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
     @color = @survey.color
     @page_title = @survey.get_title
-    @answer_by = @survey.answer_by
     # flash[:notice] = "Denne side viser ikke et brugbart spørgeskema. Du har tilgang til besvarelser gennem journaler."
     render :template => 'surveys/show', :layout => "layouts/survey"
   end
@@ -45,7 +45,6 @@ class SurveysController < ApplicationController
     @options = {:show_all => true, :show_only => true, :action => 'show_answer'}
     @survey = Survey.and_questions.find(params[:id])
     @page_title = @survey.get_title
-    @answer_by = @survey.answer_by
     render :template => 'surveys/show_fast', :layout => "layouts/survey_fast"
   end
 
@@ -65,8 +64,8 @@ class SurveysController < ApplicationController
     @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
     @color = @survey.color
     @page_title = @survey.get_title
-    @answer_by = @survey.answer_by
-    puts "SURVEY: #{@survey.inspect}"
+    # render :text => "Survey: #{@survey.inspect}" and return
+    # raise ActiveRecord::RecordNotFound "SURVEY: #{@survey.inspect}: answer_by: #{@answer_by.inspect}"
       rescue ActiveRecord::RecordNotFound
    end
 
@@ -80,7 +79,6 @@ class SurveysController < ApplicationController
     survey_id = @journal_entry.survey_id
     @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
     @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
-    @answer_by = @survey.answer_by
 
     @page_title = @survey.get_title
   

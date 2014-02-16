@@ -5,12 +5,15 @@ class StartController < ApplicationController
     cookies.delete :user_name # if current_user.login_user?
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
     # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
+    @name = @journal_entry.journal.title
     session[:journal_entry] ||= @journal_entry.id
+    session[:journal_id] ||= @journal_entry.journal_id
     j = @journal_entry.journal
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
-    logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} entry cookie: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
+    logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
+    cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
     redirect_to survey_continue_path if @journal_entry.draft?
     redirect_to survey_finish_path(@journal_entry) and return if @journal_entry.answered?
     @survey = @journal_entry.survey
@@ -26,8 +29,9 @@ class StartController < ApplicationController
     je = @journal_entry
     @journal = je.journal
     cookies[:journal_entry] = @journal_entry.id # session[:journal_entry]
+    cookies[:journal_id] = @journal_entry.journal_id
     user_name = je.login_user.name
-    logger.info "LOGIN_USER conti #{user_name} journal: #{@journal.title} entry cookie: '#{session[:journal_entry]}' entry: '#{je.id}' luser: '#{je.user_id}' @ #{9.hours.from_now.to_s(:short)}: #{request.env['HTTP_USER_AGENT']}"
+    logger.info "LOGIN_USER conti #{user_name} journal: #{@journal.title} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' luser: '#{je.user_id}' @ #{9.hours.from_now.to_s(:short)}: #{request.env['HTTP_USER_AGENT']}"
     @survey = @journal_entry.survey
   end
 

@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 
 t = Survey.new {:title => "BMP-P 6-16 forældreskema", :category => "BMP", :age => "6-16", :surveytype => "parent", :prefix => "bpm-p"}

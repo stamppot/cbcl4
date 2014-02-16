@@ -3,12 +3,15 @@ class JournalEntry < ActiveRecord::Base
   belongs_to :survey
   belongs_to :survey_answer, :dependent => :destroy, :touch => true
   belongs_to :login_user, :class_name => "LoginUser", :foreign_key => "user_id", :dependent => :destroy  # TODO: rename to login_user, add type constraint
+  belongs_to :group, :class_name => "Group"
 
-  validates_associated :login_user
+  # accepts_nested_attributes_for :journal, :group
+  # validates_associated :login_user
   # validates_uniqueness_of :follow_up, :scope => :journal_id #, :message => "bruges allerede. Vælg andet ID."
   # validate :follow_up_validation
-  attr_accessible :survey, :state, :journal, :follow_up, :group_id
+  attr_accessible :survey, :state, :journal, :follow_up #, :group_id
 
+  scope :by_id_and_journal, lambda { |id, journal_id| where('id = ? AND journal_id = ?', id, journal_id) }
   scope :and_login_user, -> { includes(:login_user) }
   scope :and_survey_answer, -> { includes([:survey, :survey_answer]) }
 	scope :in_center, lambda { |center_id| { :joins => :journal, :conditions => ["center_id = ?", center_id] } }
@@ -58,7 +61,7 @@ class JournalEntry < ActiveRecord::Base
                              :center_id => self.journal.center_id)
     self.survey_answer.alt_id = self.journal.alt_id
     self.survey_answer.team_id = self.journal.group_id if self.journal.group.is_a?(Team)
-    self.survey_answer.journal_entry = self
+    self.survey_answer.journal_entry_id = self.id
     self.survey_answer
   end
 
@@ -101,6 +104,8 @@ class JournalEntry < ActiveRecord::Base
     return false if subscription.nil?                               # no abbo exists
     subscription.copy_used!
     self.save    # saves objects
+    rescue ActiveModel::MissingAttributeError
+      logger.info "MissingAttributeError draft! #{self.inspect}"
   end
     
   def status
@@ -132,6 +137,7 @@ class JournalEntry < ActiveRecord::Base
 
   def answered_paper!
     self.state = JournalEntry.states['Papir']  
+    puts "#{self.group_id}"
     self.save!
   end
 
@@ -154,6 +160,7 @@ class JournalEntry < ActiveRecord::Base
   
   def draft!
     self.state = JournalEntry.states['Kladde']   # Svarkladde
+    puts "journal_entry: #{self.inspect}"
     self.save!
   end
 

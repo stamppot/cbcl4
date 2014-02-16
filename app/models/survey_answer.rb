@@ -76,7 +76,7 @@ class SurveyAnswer < ActiveRecord::Base
       answers.each {|a| a.save!}
     end
       # survey_answer.add_missing_cells unless current_user.login_user # 11-01-10 not necessary with ratings_count
-    Spawnling.new(:method => :thread) do
+    Spawnling.new(:method => :fork) do
       score_rapport = self.generate_score_report(update = true) # generate score report
       self.save_csv_survey_answer
       score_rapport.save_csv_score_rapport
@@ -213,7 +213,7 @@ class SurveyAnswer < ActiveRecord::Base
     
     scores = self.survey.scores
     scores.each do |score|
-      score_result = ScoreResult.find(:first, :conditions => ['score_id = ? AND score_rapport_id = ?', score.id, rapport.id])
+      score_result = ScoreResult.where('score_id = ? AND score_rapport_id = ?', score.id, rapport.id).first
       
       # everything is calculated already
       if !update && score_result && score_result.valid_percentage && !score_result.title && !score_result.scale && !score_result.result && !score_result.percentile && !score_result.percentile_98 && 
@@ -291,7 +291,7 @@ class SurveyAnswer < ActiveRecord::Base
       an_answer = self.answers.find_by_question_id(q_id)
       an_answer ||= self.answers.build(:survey_answer_id => self.id, :question_id => q_id, :number => q_number)
       an_answer.valid?
-      puts "#{an_answer.errors.inspect}"
+      # puts "#{an_answer.errors.inspect}"
       an_answer.save
 
       new_cells ||= {}

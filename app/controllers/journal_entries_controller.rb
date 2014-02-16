@@ -11,7 +11,9 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   def show
     journal_entry = JournalEntry.find(params[:id], :include => :journal)
     session[:journal_entry] = journal_entry.id
+    session[:journal_id] = journal_entry.journal_id
     cookies[:journal_entry] = journal_entry.id
+    cookies[:journal_id] = journal_entry.journal_id
     # logger.info "Setting session[:journal_entry] to #{journal_entry.id} for #{journal_entry.journal.title}"
     
     if params[:fast]
@@ -23,8 +25,9 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
 
   def show_answer
     # puts "Show Answer JournalEntriesController #{params.inspect}"
-    session[:journal_entry] = params[:id]
     journal_entry = JournalEntry.find(params[:id], :include => :journal)
+    session[:journal_entry] = params[:id]
+    session[:journal_id] = journal_entry.journal_id
     redirect_to survey_answer_path(journal_entry.survey_id)
   end
 
@@ -98,7 +101,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
       # j_id = JournalEntry.find(params[:id]).journal_id
       current_user.has_journal_entry? params[:id]
       # access = journal_ids.include? j_id
-    end
+    end  # cookie and session are not set before after this check, so it's old/wrong data
     logger.info "check_access: params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
     redirect_to login_path if !current_user
   end

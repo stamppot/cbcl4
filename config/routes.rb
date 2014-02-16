@@ -84,7 +84,7 @@ Cbcl4::Application.routes.draw do
   resources :scores
   resources :sessions
   resources :subscriptions
-  resources :survey_answers
+  resources :survey_answers, :except => [:create]
   resources :survey_builders
   resources :surveys
   resources :teams, :except => [:new]
@@ -103,13 +103,13 @@ Cbcl4::Application.routes.draw do
   
   # map the login and registration controller somewhere prettier
   # get '/login', :to => 'login#index', :as => 'login'
-  #   get '/logout', :to => 'login#logout', :as => 'logout'
+  # get '/logout', :to => 'login#logout', :as => 'logout'
   # get '/shadow_login', :to => 'login#shadow_login', :as => 'shadow_login'
   get '/shadow_logout', :to => 'login#shadow_logout', :as => 'shadow_logout'
   get '/login/shadow_login/(/:id)', :to => 'login#shadow_login', :as => 'shadow_login'
   # get '/login/shadow_logout', :to => 'login#shadow_logout', :as => 'shadow_logout'
 
-  get "logout" => "login#logout", :as => "logout"
+  get "/logout" => "login#logout", :as => "logout"
   match "login" => "login#login", :via => [:get, :post] #, :as => "login"
   # get "signup" => "users#new", :as => "signup"
   get "/users/delete/(/:id)" => "users#delete", :as => "delete_user"
@@ -120,6 +120,7 @@ Cbcl4::Application.routes.draw do
   
   get '/survey_prints/print/(/:id)', :to => 'survey_prints#print', :as => 'print_survey'
 
+  post '/journal_entries/show/(/:id)', :to => 'journal_entries#show', :as => 'show_survey'
   # center
   get '/centers/delete/(/:id)', :to => 'centers#delete', :as => 'delete_center'
   get '/centers/live_search/(/:id)', :to => 'centers#live_search', :as => 'center_search'
@@ -175,10 +176,14 @@ Cbcl4::Application.routes.draw do
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
   get 'surveys/show_only/(/:id)', :to => 'surveys#show_only', :as => 'survey_show_only' # :id is entry
   # get 'surveys/show_only_fast/(/:id)', :to => 'surveys#show_only_fast', :as => 'survey_show_only_fast' # :id is entry
-  match 'survey_answers/save_draft/(/:id)', :to => 'survey_answers#save_draft', :as => 'survey_save_draft', :via => :post # :id is entry
-  get 'survey_answers/create/(/:id)', :to => 'survey_answers#create', :as => 'survey_answer_create'
+  match 'survey_answers/save_draft/(/:id)/(/:journal_id)', :to => 'survey_answers#save_draft', :as => 'survey_save_draft', :via => :post # :id is entry
+  post 'survey_answers/create/(/:id)/(/:journal_id)', :to => 'survey_answers#create', :as => 'survey_answer_create'
   get 'survey_answers/done/(/:id)', :to => 'survey_answers#done', :as => 'survey_answer_done' # :id is entry
-  
+  get 'survey_answers/edit_date/(/:id)', :to => 'survey_answers#edit_date', :as => 'edit_date_survey_answers'
+
+  post 'survey_answers/json_draft_data/(/:id)', :to => 'survey_answers#json_draft_data', :as => 'json_draft_data', :format => 'json'
+  post 'survey_answers/json_dynamic_data/(/:id)', :to => 'survey_answers#json_dynamic_data', :as => 'json_dynamic_data', :format => 'json'
+
   # subscriptions
   # get 'subscriptions/new/(/:id)', :to => 'subscriptions#new', :as => 'new_subscription' # center id
   get 'subscriptions/reset/(/:id)', :to => 'subscriptions#reset', :as => 'subscription_reset'
