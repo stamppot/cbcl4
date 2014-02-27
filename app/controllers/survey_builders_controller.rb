@@ -232,9 +232,9 @@ class SurveyBuildersController < ApplicationController
       @q_cell = QuestionCell.new( :row => cellno.first.to_i, :col => cellno.last.to_i)
       attributes.each do |cellattr, val|  # val == items|no|type|answeritem
         case cellattr
-        when "type":  @q_cell.type = val
-        when "items": @q_cell.add_question_items(val)   # appends q_item to db field
-        when "answeritem": @q_cell.answer_item = val    # sets answer item for all items (will only be shown for first listitem)
+        when "type" then  @q_cell.type = val
+        when "items" then @q_cell.add_question_items(val)   # appends q_item to db field
+        when "answeritem" then @q_cell.answer_item = val    # sets answer item for all items (will only be shown for first listitem)
         end    
       end
       @question.question_cells << @q_cell

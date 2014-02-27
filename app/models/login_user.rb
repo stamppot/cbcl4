@@ -4,6 +4,8 @@ class LoginUser < User
   
   default_scope -> { order('id DESC') }
 
+  has_one :journal_entry, :class_name => "JournalEntry", :foreign_key => "user_id"
+
   attr_accessible :login, :name, :email, :state, :login_user
 
 

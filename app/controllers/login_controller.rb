@@ -63,10 +63,10 @@ class LoginController < ApplicationController
       # raise ActiveRecord::RecordNotFound unless User.state_allows_login?(user.state)    # Check that the user has the correct state
       write_user_to_session(user)    # Write the user into the session object.
       
-      journal_entry = JournalEntry.find_by_user_id(user.id)
+      # journal_entry = JournalEntry.find_by_user_id(user.id)
       if user.login_user
-        session[:journal_entry] = journal_entry.id
-        session[:journal_id] = journal_entry.journal_id
+        session[:journal_entry] = user.journal_entry.id
+        session[:journal_id] = user.journal_entry.journal_id
       end
 
       unless user.login_user?

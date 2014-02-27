@@ -119,6 +119,10 @@ class ApplicationController < ActionController::Base
     redirect_to login_path
   end
 
+  def current_center
+    return current_user.center
+  end
+  
   def remove_current_user
     session[:rbac_user_id] = nil
     @current_user_cached = nil

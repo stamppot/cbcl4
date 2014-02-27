@@ -6,9 +6,11 @@ class BpmY
 # y.save
 
 def create
-y = Survey.find 7
+# y = Survey.find 7
+y = Survey.new({:title => "BMP-P 6-16 selvrapportskema", :description => "BPM-Y ages 11-6 Unges selvrapport", :category => "BMP", :age => "11-16", :surveytype => "youth", :prefix => "bpm-y"})
+y.save
 
-q1 = Question.new({:number => 1, :ratings_count => 18, :columns => 3, :survey => y})
+q1 = Question.new({:number => 1, :ratings_count => 1, :columns => 3, :survey => y})
 q1.save
 
 q1_cells = [
@@ -24,10 +26,10 @@ q2.save
 
 q2_cells = [
 Information.new({:question => q2, :col => 1, :row => 1, :answer_item => nil, :items => "information::::Her er en liste over egenskaber, som kan være til stede i større eller mindre grad. Markér for hver egenskab, hvorledes den passer på dig nu eller de 
-sidste ______dage. Sæt en ring rundt om 2, hvis beskrivelsen passer godt eller ofte. Sæt ring rung om 1, hvis beskrivelsen passer til en vis grad eller nogen gange. Hvis beskrivelsen ikke passer på barnet, sæt ring om 0. Svar venligst så godt du kan på alle spørgsmålene. ", :preferences => "", :prop_mask => 0}),
+sidste ______dage. Sæt en ring rundt om 2, hvis beskrivelsen passer godt eller ofte. Sæt ring rundt om 1, hvis beskrivelsen passer til en vis grad eller nogen gange. Hvis beskrivelsen ikke passer på barnet, sæt ring om 0. Svar venligst så godt du kan på alle spørgsmålene. ", :preferences => "", :prop_mask => 0}),
 ListItem.new({:question => q2, :col => 1, :row => 2, :answer_item => nil, :items => "listitem::::Dage", :preferences => "", :prop_mask => 0}),
 TextBox.new({:question => q2, :col => 2, :row => 2, :answer_item => nil, :items => "textbox::::", :preferences => "", :prop_mask => 0}),
-Information.new({:question => q2, :col => 1, :row => 3, :answer_item => nil, :items => "information::::0 = Passer ikke \\u0026nbsp; 1 = Passer til en vis grad eller nogen gange \\u0026nbsp; 2 = Passer godt eller ofte", :preferences => "", :prop_mask => 0}),
+Information.new({:question => q2, :col => 1, :row => 3, :answer_item => nil, :items => "information::::0 = Passer ikke &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 = Passer til en vis grad eller nogen gange &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 = Passer godt eller ofte", :preferences => "", :prop_mask => 0}),
 Rating.new({:question => q2, :col => 1, :row => 4, :answer_item => "1", :items => "radio::0::0###radio::1::1###radio::2::2", :preferences => { :required => true}, :prop_mask => 1}),
 ListItem.new({:question => q2, :col => 2, :row => 4, :answer_item => "1", :items => "listitem::::Jeg opfører mig som yngre end jeg er", :preferences => "", :prop_mask => 0}),
 Rating.new({:question => q2, :col => 1, :row => 5, :answer_item => "2", :items => "radio::0::0###radio::1::1###radio::2::2", :preferences => { :required => true}, :prop_mask => 1}),
@@ -75,8 +77,8 @@ ListItem.new({:question => q2, :col => 2, :row => 24, :answer_item => nil, :item
 q2_cells.each &:save
 end
 
-def remove_cells
-	y = Survey.find 7
+def remove_cells(id)
+	y = Survey.find id
 	y.questions.map {|q| q.question_cells.each &:destroy }
 end
 end
