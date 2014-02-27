@@ -1,9 +1,7 @@
 class ScoreItemsController < ApplicationController
 
   layout 'cbcl', :except => [:new, :cancel]
-  
-  attr_accessible :question_id, :range, :qualifier, :items, :number
-  
+    
   # show new row with score_item initialized to values of the previous. ajax method
   def new #add_score_item
     # find most recent score_item by :id

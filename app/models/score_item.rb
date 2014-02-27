@@ -1,6 +1,8 @@
 class ScoreItem < ActiveRecord::Base
     belongs_to :score
     belongs_to :question
+
+    attr_accessible :question_id, :range, :qualifier, :items, :number
     
     # todo check for nil... or make sure self.qualifier is never nil
     def item_qualifier
