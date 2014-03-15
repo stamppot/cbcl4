@@ -902,7 +902,7 @@ input.validation-maybe, textarea.validation-maybe {
 	padding: 6px 15px 6px 15px;
 }
 a .send_survey {
-	background:url('/images/spinner.gif') no-repeat 0px 0px;
+	background:url('/assets/spinner.gif') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 

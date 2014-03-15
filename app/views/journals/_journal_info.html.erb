@@ -13,7 +13,7 @@
 		</tr>
 		<tr>
 			<td class="p_i">Fødselsdato:</td>
-			<td class="p"><%=h @journal.birthdate.to_s %>&nbsp;&nbsp;<% if(@journal.birthdate.day == Time.now.day && @journal.birthdate.month == Time.now.month) %><%= image_tag('/images/cake.png') %><% end %></td>
+			<td class="p"><%=h @journal.birthdate.to_s %>&nbsp;&nbsp;<% if(@journal.birthdate.day == Time.now.day && @journal.birthdate.month == Time.now.month) %><%= image_tag('/assets/cake.png') %><% end %></td>
 		</tr>
 		<tr>
 			<td class="p_i">Alder (år):</td>

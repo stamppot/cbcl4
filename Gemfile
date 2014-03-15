@@ -19,6 +19,9 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 
+# gem 'tinymce-rails'
+gem 'wysiwyg-rails'
+
 gem 'cacheable_flash'
 gem 'will_paginate', '~> 3.0.5'
 
@@ -49,8 +52,6 @@ gem 'spawnling', :git => 'git://github.com/tra/spawnling'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-
-gem 'tinymce-rails'
 
 gem 'fastercsv'
 

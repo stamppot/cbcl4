@@ -94,7 +94,13 @@ Cbcl4::Application.routes.draw do
   namespace(:active_rbac) do |active_rbac|
     resources :roles
   end
-  
+
+  # if Rails.env.production?
+    get '404', :to => 'application#page_not_found'
+    get '422', :to => 'application#server_error'
+    get '500', :to => 'application#server_error'
+  # end
+
   # map the admin stuff into '/admin/'
   # get '/user/:action/(/:id)', :controller => 'active_rbac/user'
   get '/admin/groups/:action/(/:id)', :to => 'active_rbac/groups'
@@ -109,7 +115,7 @@ Cbcl4::Application.routes.draw do
   get '/login/shadow_login/(/:id)', :to => 'login#shadow_login', :as => 'shadow_login'
   # get '/login/shadow_logout', :to => 'login#shadow_logout', :as => 'shadow_logout'
 
-  get "/logout" => "login#logout", :as => "logout"
+  match "/logout" => "login#logout", :as => "logout", :via => [:get, :post]
   match "login" => "login#login", :via => [:get, :post] #, :as => "login"
   # get "signup" => "users#new", :as => "signup"
   get "/users/delete/(/:id)" => "users#delete", :as => "delete_user"
@@ -117,7 +123,7 @@ Cbcl4::Application.routes.draw do
   # user
   get 'change_password/(/:id)', :to => 'user#change_password', :as => 'change_password'
   get 'generate_password/(/:id)', :to => 'password#new', :as => 'generate_password'
-  
+
   get '/survey_prints/print/(/:id)', :to => 'survey_prints#print', :as => 'print_survey'
 
   post '/journal_entries/show/(/:id)', :to => 'journal_entries#show', :as => 'show_survey'

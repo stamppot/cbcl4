@@ -29,7 +29,7 @@ class ScoreReport
   def to_s
     if @score.nil?
       @description = 'link'
-      "<div class='scale_title'>#{@title}</div><a class='show_hide' ><img border='0' src='/images/icon_show_hide.png' ></a>"
+      "<div class='scale_title'>#{@title}</div><a class='show_hide' ><img border='0' src='/assets/icon_show_hide.png' ></a>"
     else
       @result.to_s
     end
