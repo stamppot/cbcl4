@@ -22,7 +22,7 @@
 	<dd><%= render :partial => "shared/subscription_summary", :object => @periods %></dd>
 
 	<dt><span id="subscription_note">Noter</span></dt>
-	<dd><%= in_place_editor_field :subscription, :note, {}, :rows => 5,
+	<dd><%# in_place_editor_field :subscription, :note, {}, :rows => 5,
                      :external_control => 'subscription_note', :style => "border: 1px solid #888;" %>
 	</dd>
 <dl>

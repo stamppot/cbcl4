@@ -1,4 +1,4 @@
-<%# @subscription_summary = subscription_presenter.summary_view %>
+<% @summaries = @subscription_presenter.summary_view[:periods] %>
 
 <% if @options %>
 	<% buttons = {"all" => "Alle", "active" => "Aktive", "paid" => "Betalte"} %>
@@ -18,7 +18,7 @@
 	<%
 	date1 = nil 
 	date2 = nil
-	subscription_summary[:periods].each do |summary|
+	@summaries.each do |summary|
 		if date1.nil?
 			date1 = summary[:start_on].to_date if summary[:used] == 0 && !summary[:paid]
 		elsif date2.nil?
@@ -29,9 +29,9 @@
 		end
 	end
 	
-	subscription_summary[:periods].each do |summary|
+	@summaries.each do |summary|
 		stopped_on = (summary[:stopped_on] || local_time).to_date
-		if !summary[:paid] # && subscription_summary.to_a.last == summary
+		if !summary[:paid] && @summaries.last == summary
 			stopped_on = DateTime.now.to_date
 		end
 	%>
@@ -52,6 +52,6 @@
 	<% end %>
 	<tr>
 		<td>Total:</td>
-		<td class="number"><%= subscription_summary[:total_periods] %></td>
+		<td class="number"><%= @subscription_presenter.summary_view[:total_periods] %></td>
 	</tr>
 </table>
