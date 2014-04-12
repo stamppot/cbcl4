@@ -32,7 +32,7 @@
 										:class => 'icon', :title => 'Vis login-info'), login_letter_path(entry) + ".pdf", :popup => ['new_window, height=800,width=700']) %>
 					<%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret opfølgning", :title => "Ret opfølgning"), edit_journal_entry_path(entry) %>
 					<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
-						<img src="/assets/tag_blue.png" alt="Noter" title="Noter" border=0 align="right" />
+						<% image_tag 'tag_blue.png', :alt => "Noter", :title => "Noter", :align => "right" %>
 					</a>
 
 					<a class="delete_entry" href="javascript:void(0);"><%= image_tag('icon_delete_survey.gif', :border => 0, :class => 'icon icon_delete', :title => 'Fjern skema') %></a>
@@ -90,7 +90,7 @@
 					 <td style="min-width: 100px;"><%= link_to image_tag("printer.png", :border=>0, :alt => 'Udskriv besvarelse', :title => 'Udskriv besvarelse' ),
 									('/survey_answers/print/' + entry.id.to_s + ".pdf"), :format => 'pdf', :title => 'Udskriv besvarelse' %>
 						<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
-							<img src="/assets/tag_blue.png" alt="Noter" title="Noter" border=0 align="right" />
+							<%= image_tag 'tag_blue.png', :alt => "Noter", :title => "Noter", :align => "right" %>
 						</a>
 							<%= link_to image_tag("icon_input.gif", :border=>0, :alt => 'Ret besvarelse', :title => 'Ret besvarelse' ), edit_survey_answer_path(entry), :title => 'Ret besvarelse' %>
 

@@ -32,8 +32,8 @@
 		<td><%= group.created_at.strftime("%d-%m-%Y") %></td>
 		<% if can_center_delete %>
 		<td>
-			<a title="Rediger" href="/centers/<%= group.id %>/edit"><img border="0" title="Rediger center" src="/assets/group_edit_24.png" class="icon" alt="Group_edit_24"></a>
-			<a title="Slet" href="/centers/delete/<%= group.id %>"><img border="0" title="Slet center" src="/assets/group_delete_24.png" class="icon" alt="Group_delete_24"></a>
+			<a title="Rediger" href="/centers/<%= group.id %>/edit"><%= image_tag 'group_edit_24.png', :border => 0, :title => "Rediger center", :class => "icon" %></a>
+			<a title="Slet" href="/centers/delete/<%= group.id %>"><%= image_tag 'group_delete_24.png', :title => "Slet center", :class => "icon" %></a>
 			<%# link_to image_tag('group_edit_24.png', :border => 0, :class => 'icon', :title => 'Rediger center'), edit_center_path(group), :title => t('edit') -%>
 			<%# link_to image_tag('group_delete_24.png', :border => 0, :class => 'icon', :title => 'Slet center'), delete_center_path(group), :title => t('delete') -%>
 		</td>

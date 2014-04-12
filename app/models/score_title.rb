@@ -16,7 +16,7 @@ class ScoreTitle < ScoreReport
     "<div class='scale_title'>" +
       @title.to_s + "</div>" + 
       "<a class='show_hide' >" + #  
-      "<img border='0' src='/assets/icon_show_hide.png' ></a>"    
+      "<img border='0' src='/images/icon_show_hide.png' ></a>"    
     end
   end
 end

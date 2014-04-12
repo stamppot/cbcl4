@@ -100,12 +100,14 @@
 
 	channel.subscribe("Search.Journals", function ( data ) {
 		// console.log(data.value);
+		if(data.value == '')
+			return;
+		
 		$('#journal_spinner').show();
-		if(data.value == 0) return;
-		$.ajax({url: '/journals/search/' + data.value, 
-			// dataType: 'json',
+		
+		$.ajax({url: '/journals/search/' + encodeURIComponent(data.value), 
+			dataType: 'html',
 			success: function(response) {
-				console.dir(response);
 				$('#content').html(response);
 				$('#journal_spinner').hide();
 				// TableKit.reload();

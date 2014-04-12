@@ -19,7 +19,7 @@ a:visited { color: #666; }
 	color: #8b0000;
 	border: 1px solid red;
 	padding: 6px 10px 6px 27px;
-	background:url('/assets/exclamation.png') no-repeat 5px 7px;
+	background:url('/images/exclamation.png') no-repeat 5px 7px;
 	background-color: #f77;
 	display: inline;
 }
@@ -28,7 +28,7 @@ a:visited { color: #666; }
 	color: #006400;
 	border: 1px solid green;
 	padding: 6px 10px 6px 27px;
-	background:url('/assets/check.png') no-repeat 5px 7px;
+	background:url('/images/check.png') no-repeat 5px 7px;
 	background-color: #CAE3F4;
 	display: inline;
 /*	float: right;*/
@@ -716,7 +716,7 @@ a:active.button {
 }
 
 a .go_back {
-	background:url('/assets/arrow_undo.png') no-repeat 0px 0px;
+	background:url('/images/arrow_undo.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 /* submit buttons */
@@ -744,273 +744,273 @@ input.button:active {
 }
 
 a .collapse {
-	background:url('/assets/collapse.gif') no-repeat 0px 0px;
+	background:url('/images/collapse.gif') no-repeat 0px 0px;
 	padding: 2px 9px 2px 4px;
 }
 a .expand {
-	background:url('/assets/expand.gif') no-repeat 0px 0px;
+	background:url('/images/expand.gif') no-repeat 0px 0px;
 	padding: 2px 9px 2px 4px;
 }
 
 a .add {
-	background:url('/assets/add.png') no-repeat 0px 0px;
+	background:url('/images/add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .remove {
-	background:url('/assets/delete2.png') no-repeat 0px 0px;
+	background:url('/images/delete2.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .delete {
-	background:url('/assets/delete.png') no-repeat 0px 0px;
+	background:url('/images/delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .edit {
-	background:url('/assets/edit.gif') no-repeat 0px 0px;
+	background:url('/images/edit.gif') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .accept {
-	background:url('/assets/accept.png') no-repeat 0px 0px;
+	background:url('/images/accept.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .cancel {
-	background:url('/assets/stop.png') no-repeat 0px 0px;
+	background:url('/images/stop.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .text {
 }
 
 a .center_delete {
-	background:url('/assets/delete.png') no-repeat 0px 0px;
+	background:url('/images/delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .user_add {
-	background:url('/assets/user_add.png') no-repeat 0px 0px;
+	background:url('/images/user_add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .user_edit {
-	background:url('/assets/user_edit.png') no-repeat 0px 0px;
+	background:url('/images/user_edit.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .user_delete {
-	background:url('/assets/user_delete.png') no-repeat 0px 0px;
+	background:url('/images/user_delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .center_admin_new {
-	background:url('/assets/user_suit.png') no-repeat 0px 0px;
+	background:url('/images/user_suit.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .team_add {
-	background:url('/assets/team_add.png') no-repeat 0px 0px;
+	background:url('/images/team_add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .team_edit {
-	background:url('/assets/team_edit.png') no-repeat 0px 0px;
+	background:url('/images/team_edit.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .team_delete {
-	background:url('/assets/team_delete.png') no-repeat 0px 0px;
+	background:url('/images/team_delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .bulk_edit {
-	background:url('/assets/cog_edit.png') no-repeat 0px 0px;
+	background:url('/images/cog_edit.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .journal_add {
-	background:url('/assets/journal_add.png') no-repeat 0px 0px;
+	background:url('/images/journal_add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .journal_edit {
-	background:url('/assets/journal_edit.png') no-repeat 0px 0px;
+	background:url('/images/journal_edit.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .journal_delete {
-	background:url('/assets/journal_delete.png') no-repeat 0px 0px;
+	background:url('/images/journal_delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .journal_move {
-	background:url('/assets/journal_move.png') no-repeat 0px 0px;
+	background:url('/images/journal_move.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .journal_add_surveys {
-	background:url('/assets/table_add.png') no-repeat 0px 0px;
+	background:url('/images/table_add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .journal_remove_surveys {
-	background:url('/assets/table_delete.png') no-repeat 0px 0px;
+	background:url('/images/table_delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 } 
 a .journal_status {
-	background:url('/assets/icon_traffic-light.png') no-repeat 0px 0px;
+	background:url('/images/icon_traffic-light.png') no-repeat 0px 0px;
 	padding-left: 27px;
 } 
 
 a .letters_print {
-	background:url('/assets/printer.png') no-repeat 0px 0px;
+	background:url('/images/printer.png') no-repeat 0px 0px;
 	padding-left: 27px;
 } 
 
 a .survey_add {
-	background:url('/assets/table_add.png') no-repeat 0px 0px;
+	background:url('/images/table_add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .subscription_edit {
-/*	background:url('/assets/edit.png') no-repeat 0px 0px;*/
+/*	background:url('/images/edit.png') no-repeat 0px 0px;*/
 	padding-left: 0px;
 	text-decoration: none;
 }
 a .subscription_paid {
-	background:url('/assets/money.png') no-repeat 0px 0px;
+	background:url('/images/money.png') no-repeat 0px 0px;
 	padding-left: 27px;
 	text-decoration: none;
 }
 a .subscription_new_period {
-	background:url('/assets/date_add.png') no-repeat 0px 0px;
+	background:url('/images/date_add.png') no-repeat 0px 0px;
 	padding-left: 27px;
 	text-decoration: none;
 }
 a .subscription_merge_periods {
-	background:url('/assets/merge.png') no-repeat 0px 0px;
+	background:url('/images/merge.png') no-repeat 0px 0px;
 	padding-left: 27px;
 	text-decoration: none;
 }
 a .subscription_pay {
-	background:url('/assets/money.png') no-repeat 0px 0px;
+	background:url('/images/money.png') no-repeat 0px 0px;
 	padding-left: 27px;
 	text-decoration: none;
 }
 a .period_pay {
-	background:url('/assets/date_pay.png') no-repeat 0px 0px;
+	background:url('/images/date_pay.png') no-repeat 0px 0px;
 	padding-left: 27px;
 	text-decoration: none;
 }
 a .subscription_active {
-/*	background:url('/assets/money.png') no-repeat 0px 0px;*/
+/*	background:url('/images/money.png') no-repeat 0px 0px;*/
 	padding-left: 0px;
 	text-decoration: none;
 }
 a .subscription_all {
-/*	background:url('/assets/money.png') no-repeat 0px 0px;*/
+/*	background:url('/images/money.png') no-repeat 0px 0px;*/
 	padding-left: 0px;
 	text-decoration: none;
 }
 a .subscription_undo_payment {
-	background:url('/assets/money_delete.png') no-repeat 0px 0px;
+	background:url('/images/money_delete.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .letter {
-	background:url('/assets/letter.png') no-repeat 0px 0px;
+	background:url('/images/letter.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .letter_new {
-	background:url('/assets/letter.png') no-repeat 0px 0px;
+	background:url('/images/letter.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .letter_edit {
-	background:url('/assets/letter.png') no-repeat 0px 0px;
+	background:url('/images/letter.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .export_center {
-	background:url('/assets/page_excel.png') no-repeat 0px 0px;
+	background:url('/images/page_excel.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .filter {
-	background:url('/assets/cog.png') no-repeat 0px 0px;
+	background:url('/images/cog.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .export_logins {
-	background:url('/assets/page_excel.png') no-repeat 0px 0px;
+	background:url('/images/page_excel.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .download_excel_file {
-	background:url('/assets/page_excel.png') no-repeat 0px 0px;
+	background:url('/images/page_excel.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .excel {
-	background:url('/assets/page_excel.png') no-repeat 0px 0px;
+	background:url('/images/page_excel.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .download_file {
-	background:url('/assets/download_file.png') no-repeat 0px 0px;
+	background:url('/images/download_file.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .download_xml_file {
-	background:url('/assets/icon_xml.gif') no-repeat 0px 0px;
+	background:url('/images/icon_xml.gif') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .move_journal {
-	background:url('/assets/journal_move.png') no-repeat 0px 0px;
+	background:url('/images/journal_move.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 a .go_back {
-	background:url('/assets/arrow_undo.png') no-repeat 0px 0px;
+	background:url('/images/arrow_undo.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .login {
-	background:url('/assets/door_in.png') no-repeat 0px 0px;
+	background:url('/images/door_in.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .logout {
-	background:url('/assets/door_out.png') no-repeat 0px 0px;
+	background:url('/images/door_out.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .goto_next, a .goto_login {
-	background:url('/assets/arrow_right.png') no-repeat 0px 0px;
+	background:url('/images/arrow_right.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .password {
-	background:url('/assets/password.png') no-repeat 0px 0px;
+	background:url('/images/password.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 
 a .survey_edit {
-	background:url('/assets/pen_green-24x.png') no-repeat 0px 2px;
+	background:url('/images/pen_green-24x.png') no-repeat 0px 2px;
 	padding-left: 30px;
 	padding-top: 1px;
 }
 
 a .survey_continue {
-	background:url('/assets/pen_green-32x.png') no-repeat 0px 2px;
+	background:url('/images/pen_green-32x.png') no-repeat 0px 2px;
 	padding-left: 40px;
 	padding-bottom: 4px;
 	padding-top: 0px;
 }
 
 a .survey_print {
-	background:url('/assets/printer-24x.png') no-repeat 0px 4px;
+	background:url('/images/printer-24x.png') no-repeat 0px 4px;
 	padding-left: 32px;
 	padding-bottom: 4px;
 	padding-top: 8px;
 }
 
 a .survey_save_draft {
-  background:url('/assets/disk.png') no-repeat 0px 0px;
+  background:url('/images/disk.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 
 a .status_answered {
-  background:url('/assets/status.png') no-repeat 0px 0px;
+  background:url('/images/status.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 
 a .status_unanswered {
-  background:url('/assets/status-busy.png') no-repeat 0px 0px;
+  background:url('/images/status-busy.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 
 a .status_draft {
-  background:url('/assets/status-away.png') no-repeat 0px 0px;
+  background:url('/images/status-away.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 
 a .status_all {
-  background:url('/assets/status-offline.png') no-repeat 0px 0px;
+  background:url('/images/status-offline.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 
@@ -1074,87 +1074,87 @@ input.large {
 }
 
 input.add {
-	background:url('/assets/add.png') no-repeat 10px 5px;
+	background:url('/images/add.png') no-repeat 10px 5px;
 }
 input.accept {
-	background:url('/assets/accept.png') no-repeat 10px 5px;
+	background:url('/images/accept.png') no-repeat 10px 5px;
 }
 input.deny {
-	background:url('/assets/stop.png') no-repeat 10px 5px;
+	background:url('/images/stop.png') no-repeat 10px 5px;
 }
 input.save {
-	background:url('/assets/disk.png') no-repeat 10px 5px;
+	background:url('/images/disk.png') no-repeat 10px 5px;
 }
 input.edit {
-	background:url('/assets/stop.disk') no-repeat 10px 5px;
+	background:url('/images/stop.disk') no-repeat 10px 5px;
 }
 input.user_add {
-	background:url('/assets/user_add.png') no-repeat 10px 5px;
+	background:url('/images/user_add.png') no-repeat 10px 5px;
 }
 input.user_edit {
-	background:url('/assets/user_edit.png') no-repeat 10px 5px;
+	background:url('/images/user_edit.png') no-repeat 10px 5px;
 }
 input.center_add {
-	background:url('/assets/accept.png') no-repeat 10px 5px;
+	background:url('/images/accept.png') no-repeat 10px 5px;
 }
 input.center_edit {
-	background:url('/assets/accept.png') no-repeat 10px 5px;
+	background:url('/images/accept.png') no-repeat 10px 5px;
 }
 input.team_add {
-	background:url('/assets/accept.png') no-repeat 10px 5px;
+	background:url('/images/accept.png') no-repeat 10px 5px;
 }
 input.team_edit {
-	background:url('/assets/edit.png') no-repeat 10px 5px;
+	background:url('/images/edit.png') no-repeat 10px 5px;
 }
 input.journal_add {
-	background:url('/assets/journal_add.png') no-repeat 10px 5px;
+	background:url('/images/journal_add.png') no-repeat 10px 5px;
 }
 input.journal_edit {
-	background:url('/assets/journal_edit.png') no-repeat 10px 5px;
+	background:url('/images/journal_edit.png') no-repeat 10px 5px;
 }
 input.journal_delete {
-	background:url('/assets/journal_delete.png') no-repeat 10px 5px;
+	background:url('/images/journal_delete.png') no-repeat 10px 5px;
 }
 input.journal_move {
-	background:url('/assets/journal_move.png') no-repeat 10px 5px;
+	background:url('/images/journal_move.png') no-repeat 10px 5px;
 }
 
 input.survey_add {
-	background:url('/assets/table_add.png') no-repeat 10px 5px;
+	background:url('/images/table_add.png') no-repeat 10px 5px;
 }
 input.survey_remove {
-	background:url('/assets/table_delete.png') no-repeat 10px 5px;
+	background:url('/images/table_delete.png') no-repeat 10px 5px;
 }
 
 input.score_calculate {
-	background:url('/assets/table.png') no-repeat 10px 5px;
+	background:url('/images/table.png') no-repeat 10px 5px;
 }
 input.score_calculate.large {
-	background:url('/assets/patient_data_x32.png') no-repeat 50% 2px;
+	background:url('/images/patient_data_x32.png') no-repeat 50% 2px;
 }
 input.subscribe {
-	background:url('/assets/table_add.png') no-repeat 10px 5px;
+	background:url('/images/table_add.png') no-repeat 10px 5px;
 }
 input.download {
-	background:url('/assets/disk_download.png') no-repeat 10px 5px;
+	background:url('/images/disk_download.png') no-repeat 10px 5px;
 }
 input.download.busy {
-	background:url('/assets/spinner.gif') no-repeat 10px 5px;
+	background:url('/images/spinner.gif') no-repeat 10px 5px;
 }
 input.download_excel {
-	background:url('/assets/page_excel.png') no-repeat 10px 5px;
+	background:url('/images/page_excel.png') no-repeat 10px 5px;
 }
 input.login {
-	background:url('/assets/door_in.png') no-repeat 10px 5px;
+	background:url('/images/door_in.png') no-repeat 10px 5px;
 }
 input.logout {
-	background:url('/assets/door_out.png') no-repeat 10px 5px;
+	background:url('/images/door_out.png') no-repeat 10px 5px;
 }
 input.password_mail {
-	background:url('/assets/email_go.png') no-repeat 10px 5px;
+	background:url('/images/email_go.png') no-repeat 10px 5px;
 }
 input.letter {
-	background:url('/assets/letter.png') no-repeat 10px 5px;
+	background:url('/images/letter.png') no-repeat 10px 5px;
 }
 
 .mini {
@@ -1237,16 +1237,16 @@ a:active.bigbutton {
 	padding-left: 31px;
 }
 .bigbutton .move_journals {
-	background: url("/assets/document_move_24.png") 0px 0px no-repeat;
+	background: url("/images/document_move_24.png") 0px 0px no-repeat;
 }
 .bigbutton .reminders {
-	background: url("/assets/traffic-light_24.png") 0px 0px no-repeat;
+	background: url("/images/traffic-light_24.png") 0px 0px no-repeat;
 }
 .bigbutton .lettermix {
-	background: url("/assets/documents_email_24.png") 0px 0px no-repeat;
+	background: url("/images/documents_email_24.png") 0px 0px no-repeat;
 }
 .bigbutton .export_logins {
-	background: url("/assets/page_excel.png") 0px 0px no-repeat;
+	background: url("/images/page_excel.png") 0px 0px no-repeat;
 }
 
 .button {

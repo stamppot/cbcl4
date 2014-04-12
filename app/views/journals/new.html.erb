@@ -39,22 +39,27 @@
 </dl>
 
 <script type="text/javascript">
-Event.observe(window, 'load', function() {
-  var code = $("journal_code").value;
-  var hasCode = code != "";
-  if(!hasCode) {
-  	var selectedGroup = $$(".group_center").find(function(radio) { return radio.checked; }).value;
-	  new Ajax.Updater('group_code', '/centers/next_journal_code',
-	   {asynchronous:true, evalScripts:true, parameters:'id=' + selectedGroup});
-  }
+  $(document).ready( function () {
+    $.ajaxSetup({dataType: 'json'});
+
+    var code = $("#journal_code").val();
+    var hasCode = code != "";
+    if(!hasCode) {
+      var selectedGroup = $("input[name='journal[group]']:checked").val();
+      $.getJSON('/centers/next_journal_code/' + selectedGroup, function(response) {
+          $('#journal_code').val( response ).pulse();
+      });
+    }
+    
+    $(".journal_center").each(function() {
+      $(this).click(function() {
+        $.getJSON('/centers/next_journal_code/' + $(this).val(), function(response) {
+            $('#journal_code').val( response ).pulse();
+        });
+      });
+    });
+    $('#journal_code').focus();
   });
-$$(".group_center").each(function(center){
-	center.observe('click', function(){
-		new Ajax.Updater('group_code', '/centers/next_journal_code',
-		{asynchronous:true, evalScripts:true, parameters:'id=' + center.value});
-	});
-});
-$('group_code').focus();
 </script>
 
 <% else %>

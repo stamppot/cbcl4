@@ -1,3 +1,37 @@
+$.fn.pulse = function(options) {
+
+    var options = $.extend({
+        times: 3,
+        duration: 250
+    }, options);
+
+    var period = function(callback) {
+        $(this).animate({opacity: 0}, options.duration, function() {
+            $(this).animate({opacity: 1}, options.duration, callback);
+        });
+    };
+    return this.each(function() {
+        var i = +options.times, self = this,
+        repeat = function() { --i && period.call(self, repeat) };
+        period.call(this, repeat);
+    });
+};
+
+$.fn.highlight = function() {
+   $(this).each(function() {
+        var el = $(this);
+        el.before("<div/>")
+        el.prev()
+            .width(el.width())
+            .height(el.height())
+            .css({
+                "position": "absolute",
+                "background-color": "#ffff99",
+                "opacity": ".9"   
+            })
+            .fadeOut(500);
+    });
+}
   $.setAjaxPagination = function(update_id) {
     return $('.pagination a').click(function(event) {
       $('.pagination a').off('click');

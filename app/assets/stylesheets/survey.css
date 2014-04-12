@@ -63,7 +63,7 @@ height:49px; /* the correct height */
 	margin-bottom: 4px;
 	height: 18pt;
 	font-size: 18pt;
-  color: black;*/
+  color: black;
 /*  border: 0px solid red;*/
 	padding: 5px;
 	padding-right: 0;
@@ -274,7 +274,7 @@ td.rating3 .radio {
 /*  display: inline;
   padding-left: 24px;   /*7%; */
 /*  padding-right: 24px;  *//*7%; */
-*/}
+}
 td.rating3 .radiolabel {
   display: inline;
 }
@@ -666,12 +666,12 @@ td.description7lab4 {
 	display: inline;
 }
 
-.itemtextbox { /* tekst med beskrivboks efter */
-/*  display: inline;*/
+.itemtextbox { 
+  /* tekst med beskrivboks efter */
 }
 
-.listitemtext {  /* without predefined text */
-/*  width: 250px;/*175px;*/*/
+.listitemtext { 
+  /* without predefined text */
 }
 
 .listitemcomment {
@@ -681,8 +681,8 @@ td.description7lab4 {
   display: inline;
 }
 
-.itemlistitem2 {  /* with predefined text */
-/*  display: inline; */
+.itemlistitem2 { 
+ /* with predefined text */
   width: 220px;
 }
 
@@ -844,7 +844,7 @@ input.validation-maybe, textarea.validation-maybe {
 .survey_color_box {
 	padding: 0 10 0 10;
 	margin-right: 4px;
-*/	display: inline;
+	display: inline;
 }
 
 
@@ -902,7 +902,7 @@ input.validation-maybe, textarea.validation-maybe {
 	padding: 6px 15px 6px 15px;
 }
 a .send_survey {
-	background:url('/assets/spinner.gif') no-repeat 0px 0px;
+	background:url('/images/spinner.gif') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 

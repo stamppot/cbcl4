@@ -52,7 +52,7 @@
 			<div class="searchbox">
 				<label for="search_users"><font size="1"><b><%= t('menu.search_users') %></b></font></label><br>
 				<%= text_field_tag :search_users, "", { :size => 10, :class => 'search', :placeholder => 'Søg bruger' } %>
-				<img alt="spinner" id="user_spinner" src="/assets/spinner.gif" style="display:none;" >
+				<%= image_tag 'spinner.gif', :alt => 'Venter...', :id => 'filter_spinner', :style => 'display:none;' %>
 			</div>
 		<% end %>
 		
@@ -98,8 +98,8 @@
 			<div class="searchbox">
 				<label for="search_journals"><font size="1"><b><%= t('menu.search_journals') %></b></font></label><br>
 				<%= text_field_tag :search_journals, "", { :size => 10, :class => 'search', :placeholder => 'Søg journal' } %>
-				<img alt="spinner" id="journal_spinner" src="/assets/spinner.gif" style="display:none;" >
-				<img alt="help" id="journal_help" onclick="javascript:search_help();" src="/assets/help_comment.png" >
+				<%= image_tag 'spinner.gif', :alt => "spinner", :id => "journal_spinner", :style => "display:none;" %>
+				<%= image_tag 'help_comment.png', :alt => "help", :id => "journal_help", :onclick => "javascript:search_help();" %>
 				<span id="search_help" style="display:none;" onclick="javascript:hide_search_help();">
 					Søg på navn, fødselsdato eller journalkode.<br/>
 					<br/>

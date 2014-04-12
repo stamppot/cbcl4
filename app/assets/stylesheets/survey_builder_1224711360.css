@@ -137,7 +137,7 @@ a img.icon:hover {background: #dddddd}
 .options > a.action {font-size: x-small; color: red; margin-right: 0.8em}
 .properties {border: 1px solid lightblue; font-size: 11px}
 .help_tip {white-space: nowrap; padding: 5px; font-size: x-small; border: 1px solid #0C0; float: center}
-.survey_color_box {padding: 0 10 0 10; margin-right: 4px; */ display: inline}
+.survey_color_box {padding: 0 10 0 10; margin-right: 4px; display: inline}
 .offstate-a, .offstate-b, .offstate-c, .offstate-d, .offstate-e, .offstate-f, .offstate-g, .offstate-h, .offstate-j, .offstate-i, .offstate-k, .offstate-l, .offstate-m, .offstate-n, .offstate-o, .offstate-p, .offstate-q, .offstate-r, .offstate-s, .offstate-t, .offstate-u, .offstate-v, .offstate-w, .offstate-x, .offstate-z {display: none}
 .onstate-a, .onstate-b, .onstate-c, .onstate-d, .onstate-e, .onstate-f, .onstate-g, .onstate-h, .onstate-j, .onstate-i, .onstate-k, .onstate-l, .onstate-m, .onstate-n, .onstate-o, .onstate-p, .onstate-q, .onstate-r, .onstate-s, .onstate-t, .onstate-u, .onstate-v, .onstate-w, .onstate-x, .onstate-z {display: normal}
 .switch-a, .switch-b, .switch-c, .switch-d, .switch-e, .switch-f {display: normal}
