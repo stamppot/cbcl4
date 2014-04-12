@@ -1,4 +1,4 @@
-require 'fastercsv'
+require 'csv'
 # require 'facets/dictionary'
 
 class CsvExportHelper
@@ -20,7 +20,7 @@ class CsvExportHelper
       rows
     end
 
-    output = FasterCSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'u') do |csv_output|
+    output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
       csv_output << header
       csv_rows.each { |line| csv_output << line }
     end
@@ -36,7 +36,7 @@ class CsvExportHelper
       rows
     end
 
-    output = FasterCSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'u') do |csv_output|
+    output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
       csv_output << header
       csv_rows.each { |line| csv_output << line }
     end

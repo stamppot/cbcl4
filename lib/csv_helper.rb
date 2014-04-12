@@ -1,4 +1,4 @@
-require 'fastercsv'
+require 'csv'
 # require 'facets/dictionary'
 
 class CSVHelper
@@ -46,7 +46,7 @@ class CSVHelper
     result.each_hash do |c|
       puts "c: #{c.inspect}"
       values = SurveyAnswer.and_answer_cells.find(c["id"]).to_csv
-      answer = FasterCSV.generate_line(values, :col_sep => col_sep, :row_sep => :auto).gsub!(/\n$/,'').chomp
+      answer = CSV.generate_line(values, :col_sep => col_sep, :row_sep => :auto).gsub!(/\n$/,'').chomp
       csv_answers[c["id"]] = [c['id'], c['survey_id'], c['journal_entry_id'], c['journal_id'], c['age'], c['sex'], answer]
     end
     return csv_answers
@@ -234,7 +234,7 @@ class CSVHelper
   end
 
   def to_csv(rows, separator = ";")
-    csv = FasterCSV.generate(:col_sep => separator, :row_sep => :auto) do |csv|
+    csv = CSV.generate(:col_sep => separator, :row_sep => :auto) do |csv|
       headers = rows.shift
       csv << headers
       rows.each { |row| csv << row }

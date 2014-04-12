@@ -8,7 +8,7 @@ module Excelinator
   end
 
   def self.csv_to_xls(csv_content)
-    ary = FasterCSV.parse(csv_content)
+    ary = CSV.parse(csv_content)
     book = Spreadsheet::Workbook.new
     sheet = book.create_worksheet
     ary.each_with_index do |row_ary, index|

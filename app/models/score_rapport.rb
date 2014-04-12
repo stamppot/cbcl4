@@ -18,7 +18,7 @@ class ScoreRapport < ActiveRecord::Base
 
   def to_csv(csv_survey_answers, survey_id)
     csv_survey_answers.first.variables
-    output = FasterCSV.generate(:col_sep => ";", :row_sep => :auto) do |csv_output|
+    output = CSV.generate(:col_sep => ";", :row_sep => :auto) do |csv_output|
       csv_output << (headers + survey_headers_flat(survey_ids).keys)  # header
       rows.each { |line| csv_output << line.gsub(/^\"|\"$/, "").split(";;") }
     end

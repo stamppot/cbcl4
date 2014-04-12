@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'fastercsv'
+require 'csv'
 
 class ImportJournals # AddJournalsFromCsv
 
@@ -18,7 +18,7 @@ class ImportJournals # AddJournalsFromCsv
 		group = Group.find(team_id)
 		center = group.center
 
-		FasterCSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
 			puts "Row: #{row}"
 			next if row.blank?
 

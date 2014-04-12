@@ -53,7 +53,7 @@ gem 'spawnling', :git => 'git://github.com/tra/spawnling'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'fastercsv'
+# gem 'fastercsv'
 
 gem 'iconv'
 

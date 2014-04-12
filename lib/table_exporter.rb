@@ -1,4 +1,4 @@
-require 'fastercsv'
+require 'csv'
 require 'to_xls'
 # require 'to_xls/writer.rb'
 require 'axlsx'
@@ -8,7 +8,7 @@ class TableExporter
   # include Axlsx::Ar
 
   def to_csv(rows, separator = ";")
-    csv = FasterCSV.generate(:col_sep => separator, :row_sep => :auto) do |csv|
+    csv = CSV.generate(:col_sep => separator, :row_sep => :auto) do |csv|
       headers = rows.shift
       csv << headers
       rows.each { |row| csv << row }
