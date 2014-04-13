@@ -198,12 +198,12 @@ Cbcl4::Application.routes.draw do
   get 'subscriptions/deactivate/(/:id)', :to => 'subscriptions#deactivate', :as => 'subscription_deactivate'
   get 'subscriptions/set_subscription_note/(/:id)', :to => 'subscriptions#set_subscription_note', :as => 'set_subscription_note'
   
-  get 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download'
+  match 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download', :via => [:get, :post]
   get 'exports/set_age_range/(/:id)', :to => 'exports#set_age_range', :as => 'set_age_range'
   get 'exports/filter/(/:id)', :to => 'exports#filter', :as => 'export_filter'
   get 'exports/generating_export/(/:id)', :to => 'exports#generating_export', :as => 'generating'
 
-  get 'score_exports/download/(/:id)', :to => 'score_exports#download', :as => 'csv_score_rapport_download'
+  match 'score_exports/download/(/:id)', :to => 'score_exports#download', :as => 'csv_score_rapport_download', :via => [:get, :post]
   # get 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download'
 
   # get 'reminders/download/(/:id)', :to => 'reminders#download', :as => 'download'
@@ -211,7 +211,7 @@ Cbcl4::Application.routes.draw do
   get 'reminders/show/(:id)/(:state)', :to => 'reminders#show', :as => 'answer_status'
   get 'export_files/show/(/:id)', :to => 'export_files#show', :as => 'export_login'
   get 'export_files/download/(/:id)', :to => 'export_files#download', :as => 'file_download'
-  get 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv'
+  match 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv', :via => [:get, :post]
 
   # get 'faqs/new/(/:id)', :to => 'faqs#new', :as => 'new_faq'
   get 'faqs/answer/(/:id)', :to => 'faqs#answer', :as => 'faq_answer'

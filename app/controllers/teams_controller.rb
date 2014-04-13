@@ -201,8 +201,8 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
         # @teams = Team.all(:conditions => ['parent_id = ?', params[:id]], :order => "title")
         # render :json => @teams
         @group = Center.find params[:id]
-        @teams = @group.teams
-        render :partial => 'teams/center' 
+        @teams = [] + @group.teams
+        render :text => @teams.to_json # :partial => 'teams/center' 
       }
       format.html { 
         @group = Center.find params[:id]

@@ -35,6 +35,7 @@
 				dataType: 'json',
 				success: function(data) {
 					$('#team_selector').find('option').remove().end()
+					$('#team_selector').append($("<option>").attr('value', 'team').text('Vælg evt. et team'));
 					$(data).each(function() {
 						$('#team_selector').append($("<option>").attr('value',this.id).text(this.title));
 					});
@@ -44,7 +45,7 @@
 		});
 	</script>
 	<h3>Center</h3>
-	<%= select('center', "", current_user.centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
+	<%= select('center', "", @centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
 	<br/>
 	<div>
 		<br/>
@@ -90,10 +91,11 @@
 		function filter_button() {
 			var url = '/exports/filter/' + $('#center_selector').val()
 			var team = $('#team_selector').val();
+			var args = $('#export_form').serialize('filter_fields');
 			if((typeof team) !== 'undefined')
-				url += '&team=' + $('#team_selector').val();
-			$.get(url, $('#export_form').serialize('filter_fields'), function(data) {
-				$('#result').html(data.text).fadeIn();
+				args += '&team=' + $('#team_selector').val();
+			$.get(url, args, function(data) {
+				$('#results').html(data.text).fadeIn().pulse();
 			});
 		};
 	</script>

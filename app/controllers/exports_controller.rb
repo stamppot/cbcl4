@@ -27,23 +27,27 @@ class ExportsController < ApplicationController
     
     # clean params
     params.delete(:action); params.delete(:controller); params.delete(:limit); params.delete(:offset)
-  
-    @centers = Center.all(:order => 'title', :include => :teams)    
+
+    @centers = current_user.centers.sort_by {|c| c.title }
     @count_survey_answers = SurveyAnswer.filter_finished_count(current_user, params.merge({:surveys => filter_surveys}))
   end
   
   def filter
-    params[:center] = params[:id].first.to_i
+    params[:center] = params[:id].to_i
     center = Center.find params[:id] unless params[:id].blank?
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)
-    puts "params: #{params.inspect}"
     params = FilterArgs.filter_age(params)
-    puts "params: #{params.inspect}"
     # params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
-    journals = center && center.journals.count || Journal.count
+    journals = if params[:team] && !["null", "team", ""].include?(params[:team])
+      team = Team.find params[:team]
+      journals = team.journals.count
+    else
+      params.delete :team
+      center && center.journals.count || Journal.count
+    end
 
     count_survey_answers = CsvSurveyAnswer.with_options(current_user, params).count
 
@@ -55,7 +59,7 @@ class ExportsController < ApplicationController
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)
-    params = Query.filter_age(params)
+    params = FilterArgs.filter_age(params)
     params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
     csv_survey_answers = CsvSurveyAnswer.with_options(current_user, params).all
