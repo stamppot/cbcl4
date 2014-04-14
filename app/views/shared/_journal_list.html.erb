@@ -10,7 +10,7 @@ Der er ikke oprettet journaler.
 		<% unless @hide_team %>
 		<th class="half_wide" title="Sorter efter team"><%= any_teams_text %></th>
 		<% end %>
-		<th class="nosort"><%= t('action') %></th>
+		<!--<th class="nosort"><%= t('action') %></th> -->
 	</tr>
 
 	<% @journals.each do |g| %>
@@ -22,12 +22,13 @@ Der er ikke oprettet journaler.
 		<% unless @hide_team %>
 		<td class="pj" style="text-align: left;"><%= @hide_team %> <%= g.group && g.group.get_name || "" %></td>
 		<% end %>
+
+		<!--		
 		<td class="pj">
 			<a title="Rediger Journal" href="/journals/<%= g.id %>/edit"><%= image_tag 'journal_edit.png', :border => 0, :title => "Rediger Journal", :class => "icon" %></a>
 			<a title="Slet Journal" href="/journals/delete/<%= g.id %>"><%= image_tag 'journal_delete.png', :border => 0, :title => "Slet Journal", :class => "icon" %></a>
-			<%# link_to_icon 'journal_edit.png', edit_journal_url(g), :title => t('journal.edit') %>
-			<%# link_to_icon 'journal_delete.png', delete_journal_url(g), :title => t('journal.delete') %>      
 		</td>
+		-->
 	</tr>
 	<% end %>
 </table>

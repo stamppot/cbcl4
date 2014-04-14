@@ -132,6 +132,7 @@
 	<div class="commands">
 		<%= link_button t('edit'), edit_journal_path(@journal), 'journal_edit', :title => t('edit') %>
 		<%= back_button journals_path %>
+		<%= link_button t('delete'), delete_journal_path(@journal), 'journal_delete', :title => "Slet Journal" %>
 	</div>
 	
 	<script type="text/javascript">

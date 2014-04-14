@@ -155,7 +155,7 @@ Cbcl4::Application.routes.draw do
   match 'journals/search/(/:search_journals)', :to => 'journals#search', :as => 'journal_search', :via => [:get, :post]
   # get 'journals/new/(/:id)', :to => 'journals#new', :as => 'new_journal'
   get '/journals/delete/(/:id)', :to => 'journals#delete', :as => 'delete_journal'
-  get '/journals/destroy/(/:id)', :to => 'journals#destroy', :as => 'destroy_journal'
+  match '/journals/destroy/(/:id)', :to => 'journals#destroy', :as => 'destroy_journal', :via => [:delete]
   match '/journals/add_survey/(/:id)', :to => 'journals#add_survey', :as => 'journal_add_survey', :via => [:get, :post]
   match '/journals/remove_survey/(/:id)', :to => 'journals#remove_survey', :as => 'journal_remove_survey', :via => [:get, :post]
 
