@@ -5,7 +5,17 @@
 
 <script type="text/javascript">
     generating_export = true;
+
+	$(document).ready(function() {
+    	setInterval(function() {
+	      $.get('/exports/generating_export/' + <%= @task.id %>, function(response) {
+	      	if(response.completed)
+	      		location.href = response.export_file_path
+	      });
+   		}, 5000);
+    });
 </script>
 
-<%= periodically_call_remote(:url => {:action => :generating_export, :id => @task},
+
+<%# periodically_call_remote(:url => {:action => :generating_export, :id => @task},
      :frequency => 5.0, :condition => "generating_export == true" ) -%>

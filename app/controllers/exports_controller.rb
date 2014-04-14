@@ -55,12 +55,14 @@ class ExportsController < ApplicationController
   end
 
   def download
+    params[:center] = params[:center].first
     center = Center.find params[:center] unless params[:center].blank?
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)
     params = FilterArgs.filter_age(params)
-    params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
+    params.delete :team if ["null", "team", ""].include?(params[:team])
+    # params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
     csv_survey_answers = CsvSurveyAnswer.with_options(current_user, params).all
 
@@ -71,20 +73,22 @@ class ExportsController < ApplicationController
   # a periodic updater checks the progress of the export data generation 
   def generating_export
     @task = Task.find(params[:id])
-    
+    @completed = @task.completed?
+    @export_file = @task.completed? && "/export_files/#{@task.export_file.id}" || ""
+
     respond_to do |format|
       format.js {
         # puts "GENERATING JS"
-        render :update do |page|
-          if @task.completed?
-            page.visual_effect :blind_up, 'content'
-            page.redirect_to export_file_path(@task.export_file) # and return  #, :content_type => 'application/javascript'
-          else
-            page.insert_html :after, 'progress', '.'
-            page.visual_effect :pulsate, 'progress'
-            page.visual_effect :highlight, 'progress'
-          end
-        end
+        # render :update do |page|
+        #   if @task.completed?
+        #     page.visual_effect :blind_up, 'content'
+        #     page.redirect_to export_file_path(@task.export_file) # and return  #, :content_type => 'application/javascript'
+        #   else
+        #     page.insert_html :after, 'progress', '.'
+        #     page.visual_effect :pulsate, 'progress'
+        #     page.visual_effect :highlight, 'progress'
+        #   end
+        # end
       }
       format.html do
         # puts "GENERATING HTML"

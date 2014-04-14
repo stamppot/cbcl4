@@ -68,7 +68,7 @@ Cbcl4::Application.routes.draw do
   resources :code_books
   resources :export_files
   resources :exports
-  resources :journal_entries, :only => [:show, :edit]
+  resources :journal_entries, :only => [:show, :edit, :update]
   resources :journal_stats
   resources :journals
   resources :letters
@@ -129,7 +129,7 @@ Cbcl4::Application.routes.draw do
   post '/journal_entries/show/(/:id)', :to => 'journal_entries#show', :as => 'show_survey'
   # center
   get '/centers/delete/(/:id)', :to => 'centers#delete', :as => 'delete_center'
-  get '/centers/live_search/(/:id)', :to => 'centers#live_search', :as => 'center_search'
+  match '/centers/live_search/(/:id)', :to => 'centers#live_search', :as => 'center_search', :via => [:get, :post]
   get 'subscriptions/new/(/:id)', :to => 'subscriptions#new', :as => 'new_subscription_in_group'
   get 'subscriptions/new_period/(/:id)', :to => 'centers#new_subscription_period', :as => 'subscriptions_new_period'
   get 'subscriptions/undo_new_period/(/:id)', :to => 'centers#undo_new_subscription_period', :as => 'subscriptions_undo_last_period'
@@ -152,12 +152,12 @@ Cbcl4::Application.routes.draw do
 
   get '/journals/move_journal_to_group/(:id)', :to => 'journals#select_group', :as => 'move_journal_to_group'
   put '/journals/move_journal/(:id)', :to => 'journals#move', :as => 'move_journal'
-  get 'journals/search/(/:name)', :to => 'journals#search', :as => 'journal_search'
+  match 'journals/search/(/:search_journals)', :to => 'journals#search', :as => 'journal_search', :via => [:get, :post]
   # get 'journals/new/(/:id)', :to => 'journals#new', :as => 'new_journal'
   get '/journals/delete/(/:id)', :to => 'journals#delete', :as => 'delete_journal'
   get '/journals/destroy/(/:id)', :to => 'journals#destroy', :as => 'destroy_journal'
   match '/journals/add_survey/(/:id)', :to => 'journals#add_survey', :as => 'journal_add_survey', :via => [:get, :post]
-  get '/journals/remove_survey/(/:id)', :to => 'journals#remove_survey', :as => 'journal_remove_survey'
+  match '/journals/remove_survey/(/:id)', :to => 'journals#remove_survey', :as => 'journal_remove_survey', :via => [:get, :post]
 
   # journal entries
   get 'journal_entries/show_answer/(/:id)', :to => 'journal_entries#show_answer', :as => 'entry_show_answer'

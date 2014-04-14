@@ -42,7 +42,10 @@ gem 'actionpack-page_caching'
 gem 'dalli'
 # gem 'memcache-client'
 
-gem 'spawnling', :git => 'git://github.com/tra/spawnling'
+# gem 'rails-observers'
+
+# gem "spawn", :git => 'git://github.com/rfc2822/spawn'
+# gem 'spawnling', :git => 'git://github.com/tra/spawnling'
 # gem 'debugger'
 
 # gem 'handlebars_assets'

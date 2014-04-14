@@ -1,8 +1,11 @@
 class Task < ActiveRecord::Base
   belongs_to :export_file
 
+  attr_accessible :status
+
   def create_survey_answer_export(survey_id, survey_answers)
-    Spawnling.new(:method => :thread) do
+    # Spawnling.new(:method => :fork) do
+    # spawn_block do
       logger.info "EXPORT create_survey_answer_export: survey: #{survey_id} #{survey_answers.size}"
       data = ExportAnswersHelper.new.export_survey_answers(survey_answers, survey_id)  # TODO: add csv generation on save_answer & change_answer
       logger.info "create_survey_answer_export: created data survey: #{survey_id} #{survey_answers.size}"
@@ -13,9 +16,11 @@ class Task < ActiveRecord::Base
         :content_type => "application/vnd.ms-excel")
 
       self.status = "Completed"
+      logger.info "EXPORT set status completed"
       self.save
+      logger.info "EXPORT saved status"
       # logger.info "create_survey_answer_export: finished!  survey: #{survey_id} #{survey_answers.size}"
-    end
+    # end
   end
 
   def create_score_rapports_export(survey_id, csv_score_rapports)

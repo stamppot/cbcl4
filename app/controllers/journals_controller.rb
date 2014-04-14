@@ -181,7 +181,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @group = Journal.find(params[:id], :include => :journal_entries)  # 
     
     if request.post?
-      entries = params[:entry].params[:survey].select { |k,v| v.to_i == 1 }.map &:first
+      entries = params[:entry].select { |k,v| v.to_i == 1 }.map &:first
       entries = JournalEntry.find(entries, :include => [:login_user, :survey_answer])
       entries.each { |entry| entry.destroy } # deletes user and survey_answer too
 
@@ -197,16 +197,17 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def search
-    raw_phrase = params[:name]
+    raw_phrase = params[:search_journals] || params[:name]
+    logger.info "raw_phrase: #{raw_phrase}"
     phrase = raw_phrase.sub(/\=$/, "").sub(/%20/, " ")
     # cpr.nr. søgning. Reverse
     logger.info "includes ø: " + phrase if phrase.include? "Ã¸"
     logger.info "includes ø: " + phrase if phrase.include? "ø"
 
     phrase = phrase.gsub("Ã¸","ø")
-
     phrase = phrase.split("-").join if phrase =~ /\d+-\d+-\d+/
     # phrase = phrase.split("-").reverse.join if phrase.to_i > 0
+    logger.info "phrase: #{phrase}"
 
     @journals = Journal.search_journals(current_user, phrase)
 
