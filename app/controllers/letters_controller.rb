@@ -17,7 +17,7 @@ class LettersController < ApplicationController
     @survey = Survey.find_by_surveytype(params[:survey][:surveytype]) if params[:survey]
     @follow_ups = JournalEntry.follow_ups
     
-    @letters = Letter.all(:conditions => 'group_id is null') + @letters if current_user.admin?
+    @letters = Letter.where('group_id is null').to_a + @letters if current_user.admin?
     @letters = Letter.all if params[:all]
   end
 

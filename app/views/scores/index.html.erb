@@ -10,15 +10,16 @@
   
 <% for score in @scores %>
   <tr>
-    <td><%=h score.title %></td>
+    <td><%= link_to score.title, score_path(score) %></td>
     <td><%=h score.short_name %> <%= score.survey.age %></td>
 		<td><%=h (score.score_scale && score.score_scale.title || "") %></td>
 <!--	<td> output = score.calculation.gsub(/\r/, "</br>") </td> -->
 
 	
-    <td><%= link_to t('show'), score_path(score) %>&nbsp;
-    <%= link_to t('edit'), edit_score_path(score) %>&nbsp;
-    <%= link_to t('delete'), score_path(score), :confirm => 'Er du sikker?', :method => :delete %></td>
+    <td>
+      <%= link_to t('edit'), edit_score_path(score) %>&nbsp;
+      <%= link_to t('delete'), score_path(score), :confirm => 'Er du sikker?', :method => :delete %>
+    </td>
   </tr>
 <% end %>
 </table>

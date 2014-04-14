@@ -29,6 +29,6 @@ Cbcl4::Application.configure do
   config.assets.debug = true
 
   config.assets.compile = true  
-  config.assets.precompile = ['*.js', '*.css', '*.css.erb']
+  config.assets.precompile = ['*.js', '*.css', '*.css.erb'] + %w(*.png *.jpg *.jpeg *.gif)
 
 end
