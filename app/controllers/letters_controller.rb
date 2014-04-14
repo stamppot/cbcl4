@@ -5,12 +5,14 @@ class LettersController < ApplicationController
   
   def index
     if current_user.admin?  # vis ikke alle breve til admin, kun i dennes center
-      @groups =       current_user.assigned_centers_and_teams # [current_user.centers.first] + current_user.centers.first.children.inject([]) { |col, team| col << team if team.instance_of?(Team); col }
+      @groups = current_user.assigned_centers_and_teams # [current_user.centers.first] + current_user.centers.first.children.inject([]) { |col, team| col << team if team.instance_of?(Team); col }
     else
       @groups = current_user.center_and_teams
     end
+    puts "groups: #{@groups.inspect}"
     params[:center_id] = current_user.center_id || 1
     params[:group].delete :id if params[:group] && params[:group][:id].blank?
+    logger.info "params: #{params.inspect}"
     @letters = Letter.filter(params)
     @group = Group.find(params[:group][:id]) if params[:group] && !params[:group][:id].blank?
     @surveys = Survey.find([2,3,4,5])

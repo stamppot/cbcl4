@@ -17,12 +17,13 @@ class User < ActiveRecord::Base
     # def teams
     #   self.select { |g| g.is_a?(Team) }
     # end
-    def centers
-      self.select { |g| g.is_a?(Center) }
-    end
   end
-          
-          # users have a n:m relation to roles
+  
+  def centers
+    self.groups.to_a.select {|g| g.is_a?(Center)}  #groups.to_a.select {|g| g.is_a?(Center) }
+  end
+
+   # users have a n:m relation to roles
   has_and_belongs_to_many :roles #, -> { where uniq: true }
 
   attr_accessible :login, :name, :email, :sex
@@ -238,6 +239,7 @@ class User < ActiveRecord::Base
   end
   
   def assigned_centers_and_teams
+    # vis ikke alle breve til admin, kun i dennes center
     if(self.has_access?(:admin))
       c = Center.find(1)
       groups = [c] + c.teams
@@ -250,8 +252,8 @@ class User < ActiveRecord::Base
     if self.id == 1
       center_and_teams
     elsif(self.has_access?(:admin))
-      centers = self.groups.select {|g| g.is_a?(Center)}
-      centers += centers.map {|c| c.teams}.flatten
+      centers = self.groups.to_a #.select {|g| g.is_a?(Center)}
+      # centers += centers.map {|c| c.teams}.flatten
     else
       center_and_teams
     end
@@ -261,14 +263,13 @@ class User < ActiveRecord::Base
     if(self.has_access?(:admin))
       # puts "CENTER_AND_TEAMS: admin"
       # Group.center_and_teams
-      [centers.first] + centers.first.teams
+      self.groups # [centers.first] + centers.first.teams
     else
-      puts "CENTER_AND_TEAMS: roles #{self.roles.map &:title}"
-
-      groups = self.centers
+      # puts "CENTER_AND_TEAMS: roles #{self.roles.map &:title}"
       puts "Centers: #{groups.inspect}"
-      groups.each {|c| groups += c.teams }
-      groups
+      # groups.each {|c| groups += c.teams }
+      # groups
+      groups = self.groups
     end
   end
     
