@@ -10,7 +10,8 @@
 		<br/>
 	<div class="summary_view" id="summary_view_<%= group_id %>">
 		<% if group.subscriptions.length > 0 %>
-			<%= render :partial => "shared/subscription_summary", :object => subscription_presenter.summary_view %>
+			<%= puts "-- #{subscription_presenter.summary_view.inspect}" %>
+			<%= render :partial => "shared/subscription_summary", :locals => { :summary_view => subscription_presenter.summary_view } %>
 		<% else %>
 			<h4><%= t('subscription.none') %></h4>
 		<% end %>

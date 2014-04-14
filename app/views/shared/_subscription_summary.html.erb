@@ -1,4 +1,4 @@
-<% @summaries = @subscription_presenter.summary_view[:periods] %>
+<% @summaries = summary_view[:periods] %>
 
 <% if @options %>
 	<% buttons = {"all" => "Alle", "active" => "Aktive", "paid" => "Betalte"} %>
@@ -52,6 +52,6 @@
 	<% end %>
 	<tr>
 		<td>Total:</td>
-		<td class="number"><%= @subscription_presenter.summary_view[:total_periods] %></td>
+		<td class="number"><%= summary_view[:total_periods] %></td>
 	</tr>
 </table>
