@@ -3,7 +3,7 @@ class ExportFilesController < ApplicationController
   #### list and download files ####
 
   def index
-    EXPORT_FILES_STORAGE_PATH =~ /(\/files)/
+    ExportFile.storage_path =~ /(\/files)/
     @file_path = $1 + "/"
 
     @files = ExportFile.all

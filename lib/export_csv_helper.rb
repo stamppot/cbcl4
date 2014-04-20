@@ -11,6 +11,8 @@ class ExportCsvHelper
   end
   
   def to_csv(rows, separator = ";")
+    return "" unless rows.any?
+    return rows.first.join(";") if rows.second.nil?
     csv = CSV.generate(:col_sep => separator, :row_sep => :auto, :encoding => 'utf-8') do |csv|
       first_row = rows.first
       is_array = first_row.is_a?(Array)
@@ -26,6 +28,8 @@ class ExportCsvHelper
   end
 
   def get_mail_merge_login_users_rows(journal_entries)
+    return [["email", "navn", "fornavn", "login", "password", "alt_id", "mor_navn"]] if !journal_entries.any?
+    puts "jaurnal_entries: #{journal_entries}"
     results = journal_entries.inject([]) do |results, entry|
       if entry.login_user && entry.not_answered?
         row = {
@@ -41,6 +45,7 @@ class ExportCsvHelper
       end
       results
     end
+    puts "results: #{results.class} \n #{results.inspect}"
     header = results.first.keys.map &:to_s
     results = results.map &:values
     results.unshift(header)

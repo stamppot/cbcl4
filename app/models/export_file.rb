@@ -2,7 +2,9 @@ class ExportFile < ActiveRecord::Base
 
   has_one :task
   
-  EXPORT_FILES_STORAGE_PATH = "#{Rails.root}/files"
+  def self.storage_path
+    "#{Rails.root}/files"
+  end
 
   # run write_file after save to db
   after_save :write_file
@@ -23,13 +25,13 @@ class ExportFile < ActiveRecord::Base
   # together with the file original extension
   def write_file
     if @file_data
-      File.open("#{EXPORT_FILES_STORAGE_PATH}/#{filename}", "w") { |file| file.write(@file_data) }
+      File.open("#{ExportFile.storage_path}/#{filename}", "w") { |file| file.write(@file_data) }
     end
   end
   
   # deletes the file(s) by removing the whole dir
   def delete_file
-    FileUtils.rm_rf("#{EXPORT_FILES_STORAGE_PATH}/#{filename}")
+    FileUtils.rm_rf("#{ExportFile.storage_path}/#{filename}")
   end
   
   # just gets the extension of uploaded file

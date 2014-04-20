@@ -7,20 +7,25 @@
     generating_export = true;
 
 	$(document).ready(function() {
-    	setInterval(function() {
-	      $.get('/exports/generating_export/' + <%= @task.id %>, function(response) {
-	      	if(response.completed)
-	      		$('#download_link').click(function() { location.href = response.export_file_path; return false; });
-	      		$('#progress').fadeOut();
+    	var loop = setInterval(function() {
+	      $.getJSON('/exports/generating_export/' + <%= @task.id %>, function(response) {
+	      	if(response.completed) {
+	      		console.log('Completed!');
+				var file_url = response.export_file_path;
+				var button = "<a id='download_link' style='display:none;' href='" + file_url + "' class='button'> " +
+					"<span class='download_excel_file'>Hent eksportfil</span>" +
+					"</a>";
+				console.log(button);
+	      		$('#progress').html(button);
 		      	$('#download_link').fadeIn();
+
+		      	clearInterval(loop);
+		      }
 	      });
    		}, 2000);
     });
 </script>
 
-<a id='download_link' href="/export_files/" class="button" style='display:none;'>
-	<span class="download_excel_file">Hent eksportfil</span>
-</a>
 	
 <%# periodically_call_remote(:url => {:action => :generating_export, :id => @task},
      :frequency => 5.0, :condition => "generating_export == true" ) -%>
