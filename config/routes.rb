@@ -116,7 +116,7 @@ Cbcl4::Application.routes.draw do
   # get '/login/shadow_logout', :to => 'login#shadow_logout', :as => 'shadow_logout'
 
   match "/logout" => "login#logout", :as => "logout", :via => [:get, :post]
-  match "login" => "login#login", :via => [:get, :post] #, :as => "login"
+  match "login" => "login#login", :as => "login", :via => [:get, :post]
   # get "signup" => "users#new", :as => "signup"
   get "/users/delete/(/:id)" => "users#delete", :as => "delete_user"
   # get "main" => "main#index", :as => "index"

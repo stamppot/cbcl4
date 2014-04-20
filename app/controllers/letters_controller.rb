@@ -51,7 +51,7 @@ class LettersController < ApplicationController
     @page_title = @letter.name
     @follow_ups = JournalEntry.follow_ups
 
-    if !current_user.center_and_teams.map(&:id).include?(@letter.group_id)
+    if !current_user.has_access?(:superadmin) || !current_user.center_and_teams.map(&:id).include?(@letter.group_id)
 	    flash[:notice] = "Kan ikke rette andres breve!" 
 	    redirect_to letters_path and return
     end

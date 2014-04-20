@@ -19,8 +19,12 @@ class User < ActiveRecord::Base
     # end
   end
   
-  def centers
-    self.groups.to_a.select {|g| g.is_a?(Center)}  #groups.to_a.select {|g| g.is_a?(Center) }
+  def centers(options = {})
+    if self.has_access? :superadmin
+      Center.all
+    else
+      Center.for_user(self.id).includes(options[:includes])
+    end
   end
 
    # users have a n:m relation to roles
@@ -29,9 +33,6 @@ class User < ActiveRecord::Base
   attr_accessible :login, :name, :email, :sex
   attr_accessible :password, :password_confirmation, :roles, :groups
 
-  # scope :centers, -> { groups.where('groups.type == ?', 'Center')}
-  # scope :teams, -> { groups.where('groups.type == ?', 'Team')}
-  
   validates_associated :center # center must be valid
   # validates_associated :roles
   # validates_presence_of :roles#, :message => "skal angives"
@@ -260,15 +261,9 @@ class User < ActiveRecord::Base
   end
 
   def center_and_teams
-    if(self.has_access?(:admin))
-      # puts "CENTER_AND_TEAMS: admin"
-      # Group.center_and_teams
-      self.groups # [centers.first] + centers.first.teams
+    if(self.has_access?(:superadmin))
+      Group.all
     else
-      # puts "CENTER_AND_TEAMS: roles #{self.roles.map &:title}"
-      puts "Centers: #{groups.inspect}"
-      # groups.each {|c| groups += c.teams }
-      # groups
       groups = self.groups
     end
   end
@@ -303,23 +298,6 @@ class User < ActiveRecord::Base
     else
       surveys = []
     end
-  end
-  
-  def centers(options = {})
-    options ||= {:include => :users}
-    centers =
-    if self.has_access?(:center_show_all)
-      Center.includes(:users).to_a #.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }    # filtrer teams fra
-    elsif self.has_access?(:center_show_admin)
-      self.groups.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }
-    elsif self.has_access?(:center_show_member)
-      [self.center] # self.all_groups.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }
-    elsif self.has_access?(:center_show_all)
-      self.all_groups.delete_if { |group| group.instance_of? Journal or group.instance_of? Team }
-    else
-      []
-    end
-    centers
   end
   
   # must reload from DB
@@ -382,12 +360,6 @@ class User < ActiveRecord::Base
     return journals
   end
 
-  # ids of center, teams
-  # def all_group_ids
-  #   group_ids = [center_id] + teams.map(&:id)
-  #   connection.execute("select id from journal_entries je where je.group_id in (#{group_ids.join(',')})")
-  # end
-
   def change_password!(password)
     self.update_password(params[:user][:password])
     self.state = 2
@@ -399,8 +371,17 @@ class User < ActiveRecord::Base
     group_ids = []
     group_ids += (center_id && [center_id] || centers.map(&:id))
     group_ids += teams.map(&:id)
-    result = connection.execute("select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}")
-    row = result.fetch_row
+
+    query = "select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}"
+    result = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
+      puts r.inspect
+      logger.info "has_journal_entry?: #{r.inspect}"
+      col
+    end
+
+
+    # result = connection.execute("select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}")
+    # row = result.fetch_row
     row.any? && row.first.to_i > 0
   end
 

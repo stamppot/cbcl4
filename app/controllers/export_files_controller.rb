@@ -18,7 +18,7 @@ class ExportFilesController < ApplicationController
     filename = @file.filename
     response.headers["Content-Type"] = @file.content_type
     
-    send_file(EXPORT_FILES_STORAGE_PATH + @file.filename, 
+    send_file('/files/' + @file.filename, 
     :disposition => 'attachment',
     :encoding => 'utf8', 
     :type => @file.content_type,

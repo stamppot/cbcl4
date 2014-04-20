@@ -11,7 +11,7 @@
 		<th class="half_wide" title="Sorter efter journal"><%= t('journal.journals') %></th>
 		<% end %>
 		<th title="Sorter efter oprettelsesdato"><%= t('status.created') %></th>
-		<% if current_user.access? :show_column_actions %>
+		<% if false && current_user.access?(:show_column_actions) %>
 		<th class="nosort"><%= t('action') %></th>
 		<% end %>
 	</tr>	
@@ -29,13 +29,11 @@
     <td style="text-align: right;"><%= @groups_count[group.id] %></td>
 		<% end %>
 		
-		<td><%= group.created_at.strftime("%d-%m-%Y") %></td>
-		<% if can_center_delete %>
+		<td style="text-align: right;"><%= group.created_at.strftime("%d-%m-%Y") %></td>
+		<% if false && can_center_delete %>
 		<td>
 			<a title="Rediger" href="/centers/<%= group.id %>/edit"><%= image_tag 'group_edit_24.png', :border => 0, :title => "Rediger center", :class => "icon" %></a>
 			<a title="Slet" href="/centers/delete/<%= group.id %>"><%= image_tag 'group_delete_24.png', :title => "Slet center", :class => "icon" %></a>
-			<%# link_to image_tag('group_edit_24.png', :border => 0, :class => 'icon', :title => 'Rediger center'), edit_center_path(group), :title => t('edit') -%>
-			<%# link_to image_tag('group_delete_24.png', :border => 0, :class => 'icon', :title => 'Slet center'), delete_center_path(group), :title => t('delete') -%>
 		</td>
 		<% end %>
 		<tr/>

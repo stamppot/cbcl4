@@ -45,14 +45,16 @@
 		});
 	</script>
 	<h3>Center</h3>
-	<%= select('center', "", @centers.map{|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
+	<select id='center_selector' name='center[]'>
+	<%= options_for_select @centers.map {|c| [c.title, c.id]}, {:include_blank => true} %>
+	<%# select('center', :id, @centers.map {|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
+	</select>
 	<br/>
 	<div>
 		<br/>
 		<select name="team" id="team_selector" style="display:none;"></select>
 	</div>
 <% else %>
-	TODO: user with one center
 	<% if @center.teams.any? %>
 			<div id="teams">
 				<h2>Team</h2>
@@ -89,7 +91,7 @@
 <span style="padding: 3px;" id='send_form' class="btn-submit">
 	<script>
 		function filter_button() {
-			var url = '/exports/filter/' + $('#center_selector').val()
+			var url = '/exports/filter/' + ($('#center_selector').val() || 0)
 			var team = $('#team_selector').val();
 			var args = $('#export_form').serialize('filter_fields');
 			if((typeof team) !== 'undefined')

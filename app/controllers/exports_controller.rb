@@ -1,9 +1,10 @@
 class ExportsController < ApplicationController
   
   def index
-    @center = current_user.center unless current_user.access? :admin
+    @center = current_user.center || current_user.centers.first #unless current_user.access? :admin
     @center = Center.find(params[:id]) if params[:id]
     
+    puts "center: #{@center.inspect}"
     args = params
     # set default dates
     params[:start_date] ||= (JournalEntry.first_answered.first.answered_at.beginning_of_month)
@@ -22,19 +23,19 @@ class ExportsController < ApplicationController
     @surveys = surveys_default_selected(@surveys, params[:surveys])
     filter_surveys = @surveys.collect_if(:selected) { |s| s.id }
     
-    @center = current_user.center if current_user.centers.size == 1
+    # @center = current_user.center if current_user.centers.size == 1
     params[:center] = @center.id if @center
     
     # clean params
     params.delete(:action); params.delete(:controller); params.delete(:limit); params.delete(:offset)
 
-    @centers = current_user.centers.sort_by {|c| c.title }
+    @centers = current_user.centers.sort_by {|c| c.title }.to_a
     @count_survey_answers = SurveyAnswer.filter_finished_count(current_user, params.merge({:surveys => filter_surveys}))
   end
   
   def filter
     params[:center] = params[:id].to_i
-    center = Center.find params[:id] unless params[:id].blank?
+    center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)
@@ -42,7 +43,7 @@ class ExportsController < ApplicationController
     # params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
     journals = if params[:team] && !["null", "team", ""].include?(params[:team])
-      team = Team.find params[:team]
+      team = Team.find params[:team][:id]
       journals = team.journals.count
     else
       params.delete :team
@@ -56,7 +57,7 @@ class ExportsController < ApplicationController
 
   def download
     params[:center] = params[:center].first
-    center = Center.find params[:center] unless params[:center].blank?
+    center = Center.find params[:center] unless params[:center].blank? || params[:id] == '0'
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)

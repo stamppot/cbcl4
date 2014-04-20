@@ -10,12 +10,17 @@
     	setInterval(function() {
 	      $.get('/exports/generating_export/' + <%= @task.id %>, function(response) {
 	      	if(response.completed)
-	      		location.href = response.export_file_path
+	      		$('#download_link').click(function() { location.href = response.export_file_path; return false; });
+	      		$('#progress').fadeOut();
+		      	$('#download_link').fadeIn();
 	      });
-   		}, 5000);
+   		}, 2000);
     });
 </script>
 
-
+<a id='download_link' href="/export_files/" class="button" style='display:none;'>
+	<span class="download_excel_file">Hent eksportfil</span>
+</a>
+	
 <%# periodically_call_remote(:url => {:action => :generating_export, :id => @task},
      :frequency => 5.0, :condition => "generating_export == true" ) -%>
