@@ -25,5 +25,8 @@ module Cbcl4
     I18n.locale = config.i18n.locale = config.i18n.default_locale
 
     config.exceptions_app = self.routes
+
+    config.autoload_paths += %W(#{config.root}/lib)
+
   end
 end

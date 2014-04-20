@@ -1,5 +1,5 @@
 require 'csv'
-# require 'facets/dictionary'
+require 'hashery'
 
 class ExportAnswersHelper
 
