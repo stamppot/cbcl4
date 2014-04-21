@@ -51,7 +51,7 @@ class LettersController < ApplicationController
     @page_title = @letter.name
     @follow_ups = JournalEntry.follow_ups
 
-    if !current_user.has_access?(:superadmin) || !current_user.center_and_teams.map(&:id).include?(@letter.group_id)
+    unless current_user.can_access_group?(@letter.group_id)
 	    flash[:notice] = "Kan ikke rette andres breve!" 
 	    redirect_to letters_path and return
     end
@@ -82,8 +82,9 @@ class LettersController < ApplicationController
 
   def update
     @letter = Letter.find(params[:id])
-    
-    if @letter.update_attributes(params[:letter])
+    @letter.letter = params[:letter]
+
+    if @letter.save
       flash[:notice] = 'Brevet er rettet.'
       redirect_to(@letter) and return
     else

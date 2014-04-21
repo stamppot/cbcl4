@@ -260,6 +260,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def can_access_group?(group_id)
+    self.has_access?(:superadmin) || self.center_and_teams.map(&:id).include?(group_id)
+  end
+
   def center_and_teams
     if(self.has_access?(:superadmin))
       Group.all
