@@ -201,6 +201,8 @@ class SurveyAnswersController < ApplicationController
 
     if journal_entry.survey_answer.nil? || !journal_entry.answered?
       journal_entry.make_survey_answer
+      logger.info "journal_entry.survey_answer: #{journal_entry.survey_answer.inspect}"
+      journal_entry.save
       journal_entry.survey_answer.save
     end
     j = journal_entry.journal

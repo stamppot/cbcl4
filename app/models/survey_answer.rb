@@ -16,7 +16,7 @@ class SurveyAnswer < ActiveRecord::Base
   has_one :csv_survey_answer, dependent: :destroy
   has_one :csv_score_rapport, dependent: :destroy
 
-  attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id
+  attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id, :survey, :journal_entry_id, :journal_id
   
   scope :finished, -> { where('done = ?', true) }
   scope :in_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
