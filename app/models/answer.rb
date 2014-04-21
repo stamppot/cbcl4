@@ -91,6 +91,8 @@ class Answer < ActiveRecord::Base
   def create_cells_optimized(cells = {}, valid_values = {})
     new_cells = []
 		types = AnswerCell.answer_types
+    logger.info "cells: #{cells.inspect}"
+
     cells.each do |cell_id, fields|  # hash is {item=>x, value=>y, qtype=>z, col=>a, row=>b}
       value = fields[:value]
       next if value.blank? # skip blanks

@@ -3,7 +3,7 @@
 <% end -%>
 <% if @users.any? %>
 	<h2>Fundne brugere</h2>
-  	<%= render :partial => 'shared/user_list' %>
+  	<%= render :partial => 'shared/user_list', :locals => {:users => @users} %>
 <% else %>
   <h2>Intet fundet!</h2>
 <% end %>

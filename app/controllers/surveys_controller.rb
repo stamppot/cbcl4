@@ -75,6 +75,7 @@ class SurveysController < ApplicationController
     @options = {:action => "create", :hidden => true, :fast => true}
     logger.info "show_fast session: #{session[:journal_entry]}"
     @journal_entry = JournalEntry.find(session[:journal_entry])
+    cookies[:journal_entry] = journal_entry.id
     logger.info "SHOWFAST JOURNAL_ENTRY: #{@journal_entry.inspect}"
     @journal = @journal_entry.journal
     survey_id = @journal_entry.survey_id

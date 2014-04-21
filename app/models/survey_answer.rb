@@ -76,12 +76,12 @@ class SurveyAnswer < ActiveRecord::Base
       answers.each {|a| a.save!}
     end
       # survey_answer.add_missing_cells unless current_user.login_user # 11-01-10 not necessary with ratings_count
-    Spawnling.new(:method => :fork) do
+    # Spawnling.new(:method => :fork) do
       score_rapport = self.generate_score_report(update = true) # generate score report
       self.save_csv_survey_answer
       score_rapport.save_csv_score_rapport
       # self.create_csv_answer!
-    end
+    # end
     self.save
   end
   

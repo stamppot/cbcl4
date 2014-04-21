@@ -1,4 +1,5 @@
 <% can_edit_delete = current_user.access? :user_edit_delete %>
+<% puts "@users: #{@users.inspect}" %>
 <table id="user_list" class="sortable list" class="users">
 	<tr>
 	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
@@ -45,7 +46,7 @@
 </table>
 
 <% if @users.size > 1 %>
-	<div class="page_entries" > <%= page_entries_info(users) %> </div>
-	<%= will_paginate users, :renderer => 'PaginationLinkRenderer', :params => {:partial => true}, :outer_window => 2 -%>
+	<div class="page_entries" > <%= page_entries_info(@users) %> </div>
+	<%= will_paginate @users, :renderer => 'PaginationLinkRenderer', :params => {:partial => true}, :outer_window => 2 -%>
 	<div id="spinner" style='display:none;'><%= image_tag 'spinner.gif' %></div>
 <% end -%>

@@ -150,12 +150,10 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     elsif current_user.has_role?(:superadmin)
       User.search(@phrase, :order => "created_at DESC") # , :conditions => ['login_user = ?', false]
     else
-      User.search(@phrase, :with => { :center_id => current_user.center_id })
+      User.search(@phrase, :with => { :center_id => current_user.centers.map(:id) })
     end
 		@users.delete_if { |user| user.login_user }
 		
-    # render @users.to_json, :layout => false
-    # render :layout => false
     respond_to do |wants|
       wants.html  { render(:layout => false )}
       wants.js    { render(:layout => false, :template =>  "users/searchresults" )}

@@ -61,26 +61,9 @@
 		$('#search_users').keyup(function() { 
 			var search = $(this).val();
 			channel.publish( "Search.Users", { value: search   } );
-			// console.log(search);
-			// $('#user_spinner').show();
-			// if(search.length == 0) return;
-			// $.ajax({url: '/users/live_search/' + search, 
-			// 	dataType: 'json',
-			// 	success: function(response) {
-			// 		console.dir(response);
-			// 		$('content').html(response);
-			// 		$('#user_spinner').hide();
-			// 	}
-			// });
 		 });
 	
 		</script>
-		<%# observe_field(:search_users,
-			:frequency => 1.0,
-			:update => :content,
-			:loading => "Element.show('user_spinner')",
-			:complete => "Element.hide('user_spinner'); TableKit.reload();",
-			:url => user_search_path) %>
 			<div class="change_password" style="display:none;">
 				<%= link_to t('menu.change_password'), change_password_path(current_user), :title => t('menu.change_password_alt') %>
 			</div>
@@ -121,13 +104,6 @@
 				background-color: #ffb;
 			}
 		</style>
-		<%# observe_field(:search_journals,
-			:frequency => 1.0,
-			:update => :content,
-			:loading => "Element.show('journal_spinner')",
-			:complete => "Element.hide('journal_spinner'); TableKit.reload();",
-			:url => journal_search_path) %>
-		
 		<br/>
 
 		<script type='text/javascript'>

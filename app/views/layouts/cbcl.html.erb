@@ -88,8 +88,8 @@
 		console.log(data.value);
 		$('#user_spinner').show();
 		if(data.value == 0) return;
-		$.ajax({url: '/users/live_search/' + data.value, 
-			// dataType: 'json',
+		$.ajax({url: '/users/live_search/' + data.value,
+			dataType: 'html',
 			success: function(response) {
 				console.dir(response);
 				$('#content').html(response);
@@ -99,7 +99,6 @@
 	}).distinctUntilChanged().withDelay( 500 );
 
 	channel.subscribe("Search.Journals", function ( data ) {
-		// console.log(data.value);
 		if(data.value == '')
 			return;
 		

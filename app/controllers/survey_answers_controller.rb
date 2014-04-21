@@ -218,6 +218,7 @@ class SurveyAnswersController < ApplicationController
     end
     id = params.delete("id")
     journal_id = params[:journal_id]
+    logger.info "session je_id: #{session[:journal_entry]} journal_id: #{journal_id}"
     journal_entry = JournalEntry.by_id_and_journal(id, journal_id).first
     # puts "SURVEY AnSWER create #{journal_entry.inspect}"
     center = journal_entry.journal.center
@@ -234,17 +235,17 @@ class SurveyAnswersController < ApplicationController
     # end
     survey_answer = journal_entry.make_survey_answer
 
-		if current_user.login_user?
-			journal_entry.answered! 
-		else 
-      journal_entry.answered_paper!
-		end
-		
     if !survey_answer.save_final(params)
       flash[:notice] = "Fejl! Dit svar blev ikke gemt."
       redirect_to survey_answer_path(journal_entry) and return
     end
-    
+
+    if current_user.login_user?
+      journal_entry.answered! 
+    else 
+      journal_entry.answered_paper!
+    end
+
     journal_entry.increment_subscription_count(survey_answer)
 
 		# puts "SURVEYANSWERCONT current_user: #{current_user.inspect} LOGIN_USER: #{current_user.login_user?}"
