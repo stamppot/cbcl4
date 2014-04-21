@@ -4,7 +4,7 @@ class BpmT
 
 	def create
 
-t = Survey.new({:title => "BMP-T 6-16 lærerskema", :category => "BMP", :age => "6-16", :surveytype => "teacher", :prefix => "bpm-t"})
+t = Survey.new({:title => "BPM-T 6-16 lærerskema", :category => "BPM", :age => "6-16", :surveytype => "teacher", :prefix => "bpm-t"})
 t.save
 
 q1 = Question.new({:number => 1, :ratings_count => 1, :columns => 3, :survey => t})

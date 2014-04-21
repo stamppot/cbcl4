@@ -7,7 +7,7 @@ class BpmY
 
 def create
 # y = Survey.find 7
-y = Survey.new({:title => "BMP-P 6-16 selvrapportskema", :description => "BPM-Y ages 11-6 Unges selvrapport", :category => "BMP", :age => "11-16", :surveytype => "youth", :prefix => "bpm-y"})
+y = Survey.new({:title => "BPM-P 6-16 selvrapportskema", :description => "BPM-Y ages 11-6 Unges selvrapport", :category => "BMP", :age => "11-16", :surveytype => "youth", :prefix => "bpm-y"})
 y.save
 
 q1 = Question.new({:number => 1, :ratings_count => 1, :columns => 3, :survey => y})

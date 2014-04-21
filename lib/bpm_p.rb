@@ -3,7 +3,7 @@
 class BpmP
 
 def create
-p = Survey.new({:title => "BPM-P 6-16 forældreskema", :category => "BMP", :age => "6-16", :surveytype => "parent", :prefix => "bpm-p"})
+p = Survey.new({:title => "BPM-P 6-16 forældreskema", :category => "BPM", :age => "6-16", :surveytype => "parent", :prefix => "bpm-p"})
 p.save
 
 q1 = Question.new({:number => 1, :ratings_count => 1, :columns => 3, :survey => p})
