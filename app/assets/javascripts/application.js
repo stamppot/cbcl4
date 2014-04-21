@@ -177,40 +177,40 @@ function toggleElems(input) {
   } catch (e) {}
 }
 
-function toggleActionFormat(formid, element) {
-	var format = $(element).value;
-	var input = $(formid).action;
-	// alert("input before: " + input);
-	if(input.lastIndexOf('http') > -1) {
-		input = input.replace(/(http|https).\/\//, "");
-		input = input.replace(/.3000/, "");
-		input = input.replace(/(?:(?:(?:(?:[a-zA-Z0-9][-a-zA-Z0-9]*)?[a-zA-Z0-9])[.])*(?:[a-zA-Z][-a-zA-Z0-9]*[a-zA-Z0-9]|[a-zA-Z])[.]?)/, "");
-		// alert("input after: " + input);
-	}
-	var output = "";
-	if(input.lastIndexOf('.') === -1)
-		output = input + '.' + format;
-	else 
-		output = input.substr(0, input.lastIndexOf('.')) || input;
+// function toggleActionFormat(formid, element) {
+// 	var format = $(element).value;
+// 	var input = $(formid).action;
+// 	// alert("input before: " + input);
+// 	if(input.lastIndexOf('http') > -1) {
+// 		input = input.replace(/(http|https).\/\//, "");
+// 		input = input.replace(/.3000/, "");
+// 		input = input.replace(/(?:(?:(?:(?:[a-zA-Z0-9][-a-zA-Z0-9]*)?[a-zA-Z0-9])[.])*(?:[a-zA-Z][-a-zA-Z0-9]*[a-zA-Z0-9]|[a-zA-Z])[.]?)/, "");
+// 		// alert("input after: " + input);
+// 	}
+// 	var output = "";
+// 	if(input.lastIndexOf('.') === -1)
+// 		output = input + '.' + format;
+// 	else 
+// 		output = input.substr(0, input.lastIndexOf('.')) || input;
 
-		output = output.replace('.html', '');
+// 		output = output.replace('.html', '');
 
-	// alert("output: " + output);
-	document.getElementById(formid).action = output;
-}
+// 	// alert("output: " + output);
+// 	document.getElementById(formid).action = output;
+// }
 
-function toggleReportType(formid, element) {
-	var format = $(element).value;
-	var input = $(formid).action;
+// function toggleReportType(formid, element) {
+// 	var format = $(element).value;
+// 	var input = $(formid).action;
 
-	var isChecked = $(element).getValue();
-	if(isChecked == "on")
-		input = input.replace('score', 'answer');
-	else
-		input = input.replace('answer', 'score')
+// 	var isChecked = $(element).getValue();
+// 	if(isChecked == "on")
+// 		input = input.replace('score', 'answer');
+// 	else
+// 		input = input.replace('answer', 'score')
 	
-	document.getElementById(formid).action = input;
-}
+// 	document.getElementById(formid).action = input;
+// }
 
 var is_showing_help = false;
 function search_help() {

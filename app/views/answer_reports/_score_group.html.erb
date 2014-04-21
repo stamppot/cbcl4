@@ -27,7 +27,7 @@
 			"<td class='result' width='60px' align='right'>#{report}</td>" +
 			"<td class='percentile' width='50px' align='right'>#{report}</td>"
         end     %>
-        <%= result %></td>
+        <%= result.html_safe %></td>
         <%- end %>
 </tr>
 <% end %>

@@ -17,7 +17,11 @@ class SurveyAnswersController < ApplicationController
     @survey = @@surveys[@journal_entry.survey_id]
     @survey.merge_survey_answer(@survey_answer)
     @page_title = "CBCL - Vis Svar: " << @survey.get_title
-    render :layout => 'survey' # :template => 'surveys/show'
+
+    respond_to do |wants|
+      wants.html  { render :layout => 'survey' }
+      wants.pdf   { render :layout => 'survey_print' }
+    end
   end
 
   # def show_fast

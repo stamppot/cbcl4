@@ -13,6 +13,6 @@
       	(item.text.empty? ? "" : "<label for='#{cell_id}'>#{item.text}</label>"), "radio_answer")
 		end
 	end
-	newform.join
+	newform.join.html_safe
 	%>
 <% end %>

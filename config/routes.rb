@@ -243,6 +243,8 @@ Cbcl4::Application.routes.draw do
 
   get 'score_reports/create', :to => 'score_reports#create', :as => 'create_score_report'
   
+  # match 'answer_reports/show/(/:id)', :to => 'answer_reports#show', :as => 'answer_report', :via => [:post]
+  
   get 'registration', :to => 'active_rbac/registration#lostpassword', :as => 'lostpassword'
   # is this used?
   get 'registration', :to => 'active_rbac/registration#registration', :as => 'registration'

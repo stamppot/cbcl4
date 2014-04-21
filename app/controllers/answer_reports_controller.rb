@@ -25,5 +25,6 @@ class AnswerReportsController < ApplicationController
     end
     
     @page_title = "CBCL - Udvidet Svarrapport: " << @journal.title
+    # render 'show'
   end 
 end

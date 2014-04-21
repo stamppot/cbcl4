@@ -1,5 +1,5 @@
 <% if @cell %>
 <td class="question">
-	<span class="listitemtext"><%= @cell.svar_item + @cell.question_items.first.text %></span>
+	<span class="listitemtext"><%= (@cell.svar_item + @cell.question_items.first.text).html_safe %></span>
 </td>
 <% end %>

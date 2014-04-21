@@ -7,7 +7,7 @@
 		@cell.question_items.each do |item|
 		  listitem_without_predefined_text = item.text.blank?
 		  case item.qtype
-			when "textbox": 
+			when "textbox" then
 				newform << "<td class='answer textbox'>"
 				newform << 
 				if (listitem_without_predefined_text)
@@ -15,7 +15,7 @@
 					input_or_answer
 				else span_item((answer_item_set ? "" : answer_item) + item.text, "listitemtext".rstrip)
 				end
-			when "listitem":
+			when "listitem" then
 				newform << "<td class='question'>"
 		        answer_item_set = true if @cell.col == 1
 			    newform << span_item(((answer_item_set || @cell.col > 2) ? "" : answer_item) + item.text, "listitemtext".strip)
@@ -24,5 +24,5 @@
 			newform << "</td>"
 		end
 		 %>
-		<%= newform.join %>
+		<%= newform.join.html_safe %>
 <% end %>

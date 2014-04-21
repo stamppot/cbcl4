@@ -96,9 +96,11 @@ class Answer < ActiveRecord::Base
     cells.each do |cell_id, fields|  # hash is {item=>x, value=>y, qtype=>z, col=>a, row=>b}
       value = fields[:value]
       next if value.blank? # skip blanks
+      # puts "cell_id: #{cell_id.inspect} fields: #{fields.inspect}"
+      # puts "valid_values: #{valid_values.inspect}"
       fields[:answer_id] = self.id
       # fields[:answertype] = valid_values[cell_id][:type]  # not necessarily needed
-			fields[:cell_type] = AnswerCell.answer_types[valid_values[cell_id][:type]]
+			fields[:cell_type] = valid_values[cell_id] && AnswerCell.answer_types[valid_values[cell_id][:type]] || "TextBox"
 			# 09-10-2010
 			fields[:rating] = valid_values[cell_id][:type] == "Rating"  # set boolean
       fields[:item] = valid_values[cell_id][:item]        # save item, used to calculate score
@@ -119,7 +121,7 @@ class Answer < ActiveRecord::Base
       end
 			# TODO: writes value to both columns. Later, fix it so only text values are written to value_text
       # fields[:value_text] = fields[:value]
-			fields[:cell_type] = types[valid_values[cell_id][:type]]
+			fields[:cell_type] = types[valid_values[cell_id] && valid_values[cell_id][:type] || "TextBox"]
       new_cells << [fields[:answer_id], fields[:row], fields[:col], fields[:item], fields[:value], fields[:rating], fields[:text], fields[:value_text], fields[:cell_type]]
     end
     return new_cells
