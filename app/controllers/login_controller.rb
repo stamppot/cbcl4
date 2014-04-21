@@ -65,8 +65,9 @@ class LoginController < ApplicationController
       
       # journal_entry = JournalEntry.find_by_user_id(user.id)
       if user.login_user
-        session[:journal_entry] = user.journal_entry.id
-        session[:journal_id] = user.journal_entry.journal_id
+        journal_entry = JournalEntry.find_by(:user_id => user)
+        session[:journal_entry] = journal_entry.id
+        session[:journal_id] = journal_entry.journal_id
       end
 
       unless user.login_user?
