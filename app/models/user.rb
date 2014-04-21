@@ -167,8 +167,8 @@ class User < ActiveRecord::Base
     roles = Role.where(id: role_ids).to_a
     g = Group.where(id: group_ids).to_a
     puts "g; #{g.inspect}"
-    groups += g
-    puts "groups: #{groups.inspect}"
+    self.groups += g
+    puts "groups: #{self.groups.inspect}"
 
     self.center = self.groups.first.center # unless groups.empty? # or user.has_role?(:superadmin)
     # self.valid?
