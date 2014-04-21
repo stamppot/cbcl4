@@ -378,15 +378,16 @@ class User < ActiveRecord::Base
 
     query = "select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}"
     result = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
-      puts r.inspect
-      logger.info "has_journal_entry?: #{r.inspect}"
+      # puts r.inspect
+      # logger.info "has_journal_entry?: #{r.inspect}"
       col
     end
 
 
     # result = connection.execute("select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}")
     # row = result.fetch_row
-    row.any? && row.first.to_i > 0
+    puts "result: #{result.inspect}"
+    result.any? && result.first.to_i > 0
   end
 
   def has_journal?(journal_id)

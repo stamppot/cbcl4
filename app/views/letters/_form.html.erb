@@ -22,7 +22,7 @@
 		<tr>
 		<%# text_area_tag :letter, "letter", :class => "aaatinymce", :rows => 40, :cols => 120 %>
 			<td class="t_i">Indhold:</td>
-			<td class="t"><%= text_area_tag :letter, @letter.letter, :class => "tinymce", :rows => 40, :cols => 120, :value => @letter.letter, :id => 'letter_contents' %>
+			<td class="t"><%= text_area_tag :letter, @letter.letter, :class => "tinymce", :rows => 40, :cols => 120, :value => @letter.letter.html_safe, :id => 'letter_contents' %>
 			<%= tinymce %>
 			</td>
 		</tr>

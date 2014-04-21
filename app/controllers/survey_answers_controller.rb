@@ -47,54 +47,54 @@ class SurveyAnswersController < ApplicationController
     @page_title = "CBCL - Udskriv Svar: " << @survey.get_title
   end
 
-  def dynamic_data
-    @journal_entry = JournalEntry.find(params[:id], :include => :journal)
-    save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
-    save_draft_url = "/survey_answers/save_draft/#{@journal_entry.id}"
+  # def dynamic_data
+  #   @journal_entry = JournalEntry.find(params[:id], :include => :journal)
+  #   save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
+  #   save_draft_url = "/survey_answers/save_draft/#{@journal_entry.id}"
 
-    logger.info "dynamic_data: current_user: #{current_user.inspect} entry: #{@journal_entry.inspect}"
-    # sleep(3000)
-    respond_to do |format|
-      if current_user.nil?
-        format.js {
-          render :update do |page|
-            page.replace_html 'centertitle', "Du er ikke logget ind"
-            page.visual_effect :pulsate, 'centertitle'
-            page.visual_effect :blind_up, 'content_survey', :duration => 6
-            page.visual_effect :fade, 'surveyform', :duration => 6
-            page.alert "Du bliver sendt til login-siden."
-            page.redirect_to login_path
-          end
-        }
-      elsif current_user && !current_user.login_user
-        format.js {
-          render :update do |page|
-            page.replace_html 'centertitle', @journal_entry.journal.center.get_title
-            page.insert_html :bottom, 'survey_journal_info', :partial => 'surveys/survey_header_info'
-            page.insert_html :bottom, 'survey_fast_input', :partial => 'surveys/fast_input_button'
-            page.insert_html :bottom, 'back_button', :partial => 'surveys/back_button'
-            page.show 'save_draft'
-            page.show 'submit_button'
-          end
-        }
-      else # login users
-        format.js {
-          render :update do |page|
-            page.replace_html 'centertitle', @journal_entry.journal.center.get_title
-            page.insert_html :bottom, 'survey_journal_info', :partial => 'surveys/survey_header_info_login_user'
-            page.show 'save_draft'
-            page.show 'submit_button'
-          end
-        }
-      end
-    end
-  rescue RecordNotFound
-    render :update do |page|
-      logger.info "dynamic_data: fejl! #{@journal_entry.id} journal id/kode: #{@journal_entry.journal.id}/#{@journal_entry.journal.code}"
-      page.alert "Der er sket en fejl, du skal logge ud og ind igen", @journal_entry.journal.center.get_title
-      page.redirect_to logout_path
-    end
-  end
+  #   logger.info "dynamic_data: current_user: #{current_user.inspect} entry: #{@journal_entry.inspect}"
+  #   # sleep(3000)
+  #   respond_to do |format|
+  #     if current_user.nil?
+  #       format.js {
+  #         render :update do |page|
+  #           page.replace_html 'centertitle', "Du er ikke logget ind"
+  #           page.visual_effect :pulsate, 'centertitle'
+  #           page.visual_effect :blind_up, 'content_survey', :duration => 6
+  #           page.visual_effect :fade, 'surveyform', :duration => 6
+  #           page.alert "Du bliver sendt til login-siden."
+  #           page.redirect_to login_path
+  #         end
+  #       }
+  #     elsif current_user && !current_user.login_user
+  #       format.js {
+  #         render :update do |page|
+  #           page.replace_html 'centertitle', @journal_entry.journal.center.get_title
+  #           page.insert_html :bottom, 'survey_journal_info', :partial => 'surveys/survey_header_info'
+  #           page.insert_html :bottom, 'survey_fast_input', :partial => 'surveys/fast_input_button'
+  #           page.insert_html :bottom, 'back_button', :partial => 'surveys/back_button'
+  #           page.show 'save_draft'
+  #           page.show 'submit_button'
+  #         end
+  #       }
+  #     else # login users
+  #       format.js {
+  #         render :update do |page|
+  #           page.replace_html 'centertitle', @journal_entry.journal.center.get_title
+  #           page.insert_html :bottom, 'survey_journal_info', :partial => 'surveys/survey_header_info_login_user'
+  #           page.show 'save_draft'
+  #           page.show 'submit_button'
+  #         end
+  #       }
+  #     end
+  #   end
+  # rescue RecordNotFound
+  #   render :update do |page|
+  #     logger.info "dynamic_data: fejl! #{@journal_entry.id} journal id/kode: #{@journal_entry.journal.id}/#{@journal_entry.journal.code}"
+  #     page.alert "Der er sket en fejl, du skal logge ud og ind igen", @journal_entry.journal.center.get_title
+  #     page.redirect_to logout_path
+  #   end
+  # end
   
   def draft_data
 		@response = journal_entry = JournalEntry.find(params[:id], :include => {:survey_answer => {:answers => :answer_cells}})

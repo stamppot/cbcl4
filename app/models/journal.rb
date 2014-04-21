@@ -28,8 +28,9 @@ class Journal < ActiveRecord::Base #< Group
 	         :class_name => 'JournalEntry' #,
 	         # :conditions => 'journal_entries.state >= 5',  # answered
 	         # :order => 'journal_entries.answered_at'
-  has_many :not_answered_entries, -> { where('journal_entries.state < 5').order('journal_entries.answered_at') },
-           :class_name => 'JournalEntry' #,
+  has_many :not_answered_entries, -> { where('journal_entries.state < 5').order('journal_entries.created_at') },
+           :class_name => 'JournalEntry'
+
            # :conditions => 'journal_entries.state < 5',  # not answered
            # :order => 'journal_entries.answered_at'
   default_scope -> { order('created_at DESC') }
@@ -96,13 +97,15 @@ class Journal < ActiveRecord::Base #< Group
     elsif user.has_role?(:superadmin)
       Journal.search(phrase, :order => "created_at DESC", :per_page => 40)
     elsif user.has_role?(:centeradmin)
-      user.centers.map {|c| c.id}.inject([]) do |result, id|
-        result + Journal.search(phrase, :with => { :center_id => id }, :order => "created_at DESC", :per_page => 40)
-      end
+      # user.centers.map {|c| c.id}.inject([]) do |result, id|
+      #   result += Journal.search(phrase, :with => { :center_id => user.centers.map(&:id) }, :order => "created_at DESC", :per_page => 40)
+      # end
+      Journal.search(phrase, :with => { :center_id => user.centers.map(&:id) }, :order => "created_at DESC", :per_page => 40)
     else
-      user.group_ids.inject([]) do |result, id|
-        result += Journal.search(phrase, :with => {:group_id => id }, :order => "created_at DESC", :per_page => 40)
-      end
+      # user.center_and_teams.inject([]) do |result, g|
+        # result += 
+        Journal.search(phrase, :with => {:group_id => user.center_and_teams.map(&:id) }, :order => "created_at DESC", :per_page => 40)
+      # end
     end
   end
 
