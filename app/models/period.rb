@@ -1,7 +1,7 @@
 class Period < ActiveRecord::Base
   belongs_to :subscription
 
-  attr_accessible :active, :used
+  attr_accessible :active, :used, :subscription
   
   scope :active, -> { where('active = ?', true) }
   scope :inactive, -> { where('active = ?', false) }
