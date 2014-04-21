@@ -60,7 +60,7 @@
 <a href='javascript:toggleComments(surveyform)'>Skriv kommentarer</a>
 
 <% unless @options[:action] =~ /show/ %>
-		<form action="/survey_answers/create/<%= @journal_entry.id %>" id="surveyform" method="post" onsubmit="return submitAction;" >
+		<form action="/survey_answers/create/<%= @journal_entry.id %>?journal_id=<%= @journal_entry.journal_id %>" id="surveyform" method="post" onsubmit="return submitAction;" >
 <% end %>
 
 	<div>
@@ -86,7 +86,8 @@
 				 :frequency => save_draft_interval %>
 		<script type='text/javascript'>
 		//<![CDATA[
-		new Form.Observer('surveyform', 60, function(element, value) {new Ajax.Updater('draft-message', '/survey_answers/save_draft/<%= @journal_entry.id %>', {asynchronous:true, evalScripts:true, parameters:value})})
+		var journal_id = <%= @journal_entry.journal_id %>;
+		new Form.Observer('surveyform', 60, function(element, value) {new Ajax.Updater('draft-message', '/survey_answers/save_draft/<%= @journal_entry.id %>?journal_id=' + journal_id, {asynchronous:true, evalScripts:true, parameters:value})})
 		//]]> 
 		// $('#surveyform').delayedObserver(function() {
 		// 	console.log('Sending "' + $(this).val() + '" to the server.');
