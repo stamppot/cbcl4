@@ -11,8 +11,8 @@
 				<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
 				<th class="sortcol" title="<%= t('sort.role') %>"><%= t('role') %></th>
 				<th class="sortcol" title="<%= t('sort.group') %>"><%= t('groups') %></th>
-				<% if can_edit_delete %>
-				<th class="nosort" style="width: 92px;"><%= t('action') %><span style="width: 100px;">&nbsp;</span></th>
+				<% if current_user.has_access?(:superadmin) %>
+				<th class="nosort" style="width: 32px;"><%# t('action') %><span style="width: 100px;">&nbsp;</span></th>
 				</tr>
 				<% end %>
 			
@@ -26,16 +26,16 @@
 					<td><%= groups.join(', ') -%></td>
 				<% if can_edit_delete %>
 				<td style="display:inline; width: 100px;">
-					<span style="display:inline;">
+					<!-- <span style="display:inline;">
 						<a title="Rediger Bruger" href="/users/<%= user.id %>/edit">
 							<%= image_tag 'user_edit_female_24.png', :alt => 'Rediger bruger', :title => "Rediger Bruger", :class => "icon" %>
 						</a>
 						<a title="Slet Bruger" href="/users/delete/<%= user.id %>">
-							<%= image_tag 'user_delete_24.png', :alt => 'Slet bruger', :title => "Slet Bruger", :class => "icon", :alt="Slet bruger" %>
-						</a>
+							<%= image_tag 'user_delete_24.png', :alt => 'Slet bruger', :title => "Slet Bruger", :class => "icon" %>
+						</a> -->
 					<span>&nbsp;</span>
 					<a title="Login som denne bruger" href="/login/shadow_login/<%= user.id %>">
-						<%= image_tag 'door_24.png', :alt => 'Login som denne bruger', :title="Login som denne bruger", :class => "icon", :alt => "Login som denne bruger" %>
+						<%= image_tag 'door_24.png', :alt => 'Login som denne bruger', :title => "Login som denne bruger", :class => "icon" %>
 					</a>
 					<%# link_to_icon 'door_24.png', shadow_login_url(user), {:alt => t('shadow_login_alt'), :title => t('shadow_login_alt')}, (			current_user.access?(:shadow_login) and user.id != current_user.id) %>
 				</span>
