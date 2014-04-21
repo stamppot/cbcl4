@@ -4,7 +4,7 @@
 		<th class="wide" title="Sorter efter navn">Team</th>
 		<th title="Sorter efter SKS-kode">ID</th>
 		<th class="nosort">Journalhandling</th>
-		<% if current_user.access? :show_column_actions %>
+		<% if false && current_user.access?(:show_column_actions) %>
 		<th title=""><%= t('action') %></th>
 		<% end %>
 	</tr>	
@@ -19,27 +19,28 @@
 				<a title="Flyt journaler" href="/journals/select/<%= group.id %>">
 					<%= image_tag 'document_move_24.png', :title => "Flyt journaler", :class => "icon", :alt => "Flyt journaler" %>
 				</a>
+				&nbsp;&nbsp;
 			</span>
 			<span class="action">
 				<a href="/reminders/<%= group.id %>">
 					<%= image_tag 'traffic-light_24.png', :title => "Status besvarelser", :class => "icon", :alt => "Status besvarelser" %>
-				</a>
+				</a>				&nbsp;&nbsp;
 				<a title="Eksporter brevfletningsdata" href="/journals/export_mails/<%= group.id %>.csv">
 					<%= image_tag 'documents_email_24.png', :title => "Eksporter brevfletningsdata", :class => "icon", :alt => "Documents_email_24" %>
 				</a>
 			</span>
-			<span class="action"></span>
+<!-- 			<span class="action"></span> -->
 		</td>
-		<% if current_user.access? :center_delete %>
-		<td>
+		<%# if current_user.access? :center_delete %>
+		<!-- <td>
 			<a title="Rediger" href="/teams/<%= group.id %>/edit">
-				<%= image_tag :title => "Rediger team",, :class => "icon", :alt => "Rediger team" %>
+				<%= image_tag :title => "Rediger team", :class => "icon", :alt => "Rediger team" %>
 			</a>
 			<a title="Slet" href="/teams/delete/<%= group.id %>">
-				<%image_tag 'group_delete_24.png', :title => "Slet team", :class => "icon", :alt => "Slet team" %>
+				<%= image_tag 'group_delete_24.png', :title => "Slet team", :class => "icon", :alt => "Slet team" %>
 			</a>
-		</td>
-		<% end %>
+		</td> -->
+		<%# end %>
 		<tr/>
 		<% end %>
 </table>

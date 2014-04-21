@@ -484,8 +484,16 @@ th.wide {
 	width: 200px;
 }
 
+th.extra_wide {
+	width: 200px;
+}
+
 th.half_wide {
 	width: 110px;
+}
+
+th.narrow {
+	width: 70px;
 }
 
 th.date {

@@ -6,7 +6,7 @@
 	<% 	 sub = @subscribed.detect { |subsc| subsc.survey_id == survey.id }	%>
 
 	<div style='background-color: ##<%= survey.color %>; width: 20em;'>
-		<input id="group_surveys_<%= survey.id %>" type="checkbox" name="group[surveys][]" value="<%= survey.id %>" <%= sub && 'checked="checked"' || '' %> />
+		<input id="group_surveys_<%= survey.id %>" type="checkbox" name="group[surveys][]" value="<%= survey.id %>" <%= sub && sub.active? && 'checked="checked"' || '' %> />
 		<label for="group_surveys_<%= survey.id %>"><%= survey.title %></label>
 	</div>
 

@@ -6,10 +6,10 @@
 <% if @teams.any? %>
 <table class="sortable list" class="groups">
 	<tr>
-		<th class="wide" title="Sorter efter navn">Teams</th>
-		<th title="Sorter efter SKS-kode">ID</th>
+		<th class="extra_wide" title="Sorter efter navn">Teams</th>
+		<th width="80px" class="narrow" title="Sorter efter SKS-kode">ID</th>
 		<!-- <th class="narrow" title="Sorter efter antal brugere"><%# t('user.users') %></th> -->
-		<th class="nosort">Journalhandling</th>
+		<th class="nosort narrow">Journalhandling</th>
 		<% if false && current_user.access?(:show_column_actions) %>
 		<th title="">Teamhandling</th>
 		<% end %>
@@ -17,11 +17,11 @@
 
 	<% @teams.each do |group| %>
 	<tr>
-		<td><a title="Vis Team" href="/teams/<%= group.id %>"><%= group.title %></td>
+		<td class="wide"><a title="Vis Team" href="/teams/<%= group.id %>"><%= group.title %></td>
 		<td style="text-align: right;"><%= group.code %></td>
 		<!-- <td style="text-align: right;"><%# group.users.size %></td> -->
 		
-		<td>
+		<td style="text-align: right;">
 			<!-- <span class="action wide actions">
 				<a title="Flyt journaler" href="/journals/select/<%= group.id %>"><img border="0" title="Flyt journaler" src="/assets/document_move_24.png" class="icon" alt="Flyt journaler"></a>
 			</span> -->
