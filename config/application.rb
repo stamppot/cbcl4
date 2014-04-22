@@ -28,5 +28,6 @@ module Cbcl4
 
     config.autoload_paths += %W(#{config.root}/lib)
 
+    config.middleware.use "PDFKit::Middleware"
   end
 end

@@ -14,7 +14,7 @@
    		<% # survey titles in top line only
 		@titles.each_with_index do |title, j|
 	 		fst_col = (j == 0) %>
-			<th class='col<%= j %> score_entry' colspan='<%= fst_col ? 1 : 2 %>'><%= (i == 0) ? title : "&nbsp;" %></th>
+			<th class='col<%= j %> score_entry' colspan='<%= fst_col ? 1 : 2 %>'><%= ((i == 0) ? title : "&nbsp;").html_safe %></th>
 		<% end %>
 		<% if (1..group.size + 1) === i && !group.empty? %>
    			<tr class='scale_title'>

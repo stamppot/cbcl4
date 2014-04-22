@@ -6,13 +6,13 @@
 	<title><%= @page_title %></title>
 
 	<% if !current_user.login_user? %>
-	<%= stylesheet_link_tag_html4 'tablekit', :media => 'all' %>
+	<%= stylesheet_link_tag 'tablekit', :media => 'all' %>
 	<% stylesheet_link_tag_html4 'validation' %>
-	<%= stylesheet_link_tag_html4 'login', :media => 'all' %>
+	<%= stylesheet_link_tag 'login', :media => 'all' %>
 	<% end %>
-	<%= stylesheet_link_tag_html4 'cbcl', :media => 'all' %>
-	<%= stylesheet_link_tag_html4 'score_report', :media => 'all' %>
-	<% stylesheet_link_tag_html4 'buttons' %>
+	<%= stylesheet_link_tag 'cbcl', :media => 'all' %>
+	<%= stylesheet_link_tag 'score_report', :media => 'all' %>
+	<% stylesheet_link_tag 'buttons' %>
 
 	<% if !current_user.login_user? %>
 	<script type="text/javascript">

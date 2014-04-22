@@ -26,7 +26,7 @@
 				 when /excel/ then image_tag("icon_excel.png", :size => "20x20", :alt => "Excel-fil")
 				 else file.content_type
 				 end %></td>
-			<td class="col action" id="col4"><%= link_to "Slet", export_file_path(file), :method => :delete, :confirm => "Er du sikker??"   %></td>
+			<td class="col action" id="col4"><%= link_to "Slet", export_file_path(file), :method => :delete, :data => { :confirm => "Er du sikker??"}   %></td>
 		</tr>
 	</p>
 <% end %>

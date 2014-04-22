@@ -22,7 +22,7 @@
 			<span class="download_excel_file"><%= t('export.entry_status') %></span></a>
 	</span>
 
-	<div id="export_file"></div>
+	<div id="export_file" data-no-turbolink></div>
 
 
 	<div id='filter_fields' style="display:none;"> <!-- Flyt ovenover hvis det skal bruges-->
@@ -76,6 +76,23 @@
 
 
 <script type="text/javascript">
+
+	function update_reminder_status(group_id) {
+		alert("?: update_reminder_status group_id: " + group_id);
+		var params = $("reminders").serialize();
+		params += "&id=" + group_id;
+
+		$.ajax({ 
+			url: '/reminders/update?' + params,
+		 	dataType: 'json',
+  			success: function(response) {
+  			// alert("success");
+    		// location.href = location.href;
+			}
+		});
+	}
+
+
 $('.tabs').each(function(tab_group){  
 	new Control.Tabs(tab_group);  
 });
@@ -83,7 +100,7 @@ $('.tabs').each(function(tab_group){
 
 $(document).ready(function() {
 	$('.answer_state').click(function(element) {
-		var selected_state = $(this).href;
+		var selected_state = $(this).attr('href');
 		console.log("selected_state: " + selected_state)
 		//alert("hello: " + selected_state);
 		 console.log($("input[name='selected_state']"));
@@ -98,14 +115,25 @@ $(document).ready(function() {
 });
 
 function generate_file(id) {
-	var state = $$("[name='selected_state']")[0].value;
-	new Ajax.Request('/reminders/generate_file/' + id, {
-  		method:'post',
-  		parameters: {id: id, state: state},
-  		onSuccess: function(transport) {
-  			eval(response);
-  		},
-  		onFailure: function() { alert('Something went wrong...'); }
+	var state = $("input[name='selected_state']").val();
+	$.ajax({
+		url: '/reminders/generate_file/' + id + '?state='+state,
+		dataType: 'html',
+		method: 'post',
+		success: function(response) {
+			// alert(response);
+			// console.log(response);
+			$('#export_file').html(response);
+			$('#export_file').highlight();
+		}
 	});
+	// new Ajax.Request('/reminders/generate_file/' + id, {
+ //  		method:'post',
+ //  		parameters: {id: id, state: state},
+ //  		onSuccess: function(transport) {
+ //  			eval(response);
+ //  		},
+ //  		onFailure: function() { alert('Something went wrong...'); }
+	// });
 }
 </script>

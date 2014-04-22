@@ -21,11 +21,11 @@ class JournalEntry < ActiveRecord::Base
   scope :unanswered, -> { where('state < 5') }
   scope :answered, -> { where('state = 5') }
   scope :answered_by_login_user, -> { where('state = 6') }
-  scope :for_states, lambda { |states| where("state IN (?)", states) }
+  scope :for_states, lambda { |states| where("journal_entries.state IN (?)", states) }
   scope :with_cond, lambda { |cond| cond }
-  scope :between, lambda { |start, stop| where(:created_at => start..stop) } 
-  scope :first_answered, -> { where('answered_at is not null').order('answered_at asc').limit(1) }
-  scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'answered_at desc', :limit => 1}}
+  scope :between, lambda { |start, stop| where('journal_entries.created_at' => start..stop) } 
+  scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
+  scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
 
   def self.follow_ups
     [["Diagnose", 0], ["1. opfølgning", 1], ["2. opfølgning", 2], ["3. opfølgning", 3], ["Afslutning", 4]]

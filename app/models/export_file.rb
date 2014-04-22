@@ -2,6 +2,10 @@ class ExportFile < ActiveRecord::Base
 
   has_one :task
   
+  attr_accessible :filename, :content_type
+
+  default_scope order('created_at DESC')
+
   def self.storage_path
     "#{Rails.root}/files"
   end
@@ -50,7 +54,12 @@ class ExportFile < ActiveRecord::Base
 
   def self.export_xls_file(csv_table, filename, content_type = 'text/csv; charset=utf-8; header=present')
     return unless csv_table
-    ExcelConverter.new.write_file(csv_table, "files/#{filename}")
+    # table = csv_table.inject([]) do |a, t|
+    #   a << t.values
+    #   a
+    # end
+    # puts "table: #{table.inspect}"
+    ExcelConverter.new.write_file(csv_table, "public/files/#{filename}")
     # puts "CONTENT: #{content.inspect}"
 
     export_file = ExportFile.find_by_filename(filename) ||

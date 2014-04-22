@@ -18,15 +18,15 @@ class ExportFilesController < ApplicationController
     filename = @file.filename
     response.headers["Content-Type"] = @file.content_type
     
-    send_file('/files/' + @file.filename, 
+    send_file('public/files/' + @file.filename, 
     :disposition => 'attachment',
     :encoding => 'utf8', 
     :type => @file.content_type,
     :filename => URI.encode(filename))  
     
-  rescue
-    flash[:notice] = "Filen findes ikke"
-    redirect_to export_files_path
+  # rescue
+  #   flash[:notice] = "Filen findes ikke"
+  #   redirect_to export_files_path
   end
   
   def destroy

@@ -19,7 +19,7 @@ class SurveyAnswersController < ApplicationController
     @page_title = "CBCL - Vis Svar: " << @survey.get_title
 
     respond_to do |wants|
-      wants.html  { render :layout => 'survey' }
+      wants.html  { render :layout => 'survey_print' }
       wants.pdf   { render :layout => 'survey_print' }
     end
   end

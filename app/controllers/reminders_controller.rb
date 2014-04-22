@@ -17,12 +17,12 @@ class RemindersController < ApplicationController
     @states = {'Alle' => 0, 'Ubesvaret' => 2, 'Besvaret' => "5,6", 'Kladde' => 4} #JournalEntry.states
     respond_to do |format|
       format.html
-      format.js {
-        render :update do |page|
-          page.replace_html 'journal_entries', :partial => 'entries'
-          page.visual_effect :highlight, 'journal_entries'
-        end
-      }
+      format.js { render :partial => 'entries' }
+        # render :update do |page|
+        #   page.replace_html 'journal_entries', :partial => 'entries'
+        #   page.visual_effect :highlight, 'journal_entries'
+        # end
+      # }
     end
   end
   
@@ -38,7 +38,7 @@ class RemindersController < ApplicationController
       puts entry.reminder_status
       entry.save
     end
-    redirect_to answer_status_path(group, [2,4]) 
+    redirect_to answer_status_path(group, [2,4])
   end
 
   def generate_file
@@ -57,23 +57,26 @@ class RemindersController < ApplicationController
 
     done_file = true
     @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).all(:order => 'created_at desc', :include => [:journal, :login_user]) unless @state.empty?
+      between(@start_date, @stop_date).all(:order => 'journal_entries.created_at desc', :include => [:journal, :login_user]) unless @state.empty?
     export_csv_helper = ExportCsvHelper.new
     rows = export_csv_helper.get_entries_status(@journal_entries)
     done_file = rows.any?
-    export_file = ExportFile.export_xls_file rows, filename, "application/vnd.ms-excel" if rows.first
+    # puts "rows: #{rows.inspect}"
+    @export_file = ExportFile.export_xls_file rows, filename, "application/vnd.ms-excel" #if rows.first
+    puts "export_file: #{@export_file.inspect}"
 
     respond_to do |wants|
       wants.js {
-        render :update do |page|
-          if done_file
-            page.insert_html :after, 'export_file', link_button("Hent fil", file_download_path(export_file.id), 
-              :class => 'button download_file')
-            page.visual_effect :highlight, 'export_file'
-          else
-            page.insert_html :after, 'export_file', "Ingen resultater "
-          end
-        end
+        render        
+        # render :update do |page|
+        #   if done_file
+        #     page.insert_html :after, 'export_file', link_button("Hent fil", file_download_path(export_file.id), 
+        #       :class => 'button download_file')
+        #     page.visual_effect :highlight, 'export_file'
+        #   else
+        #     page.insert_html :after, 'export_file', "Ingen resultater "
+        #   end
+        # end
       }
     end    
   end

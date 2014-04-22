@@ -8,7 +8,7 @@ class ExcelConverter
 		worksheet = workbook.add_worksheet
 
 		# all rows contain headers
-		headings = csv_table.first.map &:first
+		headings = csv_table.first.keys
 		num_columns = headings.size
 		num_rows = csv_table.size
 
