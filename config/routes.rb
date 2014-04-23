@@ -281,7 +281,7 @@ Cbcl4::Application.routes.draw do
   # get '/reminders/:action/:id.:format', :to => 'reminders#download', :as => 'download'
 
   get 'main', :to => 'main#index', :as => 'main'
-  root :to => 'main#index'
+  root :to => 'login#index'
   get '', :to => 'login#index'
   
   # hide '/active rbac/*'
