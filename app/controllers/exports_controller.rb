@@ -75,11 +75,12 @@ class ExportsController < ApplicationController
   def generating_export
     @task = Task.find(params[:id])
     @completed = @task.completed?
-    @export_file = @task.completed? && "/export_files/#{@task.export_file.id}" || ""
+    @file_path = @task.completed? && "/export_files/#{@task.export_file.id}" || ""
+    @export_file = @task.export_file
 
     respond_to do |format|
       format.js {
-        # puts "GENERATING JS"
+        puts "GENERATING JS"
         # render :update do |page|
         #   if @task.completed?
         #     page.visual_effect :blind_up, 'content'
@@ -92,7 +93,7 @@ class ExportsController < ApplicationController
         # end
       }
       format.html do
-        # puts "GENERATING HTML"
+        puts "GENERATING HTML"
         redirect_to export_file_path(@task.export_file) and return if @task.completed?
       end
     end

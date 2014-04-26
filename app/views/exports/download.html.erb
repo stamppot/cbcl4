@@ -2,17 +2,37 @@
 <h3>Dette kan tage et stykke tid</h3>
 
 <span id="progress">Genererer</span>
+<div id="export_file" />
 
 <script type="text/javascript">
     generating_export = true;
 
 	$(document).ready(function() {
-    	var loop = setInterval(function() {
-	      $.getJSON('/exports/generating_export/' + <%= @task.id %>, function(response) {
+
+	// 		$.ajax({
+	// 	url: '/reminders/generate_file/' + id + '?state='+state,
+	// 	dataType: 'html',
+	// 	method: 'post',
+	// 	success: function(response) {
+	// 		// alert(response);
+	// 		// console.log(response);
+	// 		$('#export_file').html(response);
+	// 		$('#export_file').highlight();
+	// 	}
+	// });
+    	var loop = setInterval(
+
+    		function() {
+	      $.ajax({ url: '/exports/generating_export/' + <%= @task.id %>, 
+	      	dataType: 'json',
+	      	success:
+	      	function(response) {
+	      	// console.log("response: " + response);
+	      	// console.log("eval: " + eval(response));
 	      	if(response.completed) {
 	      		console.log('Completed!');
-				var file_url = response.export_file_path;
-				var button = "<a id='download_link' style='display:none;' href='" + file_url + "' class='button'> " +
+				var file_url = response.filename;
+				var button = "<a id='download_link' style='display:none;' href='/export_files/download/" + response.id + "' class='button'> " +
 					"<span class='download_excel_file'>Hent eksportfil</span>" +
 					"</a>";
 				console.log(button);
@@ -22,11 +42,27 @@
 		      	clearInterval(loop);
 		      }
 		      else {
-		      	$("#progresss").append(".");
+		      	$("#progresss").html($("#progresss").html() + "..");
 		      }
-	      });
-   		}, 2000);
+	      }});
+   		}
+   		, 2000);
     });
+
+function generate_file(id) {
+	var state = $("input[name='selected_state']").val();
+	$.ajax({
+		url: '/exports/generating_export/' + <%= @task.id %>,
+		dataType: 'html',
+		method: 'post',
+		success: function(response) {
+			// alert(response);
+			// console.log(response);
+			$('#export_file').html(response);
+			$('#export_file').highlight();
+		}
+	});
+}
 </script>
 
 	

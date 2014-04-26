@@ -89,7 +89,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     end
 
   rescue ActiveRecord::RecordNotFound
-    flash[:error] += 'Du sendte en ugyldig forespørgsel. ' + params.inspect + "<br>" + (@journal && @journal.errors.inspect || "")
+    flash[:error] = 'Du sendte en ugyldig forespørgsel. ' + params.inspect + "<br>" + (@journal && @journal.errors.inspect || "")
     redirect_to journals_path
   end
 

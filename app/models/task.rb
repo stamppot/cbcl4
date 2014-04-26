@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
       logger.info "create_survey_answer_export: created data survey: #{survey_id} #{survey_answers.size}"
       # write data
       self.export_file = ExportFile.create(:data => data,
-        :type => 'text/csv; charset=utf-8; header=present',
+        # :type => 'text/csv; charset=utf-8; header=present',
         :filename => "eksport_svar_#{Time.now.to_date.to_s}_#{survey_id}" + ".csv",
         :content_type => "application/vnd.ms-excel")
 

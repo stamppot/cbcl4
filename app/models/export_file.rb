@@ -2,12 +2,12 @@ class ExportFile < ActiveRecord::Base
 
   has_one :task
   
-  attr_accessible :filename, :content_type
+  attr_accessible :filename, :content_type, :data, :file
 
   default_scope order('created_at DESC')
 
   def self.storage_path
-    "#{Rails.root}/files"
+    "#{Rails.root}/public/files"
   end
 
   # run write_file after save to db
