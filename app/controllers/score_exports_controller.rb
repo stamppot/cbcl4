@@ -30,14 +30,22 @@ class ScoreExportsController < ApplicationController
   end
 
   def download
-    center = Center.find params[:center] unless params[:center].blank?
-    args = params
+    # center = Center.find params[:center] unless params[:center].blank?
+    # args = params
+    # params = filter_date(args)
+    # params = FilterArgs.filter_age(params)
+    
+    # center = current_user.center if current_user.centers.size == 1
+    
+    # params[:team] = params[:team].delete :team if params[:team] && params[:team][:team]
+    params[:center] = params[:center].first
+    center = Center.find params[:center] unless params[:center].blank? || params[:id] == '0'
+    center = current_user.center if current_user.centers.size == 1
+    args = params.clone
     params = filter_date(args)
     params = FilterArgs.filter_age(params)
-    
-    center = current_user.center if current_user.centers.size == 1
-    
-    params[:team] = params[:team].delete :team if params[:team] && params[:team][:team]
+    params.delete :team if ["null", "team", ""].include?(params[:team])
+
     csv_score_rapports = CsvScoreRapport.with_options(current_user, params).all
     puts "DOWNLOAD csv_score_rapports: #{csv_score_rapports.size}"
     # spawns background task
@@ -46,28 +54,28 @@ class ScoreExportsController < ApplicationController
   end
    
   # a periodic updater checks the progress of the export data generation 
-  def generating_export
-    @task = Task.find(params[:id])
+  # def generating_export
+  #   @task = Task.find(params[:id])
     
-    respond_to do |format|
-      format.js {
-        render :update do |page|
-          if @task.completed?
-            page.visual_effect :blind_up, 'content'
-            page.redirect_to export_file_path(@task.export_file) # and return  #, :content_type => 'application/javascript'
-          else
-            page.insert_html :after, 'progress', '.'
-            page.visual_effect :pulsate, 'progress'
-            page.visual_effect :highlight, 'progress'
-          end
-        end
-      }
-      format.html do
-        puts "GENERATING HTML"
-        redirect_to export_file_path(@task.export_file) and return if @task.completed?
-      end
-    end
-  end 
+  #   respond_to do |format|
+  #     format.js {
+  #       render :update do |page|
+  #         if @task.completed?
+  #           page.visual_effect :blind_up, 'content'
+  #           page.redirect_to export_file_path(@task.export_file) # and return  #, :content_type => 'application/javascript'
+  #         else
+  #           page.insert_html :after, 'progress', '.'
+  #           page.visual_effect :pulsate, 'progress'
+  #           page.visual_effect :highlight, 'progress'
+  #         end
+  #       end
+  #     }
+  #     format.html do
+  #       puts "GENERATING HTML"
+  #       redirect_to export_file_path(@task.export_file) and return if @task.completed?
+  #     end
+  #   end
+  # end 
     
     
   protected

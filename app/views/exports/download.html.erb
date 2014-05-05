@@ -9,17 +9,6 @@
 
 	$(document).ready(function() {
 
-	// 		$.ajax({
-	// 	url: '/reminders/generate_file/' + id + '?state='+state,
-	// 	dataType: 'html',
-	// 	method: 'post',
-	// 	success: function(response) {
-	// 		// alert(response);
-	// 		// console.log(response);
-	// 		$('#export_file').html(response);
-	// 		$('#export_file').highlight();
-	// 	}
-	// });
     	var loop = setInterval(
 
     		function() {
@@ -27,8 +16,6 @@
 	      	dataType: 'json',
 	      	success:
 	      	function(response) {
-	      	// console.log("response: " + response);
-	      	// console.log("eval: " + eval(response));
 	      	if(response.completed) {
 	      		console.log('Completed!');
 				var file_url = response.filename;
@@ -48,23 +35,4 @@
    		}
    		, 2000);
     });
-
-function generate_file(id) {
-	var state = $("input[name='selected_state']").val();
-	$.ajax({
-		url: '/exports/generating_export/' + <%= @task.id %>,
-		dataType: 'html',
-		method: 'post',
-		success: function(response) {
-			// alert(response);
-			// console.log(response);
-			$('#export_file').html(response);
-			$('#export_file').highlight();
-		}
-	});
-}
 </script>
-
-	
-<%# periodically_call_remote(:url => {:action => :generating_export, :id => @task},
-     :frequency => 5.0, :condition => "generating_export == true" ) -%>

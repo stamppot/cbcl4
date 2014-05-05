@@ -29,7 +29,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
 
   # Show a user identified by the +:id+ path fragment in the URL. Before_filter find_user
   def show
-    @page_title = "CBCL - Detaljer om bruger " + @user.login
+    @page_title = "CBCL - Detaljer om bruger " + (@user && @user.login || "")
     @groups = @user.center_and_teams
 
     group_ids = @groups.map {|g| g.id }.join(',')
@@ -45,7 +45,9 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @roles = current_user.pass_on_roles || []  # logged-in user can give his own roles to new user
     @user = User.new
     
-    if !params[:id].nil?   # create new user for specific center/team
+    params[:id] = current_user.centers.first.id if params[:id] == "0"
+    
+    if !params[:id].nil?  # create new user for specific center/team
       @groups = Group.this_or_parent(params[:id])
       @group = Group.find(params[:id])
       @user.groups += @groups
@@ -55,8 +57,12 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     end
   end
 
-
   def create
+    if !params[:user][:groups]
+      flash[:error] = "Du skal vælge et center eller team"
+      redirect_to new_user_url(params[:id]) and return
+    end
+
     group_id = params[:user][:groups].first
     role_ids = params[:user][:roles]
     group_ids = params[:user][:groups]
@@ -178,6 +184,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
    
   def find_user
+    return if params[:id] == 'new'
     if params[:id]
       if current_user.access?(:superadmin) or current_user.access?(:admin)
         @user = User.find(params[:id])
@@ -212,7 +219,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     id = params[:id].to_i
     # puts "CHECK ACCESS #{current_user.inspect}"
     redirect_to login_path and return false unless current_user
-    if current_user.access?(:user_show_all) || params[:action] == 'new'
+    if current_user.access?(:user_show_all) || params[:action] == 'new' || params[:id] == 'new'
       return true
     else
       access_list = User.users.in_center(current_user.center).map { |u| u.id } << 0

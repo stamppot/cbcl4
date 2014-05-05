@@ -2,10 +2,37 @@
 <h3>Dette kan tage et stykke tid</h3>
 
 <span id="progress">Genererer</span>
+<div id="export_file" />
 
 <script type="text/javascript">
     generating_export = true;
-</script>
 
-<%= periodically_call_remote(:url => {:action => :generating_export, :id => @task},
-     :frequency => 3.0, :condition => "generating_export == true" ) -%>
+	$(document).ready(function() {
+
+    	var loop = setInterval(
+
+    		function() {
+	      $.ajax({ url: '/exports/generating_export/' + <%= @task.id %>, 
+	      	dataType: 'json',
+	      	success:
+	      	function(response) {
+	      	if(response.completed) {
+	      		console.log('Completed!');
+				var file_url = response.filename;
+				var button = "<a id='download_link' style='display:none;' href='/export_files/download/" + response.id + "' class='button'> " +
+					"<span class='download_excel_file'>Hent eksportfil</span>" +
+					"</a>";
+				console.log(button);
+	      		$('#progress').html(button);
+		      	$('#download_link').fadeIn();
+
+		      	clearInterval(loop);
+		      }
+		      else {
+		      	$("#progresss").html($("#progresss").html() + "..");
+		      }
+	      }});
+   		}
+   		, 2000);
+    });
+</script>

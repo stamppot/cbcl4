@@ -81,16 +81,6 @@ class ExportsController < ApplicationController
     respond_to do |format|
       format.js {
         puts "GENERATING JS"
-        # render :update do |page|
-        #   if @task.completed?
-        #     page.visual_effect :blind_up, 'content'
-        #     page.redirect_to export_file_path(@task.export_file) # and return  #, :content_type => 'application/javascript'
-        #   else
-        #     page.insert_html :after, 'progress', '.'
-        #     page.visual_effect :pulsate, 'progress'
-        #     page.visual_effect :highlight, 'progress'
-        #   end
-        # end
       }
       format.html do
         puts "GENERATING HTML"
