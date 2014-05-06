@@ -3,7 +3,7 @@ class SurveyAnswersController < ApplicationController
   layout 'survey', :only  => [ :show, :show_fast, :edit, :print ]
   # layout 'survey_print', :only => [ :print ]
 
-  @@surveys = {}
+  # @@surveys = {}
 
   # should answered survey (merged with answers), which can be saved (send button)
   def show # BROKEN layout
@@ -13,8 +13,9 @@ class SurveyAnswersController < ApplicationController
     cookies[:journal_entry] = @journal_entry.id
     cookies[:journal_id] = @journal_entry.journal_id
     @survey_answer = SurveyAnswer.and_answer_cells.find(@journal_entry.survey_answer_id)
-    @@surveys[@journal_entry.survey_id] ||= Survey.and_questions.find(@survey_answer.survey_id)
-    @survey = @@surveys[@journal_entry.survey_id]
+    # @@surveys[@journal_entry.survey_id] ||= Survey.and_questions.find(@survey_answer.survey_id)
+    @survey = Survey.and_questions.find(@survey_answer.survey_id)
+    @survey.reload
     @survey.merge_survey_answer(@survey_answer)
     @page_title = "CBCL - Vis Svar: " << @survey.get_title
 

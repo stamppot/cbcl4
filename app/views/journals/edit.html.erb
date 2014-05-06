@@ -31,38 +31,10 @@
   <dt><label for="journal_alt_id"><%= 'Projektnr' %></label></dt>
   <dd><%= text_field('journal', 'alt_id', {:size => 25}) %></dd>
 
-  <% if !@any_answered_entries %>
-  </dl>
-
-
+  <dt><%= center_or_team_text(@journal.group) %></label></dt>
+  <dd><%= @journal.group.title %></dd>
   <br/>
-
-
-
-<script type="text/javascript">
-// Event.observe(window, 'load', function() {
-//   var code = $("journal_code").value;
-//   var hasCode = code != "";
-//   if(!hasCode) {
-//    var selectedGroup = $$(".journal_center").find(function(radio) { return radio.checked; }).value;
-//    new Ajax.Updater('journal_code', '/centers/next_journal_code',
-//     {asynchronous:true, evalScripts:true, parameters:'id=' + selectedGroup});
-//   }
-//   });
-// $$(".journal_center").each(function(center){
-//  center.observe('click', function(){
-//    new Ajax.Updater('journal_code', '/centers/next_journal_code',
-//    {asynchronous:true, evalScripts:true, parameters:'id=' + center.value});
-//  });
-// });
-// $('journal_code').focus();
-</script>
-
-<% else %>
-  <dt><%= center_or_team_text(@journal.parent) %></label></dt>
-  <dd><%= @journal.parent.title %></dd>
-  <br/>
-<% end %>
+</dl>
 <!--[eoform:user]-->
 
   <%= submit_tag t('save_changes'), :class => 'button journal_edit' %> &nbsp; <%= link_button t('journal.move'), move_journal_to_group_path(@journal), "move_journal" %>

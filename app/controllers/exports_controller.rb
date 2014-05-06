@@ -43,7 +43,7 @@ class ExportsController < ApplicationController
     # params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
     journals = if params[:team] && !["null", "team", ""].include?(params[:team])
-      team = Team.find params[:team][:id]
+      team = Team.find params[:team]
       journals = team.journals.count
     else
       params.delete :team
