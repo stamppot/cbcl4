@@ -33,8 +33,8 @@ class ImportJournals # AddJournalsFromCsv
 			puts "#{journal_name}: #{alt_id} #{b}"
 			# next
 
-			journal = Journal.find_by_title_and_team_id(journal_name, team_id)
-
+			journal = Journal.find_by_title_and_group_id(journal_name, team_id)
+			
 			if b.blank?
 				puts "ERROR: no birthdate: #{row}"
 				next
