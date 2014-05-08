@@ -13,7 +13,7 @@
 	<p style="font-size: 12pt; padding-top: 20px; padding-bottom: 0px">
 		<%= link_button t('survey.print'), (survey_answer_path(@journal_entry) + ".pdf"), 'survey_print', :title => 'Udskriv besvarelse' %>&nbsp;&nbsp;
 		<% if @can_update_answer %>
-			<%= link_button t('survey.change_answer'), survey_path(@survey), 'survey_edit' %>
+			<%= link_button t('survey.change_answer'), journal_entry_path(@journal_entry), 'survey_edit' %>
 		<% end %>
 	</p>
 </div>

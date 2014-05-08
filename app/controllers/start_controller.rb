@@ -36,7 +36,7 @@ class StartController < ApplicationController
   end
 
   def finish
-    @journal_entry = JournalEntry.find_by_user_id(current_user.id)
+    @journal_entry = JournalEntry.find_by_id_and_user_id(params[:id], current_user.id)
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
     session.delete "journal_entry"

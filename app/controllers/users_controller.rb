@@ -169,10 +169,6 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def center
     @group = Center.find params[:id]
     @userlist = UserList.new(@group, {:page => params[:page], :per_page => 15})
-    # @users = User.users.in_center(@group).paginate(:page => params[:page], :per_page => 15)
-    # puts "params: #{params.inspect} #{params[:partial]}"
-
-    # render :partial => 'center', locals: {group: @group}, :layout => false
     render :partial => 'user_list', locals: {group: @group, user_list: @userlist}, :layout => false
   end
 

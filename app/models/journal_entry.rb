@@ -161,7 +161,6 @@ class JournalEntry < ActiveRecord::Base
   
   def draft!
     self.state = JournalEntry.states['Kladde']   # Svarkladde
-    puts "journal_entry: #{self.inspect}"
     self.save!
   end
 

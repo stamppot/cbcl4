@@ -59,8 +59,8 @@ class SurveysController < ApplicationController
     @journal = journal_entry.journal
     @is_login_user = current_user.login_user?
      
-    survey_id = params[:id].to_i
-    @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
+    # survey_id = params[:id].to_i
+    # @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
     @survey = Survey.and_questions.find(params[:id]) # @@surveys[survey_id] #Survey.and_questions.find(params[:id])
     @color = @survey.color
     @page_title = @survey.get_title
