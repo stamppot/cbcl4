@@ -10,7 +10,7 @@
 		<tr>
 			<td valign="top">
 
-	<input name="id" type="hidden" value="<%= @group.id %>" />
+	<input name="id" type="hidden" value="<%= @group && @group.id || 0 %>" />
 	
 <dl>
 	<dt><label for="user_login">Login</label></dt>

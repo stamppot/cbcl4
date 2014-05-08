@@ -9,7 +9,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # We force users to use POST on the state changing actions.
   # verify :method       => :delete, :only => :destroy, :redirect_to => :show, :add_flash => { :error => 'Wrong request type: cannot delete'}
 
-  before_filter :find_user, :except => [:index, :new, :create, :center, :live_search ]
+  before_filter :find_user, :except => [:index, :new, :edit, :update, :create, :center, :live_search ]
   before_filter :check_access, :except => [:index, :list, :live_search, :page]
 
   # 31-12 Administrators cannot see other users
@@ -52,7 +52,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       @group = Group.find(params[:id])
       @user.groups += @groups
     else
-      @group = current_user.center || current_user.centers.first
+      # @group = current_user.center || current_user.centers.first
       @groups = current_user.center_and_teams
     end
   end
@@ -63,7 +63,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       redirect_to new_user_url(params[:id]) and return
     end
 
-    group_id = params[:user][:groups].first
+    # group_id = params[:user][:groups].first
     role_ids = params[:user][:roles]
     group_ids = params[:user][:groups]
     
@@ -87,7 +87,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       puts "user.groups: #{@user.groups.inspect}"
       puts "ERRORS: #{@user.errors.inspect}"
       @roles = current_user.pass_on_roles || []
-      @group = Group.find(group_id)
+      # @group = Group.find(group_id)
       @groups = Group.this_or_parent(group_id)
       render :new
       # redirect_to new_user_url(group_id) #, :flash => { :error => @user.errors.to_a.join }
@@ -95,9 +95,9 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
   
   def edit
+    @user = User.find params[:id]
     @roles = current_user.pass_on_roles
     @groups = current_user.center_and_teams
-    puts "CENTER_AND_TEAMS: #{@groups.map &:title}"
     @user.password = ""
   end
 
@@ -184,8 +184,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
    
   def find_user
-    return if params[:id] == 'new'
-    if params[:id]
+    # return if params[:id] == 'new'
+    if params[:id].to_i > 0
       if current_user.access?(:superadmin) or current_user.access?(:admin)
         @user = User.find(params[:id])
       else
