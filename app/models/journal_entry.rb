@@ -26,9 +26,18 @@ class JournalEntry < ActiveRecord::Base
   scope :between, lambda { |start, stop| where('journal_entries.created_at' => start..stop) } 
   scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
   scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
+  scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }
 
   def self.follow_ups
     [["Diagnose", 0], ["1. opfølgning", 1], ["2. opfølgning", 2], ["3. opfølgning", 3], ["Afslutning", 4]]
+  end
+
+  def self.get_status_query(state)
+    case state
+    when "" then ""
+    when "0" then "reminder_status is null or reminder_status = ?"
+    when "1" then "reminder_status = ?"
+    end
   end
 
   def get_follow_up
@@ -237,11 +246,11 @@ class JournalEntry < ActiveRecord::Base
     self.reminder_status = value if value
   end
 
-  def JournalEntry.reminder_states
+  def JournalEntry.reminder_states # om de skal trækkes med ud i trafiklys-funktion
     {
       '' => 0,
-      'Rykket' => 1,
-      'Afsluttet' => 9 
+      'Passiv' => 1 #,
+      # 'Afsluttet' => 9 
     }
   end
 

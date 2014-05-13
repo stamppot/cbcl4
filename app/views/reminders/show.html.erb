@@ -20,6 +20,12 @@
 	<span class="commands">
 		<a class="button download_excel_file" href="javascript:void(0);" onclick="generate_file(<%= @group.id %>)" >
 			<span class="download_excel_file"><%= t('export.entry_status') %></span></a>
+
+			<select id="export_reminder_status" name="export_reminder_status">
+				<option value="">Alle</option>
+				<option value="0">Kun aktive</option>
+				<option value="1">Kun passive</option>
+			</select>
 	</span>
 
 	<div id="export_file" data-no-turbolink></div>
@@ -58,9 +64,9 @@
 		<a class="button status_all" href="javascript:void(0);" onclick="update_reminder_status(<%= @group.id %>)" >
 		<span class="">Marker som </span></a>
 		<select id="reminder_status" name="reminder_status">
-			<option value=""></option>
-			<option value="Rykket">Rykket</option>
-			<option value="Afsluttet">Afsluttet</option>
+			<option value="">Aktive</option>
+			<option value="Passiv">Passive</option>
+<!-- 			<option value="Afsluttet">Afsluttet</option> -->
 		</select>
 		<% end %>
 		<%= render :partial => 'entries', :locals => {:hide_team => true} %>
@@ -78,16 +84,13 @@
 <script type="text/javascript">
 
 	function update_reminder_status(group_id) {
-		alert("?: update_reminder_status group_id: " + group_id);
-		var params = $("reminders").serialize();
-		params += "&id=" + group_id;
+		var params = $("#reminders").serialize();
 
 		$.ajax({ 
-			url: '/reminders/update?' + params,
+			url: '/reminders/update/' + group_id + '?' + params,
 		 	dataType: 'json',
   			success: function(response) {
-  			// alert("success");
-    		// location.href = location.href;
+    			location.href = location.href;
 			}
 		});
 	}
@@ -116,8 +119,10 @@ $(document).ready(function() {
 
 function generate_file(id) {
 	var state = $("input[name='selected_state']").val();
+	var export_reminder = $("#export_reminder_status").val();
+
 	$.ajax({
-		url: '/reminders/generate_file/' + id + '?state='+state,
+		url: '/reminders/generate_file/' + id + '?state='+state + '&active=' + export_reminder,
 		dataType: 'html',
 		method: 'post',
 		success: function(response) {

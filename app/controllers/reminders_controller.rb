@@ -38,7 +38,7 @@ class RemindersController < ApplicationController
       puts entry.reminder_status
       entry.save
     end
-    redirect_to answer_status_path(group, [2,4])
+    redirect_to answer_status_path(group) #, [2,4])
   end
 
   def generate_file
@@ -55,9 +55,12 @@ class RemindersController < ApplicationController
     timestamp = Time.now.strftime('%Y%m%d%H%M')
     filename = "journalstatus_#{@group.group_name_abbr.underscore}-#{status}-#{timestamp}.xls" 
 
+    # use_filter = !params[:active].nil?
+    filter = params[:active]
+
     done_file = true
     @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).all(:order => 'journal_entries.created_at desc', :include => [:journal, :login_user]) unless @state.empty?
+      between(@start_date, @stop_date).active_state(filter).all(:order => 'journal_entries.created_at desc', :include => [:journal, :login_user]) unless @state.empty?
     export_csv_helper = ExportCsvHelper.new
     rows = export_csv_helper.get_entries_status(@journal_entries)
     done_file = rows.any?
