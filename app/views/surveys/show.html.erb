@@ -273,6 +273,26 @@ jQuery(document).ready(function ($) {
     changeAction('surveyform', '/survey_answers/create/' + params['id'] + "/" + journal_id);
 
     initMakeItCount();
+
+    $('.comment').each(function() {
+    $(this).data('chars', 0);
+    $(this).parent().append('<span>0/2000</span>');
+});
+
+	$('.comment').off('keyup').keyup(function(e) {
+	    var count = $(this).data('chars');
+	    count = $(this).val().length;
+	    $(this).data('chars', count);
+ 	    $(this).next('span').html(count + '/2000');
+ 	    if(count > 2000) {
+	        $(this).val($(this).val().substring(0,2000));
+	        alert('Der er ikke plads til mere tekst');
+	        $(this).data('chars', count);
+	    	$(this).next('span').html(count + '/2000');
+	        e.preventDefault();
+	        return false;
+	    }
+	});
 });
 
 </script>

@@ -70,46 +70,37 @@ class RemindersController < ApplicationController
 
     respond_to do |wants|
       wants.js {
-        render        
-        # render :update do |page|
-        #   if done_file
-        #     page.insert_html :after, 'export_file', link_button("Hent fil", file_download_path(export_file.id), 
-        #       :class => 'button download_file')
-        #     page.visual_effect :highlight, 'export_file'
-        #   else
-        #     page.insert_html :after, 'export_file', "Ingen resultater "
-        #   end
-        # end
+        render
       }
     end    
   end
 
   # old, download csv
-  def download
-    @group = Group.find(params[:id])
-    selected_state = params[:selected_state]
-    selected_state = [2,3,4,5,6] if selected_state == "0"
+  # def download
+  #   @group = Group.find(params[:id])
+  #   selected_state = params[:selected_state]
+  #   selected_state = [2,3,4,5,6] if selected_state == "0"
 
-    @state = selected_state.to_a
-    @start_date = @group.created_at
-    @stop_date = DateTime.now
+  #   @state = selected_state.to_a
+  #   @start_date = @group.created_at
+  #   @stop_date = DateTime.now
 
-    @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).all(:order => 'created_at desc') unless @state.empty?
-    export_csv_helper = ExportCsvHelper.new
-    rows = export_csv_helper.get_entries_status(@journal_entries)
-    csv = export_csv_helper.to_csv(rows)
-    respond_to do |wants|
-      timestamp = Time.now.strftime('%Y%m%d%H%M')
-      filename = "journalstatus_#{@group.group_name_abbr.underscore}-#{timestamp}.csv" 
-      wants.html {
-        export_csv(csv, filename, 'text/csv;charset=utf-8; encoding=utf-8')
-      }
-      wants.csv {
-        export_csv(csv, filename, 'text/csv;charset=utf-8; encoding=utf-8')
-      }
-    end    
-  end
+  #   @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
+  #     between(@start_date, @stop_date).all(:order => 'created_at desc') unless @state.empty?
+  #   export_csv_helper = ExportCsvHelper.new
+  #   rows = export_csv_helper.get_entries_status(@journal_entries)
+  #   csv = export_csv_helper.to_csv(rows)
+  #   respond_to do |wants|
+  #     timestamp = Time.now.strftime('%Y%m%d%H%M')
+  #     filename = "journalstatus_#{@group.group_name_abbr.underscore}-#{timestamp}.csv" 
+  #     wants.html {
+  #       export_csv(csv, filename, 'text/csv;charset=utf-8; encoding=utf-8')
+  #     }
+  #     wants.csv {
+  #       export_csv(csv, filename, 'text/csv;charset=utf-8; encoding=utf-8')
+  #     }
+  #   end    
+  # end
 
   protected 
   
