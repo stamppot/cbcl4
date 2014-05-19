@@ -219,19 +219,13 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   
   def select
     @group = Group.find(params[:id])
+    @teams = current_user.center_and_teams
+    puts "@teams: #{@teams.inspect}"
     @page_title = "CBCL - Center " + @group.title
     @groups = @group.journals.paginate(:page => params[:page], :per_page => journals_per_page*2, :order => 'title') || []
     @journal_count = @group.journals.count
 
-     respond_to do |format|
-       format.html
-       format.js {
-         render :update do |page|
-           page.replace_html 'journals', :partial => 'select_journals'
-         end
-       }
-     end
-
+    # render :view => :select_journals
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'Du har ikke adgang til dette center.'
     redirect_to teams_url

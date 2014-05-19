@@ -10,7 +10,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # verify :method       => :delete, :only => :destroy, :redirect_to => :show, :add_flash => { :error => 'Wrong request type: cannot delete'}
 
   before_filter :find_user, :except => [:index, :new, :edit, :update, :create, :center, :live_search ]
-  before_filter :check_access, :except => [:index, :list, :live_search, :page]
+  before_filter :check_access, :except => [:index, :list, :live_search, :page, :create]
 
   # 31-12 Administrators cannot see other users
   def index
@@ -88,7 +88,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       puts "ERRORS: #{@user.errors.inspect}"
       @roles = current_user.pass_on_roles || []
       # @group = Group.find(group_id)
-      @groups = Group.this_or_parent(group_id)
+      @groups = Group.this_or_parent(params[:id])
       render :new
       # redirect_to new_user_url(group_id) #, :flash => { :error => @user.errors.to_a.join }
     end

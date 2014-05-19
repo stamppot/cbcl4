@@ -22,9 +22,12 @@
 		<!-- <td style="text-align: right;"><%# group.users.size %></td> -->
 		
 		<td style="text-align: right;">
-			<!-- <span class="action wide actions">
-				<a title="Flyt journaler" href="/journals/select/<%= group.id %>"><img border="0" title="Flyt journaler" src="/assets/document_move_24.png" class="icon" alt="Flyt journaler"></a>
-			</span> -->
+			<span class="action wide actions">
+				<a title="Flyt journaler" href="/journals/select/<%= group.id %>">
+					<%= image_tag 'document_move_24.png', :title => "Flyt journaler", :class => "icon", :alt => "Flyt journaler" %>
+
+				</a>
+			</span>
 			<span class="action">
 				<a href="/reminders/<%= group.id %>">
 					<%= image_tag 'traffic-light_24.png', :title => "Svarstatus", :class => "icon", :alt => "Svarstatus" %>

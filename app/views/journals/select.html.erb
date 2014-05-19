@@ -2,11 +2,34 @@
 
 <%= form_tag(move_journals_url(@group), :class => 'form', :method => :post) do %>
 <div class="teams" id="teams" style="float:right;">
-  <p/>
-  <h3>Flyt til team</h3>
+	<p/>
+	<h3>Flyt til team</h3>
   <% unless @group.errors[:parent].nil? %><div class="fieldWithErrors"><% end %>
-    <%= render 'shared/groups_tree', :locals => {:groups => @groups} %>
-  <% unless @group.errors[:parent].nil? %></div><% end %>
+    <% grouped = @teams.group_by {|g| g.parent_or_self } %>
+    <div style="float:right;">
+    <ul>
+    <% grouped.each do |center, teams| %>
+      <% group = center %>
+        <li>
+          <% checked = @group == group && "checked='checked'" || "" %>
+          <input class="journal_center" id="team_id_<%= group.id %>" type="radio" name="team[id]" value="<%= group.id %>" <%= checked %> />
+            <label for="team_id_<%= group.id %>"><%= group.title %></label>
+          </li>
+
+          <ul>
+          <% teams.each do |group| %>
+            <% checked = @group == group && "checked='checked'" || "" %>
+            <li>
+              <input class="journal_center" id="team_id_<%= group.id %>" type="radio" name="team[id]" value="<%= group.id %>" <%= checked %> />
+              <label for="team_id_<%= group.id %>"><%= group.title %></label>
+            </li>
+        <% end %>
+        </ul>
+    <% end %>
+    </ul>
+    </div>
+    <% unless @group.errors[:parent].nil? %></div>
+  <% end %>
 </div>
 
 <div class="team_journals" id="team_journals">
@@ -32,22 +55,21 @@
 </div>
 
 <script type="text/javascript">
-	$$('.tabs').each(function(tab_group){  
-    new Control.Tabs(tab_group);  
+	$('.tabs').each(function(tab_group){  
+    	new Control.Tabs(tab_group);  
 	});
 	
-	Event.observe(window, 'load', function() {
-	  var select_all_box = $('select_all_box');
-	  if (select_all_box) {
-	    var checkboxes = select_all_box.up('form').getInputs('checkbox');
-	    checkboxes.shift(); // throw out select all box
-
-	    select_all_box.observe('click', function() {
-	      checkboxes.each(function(e) {
-	        e.checked = select_all_box.checked;
-	      });
+	$(document).ready(function() {
+	  var select_all_box = $('#select_all_box');
+	  var ischecked = select_all_box.val() == "1";
+	    select_all_box.on('click', function() {
+	      $('input[type=checkbox]').each(function() { 
+	      	if(ischecked) 
+		      	$(this).attr('checked', 'checked');
+		    else
+		    	$(this).attr('checked', '');
+		  });
 	    });
-	  }
 	});
 </script>
 

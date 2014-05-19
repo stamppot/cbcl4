@@ -329,11 +329,11 @@ class SurveyAnswer < ActiveRecord::Base
   def variable_values
     variables = self.survey.variables.map {|v| v.var.to_sym}
     values = self.cell_values
-    variables.inject(Dictionary.new) do |col,var|
+    result = variables.inject(Dictionary.new) do |col,var|
       col[var] = values[var] || "#NULL!"
       col
     end
-    #variables
+    
   end
   
   def save_csv_survey_answer
@@ -350,7 +350,8 @@ class SurveyAnswer < ActiveRecord::Base
       :sex => self.journal.sex,
       :created_at => self.created_at,
       :updated_at => self.updated_at,
-      :journal_info => to_danish(self.info.values.join(';;'))
+      :journal_info => to_danish(self.info.values.join(';;')),
+      :answer_count => vals.values.size
     }
     
     csa = self.csv_survey_answer

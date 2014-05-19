@@ -35,7 +35,7 @@ class Journal < ActiveRecord::Base #< Group
            # :order => 'journal_entries.answered_at'
   default_scope -> { order('created_at DESC') }
 
-  attr_accessible :code, :title, :sex, :birthdate, :birthdate, :birthdate, :nationality, :parent_name, :parent_email, :alt_id, :group, :center_id
+  attr_accessible :code, :title, :sex, :birthdate, :birthdate, :birthdate, :nationality, :parent_name, :parent_email, :alt_id, :group, :center_id, :group_id
 
   after_save    :expire_cache
 	after_create  :index_search, :expire_cache

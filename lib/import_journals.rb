@@ -104,6 +104,11 @@ class ImportJournals # AddJournalsFromCsv
 			m = d[5..6].to_i
 			d = d[8..9].to_i
 			return Date.new(y,m,d)
+		elsif d.length == 10 && d[2] == "-" && d[5] == "-" # dd-mm-yyyy
+			y = d[6..9].to_i
+			m = d[3..4].to_i
+			d = d[0..1].to_i
+			return Date.new(y,m,d)
 		else 	  # dd-mm-yyyy 
 			y = d[6..9].to_i
 			m = d[3..4].to_i

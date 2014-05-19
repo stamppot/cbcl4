@@ -57,7 +57,7 @@ class AnswerCell < ActiveRecord::Base
 	end  
 
 	def answer_type  
-	  AnswerCell.answer_types.index(self.cell_type)
+	  AnswerCell.answer_types.key(self.cell_type)
 	end
 	
 	def text?

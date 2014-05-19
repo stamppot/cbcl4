@@ -33,7 +33,8 @@
 			<%= link_button t('export.logins'), export_login_path(@group.id), 'export_logins', :class => "mini", :title => 'Eksporter logins til Excel' %>
 			<br/>
 			<% if @group.group && @group.group.teams.size > 1 %>
-			<%= link_button t('team.move'), select_move_journals_path(@group), 'journal_move', :class => "mini", :title => t('team.move') %>
+			<a title="Flyt journaler" href="/journals/select/<%= @group.id %>"><img border="0" title="Flyt journaler" src="/images/document_move_24.png" class="icon" alt="Flyt journaler"></a>
+			<%# link_button t('team.move'), select_move_journals_path(@group), 'journal_move', :class => "mini", :title => t('team.move') %>
 			<% end %>
 			<%= link_button t('export.journal_letter_data'), export_journals_path(@group, :format => 'csv') +".csv", 'export_logins', :title => 'Eksporter brevfletningsdata' %>
 

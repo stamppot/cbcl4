@@ -1265,6 +1265,8 @@ a:active.bigbutton {
 	margin-left: 30px;
 }
 
+label { word-wrap: break-word; }
+
 @media print {  
     body { background-color: #FFF; }
 		body, p, ol, ul, td { font-size: 9px; }

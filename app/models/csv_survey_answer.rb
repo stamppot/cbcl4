@@ -23,7 +23,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
   scope :in_center, lambda { |center_id| { :conditions => ["csv_survey_answers.center_id = ?", center_id] } }
   scope :for_team, lambda { |team_id| { :conditions => ["csv_survey_answers.team_id = ?", team_id] } }
 
-  attr_accessible :answer, :journal_id, :survey_answer_id, :center_id, :team_id, :survey_id, :journal_entry_id, :age, :sex, :created_at, :updated_at, :journal_info
+  attr_accessible :answer, :journal_id, :survey_answer_id, :center_id, :team_id, :survey_id, :journal_entry_id, :age, :sex, :created_at, :updated_at, :journal_info, :answer_count
 
 
   def to_csv(csv_survey_answers, survey_id)
