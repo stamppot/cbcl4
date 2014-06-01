@@ -42,7 +42,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
 
   # Displays a form to create a new user. Posts to the #create action.
   def new
-    @roles = current_user.pass_on_roles || []  # logged-in user can give his own roles to new user
+    @roles = current_user.pass_on_roles.to_a || []  # logged-in user can give his own roles to new user
     @user = User.new
     
     params[:id] = current_user.centers.first.id if params[:id] == "0"
@@ -70,7 +70,9 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @user = current_user.create_user(params[:user])
 
     if !(current_user.access_to_roles?(role_ids) && current_user.access_to_groups?(group_ids))
+     logger.info("could not create user: roleIds: #{role_ids.inspect}, group_ids: #{group_ids.inspect}  access_to_roles: #{current_user.access_to_roles?(role_ids)}, access to groups: #{current_user.access_to_groups?(group_ids)}")
       flash[:error] = "No access to role or group"
+      flash[:notice] = "Ingen adgang til den valgte rolle eller gruppe"
       redirect_to users_path and return
     end
 

@@ -19,13 +19,13 @@
 	<br/>
 	<span class="commands">
 		<a class="button download_excel_file" href="javascript:void(0);" onclick="generate_file(<%= @group.id %>)" >
-			<span class="download_excel_file"><%= t('export.entry_status') %></span></a>
-
 			<select id="export_reminder_status" name="export_reminder_status">
 				<option value="">Alle</option>
 				<option value="0">Kun aktive</option>
 				<option value="1">Kun passive</option>
 			</select>
+	
+			<span class="download_excel_file"><%= t('export.entry_status') %></span></a>
 	</span>
 
 	<div id="export_file" data-no-turbolink></div>
@@ -64,8 +64,8 @@
 		<a class="button status_all" href="javascript:void(0);" onclick="update_reminder_status(<%= @group.id %>)" >
 		<span class="">Marker som </span></a>
 		<select id="reminder_status" name="reminder_status">
-			<option value="">Aktive</option>
 			<option value="Passiv">Passive</option>
+			<option value="">Aktive</option>
 <!-- 			<option value="Afsluttet">Afsluttet</option> -->
 		</select>
 		<% end %>

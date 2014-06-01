@@ -27,10 +27,10 @@ class ImportJournals # AddJournalsFromCsv
 			journal_name = row["journalnavn"] || row["Bnavn"]
 			parent_name = row["Mnavn"]
 			parent_mail = row["Email"]
-			sex = row["gender"]
-			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Pige" && 1 || 2
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
 
-			puts "#{journal_name}: #{alt_id} #{b}"
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
 			# next
 
 			journal = Journal.find_by_title_and_group_id(journal_name, team_id)
@@ -48,6 +48,8 @@ class ImportJournals # AddJournalsFromCsv
 				:birthdate => birthdate, :parent_email => parent_mail, :title => journal_name,
 				:parent_name => parent_name, :alt_id => alt_id, :nationality => "Dansk", :sex => sex
 			}
+			journal.sex = sex if journal
+			journal.update_attributes(args) if journal
 
 			if !journal
 				args[:code] = center.next_journal_code

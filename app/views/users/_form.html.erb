@@ -35,7 +35,7 @@
 
 	<dt><label><%= t('roles.Roles') %></label></dt>
 	<dd>
-		<% @roles.each do |role|
+		<% @roles.to_a.each do |role|
 			if @user.has_role?(role) %>
 				<input id="user_roles_<%= role.id %>" type="checkbox" name="user[roles][]" value="<%= role.id %>" checked="checked" />
 			<% else %>

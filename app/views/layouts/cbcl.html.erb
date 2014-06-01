@@ -28,8 +28,6 @@
  	<%# javascript_include_tag 'controls' %>
 
 	<%= javascript_include_tag 'underscore' %>
-	<%= javascript_include_tag 'postal.min' %>
-	<%= javascript_include_tag 'postal.diagnostics.min' %>
 
 	<%= javascript_include_tag 'curvy-corners' %>
 
@@ -44,6 +42,9 @@
 	<%= javascript_include_tag 'jquery.easytabs.min' %>
 	<%# javascript_include_tag 'livepipe/livepipe' %>
 	<%# javascript_include_tag 'livepipe/tabs' %>
+
+	<%= javascript_include_tag 'postal.min' %>
+	<%= javascript_include_tag 'postal.diagnostics.min' %>
 
  	<%= javascript_include_tag 'jqTableKit' %>
 	<script type="text/javascript">
@@ -102,10 +103,10 @@
 	}).distinctUntilChanged().withDelay( 500 );
 
 	channel.subscribe("Search.Journals", function ( data ) {
+		$('#journal_spinner').toggle(data.value.length > 0);
+
 		if(data.value == '')
 			return;
-		
-		$('#journal_spinner').show();
 		
 		$.ajax({url: '/journals/search/' + encodeURIComponent(data.value), 
 			dataType: 'html',

@@ -32,52 +32,41 @@
   <% if !@any_answered_entries %>
   <dt><label>Vælg center/team:</label></dt>
   <dd>
-    <%= node_tree(@groups) do |group| %>
-      <input class="journal_center" id="journal_group_<%= group.id %>" type="radio" name="journal[group]" value="<%= group.id %>" <%= @journal.group == group && 'checked="checked"' || '' %> />
-      <label for="journal_group_<%= group.id %>"><%= group.title %> Hello</label>
-      <% end %>
+    <ul>
+    <% grouped = @groups.group_by {|g| g.parent_or_self } %>
+
+    <% grouped.each do |center, teams| %>
+      <% group = center %>
+        <li>
+          <% checked = @group == group && "checked='checked'" || "" %>
+          <input class="journal_center" id="team_id_<%= group.id %>" type="radio" name="team[id]" value="<%= group.id %>" <%= checked %> />
+            <label for="team_id_<%= group.id %>"><%= group.title %></label>
+          </li>
+
+          <ul>
+          <% teams.each do |group| %>
+            <% next if group.is_a?(Center) %>
+            <% checked = @group == group && "checked='checked'" || "" %>
+            <li>
+              <input class="journal_center" id="team_id_<%= group.id %>" type="radio" name="team[id]" value="<%= group.id %>" <%= checked %> />
+              <label for="team_id_<%= group.id %>"><%= group.title %></label>
+            </li>
+        <% end %>
+        </ul>
+    <% end %>
+    </ul>
+    </div>
+
+
+    <%# node_tree(@groups) do |group| %>
+<!--       <input class="journal_center" id="journal_group_<%= group.id %>" type="radio" name="journal[group]" value="<%= group.id %>" <%= @journal.group == group && 'checked="checked"' || '' %> />
+      <label for="journal_group_<%= group.id %>"><%= group.title %> Hello</label> -->
+      <%# end %>
   </dd>
 </dl>
 
 <script type="text/javascript">
-// $(document).ready(function () {
-//   var code = $("#journal_code").val();
-//   var hasCode = code != "";
-//   if(!hasCode) {
-//     var selectedGroup = $("input[name='journal[group]']:checked").val();
-//     $.get('/centers/next_journal_code?id=' + selectedGroup, function(response) {
-//       $('group_code').val( response );
-//     });
-//     // new Ajax.Updater('journal_code', '/centers/next_journal_code',
-//      // {asynchronous:true, evalScripts:true, parameters:'id=' + selectedGroup});
-//   // }
-//   });
-// $(".journal_center").each(function(){
-//   $(this).click(function() {
-//     $.get('/centers/next_journal_code?id=' + $(this).val(), function(response) {
-//       $('group_code').val( response );
-//     });
-//   });
-// });
-//   $('#journal_code').focus();
-// });
 
-// Event.observe(window, 'load', function() {
-//   var code = $("journal_code").value;
-//   var hasCode = code != "";
-//   if(!hasCode) {
-//     var selectedGroup = $$(".journal_center").find(function(radio) { return radio.checked; }).value;
-//     new Ajax.Updater('journal_code', '/centers/next_journal_code',
-//      {asynchronous:true, evalScripts:true, parameters:'id=' + selectedGroup});
-//   }
-//   });
-// $$(".journal_center").each(function(center){
-//   center.observe('click', function(){
-//     new Ajax.Updater('journal_code', '/centers/next_journal_code',
-//     {asynchronous:true, evalScripts:true, parameters:'id=' + center.value});
-//   });
-// });
-// $('journal_code').focus();
 </script>
 
 <% else %>

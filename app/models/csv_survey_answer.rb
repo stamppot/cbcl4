@@ -14,14 +14,15 @@ class CsvSurveyAnswer < ActiveRecord::Base
   scope :by_journal_and_survey, lambda { |j_id, survey_id| { :conditions => ['journal_id = ? and survey_id = ?', j_id, survey_id], :limit => survey_ids.size, :order => 'survey_id' } }
   scope :by_survey_answer_and_surveys, lambda { |sa_id, survey_ids| { :conditions => ['survey_answer_id = ? and survey_id IN (?)', sa_id, survey_ids], :limit => survey_ids.size, :order => 'survey_id' } }  
 
-  scope :between, lambda { |start, stop| { :conditions => { :created_at  => start...stop } } }
-  scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start...stop } } }
-  scope :from_date, lambda { |start| { :conditions => { :created_at  => start...(Date.now) } } }
-  scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)...stop } } }
+  scope :between, ->(start, stop) { where(:created_at => start...stop) }
+  scope :aged_between, ->(start, stop) { where(:age => start...stop) }
+  scope :from_date, ->(start = DateTime.new(2005)) { where(:created_at => start...(Date.now)) }
+  scope :to_date, ->(stop = DateTime.now) { where(:created_at  => (Date.now)...stop) }
   # scope :for_survey, lambda { |survey_id| { :conditions => { :survey_id => survey_id } } }
-  scope :for_survey, lambda { |survey_id| where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
-  scope :in_center, lambda { |center_id| { :conditions => ["csv_survey_answers.center_id = ?", center_id] } }
-  scope :for_team, lambda { |team_id| { :conditions => ["csv_survey_answers.team_id = ?", team_id] } }
+  scope :for_survey, ->(survey_id) { where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
+  scope :in_center, ->(center_id) { where(["csv_survey_answers.center_id = ?", center_id]) }
+  scope :for_team, ->(team_id) { where(["csv_survey_answers.team_id = ?", team_id]) }
+  # scope :in_group, lambda { |options| { (!options[:center].blank? && {:conditions => ["csv_survey_answers.center_id = ?", team_id]}) || (!options[:team].blank? && {:conditions => ["csv_survey_answers.team_id = ?", team_id]}) } }
 
   attr_accessible :answer, :journal_id, :survey_answer_id, :center_id, :team_id, :survey_id, :journal_entry_id, :age, :sex, :created_at, :updated_at, :journal_info, :answer_count
 
@@ -37,6 +38,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
   def self.filter_params(user, options = {})
     options[:start_date]  ||= SurveyAnswer.first.created_at.beginning_of_day
     options[:stop_date]   ||= SurveyAnswer.last.created_at.end_of_day
+    puts "filter_params before start_age: #{options.inspect}"
     options[:start_age]   ||= 0
     options[:stop_age]    ||= 28
 
@@ -55,16 +57,30 @@ class CsvSurveyAnswer < ActiveRecord::Base
   
   # filtrerer ikke på done, også kladder er med
   def self.with_options(user, options)
+    puts "with_options: #{options.inspect}"
     o = self.filter_params(user, options)
-    query = CsvSurveyAnswer.for_survey(o[:survey][:id]).
-      between(o[:start_date], o[:stop_date]).
-      aged_between(o[:start_age], o[:stop_age])
+    survey_id = o[:survey][:id]
+    puts "survey_id: #{survey_id} -- #{o[:survey][:id].inspect}"
+    options.delete(:team) if options[:team].blank?
 
+    query = if !options[:team].blank?
+      puts "with_options for_team: #{options[:team]}"
+      CsvSurveyAnswer.between(o[:start_date], o[:stop_date])
+        .aged_between(o[:age_start], o[:age_stop])
+        .for_team(options[:team])
+        .for_survey(survey_id)
+      else
+        puts "with_options in_center: #{options[:center]}"
+        CsvSurveyAnswer.between(o[:start_date], o[:stop_date])
+        .aged_between(o[:age_start], o[:age_stop])
+        .in_center(options[:center])
+        .for_survey(survey_id)
+      end
+      puts "query: #{query.to_sql.inspect}"
     # puts "options.: #{options.inspect}"
     # puts "options[:team]: #{options[:team].inspect}"
-    options.delete(:team) if options[:team].blank?
-    query = query.in_center(options[:center]) if !options[:center].blank?
-    query = query.for_team(options[:team]) if !options[:team].blank?
+    # query = query.in_center(options[:center]) if !options[:center].blank?
+    # query = query.for_team(options[:team]) if !options[:team].blank?
     query
   end
   

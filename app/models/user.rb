@@ -61,6 +61,7 @@ class User < ActiveRecord::Base
   end
 
   def access?(permission)
+    set_perms if !self.perms
     self.perms && self.perms.include?(permission)
   end  
   
@@ -444,13 +445,13 @@ class User < ActiveRecord::Base
     
   # roles a user can pass on
   def pass_on_roles
-    r = self.roles
+    r = self.roles.to_a
     if self.has_access?(:superadmin)
-      r = Role.get(Access.roles(:all_users))
+      r = Role.get(Access.roles(:all_users)).to_a
     elsif self.has_access?(:admin)
-      r = Role.get(Access.roles(:admin_roles))
+      r = Role.get(Access.roles(:admin_roles)).to_a
     elsif self.has_access?(:centeradm)
-      r = Role.get(Access.roles(:center_users))
+      r = Role.get(Access.roles(:center_users)).to_a
     end
     return (r.is_a?(Array) ? r : [r])
   end

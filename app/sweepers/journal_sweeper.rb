@@ -12,8 +12,8 @@ class JournalSweeper < ActionController::Caching::Sweeper
   private
 
     def expire_cache(journal)
-      expire_page journals_path 
-      expire_page journal_path(journal)
+      # expire_page journals_path 
+      # expire_page journal_path(journal)
     end
 
 end
