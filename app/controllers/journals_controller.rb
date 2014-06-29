@@ -42,10 +42,12 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   
   def index
+    # params[:center] = nil if params[:center] = "0"
     options = { :include => :group, :page => params[:page], :per_page => Journal.per_page, 
       :center => params[:center], :team => params[:team], :column => params[:column], :order => params[:order] }
     @centers = current_user.centers
-    @teams = current_user.access?(:superadmin) && Center.find(params[:center]).teams || current_user.center.teams
+    center = (params[:center] && params[:center] != "0") && Center.find(params[:center]) || current_user.center || Center.first
+    @teams = current_user.access?(:superadmin) && center.teams || current_user.center.teams
     @column = "created_at"
     @order = params[:order] == "desc" && "asc" || "desc"
     @center = params[:center]

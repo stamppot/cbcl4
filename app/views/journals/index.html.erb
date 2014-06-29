@@ -124,15 +124,20 @@ $(document).ready(function() {
 
 	$('select#center_select, select#team_select').change(function() {
 		var val = $(this).val();
-		console.log('update list: ' + val);
 		var center_id = $('#center_select').val();
 		if("0" == center_id) center_id = '';
-		var team_id = $('#team_select').val();
-		if("0" == team_id) team_id = '';
 		$('#center_select').val(center_id);
-		$('#team_select').val(team_id);
-
+		$('#team_select').val(0);
 		get_page_url(get_page_params());
 	});
+
+	$('select#team_select').change(function() {
+		var val = $(this).val();
+		var team_id = $('#team_select').val();
+		if("0" == team_id) team_id = '';
+		$('#team_select').val(team_id);
+		get_page_url(get_page_params());
+	});
+
 });
 </script>
