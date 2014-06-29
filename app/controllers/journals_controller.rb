@@ -42,7 +42,18 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   
   def index
-    options = { :include => :group, :page => params[:page], :per_page => Journal.per_page }
+    options = { :include => :group, :page => params[:page], :per_page => Journal.per_page, 
+      :center => params[:center], :team => params[:team], :column => params[:column], :order => params[:order] }
+    @centers = current_user.centers
+    @teams = current_user.access?(:superadmin) && Center.find(params[:center]).teams || current_user.center.teams
+    @column = "created_at"
+    @order = params[:order] == "desc" && "asc" || "desc"
+    @center = params[:center]
+    @team = if @centers.map {|c| c.teams.map {|t| t.id.to_s}}.flatten.include?(params[:team])
+      params[:team]
+    else
+      "0"
+    end
     @journals = current_user.journals(options) || [] # TODO: Move to configuration option
   end
 
@@ -184,7 +195,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     if request.post?
       entries = params[:entry].select { |k,v| v.to_i == 1 }.map &:first
       entries = JournalEntry.find(entries, :include => [:login_user, :survey_answer])
-      entries.each { |entry| entry.destroy } # deletes user and survey_answer too
+      entries.each { |entry| entry.clear_association_cache; entry.destroy } # deletes user and survey_answer too
 
       if @group.save
         flash[:notice] = "Spørgeskemaer blev fjernet fra journal."
@@ -195,6 +206,11 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
       @entries = @group.journal_entries.collect { |entry| entry if entry.not_answered? }.compact
       @page_title = "Journal #{@group.title}: Fjern spørgeskemaer"      
     end
+
+  rescue ActiveRecord::ActiveRecordError
+    flash[:notice] = "Spørgeskemaer blev fjernet fra journal."
+    @group.surveys(:reload => 'force')
+    redirect_to journal_path(@group)
   end
 
   def search

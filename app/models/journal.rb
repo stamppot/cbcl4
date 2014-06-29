@@ -33,7 +33,7 @@ class Journal < ActiveRecord::Base #< Group
 
            # :conditions => 'journal_entries.state < 5',  # not answered
            # :order => 'journal_entries.answered_at'
-  default_scope -> { order('created_at DESC') }
+  # default_scope -> { order('created_at DESC') }
 
   attr_accessible :code, :title, :sex, :birthdate, :birthdate, :birthdate, :nationality, :parent_name, :parent_email, :alt_id, :group, :center_id, :group_id
 
@@ -60,13 +60,22 @@ class Journal < ActiveRecord::Base #< Group
 
   scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
-  scope :for_group, lambda { |group| where(:group_id => (group.is_a?(Group) ? group.id : group)).order('created_at desc') }
-  scope :in_center, lambda { |group| where(:center_id => (group.is_a?(Center) ? group.id : group)).order('created_at desc') }
+  scope :for_group, lambda { |group| group && where(:group_id => (group.is_a?(Group) ? group.id : group)) || scoped }
+  scope :in_center, lambda { |group| group && where(:center_id => (group.is_a?(Center) ? group.id : group)) || scoped }
   scope :by_code, -> { order('code ASC') }
+  scope :order_by, lambda { |column, order|
+    puts "column, order: #{column} #{order}"
+    if ['title', 'code', 'birthdate', 'created_at'].include?(column)
+      order("#{column} #{order == 'desc' && 'desc' || 'asc'}")
+    else
+      order(' created_at desc')
+    end
+  }
   scope :for_groups, lambda { |group_ids| where(:group_id => group_ids) }  # { :conditions => ['parent_id IN (?)', group_ids] } }
   scope :for, lambda { |journal_id| where(:id => journal_id) }
   scope :all_groups, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
   scope :all_groups, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
+
 
   define_index do
      # fields
@@ -95,12 +104,12 @@ class Journal < ActiveRecord::Base #< Group
     if phrase.empty?
       []
     elsif user.has_role?(:superadmin)
-      Journal.search(phrase, :order => "created_at DESC", :per_page => 40)
+      Journal.search(phrase, :order => "created_at DESC", :per_page => 44440)
     elsif user.has_role?(:centeradmin)
       # user.centers.map {|c| c.id}.inject([]) do |result, id|
-      #   result += Journal.search(phrase, :with => { :center_id => user.centers.map(&:id) }, :order => "created_at DESC", :per_page => 40)
+      #   result += Journal.search(phrase, :with => { :center_id => user.centers.map(&:id) }, :order => "created_at DESC", :per_page => 44440)
       # end
-      Journal.search(phrase, :with => { :center_id => user.centers.map(&:id) }, :order => "created_at DESC", :per_page => 40)
+      Journal.search(phrase, :with => { :center_id => user.centers.map(&:id) }, :order => "created_at DESC", :per_page => 44440)
     else
       # user.center_and_teams.inject([]) do |result, g|
         # result += 

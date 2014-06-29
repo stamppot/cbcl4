@@ -79,7 +79,7 @@
 						&nbsp;&nbsp;
 						<%# link_to entry.get_title, survey_answer_path(entry), :title => 'Vis Besvarelse' %>
 					</td>
-					 <td style="min-width: 100px;"><%= entry.answered_at.strftime "%-d-%-m-%Y" %> 
+					 <td style="min-width: 100px;"><%= (entry.answered_at || DateTime.now).strftime "%-d-%-m-%Y" %> 
 						 <%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret besvarelsesdato", :title => "Ret besvarelsesdato", :align => "right"), edit_date_survey_answers_path(entry) %>
 					 </td>
 					 <td style="max-width: 200px;"><%= entry.notes %></td>

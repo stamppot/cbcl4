@@ -325,31 +325,38 @@ class User < ActiveRecord::Base
   def journals(options = {})
     options[:page] ||= 1
     options[:per_page] ||= Journal.per_page
+    puts "journals options: #{options.inspect}"
+    center = options.delete :center
+    center = nil if center && center.to_i == 0
+    team = options.delete :team
+    team = nil if team && team.to_i == 0
+    column = options.delete(:column) || 'created_at'
+    order = options.delete(:order) || 'desc'
 
     journals =
     if self.has_access?(:journal_show_all)
       if options[:page].to_i < 4 # only cache first pages, since they're used more often
         # TODO: cache
         # cache_fetch("journals_all_paged_#{options[:page]}_#{options[:per_page]}") do
-          Journal.paginate(options)
+          Journal.in_center(center).for_group(team).order_by(column,order).paginate(options)
         # end
       else
-        Journal.paginate(options)
+        Journal.in_center(center).for_group(team).order_by(column,order).paginate(options)
       end
     elsif self.has_access?(:journal_show_centeradm)
       # TODO: cache
       # cache_fetch("journals_groups_#{self.center_id}_paged_#{options[:page]}_#{options[:per_page]}", :expires_in => 10.minutes) do
-        Journal.in_center(self.center).paginate(options)
+        Journal.in_center(self.center).for_group(team).order_by(column,order).paginate(options)
       # end
     elsif self.has_access?(:journal_show_member)
       group_ids = self.group_ids  #(options[:reload]) # get teams and center ids for this user
       if options[:page].to_i < 4 # only cache first 5 pages
         # TODO: cache
         journals = # cache_fetch("journals_groups_#{group_ids.join("_")}_paged_#{options[:page]}_#{options[:per_page]}") do
-          Journal.all_groups(group_ids).paginate(options)
+          Journal.all_groups(group_ids).order_by(column,order).paginate(options)
         # end
       else 
-        Journal.all_groups(group_ids).paginate(options)
+        Journal.all_groups(group_ids).order_by(column,order).paginate(options)
       end
     elsif self.has_access?(:login_user)
       entry = JournalEntry.find_by_user_id(self.id)

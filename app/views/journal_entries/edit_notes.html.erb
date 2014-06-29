@@ -3,7 +3,7 @@
 
 <%= form_tag :action => 'update_notes', :id => @journal_entry do %>
 	<p>
-	<div><%= @journal_entry.journal.get_title %></div>
+	<div><%= @journal_entry.journal.title %></div>
 		<div><%= @journal_entry.survey.get_title %></div>
 	<br/>
 	<div>

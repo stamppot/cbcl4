@@ -54,20 +54,33 @@ class SurveyAnswer < ActiveRecord::Base
     csv_score_rapport.save
   end
 
+  def self.save_manual(params)
+    id = params.delete("id")
+    journal_entry ||= JournalEntry.find(id)
+    center = journal_entry.journal.center
+    subscription = center.subscriptions.detect { |sub| sub.survey_id == journal_entry.survey_id }
+    survey = Survey.and_questions.find(journal_entry.survey_id)
+    survey_answer = journal_entry.make_survey_answer
+    ok = survey_answer.save_final(params)
+    journal_entry.answered! 
+  end
 
   def save_draft(params)
-    survey_answer = journal_entry.survey_answer
-    survey_answer.done = false
-    survey_answer.journal_entry_id ||= journal_entry.id
-    survey_answer.set_answered_by(params)
-    survey_answer.save_answers(params)
-    survey_answer.center_id ||= journal_entry.journal.center_id
-    survey_answer.save
+    # t = Thread.new do
+      survey_answer = journal_entry.survey_answer
+      survey_answer.done = false
+      survey_answer.journal_entry_id ||= journal_entry.id
+      survey_answer.set_answered_by(params)
+      survey_answer.save_answers(params)
+      survey_answer.center_id ||= journal_entry.journal.center_id
+      survey_answer.save
+    # end
+    # t.join
   end
   
 
   def save_final(params, save_the_answers = true)
-		set_answered_by(params)
+    set_answered_by(params)
     self.done = true
     self.save   # must save here, otherwise partial answers cannot be saved becoz of lack of survey_answer.id
     self.save_answers(params) if save_the_answers

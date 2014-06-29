@@ -7,8 +7,14 @@
 	</ul>
 	<div class="tab_canvas" id="tab_canvas_<%= @user.id %>">
 		<br/>
-	
+
 		<div class="user_info" id="info">
+			<% if current_user.access?(:superadmin) %>
+				<a title="Login som denne bruger" href="/login/shadow_login/<%= @user.id %>">
+                		        <%= image_tag 'door_24.png', :title => "Login som denne bruger", :class => "icon", :alt => "Login som denne bruger" %>
+	                	</a>
+			<% end %>
+
 			<table class="user_info">
 				<tr>
 					<td class="u_i"><%= t('name') %>:</td>

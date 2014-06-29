@@ -78,7 +78,7 @@ $(document).ready(function() {
 
 	$('#users_tab').click(function() {
 		if($('#users_content').is(':empty')) {
-			$.getHtml("/users/center/" + groupId + "/partial=true", function(data) {
+			$.getHtml("/users/center/" + groupId + "?partial=true", function(data) {
 				$('#users_content').html(data);
 				// $.jqTableKit.reload();
 			});

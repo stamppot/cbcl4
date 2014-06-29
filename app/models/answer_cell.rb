@@ -25,11 +25,11 @@ class AnswerCell < ActiveRecord::Base
     new_value = new_value || ""
     if self.rating? || valid_values[:type].to_s == "SelectOption"   # if not valid, keep existing value
       new_value = "9" if new_value.blank?
-      if new_value != self.value && valid_values[:values].include?(new_value)
+      if new_value != self.value && valid_values[:values] && valid_values[:values].include?(new_value)
         self.value = new_value
       end
     else  # other types
-      self.value_text = CGI.escape(new_value) if new_value != self.value_text  # TODO: escape value
+      self.value_text = CGI.escape(new_value[0..2000]) if new_value != self.value_text  # TODO: escape value
     end
     changed?
   end

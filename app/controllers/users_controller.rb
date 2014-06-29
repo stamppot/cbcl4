@@ -10,7 +10,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   # verify :method       => :delete, :only => :destroy, :redirect_to => :show, :add_flash => { :error => 'Wrong request type: cannot delete'}
 
   before_filter :find_user, :except => [:index, :new, :edit, :update, :create, :center, :live_search ]
-  before_filter :check_access, :except => [:index, :list, :live_search, :page, :create]
+  before_filter :check_access, :except => [:index, :list, :live_search, :page, :create, :center]
 
   # 31-12 Administrators cannot see other users
   def index
@@ -182,6 +182,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   end
    
   def find_user
+    return unless current_user
     # return if params[:id] == 'new'
     if params[:id].to_i > 0
       if current_user.access?(:superadmin) or current_user.access?(:admin)

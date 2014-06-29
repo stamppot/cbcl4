@@ -1,3 +1,43 @@
+  <style TYPE="text/css">
+  #center_select {
+  	width: 220px;
+  }
+
+  #team_select {
+  	width: 220px;
+  }
+  </style>
+
+<%= image_tag 'journal_48.png', :border => 0, :align => "middle" %>
+	<span class="h3">Journaler</span><p>
+<p/>
+
+
+<% if current_user.access?(:superadmin) %>
+
+	<select name='center' id='center_select'>
+		<option value="0">Alle centre</option>
+	<% @centers.each do |c| %>
+		<option value="<%= c.id %>" <%= @center == c.id.to_s && 'selected=selected' || '' %> ><%= c.title %></option>
+	<% end %>
+	</select>
+
+<% else %>
+	<input type='hidden' name='center' id='center_select' value="#{current_user.center_id}" />
+<% end %>
+
+<select name='team' id='team_select'>
+	<option value="0">Alle teams</option>
+	<% @teams.each do |t| %>
+		<option value="<%= t.id %>" <%= @team == t.id.to_s && 'selected=selected' || '' %> ><%= t.title %></option>
+	<% end %>
+</select>
+
+<input name="column" id="column" type="hidden" value="<%= @column %>" />
+<input name="order" id="order" type="hidden" value="<%= @order %>" />
+
+<p/>
+
 <%= render :partial => 'shared/journals' %>
 
 <p>
@@ -7,3 +47,92 @@
 	<%= link_button 'Ny Journal', new_journal_path, 'journal_add' %>
 </div>
 <% end %>
+
+
+<script type='text/javascript'>
+
+function get_column_order() {
+	return { 'column': $('#column').val(), 'order': $('#order').val() };
+}
+
+function update_page() {
+
+};
+
+function get_page_params() {
+	var center = $('#center_select').val();
+	var team = $('#team_select').val();
+	var column = $('#column').val();
+	var order = $('#order').val();
+
+	var p = {'column':column, 'order':order}
+	if('' != center) p.center = center;
+	if('' != team) p.team = team;
+	return p;
+}
+
+function get_page_url(params) {
+	var url = '/journals/?' + jQuery.param(params);
+	location.href = url;
+}
+
+$(document).ready(function() {
+
+	$('table.sortable th').click(function() {
+		var curr_order = $('#order').val();
+		var curr_column = $('#column').val();
+		var clicked_column = $(this).data('column');
+		var clicked_order = $(this).data('order');
+		console.log('current column, order: ' + curr_column + ', ' + curr_order + '  clicked: ' + clicked_column + ', ' + clicked_order);
+		if(curr_column == clicked_column) {
+			$('#order').val(curr_order == 'asc' ? 'asc' : 'desc');
+		}
+		else {
+			$('#column').val(clicked_column);
+			console.log(curr_order);
+			$('#order').val(curr_order == 'asc' ? 'asc' : 'desc');
+		}
+		get_page_url(get_page_params());
+	});
+
+	console.log('doc ready');
+	$('select#center_select').change(function() {
+		var el = $(this);
+		if('0' == el.val()) {
+			$('select#team_select').empty();
+			return;
+		}
+		var center_id = el.val();
+		console.log('el: ' + center_id);
+
+		var params = get_column_order();
+		var url = '/teams/center/' + center_id + '?' + jQuery.param(params);
+		console.log(url);
+
+		$.get(url, function(data) {
+			$('select#team_select').empty(); // remove old options
+			var isEmpty = data.length == 0;
+			$('select#team_select').append($("<option></option>")
+			     .attr("value", 0).text(isEmpty ? "Ingen teams" : "Alle teams"));
+
+			$.each(data, function(key, value) {
+			  $('select#team_select').append($("<option></option>")
+			     .attr("value", value.id).text(value.title));
+			});
+		});
+	});
+
+	$('select#center_select, select#team_select').change(function() {
+		var val = $(this).val();
+		console.log('update list: ' + val);
+		var center_id = $('#center_select').val();
+		if("0" == center_id) center_id = '';
+		var team_id = $('#team_select').val();
+		if("0" == team_id) team_id = '';
+		$('#center_select').val(center_id);
+		$('#team_select').val(team_id);
+
+		get_page_url(get_page_params());
+	});
+});
+</script>

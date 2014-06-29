@@ -60,13 +60,15 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     # delete all answers and answer cells, delete login for journal_entry
     entry.destroy
 
-    render :json => {:ok => true}
+    render :json => {:ok => true} and return
     # if entry.destroy
     #   render :update do |page|
     #     page.visual_effect :slide_up, elem
     #     page.remove elem
     #   end
     # end
+  rescue ActiveRecordError
+    render :json => {:ok => true} and return
   end
 
   def edit # edit follow_up

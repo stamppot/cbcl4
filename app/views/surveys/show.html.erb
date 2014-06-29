@@ -63,6 +63,8 @@
 
 <script type="text/javascript">
 
+var journal_id = 0;
+
 function setDraftData(d, id) {
 	var input_type;
 	var val;
@@ -144,6 +146,7 @@ function onReceivedDynamicData(data) {
 function auto_save(url, changed_items) {
 	// console.log("auto save: " + new Date().toString());
 	var params = $('#surveyform').serialize();
+//	if((typeof journal_id) !== 'undefined')
 	params.journal_id = journal_id;
 	// console.log("params: " + params);
 	// console.dir(params);
@@ -168,7 +171,7 @@ jQuery(document).ready(function ($) {
 
 	var count = 0;
 
-	var journal_id = $.cookie('journal_id');
+	journal_id = $.cookie('journal_id');
 	console.log('journal_id: ' + journal_id);
 
 	// do not add submit button when it's show only
@@ -213,6 +216,20 @@ jQuery(document).ready(function ($) {
 			// console.log("got draft_data: ");
 			setDraftData(data, params['id'] );
 			wFORMS.behaviors['switch'].init();
+
+			$('.comment').each(function(e) {
+			    var count = $(this).data('chars');
+	    		count = $(this).val().length;
+			    $(this).data('chars', count);
+ 			    $(this).next('span').html(count + '/2000');
+ 	    		if(count > 2000) {
+	        		$(this).val($(this).val().substring(0,2000));
+		        	$(this).data('chars', count);
+		    		$(this).next('span').html(count + '/2000');
+			        e.preventDefault();
+			        return false;
+	    		}
+			});
 		});
 	}
 
@@ -279,7 +296,7 @@ jQuery(document).ready(function ($) {
     $(this).parent().append('<span>0/2000</span>');
 });
 
-	$('.comment').off('keyup').keyup(function(e) {
+    var checkTextLength = function(e) {
 	    var count = $(this).data('chars');
 	    count = $(this).val().length;
 	    $(this).data('chars', count);
@@ -292,6 +309,9 @@ jQuery(document).ready(function ($) {
 	        e.preventDefault();
 	        return false;
 	    }
+	$('.comment').off('keyup').keyup(checkTextLength);
+	$('.comment').focusout(checkTextLength);
+	
 	});
 });
 

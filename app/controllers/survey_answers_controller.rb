@@ -1,7 +1,7 @@
 class SurveyAnswersController < ApplicationController
   layout 'cbcl', :except => [ :show, :show_fast ]
-  layout 'survey', :only  => [ :show, :show_fast, :edit, :print ]
-  # layout 'survey_print', :only => [ :print ]
+  layout 'survey', :only  => [ :show, :show_fast, :edit ]
+  layout 'survey_print', :only => [ :print ]
 
   # @@surveys = {}
 
@@ -166,6 +166,7 @@ class SurveyAnswersController < ApplicationController
   def json_draft_data
     journal_id = params[:journal_id]
     journal_entry = JournalEntry.where('id = ? AND journal_id = ?', params[:id], journal_id).includes(:survey_answer => {:answers => :answer_cells}).first
+    journal_entry ||= JournalEntry.find params[:id]  # in some cases journal_id can be null?! browser issue?
     show_fast = params[:fast] || false
 
     cell_count = 0
@@ -196,9 +197,10 @@ class SurveyAnswersController < ApplicationController
     return if request.get?
     journal_id = params[:journal_id]
     journal_entry = JournalEntry.and_survey_answer.where('id = ? AND journal_id = ?', params[:id], journal_id).first
+    journal_entry ||= JournalEntry.find params[:id]
     journal_entry.center_id ||= Group.find(journal_entry.group_id).center_id
 
-    journal_entry.draft! unless journal_entry.answered? && journal_entry.answered_at > 1.minutes.ago
+    journal_entry.draft! unless journal_entry.answered? && (journal_entry.answered_at || DateTime.now) > 1.minutes.ago
     return if journal_entry.answered?
 
     request.session_options[:id] # touch (lazy) session
@@ -227,6 +229,7 @@ class SurveyAnswersController < ApplicationController
     journal_id = params[:journal_id]
     logger.info "session je_id: #{session[:journal_entry]} journal_id: #{journal_id}"
     journal_entry = JournalEntry.by_id_and_journal(id, journal_id).first
+    journal_entry ||= JournalEntry.find(id)  # sometimes journal_id is null, browser issue?
     # puts "SURVEY AnSWER create #{journal_entry.inspect}"
     center = journal_entry.journal.center
     subscription = center.subscriptions.detect { |sub| sub.survey_id == journal_entry.survey_id }
