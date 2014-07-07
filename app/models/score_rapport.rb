@@ -75,14 +75,7 @@ class ScoreRapport < ActiveRecord::Base
     query = query.for_team(options[:team]) if !options[:team].blank?
     query
   end
-
-  # def cell_values(prefix = nil)
-  #   # prefix ||= self.survey.prefix
-  #   a = Dictionary.new
-  #   self.score_results.each { |result| a.merge!({ result.score.variable.to_sym => result.result}) }
-  #   a.order_by
-  # end
-
+  
   def variable_values
     a = Dictionary.new
     self.score_results.each { |result| a.merge!({ result.score.variable.to_sym => result.result}) }

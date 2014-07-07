@@ -13,14 +13,15 @@
 			<%= render :partial => "shared/edit_survey" %>
 		<% else %>
 
-			<%= if @score.survey.nil? 
-				"Ingen" 
-			else
-				out = ["&nbsp;&nbsp;"]
-				out << "<span class='survey_color_box' style='background: ##{@score.survey.color};'>#{@score.survey.get_title}</span>"
-				# out << "<br>" << link_to('Vælg andet skema', { :action => :edit_survey, :id => @score.id })
+			<% if @score.survey.nil? %>
+				Ingen
+			<% else %>
+				&nbsp;&nbsp;
+				<span class='survey_color_box' style='background: <%= @score.survey.color %>;'><%= @score.survey.get_title %></span>
+				<%# out << "<br>" << link_to('Vælg andet skema', { :action => :edit_survey, :id => @score.id })
 				out.join.html_safe
 			end %>
+			<% end %>
 			
 		<% end %>
 		</td>
@@ -118,21 +119,5 @@
 
 				<div id="debug">
 				</div>
-				<script type="text/javascript">
-				    //     Ajax.Responders.register({
-				    //     // log the beginning of the requests
-				    //     onCreate: function(request, transport) {
-				    //     new Insertion.Bottom('debug', '<p><strong>[' + new Date().toString() + '] ifng ' + request.url + '</strong></p>')
-				    //     },
-
-				    //     // log the completion of the requests
-				    //    onComplete: function(request, transport) {
-				    //    new Insertion.Bottom('debug',
-				    //     '<p><strong>http status: ' + transport.status + '</strong></p>' +
-				    //     '<pre>' + transport.responseText.escapeHTML() + '</pre>')
-				    //  }
-				    // });
-				 </script>
-
 
 		<!--[eoform:score]-->

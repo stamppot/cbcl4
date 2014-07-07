@@ -56,6 +56,32 @@ class Answer < ActiveRecord::Base
     return cells
   end
 
+
+  def answer_values(prefix = nil)
+    cells = Dictionary.new
+    prefix = survey_answer.survey.prefix unless prefix
+    q = self.question.number.to_roman.downcase
+    
+    self.answer_cells.each_with_index do |cell, i|
+      value = cell.value.blank? && '#NULL!' || cell.value
+      if var = Variable.get_by_question(self.question_id, cell.row, cell.col)
+        cells[var.var.to_sym] = value
+      else  # default var name
+        answer_type = cell.answer_type
+        item = cell.item || ""
+        item << "hv" if (item.nil? or !(item =~ /hv$/)) && cell.text?
+        var = "#{prefix}#{q}#{item}".to_sym
+        cells[var] = 
+        if cell.text? && !cell.value_text.blank? #answer_type =~ /ListItem|Comment|Text/ && !cell.value.blank?
+          CGI.unescape(cell.value_text).gsub(/\r\n?/, ' ').strip
+        else
+          value
+        end
+      end
+    end
+    return cells
+  end
+
   # alias :cell_values :to_csv
 
 	# TODO: rewrite assuming all variables exists (no if statement), create new variable or set variable values (datatype)

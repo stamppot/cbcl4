@@ -23,7 +23,7 @@
 	</select>
 
 <% else %>
-	<input type='hidden' name='center' id='center_select' value="#{current_user.center_id}" />
+	<input type='hidden' name='center' id='center_select' value="<%= current_user.center_id %>" />
 <% end %>
 
 <select name='team' id='team_select'>
@@ -122,7 +122,7 @@ $(document).ready(function() {
 		});
 	});
 
-	$('select#center_select, select#team_select').change(function() {
+	$('select#center_select').change(function() {
 		var val = $(this).val();
 		var center_id = $('#center_select').val();
 		if("0" == center_id) center_id = '';

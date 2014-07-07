@@ -695,7 +695,7 @@ td.description7lab4 {
 }
 
 .answer_textbox {
-	width: 175px;
+	/*width: 175px;*/
 	border: 1px solid #ccc;
 	font-size: 9pt;
 	font-family: courier;

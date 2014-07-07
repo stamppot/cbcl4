@@ -61,6 +61,16 @@ class Survey < ActiveRecord::Base
     end
     return self  # return survey with questions with values (answers)
   end
+  
+  def merge_survey_answer_text(survey_answer)
+    return self if survey_answer.nil?
+    survey_answer.answers.each do |answer|
+      # find question which matches answer
+      question = self.questions.detect { |question| question.id == answer.question_id }
+      question.merge_answer_text(answer) if question
+    end
+    return self  # return survey with questions with values (answers)
+  end
 
   def merge_report_answer(survey_answer)
     return {} if survey_answer.nil?

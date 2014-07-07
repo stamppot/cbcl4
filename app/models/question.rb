@@ -49,7 +49,25 @@ class Question < ActiveRecord::Base
           if a_cells[row][col].text?
             q_cells[row][col].value = CGI.unescape(a_cells[row][col].value_text) || CGI.unescape(a_cells[row][col].value)
           else
-            q_cells[row][col].value = a_cells[row][col].value.to_s || "" #if q_cells[row][col].eql_cell?(a_cells[row][col])
+            q_cells[row][col].value = a_cells[row][col].value.to_s || ""
+          end
+        end
+      end
+      return q_cells
+    end
+  end
+
+  def merge_answer_text(answer)
+    if answer.question_id == self.id
+      q_cells = self.rows_of_cols
+      a_cells = answer.rows_of_cols
+      a_cells.each_pair do |row, cols|           # go thru a_cells to make it faster
+        cols.each_pair do |col, cell|
+          if a_cells[row][col].text?
+            q_cells[row][col].value = CGI.unescape(a_cells[row][col].value_text) || CGI.unescape(a_cells[row][col].value)
+          else
+            options = q_cells[row][col].answer_options
+            q_cells[row][col].value = options[a_cells[row][col].value.to_i] || ""
           end
         end
       end

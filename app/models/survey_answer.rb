@@ -111,16 +111,6 @@ class SurveyAnswer < ActiveRecord::Base
 	def all_answered?
 		self.no_unanswered == 0
 	end
-	
-	# def get_variables # do not cache, coz the cells are merged with answer cells
- #    d = Dictionary.new
- #    self.answers.each { |answer| d = d.merge!(answer.get_variables(survey.prefix)) }
- #    d.order_by
- #  end
-  
-  # def to_csv
-  #   self.survey.cell_variables.merge!(self.cell_values(self.survey.prefix)).values
-  # end
 
   def cell_values(prefix = nil)
     prefix ||= self.survey.prefix
@@ -146,14 +136,6 @@ class SurveyAnswer < ActiveRecord::Base
     c["pfoedt"] = j.birthdate.strftime("%d-%m-%Y")  # TODO: translate month to danish
     c
   end
-
-  # def cell_vals(prefix = nil)
-  #   prefix ||= self.survey.prefix
-  #   a = []
-  #   self.answers.each { |answer| a << (answer.cell_vals(prefix)) }
-  #   a
-  #   # a.order_by
-  # end
   
   # cascading does not work over multiple levels, ie. answer_cells are not deleted
   def delete

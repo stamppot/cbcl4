@@ -2,9 +2,9 @@
 	<% group_id = group.id %>
 
 <div class="tab-container">
-	<ul class="tabs" id="subscription_tabs_<%= group_id %>" class="subsection_tabs">  
-	    <li class="tab"><a href="#summary_view_<%= group_id %>"><%= t('subscription.overview') %></a></li>  
-	    <li class="tab"><a href="#detailed_view_<%= group_id %>"><%= t('subscription.details') %></a></li> 
+	<ul class="tabs" id="subscription_tabs_<%= group_id %>" class="subsection_tabs" data-group="<%= group_id %>">
+	    <li class="tab"><a href="javascript:void(0);" onclick="tab(this);"><%= t('subscription.overview') %></a></li>  
+	    <li class="tab"><a href="javascript:void(0);" onclick="tab(this);"><%= t('subscription.details') %></a></li> 
 	</ul>
 	<div class="tab_canvas" id="tab_canvas_<%= group_id %>">
 		<br/>
@@ -16,7 +16,7 @@
 			<h4><%= t('subscription.none') %></h4>
 		<% end %>
 	</div>
-	<div class="detailed_view" id="detailed_view_<%= group_id %>">
+	<div class="detailed_view" id="detailed_view_<%= group_id %>" style="display: none;">
 		<div id="subscription_details_<%= group_id %>" style="display: normal;">
 			<%= render :partial => "shared/subscription_list_new", :object => subscription_presenter.detailed_view %>
 		</div>
@@ -27,14 +27,32 @@
 	<% end %>
 	</div>
 </div>
+<style type="text/css">
+li.tab.active a {
+	/*background: #ddd3dd;*/
+}
+</style>
+
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('.tab-container').easytabs({  
-			animate: true,
-		  	animationSpeed: "fast"
-		});
-	});
-		// $$('.tabs').each(function(tab_group){  
-	 //    new Control.Tabs(tab_group);  
-		// });
+	function tab(el) {
+		// console.log(el);
+		var group_id = $(el).parent().parent().data('group');
+		// console.log('group: ' + group_id);
+
+		var visible = $("#summary_view_" + group_id).is(':visible');
+		// console.log(group_id + " is visible: " + visible);
+		if(visible) {
+			$("#summary_view_" + group_id).hide();
+			$(this).removeClass('active');
+			$("#detailed_view_" + group_id).show();
+			$(this).addClass('active');
+		}
+		else {
+			$("#summary_view_" + group_id).show();
+			$(this).addClass('active');
+			$("#detailed_view_" + group_id).hide();
+			$(this).removeClass('active');
+		}
+	}
+
 </script>

@@ -170,7 +170,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   
   def center
     @group = Center.find params[:id]
-    @userlist = UserList.new(@group, {:page => params[:page], :per_page => 15})
+    @userlist = UserList.new(@group, {:page => params[:page], :per_page => 100})
     render :partial => 'user_list', locals: {group: @group, user_list: @userlist}, :layout => false
   end
 

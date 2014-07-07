@@ -52,6 +52,15 @@ class SurveyAnswersController < ApplicationController
     @page_title = "CBCL - Udskriv Svar: " << @survey.get_title
   end
 
+  def print_old # this is dangerous because it changes @survey
+    @options = {:answers => true, :disabled => false, :action => "print"}
+    @journal_entry = JournalEntry.and_survey_answer.find(params[:id])
+    @survey_answer = SurveyAnswer.and_answer_cells.find(@journal_entry.survey_answer_id)
+    @survey = Survey.and_questions.find(@survey_answer.survey_id)
+    @survey.merge_survey_answer(@survey_answer)
+    @page_title = "CBCL - Udskriv Svar: " << @survey.get_title
+  end
+
   # def dynamic_data
   #   @journal_entry = JournalEntry.find(params[:id], :include => :journal)
   #   save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60

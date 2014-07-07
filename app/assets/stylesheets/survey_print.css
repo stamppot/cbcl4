@@ -76,7 +76,7 @@ question, table.question {
   border: 4px;
   padding-right: 2em;
   max-width: 5%;
-  border: 1px dashed green;
+/*  border: 1px dashed green;*/
 /*  colspan: 100%;*/
 }
 
@@ -631,6 +631,12 @@ td.textbox {
 	font-size: 14pt;
 }
 
+td.selectanswer {
+  display: normal;
+  border: 0;
+  width: 250px;
+  white-space: nowrap;
+}
 td.listitem {
   display: normal;
 	border: 0;
@@ -644,13 +650,18 @@ td.listitemcomment {
 }
 
 .listitemtext {  /* without predefined text */
-	border: 0;
-	display: inline;
-	white-space: normal;
-/*	background: yellow;*/
-  width: 280px;  /*175px;*/
-	max-width: 280px;
-	display:block;
+  border: 0;
+  display: inline;
+  white-space: normal;
+  width: 280px;
+  max-width: 280px;
+  display:block;
+}
+.answerlistitemtext {  /* without predefined text */
+  border: 0;
+  display: inline;
+  white-space: normal;
+  display:block;
 }
 
 .listitem1 {  /* without predefined text */
@@ -664,15 +675,15 @@ td.listitemcomment {
 
 /* show answer for listitemcomment */
 .answer_comment {
-	width: 300px;
+	/*width: 300px;*/
 	border: 1px solid #ccc;
 	font-size: 14pt;
 /*	font-family: courier;*/
-	width: 250px;
+/*	width: 250px;*/
 }
 
 .answer_textbox {
-	width: 250px;
+	/*width: 250px;*/
 	border: 1px solid #ccc;
 	font-size: 14pt;
 /*	font-family: courier;*/

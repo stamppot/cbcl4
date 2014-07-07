@@ -59,18 +59,8 @@ $(document).ready(function() {
 	$('#teams_tab').click(function() {
 		if($('#teams_content').is(':empty')) {
 			$.getHtml("/teams/center/" + groupId, function(data) {
-						$('#teams_content').html(data);
-						// $.jqTableKit.reload();
-					});
-			// $.ajax(
-			// 	{
-			// 		url: "/teams/center/" + groupId,
-			// 		dataType: 'html',
-			// 		success: function(data) {
-			// 			$('#teams_content').html(data);
-			// 			$.jqTableKit.reload();
-			// 		}
-			// 	});
+				$('#teams_content').html(data);
+			});
 		}
 	})
 	if(location.href.indexOf('#center_teams') > 0) $('#teams_tab').click();
@@ -114,36 +104,12 @@ $(document).ready(function() {
     return false;
   });
 })
-
-// document.observe("dom:loaded", function() {
-//   var container = $(document.body)
-
-//   if (container) {
-//     var img = new Image
-//     img.src = '/assets/spinner.gif'
-//     var spinner = null
-
-//     function Spinner() {
-//       spinner = new Element('img', { src: img.src, 'class': 'spinner' })
-//       return spinner
-//     }
-
-//     container.observe('click', function(e) {
-//       var el = e.element()
-//       if (el.match('.pagination a')) {
-//         el.up('.pagination').insert(Spinner())
-//         new Ajax.Request(el.href, { method: 'get' })
-//         e.stop()
-//       }
-//     })
-//   }
-// })
 </script>
+
 <br/>
 <div class="commands">
 <% if current_user.access? :center_delete %>
 <%= link_button t('delete'), { :action => :delete, :id => @group }, 'center_delete', :title => t('center.delete') %>
 <%= link_button t('edit'), edit_center_path(@group), 'center_edit', :title => t('center.edit') %>
 <% end %>
-<%# back_button centers_path %>
 </div>

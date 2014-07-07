@@ -46,8 +46,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     options = { :include => :group, :page => params[:page], :per_page => Journal.per_page, 
       :center => params[:center], :team => params[:team], :column => params[:column], :order => params[:order] }
     @centers = current_user.centers
-    center = (params[:center] && params[:center] != "0") && Center.find(params[:center]) || current_user.center || Center.first
-    @teams = current_user.access?(:superadmin) && center.teams || current_user.center.teams
+    center = (params[:center] && params[:center] != "0") && Center.find(params[:center]) || Center.first
+    @teams = current_user.access?(:superadmin) && center.teams || current_user.teams
     @column = "created_at"
     @order = params[:order] == "desc" && "asc" || "desc"
     @center = params[:center]
@@ -56,6 +56,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     else
       "0"
     end
+    puts "@team: #{@team}"
     @journals = current_user.journals(options) || [] # TODO: Move to configuration option
   end
 
