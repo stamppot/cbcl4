@@ -7,6 +7,8 @@ class Score < ActiveRecord::Base
   belongs_to :survey
   belongs_to :score_scale
 
+  attr_accessible :survey
+  
   scope :for_survey, lambda { |survey_id| where("scores.survey_id = ?", survey_id) }
   scope :with_survey_and_scale, -> { includes([:survey, :score_scale]) }
   acts_as_list :scope => :score_group
