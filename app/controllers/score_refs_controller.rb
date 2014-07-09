@@ -46,7 +46,7 @@ class ScoreRefsController < ApplicationController
     @score.score_refs << @score_ref
 
     if @score.save
-      render :partial => 'scores/score_ref' #, :locals => {:score_ref => @score_ref}
+      render :partial => 'scores/score_ref', :locals => {:score_ref => @score_ref}
     end
     #   render :update do |page|
     #     # page.remove 'create_score_ref_button'
