@@ -26,18 +26,28 @@
 			end
 		
 		no_cols = cols.size
+		puts "cols: #{cols.size} #{cols.inspect}"
+		puts "#{cols.first.type}  #{cols.last.answer_item} size: #{cols.size}"
+		if cols.size == 2 && cols[1].type == 'Rating' && cols[2].type == 'ListItemComment'
+			puts "cols before: #{cols.inspect}"
+			output << ListItemComment.to_answer(cols, @options)
+			next
+		elsif cols.first.type == 'Rating'
+			cols.reverse!
+		end
+
 		cols.each do |col, cell|
-			html = if cell.choice_id && cell.type == 'Description'
-				puts "HEHEHEHEHEHEH : " + cell.choice.full
-				cell.choice.full
-			elsif cell.datatype == :numeric && cell.choice_id
-				t = cell.choice.get_options[cell.value]
+			html = #if cell.choice_id && cell.type == 'Description'
+				# puts "HEHEHEHEHEHEH : " + cell.choice.full
+				# cell.choice.full
+			# elsif cell.datatype == :numeric && cell.choice_id
+			# 	t = cell.choice.get_options[cell.value]
 			# elsif cell.datatype == :numeric
 			# 	cell.value
-			else
+			# else
 				# cell.to_html((@options || {:show_all => false}).merge(:number => no, :last => cell.col == no_cols))
 				cell.to_answer((@options || {:show_all => false}).merge(:number => no, :last => cell.col == no_cols))
-			end
+			# end
 			output << html if html
 		end
 		output << "</div></td></tr>\n"
