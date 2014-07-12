@@ -500,7 +500,7 @@ class Questiontext < QuestionCell
 	end
 
 	def to_answer(options = {})
-		options[:outer_span] = answer_span
+		options[:outer_span] = self.span && "span-#{span}" || answer_span
 		options[:inner_span] = answer_inner_span
 		answer_template(options)
 	end
@@ -532,7 +532,7 @@ class Questiontext < QuestionCell
 		answer_item = (self.answer_item.nil? or (self.answer_item =~ /\d+([a-z]+)/).nil?) ?  "" : "\t" + $1 + ". "
 		
 		if self.question.columns == 3
-			out_span = "span-8"
+			out_span = self.span && "span-#{span}" || "span-8"
 			in_span = "span-8"
 		end
 
@@ -812,7 +812,7 @@ class ListItem < QuestionCell
 	    class_names  = class_name <<
     	((class_switch.blank? or !switch_off.blank?) ? " #{answer_span}" : " #{class_switch} #{answer_span}" )
   
-	    options[:outer_span] = answer_span(options[:last])
+	    options[:outer_span] = self.span && self.span || answer_span(options[:last])
 	    options[:inner_span] = answer_inner_span
 	    options[:answer] = true
 
