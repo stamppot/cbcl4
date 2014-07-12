@@ -15,8 +15,7 @@
 <br/>
 
 <div style="text-align: left;">
-	Udfyldt af <%= select :answer, :person, @survey.answer_by %>
-
+	&nbsp;
 	<%= render :partial => "surveys/answer_by" %></div>
 <br/>
 <%= render :partial => "question", :collection => @survey.questions %>

@@ -26,28 +26,43 @@
 			end
 		
 		no_cols = cols.size
-		puts "cols: #{cols.size} #{cols.inspect}"
-		puts "#{cols.first.type}  #{cols.last.answer_item} size: #{cols.size}"
-		if cols.size == 2 && cols[1].type == 'Rating' && cols[2].type == 'ListItemComment'
-			puts "cols before: #{cols.inspect}"
-			output << ListItemComment.to_answer(cols, @options)
+
+		if (p = question.preferences) && p[:split_rows] && p[:split_rows][row]
+			puts "SPLIT THIS ROW: #{cols.inspect}"
+			output << question.show_split_rows(cols, p[:split_rows][row], @options)
+			
 			next
+		end
+
+		# puts "cols: #{cols.size} #{cols.inspect}"
+		# puts "#{cols.first.type}  #{cols.last.answer_item} size: #{cols.size}"
+		if cols.size == 2 && cols[1].type == 'Rating' && cols[2].type == 'ListItemComment'
+			# puts "cols before: #{cols.inspect}"
+			output << ListItemComment.to_answer(cols, @options)
+			output << "</div></td></tr>"
+			next
+		# elsif cols.size == 3 && cols[2].type == 'Rating' && cols[3].type == 'ListItemComment'
+		# 	# puts "cols before: #{cols.inspect}"
+		# 	puts "q_#{question.id} row: #{row}"
+		# 	@options[:row] = row
+		# 	output << ListItemComment.to_answer3(cols, @options)
+		# 	output << "</div></td></tr>"
+		# 	next
+		# elsif cols.size == 4 && cols[1].type == 'ListItem'
+		# 	puts "split q_#{question.id} row: #{row}: cols: #{cols.inspect}"
+		# 	puts "prefs: #{cols[1].preferences.inspect}"
+		# 	output << ListItem.to_answer_splitrow(cols.values, @options)
+		# 	next
+		# elsif cols[1].type == 'QuestionComment'
+		# 	puts "QuestionComment: q_#{question.id} row: #{row}"
+		# 	output << QuestionComment.to_answer(cols, @options)
+		# 	next
 		elsif cols.first.type == 'Rating'
 			cols.reverse!
 		end
 
 		cols.each do |col, cell|
-			html = #if cell.choice_id && cell.type == 'Description'
-				# puts "HEHEHEHEHEHEH : " + cell.choice.full
-				# cell.choice.full
-			# elsif cell.datatype == :numeric && cell.choice_id
-			# 	t = cell.choice.get_options[cell.value]
-			# elsif cell.datatype == :numeric
-			# 	cell.value
-			# else
-				# cell.to_html((@options || {:show_all => false}).merge(:number => no, :last => cell.col == no_cols))
-				cell.to_answer((@options || {:show_all => false}).merge(:number => no, :last => cell.col == no_cols))
-			# end
+			html = cell.to_answer((@options || {:show_all => false}).merge(:number => no, :last => cell.col == no_cols))
 			output << html if html
 		end
 		output << "</div></td></tr>\n"

@@ -141,7 +141,7 @@ function toggleRadio(rObj) {
 }
 
 function toggleComments(form) {
-    var comments = document.getElementsByClassName('comment');
+    var comments = $$('.comment');
     comments.all(function(v) {
       v.toggle(); 
     });

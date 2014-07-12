@@ -471,7 +471,6 @@ class QuestionCell < ActiveRecord::Base
 		#self.save
 		return self.question_items     # return new items to enable chaining
 	end
-
 end
 
 class Questiontext < QuestionCell
@@ -610,13 +609,9 @@ class Placeholder < QuestionCell
 	end
 end
 
-class ListItem < QuestionCell
+# view like ListItem, answer is shown differently
+class QuestionComment < QuestionCell
 
-  # def to_html(options = {})
-  #   options[:target] = switch_target(options) unless switch_target.empty?
-  #   super(options)
-  # end
-  
 	def to_html(options = {})
 	  # onclick    = options[:onclick]
 	  switch_off = options[:switch_off]
@@ -676,6 +671,7 @@ class ListItem < QuestionCell
 	end
 	
 	def answer_inner_span(last = false)
+		return "span-#{span}" if self.span
 	 	span = if col == 2 and self.question.columns == 2
 	    	"span-10"
 	  	else
@@ -686,6 +682,7 @@ class ListItem < QuestionCell
 	end
 
 	def answer_span(last = false)
+		return "span-#{span}" if self.span
     	span = if col == 2 and self.question.columns == 2
     		"span-12"
     		else
@@ -755,12 +752,12 @@ class ListItem < QuestionCell
 				if(disabled)      # show answer value
 					field << value
 				else                        # show text field, possibly with value
-		           	span_width = value.nil? && 0 || case value.length
-		           	when 0..3 then 1
-		           	when 4..20 then 3
-		           	when 21..30 then 8
-		           	else 12
-		           	end
+		           	# span_width = value.nil? && 0 || case value.length
+		           	# when 0..3 then 1
+		           	# when 4..20 then 3
+		           	# when 21..30 then 8
+		           	# else 12
+		           	# end
        		    	newform << span_item(item_text, "span-1") if !item_text.blank?
        		    	newform << span_item(field, "span-#{in_span}") if !field.blank?
        		    	newform << span_item(value + " ", "") if !value.blank?
@@ -768,13 +765,207 @@ class ListItem < QuestionCell
 			else  # with predefined text. show text in item (no input field)
 				puts "field: #{field}, value: #{value}, item_text: #{item_text}"
 				newform << span_item(field, "span-1") if !field.blank? && i == 0
-				if !value.blank? && !item_text.blank?
-			        newform << span_item(item_text, "span-10")
-			    else
-		        	newform << span_item(item_text, "span-10")
-		        end
+				newform << span_item(item_text, "span-10")
 			end
 		end
+		span_item(newform.join, "#{class_name} #{span}")
+	end
+
+	def fast_input_form(options = {}, value = nil)
+		options[:disabled] = false
+		options[:show_all] = true
+		form_template(options)
+	end
+
+	# cell with inline editing. Only works for listitems with contents (ie. not answerable)
+	def edit_form
+		options = { :disabled => false, :show_all => true, :edit => true}
+		form_template(options)
+	end
+
+end
+
+
+class ListItem < QuestionCell
+
+	def to_html(options = {})
+	  # onclick    = options[:onclick]
+	  switch_off = options[:switch_off]
+	  class_switch = switch_target(options) unless switch_off
+	  class_names  = class_name <<
+	  ((class_switch.blank? or !switch_off.blank?) ? " #{outer_span}" : " #{class_switch} #{outer_span}" )
+	
+	  options[:outer_span] = outer_span(options[:last])
+	  id_class = id_and_class(options)
+	    
+	  klass_name = class_name
+	  fast = options[:fast] ? true : false
+	  klass_name << (fast && "" || " " + switch_target(options))
+	
+	  "<div id='td_#{cell_id(options[:number])}' class='#{klass_name}'>#{form_template(options)}</div>"
+	end
+	
+	def to_answer(options = {})
+		options[:span] = answer_span
+	    switch_off = options[:switch_off]
+    	class_switch = switch_target(options) unless switch_off
+	    class_names  = class_name <<
+    	((class_switch.blank? or !switch_off.blank?) ? " #{answer_span}" : " #{class_switch} #{answer_span}" )
+  
+	    options[:outer_span] = answer_span(options[:last])
+	    options[:inner_span] = answer_inner_span
+	    options[:answer] = true
+
+    	id_class = id_and_class(options)
+      
+	    klass_name = class_name
+    	fast = options[:fast] ? true : false
+	    klass_name << (fast && "" || " " + switch_target(options))
+  
+	    answer_template(options)
+  	end
+
+	def to_fast_input_html(options = {})
+		switch_off = options[:switch_off]
+		class_switch = switch_target(options) unless switch_off
+		class_names  = class_name + ((class_switch.blank? or switch_off) ? " #{fast_outer_span}" : " #{class_switch} #{fast_outer_span}" )
+		"<div id='td_#{cell_id(options[:number])}' class='#{class_names}'>#{fast_input_form(options)}</div>"
+	end
+
+	def outer_span(last = false)
+	  span = if col == 2 and self.question.columns == 2
+	    "span-10"
+	  else
+	    "span-6"
+	  end
+	  span << " last" if last
+	  span
+	end
+	
+	def inner_span
+	  outer_span 
+	end
+	
+	def answer_inner_span(last = false)
+		if self.span
+			# puts "in span: #{span} #{self.answer_item}"
+			return "span-#{span}" 
+		end
+	 	span = if col == 2 and self.question.columns == 2
+	    	"span-10"
+	  	else
+	    	"span-10"
+	  	end
+	  	span << " last" if last
+	  	span
+	end
+
+	def answer_span(last = false)
+		return "span-#{span}" if self.span
+    	span = if col == 2 and self.question.columns == 2
+    		"span-12"
+    		else
+    		"span-12"
+    	end
+ 	end
+
+	def fast_outer_span(last = false)
+	  outer_span(last)
+	end
+  
+	def form_template(options = {})  # value = nil, disabled = false, show_all = true, edit = false)
+		disabled = options[:disabled] ? "disabled" : nil
+		show_all = options[:show_all].nil? || options[:show_all]
+		fast     = options[:fast]
+		edit     = options[:edit]
+		no       = options[:number].to_s || self.question.number.to_s
+		span     = options[:outer_span] || outer_span
+		in_span  = options[:inner_span] || inner_span 
+		c_id     = cell_id(no)
+
+		newform = []
+		question_no = "Q" + no
+    
+		self.question_items.each_with_index do |item, i|
+			item_text = edit ? item.text : item.text
+			field = (i == 0 && (i == question_items.size-1) ? self.svar_item : "")# only show answer_item label in first item for cell with multiple list items
+			has_no_text = item_text.blank?
+			if(has_no_text)     	# listitem without predefined text
+				if(disabled)      	# show answer value
+					field << value
+				else                        # show text field, possibly with value
+		        	case options[:action]
+			    	when /print|show/ then 
+			      	field << (value || "")
+			      	newform << div_item(field, "listitemfield #{span}")
+			    	when /create|edit/ then
+		            	field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' rows='1'>#{value}</textarea>"
+        		    	newform << field
+          			end
+				end
+			else  # with predefined text. show text in item (no input field)
+		        newform << span_item(field + item_text, "#{in_span} #{options[:answer] && 'answerlistitemtext' || 'listitemtext'}")
+			end
+		end
+		span_item(newform.join, "#{class_name} #{span}")
+	end
+
+	def self.to_answer_splitrow(cols, options)
+		row1 = cols[0..1]
+		row2 = cols[2...3]
+		output = []
+		output << row1.map {|c| c.to_answer(options)}
+		output << "</div></td></tr>"
+		output << "<td id='#{options[:number]}_#{options[:row]}_2' class='row'><div class='span-2'>&nbsp;</div>"
+		output << row2.map {|c| c.to_answer(options) }
+		output << "</td></tr>"
+		output.join
+	end
+
+	def answer_template(options = {})  # value = nil, disabled = false, show_all = true, edit = false)
+		disabled = options[:disabled] ? "disabled" : nil
+		show_all = options[:show_all].nil? || options[:show_all]
+		fast     = options[:fast]
+		edit     = options[:edit]
+		no       = options[:number].to_s || self.question.number.to_s
+		span     = options[:outer_span] || answer_span
+		in_span  = options[:inner_span] || answer_inner_span
+		indent   = options[:indent]
+		c_id     = cell_id(no)
+
+		newform = []
+		question_no = "Q" + no
+    	
+    	puts "Prefs: #{preferences.inspect}"
+    	if preferences && preferences[:indent]
+    		newform << span_item("nbsp;", "span-#{preferences[:indent]}")
+    		puts "INDENT: #{p[:indent]}"
+    	end
+
+		self.question_items.each_with_index do |item, i|
+			item_text = edit ? item.text : item.text
+			field = (i == 0 && (i == question_items.size-1) ? self.svar_item : "")# only show answer_item label in first item for cell with multiple list items
+			has_no_text = item_text.blank?
+			if(has_no_text)     # listitem without predefined text
+				if(disabled)      # show answer value
+					field << value
+				else                        # show text field, possibly with value
+       		    	newform << span_item(item_text, "span-1") if !item_text.blank? || indent
+       		    	newform << span_item(field, "span-#{in_span}") if !field.blank?
+       		    	newform << span_item(value + " ", "") if !value.blank?
+				end
+			else  # with predefined text. show text in item (no input field)
+				# puts "field: #{field}, value: #{value}, item_text: #{item_text}"
+				newform << span_item(field, "span-1") if (!field.blank? && i == 0) || indent
+				newform <<
+				if self.span
+					span_item(item_text, "span-#{self.span-2}")
+				else
+					span_item(item_text, "span-10")
+				end
+			end
+		end
+		puts "class_name: #{class_name} span: #{span}"
 		span_item(newform.join, "#{class_name} #{span}")
 	end
 
@@ -807,7 +998,7 @@ class SelectOption < QuestionCell
 	end
 	
 	def answer_span(last = false)
-		span = "span-8"
+		span = "span-10"
 	 	span = "span-12" if self.question.columns == 2 and col == 1 #and self.question.number > 3
 	 	span << " last" if last
 	 	span
@@ -833,34 +1024,34 @@ class SelectOption < QuestionCell
 	def to_answer(options = {})
 		options[:outer_span] = answer_span
 		options[:inner_span] = answer_inner_span
-		
+		p = preferences
 		show_all      = options[:show_all].nil? || options[:show_all]
 		no            = options[:number].to_s || self.question.number.to_s
 		switch_off    = options[:switch_off]
 		c_id          = cell_id(no)
 		q_no          = "Q#{no}"
-		span 		  = options[:outer_span] || outer_span
-		in_span       = options[:inner_span] || inner_span
+		indent 		  = preferences && preferences[:indent]
+		outer_span    = span && span || options[:outer_span] || answer_span
+		in_span       = p && p[:in] && "span-#{p[:in]}" || options[:inner_span] || answer_inner_span
 		newform = []
 		target = !switch_off ? switch_target(options) : ""
 
-		# create options array
+		puts "Indent: #{indent}  row: #{row} col: #{col} q: #{question_id}"
+		if indent
+	    	newform << span_item("&nbsp;", "span-#{indent}")
+	    	in_span.succ!
+    	end	
+    	# create options array
 		qitems = self.question_items.collect { |item| [item.qtype, item.value, item.text] }
 		if qitems.first[0] == "listitem"
 			label = qitems.shift
-			newform << "<label for=#{c_id} class='selectlabel'>#{label.last || ""}</label><br>"
+			newform << span_item(label.last, in_span)
 		end 
 		sel_options = ["<option value=''>Vælg et svar</option>"]
 		selected = qitems.select { |option| !value.nil? && option[1] == value }.first
 
-		# if disabled # and !value.nil?  # disabled means show answer
-			# find text for this value answer
-		# 	answer_vals = qitems.detect { |item| item[1].to_s == value.to_s } # item array: index 1 -> value, index 2 -> værdi?
-		# 	newform >> (answer_vals && answer_vals[2] || (value == "0" && "ikke besvaret" || "ingen værdi"))
-		# else
-			newform << "<span class='#{in_span}'>#{selected && selected.last}</span>"
-		# end
-		span_item(newform.join, "#{span} selectanswer #{target}".rstrip)
+		newform << "<span class='#{in_span}'>#{selected && selected.last}</span>"
+		span_item(newform.join, "#{outer_span} selectanswer #{target}".rstrip)
 	end
 
   # def to_fast_input_html(options = {})
@@ -1171,8 +1362,6 @@ class ListItemComment < QuestionCell
 			case item.qtype
 			when "textbox" then 
 			when "listitem" then 
-				puts "LC listitemcom: #{item.inspect}: #{cell.value}"
-
         		part = []		
 				part << cell.span_item(answer_item, "span-1") if !(answer_item_set || cell.col > 2)
 				part << cell.span_item(item.text, "listitem span-10".strip)
@@ -1187,6 +1376,54 @@ class ListItemComment < QuestionCell
 					rating_val
 				else
 					cell.span_item(rating_val + "<br/>" + answer_val, "span-10")
+				end
+			end
+		end
+		newform.join
+  	end
+
+	def self.to_answer3(cols, options = {})
+    	cells = cols.values
+    	cell = cells.last
+		answer_item = cell.svar_item
+		no         = options[:number].to_s || cell.first.question.number.to_s 
+    	span 	   = options[:outer_span] || cell.answer_span
+		question_no = "Q" + no
+		c_id     = cell.cell_id(no)
+
+		questiontext = cells.first
+    	rating = cells.second
+    	listitem = cells.last
+		newform = []
+		answer_item_set = false
+
+		newform << cell.span_item(questiontext.question_items.first.text, "span-10")
+		# newform << span_item(rating.choice.get_options[rating.value] + "<br/>", "span-10")
+		# newform << span_item(listitem)
+
+		listitem.question_items.each do |item|
+			listitem_without_predefined_text = item.text.nil? || item.text.empty?
+			case item.qtype
+			when "questiontext"
+			when "textbox" then 
+			when "listitem" then 
+				puts "LC listitemcom: #{item.inspect}: #{cell.value}"
+
+				rating_val = cell.span_item(rating.choice.get_options[rating.value], "span-10") 
+
+        		part = []		
+				part << cell.span_item(answer_item, "span-1") if !(answer_item_set || cell.col > 2)
+				part << cell.span_item(rating_val, "listitem span-10".strip)
+				# answer_item_set = true;
+				# answer_item_set = true if cell.col == 1
+				newform << cell.span_item(part.join, "span-12 listitem") # wrap
+
+				answer_val = cell.value.blank? ? "" : "<span class='span-10' id='#{c_id}' class='answer_comment'>#{cell.value}</span>"
+
+				newform << if answer_val.blank?
+					rating_val
+				else
+					cell.span_item(item.text + "<br/>" + answer_val, "span-10")
 				end
 			end
 		end
@@ -1286,8 +1523,8 @@ class Rating < QuestionCell
 				span_item(text, "span-10")
 			elsif question.columns == 3 && datatype == :numeric
 				span_item(text, "span-8")
-			elsif question.columns == 3
-				text
+			elsif self.span
+				span_item(text, "span-#{span}")
 			else
 				text
 			end

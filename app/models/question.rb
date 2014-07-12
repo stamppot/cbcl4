@@ -7,6 +7,8 @@ class Question < ActiveRecord::Base
   has_many :answers
   has_many :score_items
   has_many :variables
+  serialize :preferences
+
   scope :by_survey, lambda { |survey| where('survey_id = ?', (survey.is_a?(Survey) ? survey.id : survey)) }
   scope :and_question_cells, -> { includes :question_cells }
 
@@ -244,4 +246,19 @@ class Question < ActiveRecord::Base
     xml << "  </question_cells>"
     xml << "</question>"
   end
+
+  def show_split_rows(cols, col_split, options)
+    output = []
+    cols.each_pair do |col, c| 
+      puts "split on: #{col_split} col: #{col}  c.col: #{c.col}"
+      output << split_row if col_split == c.col
+      output << c.to_answer(options)
+    end
+    output.join
+  end
+  
+  def split_row
+    output = "</div></td></tr>" + "<tr><td><div class='span-2'>&nbsp;</div>"
+  end
+
 end
