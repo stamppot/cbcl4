@@ -142,8 +142,12 @@ function toggleRadio(rObj) {
 
 function toggleComments(form) {
     var comments = $$('.comment');
+    var visible = comments[0].visible();
     comments.each(function(v) {
-      v.toggle(); 
+    	if(visible)
+    		v.hide();
+    	else
+    		v.show();
     });
 }
 

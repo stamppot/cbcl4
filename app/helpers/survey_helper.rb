@@ -18,6 +18,6 @@ module SurveyHelper
   def help_tip(help, div_id)
     script = "$('help_#{div_id}').toggle();"
     "<img onclick=\"#{script}\" title=\"Vis svarmuligheder\" alt='Svarmuligheder' class='help_icon' src='/images/icon_comment.gif'>" +
-    "<div id='help_#{div_id}' class='comment' style='display:none;'><div class='help_tip'>#{help}</div></div>"
+    "<div id='help_#{div_id}' class='' style='display:none;'><div class='help_tip'>#{help}</div></div>"
   end
 end
