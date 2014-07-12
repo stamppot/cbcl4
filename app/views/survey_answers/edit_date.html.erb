@@ -8,7 +8,7 @@ Den oprindelige besvarelsesdato er: <%= @journal_entry.created_at.strftime("%-d-
 <%= form_tag :action => 'update_date', :id => @journal_entry do %>
 	<p>
 	<div>
-		Opfølgning: <%= "<label for=\"survey_follow_up\">" %>
+		Opfølgning: <label for="survey_follow_up">
 		<%= select :journal_entry, :follow_up, @follow_ups %>
 	</div>
 	<p/>
