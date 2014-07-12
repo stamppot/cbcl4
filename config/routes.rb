@@ -186,6 +186,7 @@ Cbcl4::Application.routes.draw do
   post 'survey_answers/create/(/:id)/(/:journal_id)', :to => 'survey_answers#create', :as => 'survey_answer_create'
   get 'survey_answers/done/(/:id)', :to => 'survey_answers#done', :as => 'survey_answer_done' # :id is entry
   get 'survey_answers/edit_date/(/:id)', :to => 'survey_answers#edit_date', :as => 'edit_date_survey_answers'
+  post 'survey_answers/update_date/(/:id)', :to => 'survey_answers#update_date', :as => 'update_date_survey_answers'
 
   post 'survey_answers/json_draft_data/(/:id)', :to => 'survey_answers#json_draft_data', :as => 'json_draft_data', :format => 'json'
   post 'survey_answers/json_dynamic_data/(/:id)', :to => 'survey_answers#json_dynamic_data', :as => 'json_dynamic_data', :format => 'json'

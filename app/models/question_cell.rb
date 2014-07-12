@@ -720,7 +720,7 @@ class QuestionComment < QuestionCell
 			      	field << (value || "")
 			      	newform << div_item(field, "listitemfield #{span}")
 			    	when /create|edit/ then
-		            	field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' rows='1'>#{value}</textarea>"
+		            	field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' maxlength='2000' rows='1'>#{value}</textarea>"
         		    	newform << field
           			end
 				end
@@ -899,7 +899,7 @@ class ListItem < QuestionCell
 			      	field << (value || "")
 			      	newform << div_item(field, "listitemfield #{span}")
 			    	when /create|edit/ then
-		            	field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' rows='1'>#{value}</textarea>"
+		            	field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' maxlength='2000' rows='1'>#{value}</textarea>"
         		    	newform << field
           			end
 				end
@@ -1319,7 +1319,7 @@ class ListItemComment < QuestionCell
 				box_span = "span-12"
 				
 				if (listitem_without_predefined_text)
-					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='answer_comment'>#{self.value}</div>"
+					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment'>#{self.value}</div>"
 					newform << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
 					newform << div_item(answer_val, "itemtextbox #{box_span} #{target}".rstrip) unless answer_val.blank?
 				else 
@@ -1330,7 +1330,7 @@ class ListItemComment < QuestionCell
 				if (listitem_without_predefined_text)
 					# part << span_item(answer_item_set && self.col > 2 ? "" : answer_item, "span-1")
 					part << div_item(
-					"<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' rows='1' value='#{item.value}'>#{self.value}</textarea>", "listitemfield #{span}")
+					"<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='2000' rows='1' value='#{item.value}'>#{self.value}</textarea>", "listitemfield #{span}")
 				else 
 					part << span_item(answer_item, "span-1") if !(answer_item_set || self.col > 2)
 					part << span_item(item.text, "listitem #{target} span-10".strip)
@@ -1448,13 +1448,13 @@ class ListItemComment < QuestionCell
 		c_id     = cell_id(no)
 
 		comment_box = "<a href='#' onclick='return toggleComment(\"#{c_id}\");' >" <<
-		"<img src='/images/icon_comment.gif' border=0 title='Kommentar' alt='kommentar' class='comment' >" << # removed />
+		"<img src='/images/icon_comment.gif' border=0 title='Kommentar' alt='kommentar' class='' >" << # removed />
 		"</a>" unless options[:answers]
 		form = form_template(options) << comment_box.to_s
 	end
 
 	def form_template(options = {}) # value = nil, disabled = false, show_all = true)
-		disabled   = options[:disabled] ? "disabled" : nil
+		disabled   = options[:disabled] == "disabled" ? "disabled" : nil
 		answer     = options[:answers] ? true : false
 		show_all   = options[:show_all].nil? || options[:show_all] # show_all = options[:show_all].nil? ? true : false
 		fast       = options[:fast] || false
@@ -1481,7 +1481,7 @@ class ListItemComment < QuestionCell
 				if (listitem_without_predefined_text)
 					input_or_answer = answer ?
 					  (self.value.blank? ? "" : "<div id='#{c_id}' class='answer_comment'>#{self.value}</div>") :
-					  "<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' class='comment' cols='#{tcols}' rows='#{trows}' #{disabled ? ' disabled style="display:none;"' : ''}>#{self.value}</textarea>"
+					  "<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' maxlength='2000' class='comment' cols='#{tcols}' rows='#{trows}' #{disabled ? ' disabled style="display:none;"' : ''}>#{self.value}</textarea>"
 					div_item((answer_item_set ? "" : answer_item) + input_or_answer,
 					"itemtextbox #{span} #{target}".rstrip)
 				else div_item((answer_item_set ? "" : answer_item) + item.text, "listitemtext #{span} #{target}".rstrip)
@@ -1491,7 +1491,7 @@ class ListItemComment < QuestionCell
 			  newform <<
 				if (listitem_without_predefined_text)
 					span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
-					"<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' rows='1' value='#{item.value}'>#{self.value}</textarea>", "listitemfield #{span}")
+					"<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='2000' rows='1' value='#{item.value}'>#{self.value}</textarea>", "listitemfield #{span}")
 				else div_item(((answer_item_set || self.col > 2) ? "" : answer_item) + item.text, "listitemtext #{span} #{target}".strip)
 				end
 				answer_item_set = true;
@@ -1913,7 +1913,7 @@ class TextBox < QuestionCell
 			elsif answer
 				newform << (self.value.blank? ? "" : "<div id='#{c_id}' class=' #{span}'>#{self.value}</div>")
 			else
-				newform << div_item("<textarea id='#{c_id}' class='comment' name='#{question_no}[#{c_id}]' cols='38' rows='5'>#{self.value}</textarea>", "itemtextbox #{span}")
+				newform << div_item("<textarea id='#{c_id}' class='' name='#{question_no}[#{c_id}]' maxlength='2000' cols='38' rows='5'>#{self.value}</textarea>", "itemtextbox #{span}")
 			end
 		end
 		newform.join
