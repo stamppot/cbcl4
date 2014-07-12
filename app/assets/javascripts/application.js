@@ -142,7 +142,7 @@ function toggleRadio(rObj) {
 
 function toggleComments(form) {
     var comments = $$('.comment');
-    comments.all(function(v) {
+    comments.each(function(v) {
       v.toggle(); 
     });
 }

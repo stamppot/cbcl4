@@ -16,9 +16,8 @@ module SurveyHelper
   # help is form needing help
   # used by answer_by question
   def help_tip(help, div_id)
-    "<img onclick='$(\'#help_q1_5_1\').toggle();' title='Vis svarmuligheder' alt='Svarmuligheder' class='help_icon' src='/images/icon_comment.gif'>" +
+    script = "$('help_#{div_id}').toggle();"
+    "<img onclick=\"#{script}\" title=\"Vis svarmuligheder\" alt='Svarmuligheder' class='help_icon' src='/images/icon_comment.gif'>" +
     "<div id='help_#{div_id}' class='comment' style='display:none;'><div class='help_tip'>#{help}</div></div>"
-    # (link_to_function( image_tag("icon_comment.gif", :class => 'help_tip', :title => "Hjælp", :alt => "Hjælp, se muligheder"),
-    #     update_page { |page| page.toggle("help_#{div_id}") }))
   end
 end
