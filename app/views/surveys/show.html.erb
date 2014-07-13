@@ -294,7 +294,6 @@ jQuery(document).ready(function ($) {
     $('.comment').each(function() {
     $(this).data('chars', 0);
     $(this).parent().append('<span>0/2000</span>');
-});
 
     var checkTextLength = function(e) {
 	    var count = $(this).data('chars');
@@ -309,9 +308,9 @@ jQuery(document).ready(function ($) {
 	        e.preventDefault();
 	        return false;
 	    }
+	};
 	$('.comment').off('keyup').keyup(checkTextLength);
 	$('.comment').focusout(checkTextLength);
-	
 	});
 });
 
