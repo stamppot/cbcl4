@@ -22,41 +22,24 @@
 			if row == 1
 				"\t<div class='group span-1'>#{no > 0 && (no.to_roman + ". ") || '&nbsp;'}</div>\n"
 			else
-				"\t<div class='span-2'>&nbsp;</div>\n"
+				"\t<div class='span-1'>&nbsp;</div>\n"
 			end
 		
 		no_cols = cols.size
 
 		if (p = question.preferences) && p[:split_rows] && p[:split_rows][row]
+			puts "p: #{p}"
 			puts "SPLIT THIS ROW: #{cols.inspect}"
 			output << question.show_split_rows(cols, p[:split_rows][row], @options)
 			
 			next
 		end
 
-		# puts "cols: #{cols.size} #{cols.inspect}"
-		# puts "#{cols.first.type}  #{cols.last.answer_item} size: #{cols.size}"
 		if cols.size == 2 && cols[1].type == 'Rating' && cols[2].type == 'ListItemComment'
 			# puts "cols before: #{cols.inspect}"
 			output << ListItemComment.to_answer(cols, @options)
 			output << "</div></td></tr>"
 			next
-		# elsif cols.size == 3 && cols[2].type == 'Rating' && cols[3].type == 'ListItemComment'
-		# 	# puts "cols before: #{cols.inspect}"
-		# 	puts "q_#{question.id} row: #{row}"
-		# 	@options[:row] = row
-		# 	output << ListItemComment.to_answer3(cols, @options)
-		# 	output << "</div></td></tr>"
-		# 	next
-		# elsif cols.size == 4 && cols[1].type == 'ListItem'
-		# 	puts "split q_#{question.id} row: #{row}: cols: #{cols.inspect}"
-		# 	puts "prefs: #{cols[1].preferences.inspect}"
-		# 	output << ListItem.to_answer_splitrow(cols.values, @options)
-		# 	next
-		# elsif cols[1].type == 'QuestionComment'
-		# 	puts "QuestionComment: q_#{question.id} row: #{row}"
-		# 	output << QuestionComment.to_answer(cols, @options)
-		# 	next
 		elsif cols.first.type == 'Rating'
 			cols.reverse!
 		end

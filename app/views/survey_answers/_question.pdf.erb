@@ -25,17 +25,35 @@
 	index = 0
 	rows.sort.each do |row, cols|
 		color = index % 2 == 0 && "even" || "odd"
+		# output << "<tr><td><div class='group span-1 row'>#{no > 0 && (no.to_roman + ". ") || '&nbsp;'}</div>" if row == 1
 		output << "<tr><td><div id='row#{id}_#{row}' class='row'>\n"
 		output << 
 			if row == 1
 				"\t<div class='group span-1'>#{no > 0 && (no.to_roman + ". ") || '&nbsp;'}</div>\n"
 			else
-				"\t<div class='span-1'>&nbsp;</div>\n"
+				"\t<div class='span-2'>&nbsp;</div>\n"
 			end
 		
 		no_cols = cols.size
+
+		if (p = question.preferences) && p[:split_rows] && p[:split_rows][row]
+			puts "SPLIT THIS ROW: #{cols.inspect}"
+			output << question.show_split_rows(cols, p[:split_rows][row], @options)
+			
+			next
+		end
+
+		if cols.size == 2 && cols[1].type == 'Rating' && cols[2].type == 'ListItemComment'
+			# puts "cols before: #{cols.inspect}"
+			output << ListItemComment.to_answer(cols, @options)
+			output << "</div></td></tr>"
+			next
+		elsif cols.first.type == 'Rating'
+			cols.reverse!
+		end
+
 		cols.each do |col, cell|
-			html = cell.to_html((@options || {:show_all => true}).merge(:number => no, :last => cell.col == no_cols))
+			html = cell.to_answer((@options || {:show_all => false}).merge(:number => no, :last => cell.col == no_cols))
 			output << html if html
 		end
 		output << "</div></td></tr>\n"

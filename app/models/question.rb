@@ -251,14 +251,18 @@ class Question < ActiveRecord::Base
     output = []
     cols.each_pair do |col, c| 
       puts "split on: #{col_split} col: #{col}  c.col: #{c.col}"
-      output << split_row if col_split == c.col
+      split = col_split.is_a?(Array) && col_split || [col_split]
+      if split.include? c.col
+        options[:indent] = 2
+        output << split_row
+      end
       output << c.to_answer(options)
     end
     output.join
   end
   
   def split_row
-    output = "</div></td></tr>" + "<tr><td><div class='span-2'>&nbsp;</div>"
+    output = "</div></td></tr>" + "<tr><td width='100%' style='display: inline;'><div class='span-2'>&nbsp;</div>"
   end
 
 end

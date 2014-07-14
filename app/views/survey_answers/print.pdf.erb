@@ -1,20 +1,20 @@
 <%= stylesheet_link_tag('survey_print').html_safe %>
 
 <div id="survey_header">
-	<div class="survey" style='background-color: #fff<%# @survey.color %>;'>
-		<div id="survey_journal_info">
+	<div class="survey span-24" style='background-color: #fff<%# @survey.color %>;'>
+		<span id="survey_journal_info" class="span-6">
 			ID: <%= @journal_entry.journal.qualified_id %><br>
 			Navn: <%= @journal_entry.journal.name %><br>
 			F&oslash;dselsdato: <%= @journal_entry.journal.birth_short %>
-		</div>
-		<div class="surveyname"><%= @survey.get_title %></div>
+		</span>
+		<span class="surveyname" class="span-18"><%= @survey.get_title %></span>
 	</div>
 </div>
 <br/>
 
 <br/>
 
-	<div><%= render :partial => "surveys/answer_by" %></div>
+	<div class="span-24"><%= render :partial => "surveys/answer_by" %></div>
 	<br/>
 	<%= render :partial => "question", :collection => @survey.questions %>
 

@@ -88,7 +88,7 @@
 						<%= entry.answered_by && t("roles.#{entry.answered_by}") || entry.status %>
 					 </td>
 					 <td style="min-width: 100px;"><%= link_to image_tag("printer.png", :border=>0, :alt => 'Udskriv besvarelse', :title => 'Udskriv besvarelse' ),
-									('/survey_answers/print/' + entry.id.to_s + ".pdf"), :format => 'pdf', :title => 'Udskriv besvarelse' %>
+									('/survey_answers/print/' + entry.id.to_s + ".html"), :format => 'html', :title => 'Udskriv besvarelse' %>
 						<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
 							<%= image_tag 'tag_blue.png', :alt => "Noter", :title => "Noter", :align => "right" %>
 						</a>

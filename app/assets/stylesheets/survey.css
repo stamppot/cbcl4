@@ -16,6 +16,7 @@ pre {
 a { color: #000; }
 a:visited { color: #666; }
 
+/*table { width: 99%; }*/
 
 .survey {
   border: 1px black solid;
@@ -76,20 +77,20 @@ height:49px; /* the correct height */
 }
 
 #survey_journal_info {
-	float: right;
+	/*float: right;*/
 }
 .ListTitle a {
   text-decoration: none;
 }
 
-question, table.question {
+.question, table.question {
 /*  border: 1px lightblue solid;
 */  display: table;
 }
 
 .group {
   border: 4px;
-  padding-right: 2em;
+  /*padding-right: 2em;*/
   colspan: 100%;
 }
 
