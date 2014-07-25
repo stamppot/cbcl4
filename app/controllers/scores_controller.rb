@@ -60,14 +60,16 @@ class ScoresController < ApplicationController
     # params contains a new score_item that has not been created yet (happens when return is pressed)
     if params[:score_item] && params[:score_item].keys.map(&:to_i).select {|i| i==0}.size > 1 # contains new score_item
       # find curr to be updated, remove from params to new score_item
-      # new_score_item_params = {}
-      # new_score_item_params[:items] = params[:score_item].delete("items")
-      # new_score_item_params[:question_id] = params[:score_item].delete("question_id")
-      # new_score_item_params[:qualifier] = params[:score_item].delete("qualifier")
-      # new_score_item_params[:range] = params[:score_item].delete("range")
-      # new_score_item_params[:score_id] = @score.id
-      new_score_item_params = params[:score_item].slice(%w(items question_id qualifier range))
+      new_score_item_params = {}
+      new_score_item_params[:items] = params[:score_item].delete("items")
+      new_score_item_params[:question_id] = params[:score_item].delete("question_id")
+      new_score_item_params[:qualifier] = params[:score_item].delete("qualifier")
+      new_score_item_params[:range] = params[:score_item].delete("range")
+      new_score_item_params[:score_id] = @score.id
+      
+      # new_score_item_params = params[:score_item].slice(%w(items question_id qualifier range))
       new_score_item = @score.score_items.new(new_score_item_params)
+      puts "new_score_item_params: #{new_score_item_params.inspect}   new_score_item: #{new_score_item.inspect}"
       new_score_item.number = Question.find(new_score_item.question_id).number
       new_score_item.save
 
@@ -84,13 +86,13 @@ class ScoresController < ApplicationController
       if params[:score_ref].keys.map(&:to_i).select {|i| i==0}.size > 1 # contains new score_ref
         # find curr to be updated, remove from params to new score_item
         # TODO: test this (was already broken (not this piece))
-        new_score_item_params = params[:score_item].slice(%w(age_group mean gender percent95 percent98))
-        # new_score_ref_params = {}
-        # new_score_ref_params[:age_group] = params[:score_ref].delete("age_group")
-        # new_score_ref_params[:mean] = params[:score_ref].delete("mean")
-        # new_score_ref_params[:gender] = params[:score_ref].delete("gender")
-        # new_score_ref_params[:percent95] = params[:score_ref].delete("percent95")
-        # new_score_ref_params[:percent98] = params[:score_ref].delete("percent98")
+        # new_score_item_params = params[:score_item].slice(%w(age_group mean gender percent95 percent98))
+        new_score_ref_params = {}
+        new_score_ref_params[:age_group] = params[:score_ref].delete("age_group")
+        new_score_ref_params[:mean] = params[:score_ref].delete("mean")
+        new_score_ref_params[:gender] = params[:score_ref].delete("gender")
+        new_score_ref_params[:percent95] = params[:score_ref].delete("percent95")
+        new_score_ref_params[:percent98] = params[:score_ref].delete("percent98")
         new_score_ref_params[:score_id] = @score.id
         if new_score_ref_params[:mean] =~ /(\d+)\,(\d+)/
           new_score_ref_params[:mean] = ($1 + "." + $2).to_f
