@@ -13,7 +13,7 @@ class ScoreRapport < ActiveRecord::Base
   # scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   # scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
 
-  attr_accessible :survey_name, :survey, :unanswered, :short_name, :age, :gender, :age_group, :created_at, :center_id, :survey_answer_id
+  attr_accessible :survey_name, :survey, :unanswered, :short_name, :age, :gender, :age_group, :created_at, :center_id, :survey_answer_id, :follow_up
 
 
   def to_csv(csv_survey_answers, survey_id)

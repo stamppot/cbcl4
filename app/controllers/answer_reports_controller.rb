@@ -8,6 +8,7 @@ class AnswerReportsController < ApplicationController
       redirect_to journals(journal_id) and return 
     end 
     score_report = ScoreReportPresenter.new.build(params[:answers], params[:journal_id])
+    puts "score_report: #{score_report.inspect}"
     @journal = score_report.journal
     @titles  = score_report.titles #.map {|t| t.gsub("nn", "<br/>")}
     @groups  = score_report.groups

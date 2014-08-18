@@ -124,7 +124,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   def update
     @journal = Journal.find(params[:id], :include => :journal_entries)
     @journal.update_attributes(params[:journal])
-        
+    @journal.delta = 1
+
     if @journal.save
       flash[:notice] = 'Journalen er opdateret.'
       redirect_to journal_path(@journal)
@@ -182,7 +183,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
       flash[:notice] = (@surveys.size > 1 && "Spørgeskemaer " || "Spørgeskemaet ") + "er oprettet." if @group.save && valid
       redirect_to @group
     else       # can only add surveys in age group of person
-      @follow_ups = JournalEntry.follow_ups
+      @follow_ups = FollowUp.get
       @follow_up = @group.follow_up_count
       @surveys = @group.center.subscribed_surveys_in_age_group(@group.age)
       @page_title = "Journal #{@group.title}: Tilføj spørgeskemaer"      
@@ -199,6 +200,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
       entries = params[:entry].select { |k,v| v.to_i == 1 }.map &:first
       entries = JournalEntry.find(entries, :include => [:login_user, :survey_answer])
       entries.each { |entry| entry.clear_association_cache; entry.destroy } # deletes user and survey_answer too
+      @group.delta = 1
 
       if @group.save
         flash[:notice] = "Spørgeskemaer blev fjernet fra journal."
@@ -304,6 +306,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     params[:journals].each do |journal_params|
       journal = Journal.find(journal_params[:id])
       journal.parent_email = journal_params[:group][:parent_email]
+      journal.delta = 1
       journal.save
     end
     flash[:notice] = "Forældre-mails er rettet"

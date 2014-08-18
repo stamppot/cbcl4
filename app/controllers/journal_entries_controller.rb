@@ -74,7 +74,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   def edit # edit follow_up
     @journal_entry = JournalEntry.find(params[:id])
     @follow_ups
-    @follow_ups = JournalEntry.follow_ups
+    @follow_ups = FollowUp.get
   end
 
   def update

@@ -16,7 +16,7 @@ class Letter < ActiveRecord::Base
   def get_follow_up
     # self.follow_up ||= 0
     return "Alle" unless self.follow_up  
-    JournalEntry.follow_ups[self.follow_up].first
+    FollowUp.get[self.follow_up].first
   end
 
   def insert_text_variables(journal_entry)

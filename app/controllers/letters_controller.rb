@@ -17,7 +17,7 @@ class LettersController < ApplicationController
     @group = Group.find(params[:group][:id]) if params[:group] && !params[:group][:id].blank?
     @surveys = Survey.find([2,3,4,5])
     @survey = Survey.find_by_surveytype(params[:survey][:surveytype]) if params[:survey]
-    @follow_ups = JournalEntry.follow_ups
+    @follow_ups = FollowUp.get
     
     @letters = Letter.where('group_id is null').to_a + @letters if current_user.admin?
     @letters = Letter.all if params[:all]
@@ -40,7 +40,7 @@ class LettersController < ApplicationController
     end
     @groups = @groups.map {|g| [g.title, g.id] } if @groups.any?
     @groups.unshift ["Alle grupper", nil] if current_user.admin? && !params[:id] && !Letter.default_letters_exist?
-    @follow_ups = JournalEntry.follow_ups
+    @follow_ups = FollowUp.get
   end
 
   def edit
@@ -49,7 +49,7 @@ class LettersController < ApplicationController
     @groups = current_user.center_and_teams.map {|g| [g.title, g.id] }
     @groups.unshift ["Alle grupper", nil] if current_user.admin?
     @page_title = @letter.name
-    @follow_ups = JournalEntry.follow_ups
+    @follow_ups = FollowUp.get
 
     unless current_user.can_access_group?(@letter.group_id)
 	    flash[:notice] = "Kan ikke rette andres breve!" 
@@ -75,7 +75,7 @@ class LettersController < ApplicationController
       @role_types = Survey.surveytypes
       @groups = [@group]
       # @letter.follow_up = params[:letter][:follow_up].blank? && -1 || params[:letter][:follow_up].to_i
-      @follow_ups = JournalEntry.follow_ups
+      @follow_ups = FollowUp.get
       render :new, :params => params and return
     end
   end
@@ -89,7 +89,7 @@ class LettersController < ApplicationController
       redirect_to(@letter) and return
     else
       @group = [@letter.group.title, @letter.group.id]
-      @follow_ups = JournalEntry.follow_ups
+      @follow_ups = FollowUp.get
       @role_types = Survey.surveytypes
       @groups = current_user.center_and_teams.map {|g| [g.title, g.id] }
       render :edit

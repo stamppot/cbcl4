@@ -28,9 +28,9 @@ class JournalEntry < ActiveRecord::Base
   scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
   scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }
 
-  def self.follow_ups
-    [["Diagnose", 0], ["1. opfølgning", 1], ["2. opfølgning", 2], ["3. opfølgning", 3], ["Afslutning", 4]]
-  end
+  # def self.follow_ups
+  #   [["Diagnose", 0], ["1. opfølgning", 1], ["2. opfølgning", 2], ["3. opfølgning", 3], ["Afslutning", 4]]
+  # end
 
   def self.get_status_query(state)
     case state
@@ -42,7 +42,7 @@ class JournalEntry < ActiveRecord::Base
 
   def get_follow_up
     self.follow_up ||= 0
-    JournalEntry.follow_ups[follow_up].first
+    FollowUp.get[follow_up].first
   end
 
   # def follow_up_validation

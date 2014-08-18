@@ -56,8 +56,8 @@ class ExportsController < ApplicationController
   end
 
   def download
-    params[:center] = params[:center].first
-    center = Center.find params[:center] unless params[:center].blank? || params[:id] == '0'
+    params[:center] = params[:id]
+    center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
     center = current_user.center if current_user.centers.size == 1
     args = params.clone
     params = filter_date(args)

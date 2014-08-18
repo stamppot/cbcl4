@@ -311,7 +311,7 @@ class SurveyAnswersController < ApplicationController
     @journal_entry = JournalEntry.find(params[:id])
     # @date = @journal_entry.created
     # @follow_up = @journal_entry.get_follow_up
-    @follow_ups = JournalEntry.follow_ups
+    @follow_ups = FollowUp.get
     puts "follow_up: #{@follow_up}"
     puts "follow_ups: #{@follow_ups.inspect}"
     render :layout => 'cbcl'
