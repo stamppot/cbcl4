@@ -1,0 +1,5 @@
+[
+{:question_id => 7, :col => 1, :row => 11, :answer_item => "3", :items => "listitem::::Har barnet gÃ¥et en klasse om?", :preferences => {:targets => [{:state => "onstate", :target => "e"}]}, :prop_mask => 2},
+{:question_id => 7, :col => 2, :row => 11, :answer_item => "3", :items => "radio::0::Nej###radio::1::Ja", :preferences => {:targets => [{:state => "onstate", :target => "e"}]}, :prop_mask => 3},
+{:question_id => 7, :col => 3, :row => 11, :answer_item => "3", :items => "listitem::::Hvis ja, hvilket klassetrin?###option::0::0. klasse###option::1::1. klasse###option::2::2. klasse###option::3::3. klasse###option::4::4. klasse###option::5::5. klasse###option::6::6. klasse###option::7::7. klasse###option::8::8. klasse###option::9::9. klasse###option::10::10. klasse###option::99::Andet", :preferences => {"targets => [{"state => "onstate", :target => "e"}]}, :prop_mask => 1},
+{:question_id => 7, :col => 4, :row => 11, :answer_item => "3", :items => "listitem::::Angiv Ã¥rsagen:###textbox::::", :preferences => {:targets => [{:state => "onstate", :target => "e"}]}, :prop_mask => 3}]"
