@@ -44,7 +44,7 @@ gem 'dalli'
 # gem 'memcache-client'
 
 # gem 'rails-observers'
-
+gem 'wkhtmltopdf-binary'
 gem 'pdfkit'
 
 gem 'writeexcel'

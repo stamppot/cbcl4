@@ -103,6 +103,11 @@
 <p/>
 	<%= back_button journal_path(@journal_entry.journal) %>
 
+<script type="text/javascript">
+	document.observe('dom:loaded', function() {
+  		toggleComments();
+	});
+</script>
 
 <div id="debug">
 </div>

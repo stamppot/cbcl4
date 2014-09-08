@@ -236,13 +236,19 @@ function scrollToAnim(targetTop, duration) {
 //  };
 // })();
 
+Element.prototype.hasClass = function(className) {
+    return this.className && new RegExp("(^|\\s)" + className + "(\\s|$)").test(this.className);
+};
 
 function tabNext(valid, input) {
 	if(valid) {
-    var nextelem = $(input.form[getIndex(input)]);
-    			// console.log('input1: ' + input.id);
-    			// console.log('input2: ' + nextelem);
- 	  	if((typeof nextelem) !== 'undefined' && nextelem.value == "9") {  // when element is prefilled with 'no answer', select to ease input
+		console.log('tabNext input: ' + input);
+	    var nextelem = $(input.form[getIndex(input)]);
+
+    if(nextelem.hasClass('comment')) { // jump over commenst
+    	nextelem = $(input.form[getIndex(nextelem)]);
+    }
+	  	if((typeof nextelem) !== 'undefined' && nextelem.value == "9") {  // when element is prefilled with 'no answer', select to ease input
 			nextelem.focus();  // both focus and select, then the window scrolls along
 			nextelem.select();
 			// console.log('input: ' + input);

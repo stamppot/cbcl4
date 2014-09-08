@@ -30,6 +30,7 @@
 var submitAction = false;
 
 function tabOnValidate(result, elem) {
+	puts "tabOnValidate:: result: " + result;
 	if(result == 2) {
 		window.status = "Du kan indtaste mere eller hoppe videre";
 		elem.focus();
