@@ -20,10 +20,14 @@ class User < ActiveRecord::Base
   end
   
   def centers(options = {})
+    column = options.delete(:column) || 'title'
+    order = options.delete(:order) || 'desc'
+
+    puts "options user.rb:centers: #{options.inspect}"
     if self.has_access? :superadmin
-      Center.all
+      Center.all.order_by(column,order)
     else
-      Center.for_user(self.id).includes(options[:includes])
+      Center.for_user(self.id).includes(options[:includes]).order_by(column,order)
     end
   end
 

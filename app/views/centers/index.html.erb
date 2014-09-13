@@ -16,3 +16,56 @@
 		<%= link_button t('center.new'), new_center_path, 'center_new' %>
 	</div>
 <% end %>
+
+<input name="column" id="column" type="hidden" value="<%= @column %>" />
+<input name="order" id="order" type="hidden" value="<%= @order %>" />
+
+
+<script type='text/javascript'>
+
+function get_column_order() {
+	return { 'column': $('#column').val(), 'order': $('#order').val() };
+}
+
+function update_page() {
+
+};
+
+function get_page_params() {
+	// var center = $('#center_select').val();
+	// var team = $('#team_select').val();
+	var column = $('#column').val();
+	var order = $('#order').val();
+
+	var p = {'column':column, 'order':order}
+	// if('' != center) p.center = center;
+	// if('' != team) p.team = team;
+	return p;
+}
+
+function get_page_url(params) {
+	var url = '/centers/?' + jQuery.param(params);
+	location.href = url;
+}
+
+$(document).ready(function() {
+
+	$('table.sortable th.sortcol').click(function() {
+		var curr_order = $('#order').val();
+		var curr_column = $('#column').val();
+		var clicked_column = $(this).data('column');
+		var clicked_order = $(this).data('order');
+		console.log('current column, order: ' + curr_column + ', ' + curr_order + '  clicked: ' + clicked_column + ', ' + clicked_order);
+		if(curr_column == clicked_column) {
+			$('#order').val(curr_order == 'asc' ? 'asc' : 'desc');
+		}
+		else {
+			$('#column').val(clicked_column);
+			console.log(curr_order);
+			$('#order').val(curr_order == 'asc' ? 'asc' : 'desc');
+		}
+		get_page_url(get_page_params());
+	});
+});
+
+</script>

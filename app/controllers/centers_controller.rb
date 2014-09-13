@@ -2,7 +2,16 @@ class CentersController < ApplicationController
   
   def index
     @page_title = "CBCL - Centre"
-    @groups = current_user.centers.sort_by {|c| c.title}
+    @column = params[:column]
+    @column = "title" if @column.blank? 
+    @order = params[:order]
+    @order = if @order.blank?
+      "asc"
+    else
+      @order == "desc" && "asc" || "desc"
+    end
+
+    @groups = current_user.centers(:column => @column, :order => @order)
     query = "select center_id, count(*) as count from journals where center_id IN (#{@groups.map(&:id).join(',')}) group by center_id"
     @groups_count = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 
       col[j['center_id']] = j['count']; col

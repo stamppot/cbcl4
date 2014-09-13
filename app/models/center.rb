@@ -24,6 +24,15 @@ class Center < Group
   # validates_uniqueness_of :title
 
   scope :search_title_or_code, lambda { |phrase| { :conditions => ["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase] } }
+
+  scope :order_by, lambda { |column, order|
+    puts "column, order: #{column} #{order}"
+    if ['title', 'code', 'created_at'].include?(column)
+      order("#{column} #{order == 'desc' && 'desc' || 'asc'}")
+    else
+      order(' title desc')
+    end
+  }
   
   attr_accessor :subscription_service, :subscription_presenter
   # def validate

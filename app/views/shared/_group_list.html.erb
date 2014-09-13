@@ -1,20 +1,27 @@
 <% @groups = @group.teams if @group && @group.teams.count > 0 %>
 <table class="sortable list" class="groups">
 	<tr>
-		<th class="wide" title="Sorter efter navn"><%= center_or_team_text(@groups) %></th>
-		<th title="Sorter efter SKS-kode">ID</th>
+		<th class="wide sortcol sortdesc" title="Sorter efter navn" data-column="title" data-order='<%= @column == 'title' && @order || '' %>'><%= center_or_team_text(@groups) %></th>
+
+		<th title="Sorter efter SKS-kode" class="sortcol" data-column="code" data-order='<%= @column == 'code' && @order || '' %>'>Id</th>
+
 		<!-- <th class="narrow" title="Sorter efter antal brugere"><%# t('user.users') %></th> -->
 		<% unless @hide_team %>
-		<th class="half_wide" title="Sorter efter team"><%= any_teams_text %></th>
+			<th title="Sorter efter team" class="sortcol" data-column="team" data-order='<%= @column == 'team' && @order || '' %>'><%= any_teams_text %></th>
 		<% end %>
 		<% unless @hide_journals %>
-		<th class="half_wide" title="Sorter efter journal"><%= t('journal.journals') %></th>
+			<th title="Sorter efter journal" class="half_wide" data-column="journal" data-order='<%= @column == 'journal' && @order || '' %>'><%= t('journal.journals') %>
+			</th>
 		<% end %>
-		<th title="Sorter efter oprettelsesdato"><%= t('status.created') %></th>
+
+		<th title="Sorter efter oprettelsesdato" class="sortcol" data-column="created_at" data-order='<%= @column == 'created_at' && @order || '' %>'><%= t('status.created') %>
+		</th>
 		<% if false && current_user.access?(:show_column_actions) %>
 		<th class="nosort"><%= t('action') %></th>
 		<% end %>
 	</tr>	
+
+
 
 	<% can_center_delete = current_user.access? :center_delete %>
 	<% @groups.each do |group| %>
