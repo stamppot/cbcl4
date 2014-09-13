@@ -219,22 +219,6 @@ function scrollToAnim(targetTop, duration) {
       }, 10);
 } 
 
-// var getScrollRoot = (function() {
-// var SCROLL_ROOT;
-//  return function() {
-//    if (!SCROLL_ROOT) {
-//      var bodyScrollTop  = document.body.scrollTop;
-//      var docElScrollTop = document.documentElement.scrollTop;
-//      window.scrollBy(0, 1);
-//      if (document.body.scrollTop != bodyScrollTop)
-//        (SCROLL_ROOT = document.body);
-//      else 
-//        (SCROLL_ROOT = document.documentElement);
-//      window.scrollBy(0, -1);
-//    }
-//    return SCROLL_ROOT;
-//  };
-// })();
 
 Element.prototype.hasClass = function(className) {
     return this.className && new RegExp("(^|\\s)" + className + "(\\s|$)").test(this.className);
@@ -242,32 +226,27 @@ Element.prototype.hasClass = function(className) {
 
 function tabNext(valid, input) {
 	if(valid) {
-		console.log('tabNext input: ' + input);
 	    var nextelem = $(input.form[getIndex(input)]);
 
-    if(nextelem.hasClass('comment')) { // jump over commenst
-    	nextelem = $(input.form[getIndex(nextelem)]);
-    }
+	    if(nextelem.hasClass('comment')) { // jump over commenst
+	    	nextelem = $(input.form[getIndex(nextelem)]);
+    	}
+
 	  	if((typeof nextelem) !== 'undefined' && nextelem.value == "9") {  // when element is prefilled with 'no answer', select to ease input
 			nextelem.focus();  // both focus and select, then the window scrolls along
 			nextelem.select();
-			// console.log('input: ' + input);
-			// scrollTo(input.id, input.offsetTop-300);
 		}
-		else
+		else {
 			if((typeof nextelem) !== 'undefined') {
 				nextelem.focus();
-			// scrollTo(input.id, input.offsetTop-300);
 			}
+		}
 	}
 };
 
 function tabPrev(valid, input) {
 	if(valid) {
-    var prevelem = input.form[getIndexPrevious(input)];
- 	  $(prevelem).focus();
-			// scrollTo(input.id, input.offsetTop-300);
-	} 
-	else {
+	    var prevelem = input.form[getIndexPrevious(input)];
+ 		$(prevelem).focus();
 	}
 };
