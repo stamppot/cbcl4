@@ -13,16 +13,11 @@ class RemindersController < ApplicationController
     # puts "#{params[:state]}"
     set_params_and_find(params)
     
-    @surveys = Survey.all.to_a.inject({}) { |h,elem| h[elem.id] = elem; h }.invert #to_h(&:id).invert
+    @surveys = Survey.all.to_a.inject({}) { |h,elem| h[elem.id] = elem; h }.invert
     @states = {'Alle' => 0, 'Ubesvaret' => 2, 'Besvaret' => "5,6", 'Kladde' => 4} #JournalEntry.states
     respond_to do |format|
       format.html
       format.js { render :partial => 'entries' }
-        # render :update do |page|
-        #   page.replace_html 'journal_entries', :partial => 'entries'
-        #   page.visual_effect :highlight, 'journal_entries'
-        # end
-      # }
     end
   end
   
@@ -131,7 +126,7 @@ class RemindersController < ApplicationController
     @journal_entries_count = JournalEntry.for_parent_with_state(@group, @state).
       between(@start_date, @stop_date).count
     @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).all(:order => 'journal_entries.created_at desc', :include => :journal) unless @state.empty?
+      between(@start_date, @stop_date).all(:order => 'journals.title asc', :include => :journal) unless @state.empty?
     @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
   end
 end

@@ -225,7 +225,7 @@ class Journal < ActiveRecord::Base #< Group
   
   # returns full id, qualified with center and team ids
   def qualified_id
-    qualified_code + "-" + "%04d" % self.code
+    qualified_code + "-" + "%04d" % (self.code || 0)
   end
   
   # code of center and team

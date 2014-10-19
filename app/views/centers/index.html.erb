@@ -1,10 +1,31 @@
-<h2>Centre</h2>
+<p>
+<span class="h3">Centre</span>
+
+	<span class="button" style="margin-left: 229px">
+		<%= link_button t('center.new'), new_center_path, 'center_new' %>
+	</span>
+</p>
 
 <% if flash[:error] -%>
 	<div id="errorExplanation"><%= flash[:error] %></div>
 <% end %>
 <% if flash[:notice] -%>
 	<div id="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<% if @can_change_center %>
+	<p>
+		<script type="text/javascript">
+		function activate_center(elem) {
+			var center_id = $('#active_center').val();
+			$.post($(elem).attr('href'), {'id': center_id}, function(response) {
+				window.location = '/centers/';
+			});
+		}
+		</script>
+		<%= select_tag :active_center, options_for_select(@centers.map {|c| [c.title, c.id]}, :selected => @active.id) %>
+		<a class="button save" onclick="activate_center(this); return false;" href="/centers/activate"><span class="save">Aktiver</span></a>
+	</p>
 <% end %>
 
 <% @hide_team = true %>

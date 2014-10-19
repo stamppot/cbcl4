@@ -129,7 +129,8 @@ class Question < ActiveRecord::Base
     
   # counts no. rows with an answer_item
   def count_items
-    QuestionCell.count("id", :conditions => ["question_id = ? AND answer_item != ? AND col = 2", self.id, "" ])
+    # QuestionCell.count("id", :conditions => ["question_id = ? AND answer_item != ? AND col = 2", self.id, "" ])
+    QuestionCell.where(["question_id = ? AND answer_item != ? AND col = 2", self.id, "" ]).count("id")
   end
       
   # comparison based on row number

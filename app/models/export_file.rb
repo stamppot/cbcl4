@@ -4,7 +4,7 @@ class ExportFile < ActiveRecord::Base
   
   attr_accessible :filename, :content_type, :data, :file
 
-  default_scope order('created_at DESC')
+  default_scope { order('created_at DESC') }
 
   def self.storage_path
     "#{Rails.root}/public/files"

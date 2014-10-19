@@ -10,16 +10,15 @@
 		<td class="t_i"><label for="group_code">Kode:</label></td>
 		<td class="t"><%= text_field 'group', 'code'  %></td>
 	</tr>
-	<tr>
-		<td class="t_i">Center:</td>
-		<td class="t">
+</table>
+<p/>
 
-	<% has_errors = !@group.errors[:parent].blank? %>
+<label for="center">Center</label>
+<% has_errors = !@group.errors[:parent].blank? %>
     <% if has_errors %><div class="fieldWithErrors"><% end %>
-
     <% grouped = @groups.group_by {|g| g.parent_or_self } %>
     <ul>
-      <% @groups.each do |group| %>
+    	<% @groups.each do |group| %>
         <li>
           <% checked = @group.center == group && "checked='checked'" || "" %>
           <input class="group_parent" id="group_parent_<%= group.id %>" type="radio" name="group[parent]" value="<%= group.id %>" <%= checked %> />
@@ -31,9 +30,6 @@
 </dl>
 
  <% if has_errors %></div><% end %>
-	</td>
-	</tr>
-</table>
 
 <!--[eoform:team]-->
 

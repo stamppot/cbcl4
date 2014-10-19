@@ -90,7 +90,7 @@
 		<% unless @score.survey.nil? %>
 			<%# if @score.score_items.empty? %>
 				<table id="score_items">
-					<% if @score.score_items.empty? %>
+					<% if !@score.score_items.empty? %>
 					<tr>
 						<% @score_items_header.each do |h| %>
 						<th><%= h %></th>

@@ -11,10 +11,16 @@ class CentersController < ApplicationController
       @order == "desc" && "asc" || "desc"
     end
 
-    @groups = current_user.centers(:column => @column, :order => @order)
+    @groups = current_user.all_centers(:column => @column, :order => @order)
     query = "select center_id, count(*) as count from journals where center_id IN (#{@groups.map(&:id).join(',')}) group by center_id"
     @groups_count = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 
       col[j['center_id']] = j['count']; col
+    end
+
+    @can_change_center = current_user.centers.size > 1
+    if @can_change_center
+      @centers = current_user.centers.reverse
+      @active = current_user.center || current_user.centers.last
     end
 
 		redirect_to center_url(@groups.first) if @groups.size == 1
@@ -222,7 +228,19 @@ class CentersController < ApplicationController
       }
     end
   end
-  
+
+  def activate
+    center = Center.find params[:id]
+    # render and return unless current_user.access?(:superadmin) && current_user.centers.any? {|c| c.id == center.id}
+    current_user.center = center
+    current_user.save
+    flash[:notice] = 'Du arbejder nu i ' + center.title
+    # redirect_to center_url(center)
+    render :json => {:id => center.id}
+
+  # rescue ActiveRecord::RecordNotFound
+  end
+
   protected
   before_filter :admin_access, :only => [ :new, :delete, :create, :edit, :pay_subscriptions, :undo_pay_subscriptions ]
   

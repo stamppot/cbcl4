@@ -1,5 +1,15 @@
 <p><%= image_tag('users_48.png', :border => 0, :align => "middle") %>
-<span class="h3">Brugere</span></a><p>
+<span class="h3">Brugere</span>
+
+<span style="margin-left: 400px;">
+<% if current_user.access? :user_new_in_center %>
+	<%= link_button t('user.new'), new_user_path(current_user.center), 'user_add', :title => 'Opret ny bruger i centeret' %>
+<% elsif current_user.access? :user_new %>
+	<%= link_button t('user.new'), new_user_path(0), 'user_add' %>
+<% end %>
+</span>
+
+<p>
 </p>
 
     <% if shadow_user? %>

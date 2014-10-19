@@ -1,8 +1,8 @@
 class JournalEntry < ActiveRecord::Base
   belongs_to :journal #, :touch => true
   belongs_to :survey
-  belongs_to :survey_answer, :dependent => :destroy, :touch => true
-  belongs_to :login_user, :class_name => "LoginUser", :foreign_key => "user_id", :dependent => :destroy  # TODO: rename to login_user, add type constraint
+  belongs_to :survey_answer, :dependent => :destroy #, :touch => true
+  belongs_to :login_user, :class_name => "LoginUser", :foreign_key => "user_id", :dependent => :destroy
   belongs_to :group, :class_name => "Group"
 
   # accepts_nested_attributes_for :journal, :group
@@ -78,7 +78,7 @@ class JournalEntry < ActiveRecord::Base
   # deletes login user
   def remove_login!
     return self.login_user.destroy if self.login_user
-    return false
+    return self.login_user.nil?
   end
 
   def is_parent_survey?

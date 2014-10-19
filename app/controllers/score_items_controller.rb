@@ -55,7 +55,8 @@ class ScoreItemsController < ApplicationController
   #   end  
   # end
   
-  def create # create_score_item
+  def create
+    puts "score_items CREATE"
     @score = Score.find(params[:id])
     q_no = Question.find(params[:score_item][:question_id]).number.to_s
     params[:score_item][:number] = q_no
@@ -80,12 +81,13 @@ class ScoreItemsController < ApplicationController
   def destroy #remove_score_item
     elem = "score_item_" << params[:id]
 
-    if ScoreItem.destroy(params[:id])
-      render :update do |page|
-        page[elem].visual_effect :blind_up
-        page[elem].remove
-      end
-    end
+    ScoreItem.destroy(params[:id])
+    # if ScoreItem.destroy(params[:id])
+    #   render :update do |page|
+    #     page[elem].visual_effect :blind_up
+    #     page[elem].remove
+    #   end
+    # end
   end
   
 

@@ -128,12 +128,12 @@ class Center < Group
   
   # return the next team id. Id must be highest id so far plus 1, and if doesn't exist
   def next_team_code
-    highest_code = Team.maximum('code', :conditions => ['center_id = ?', self.id])
+    highest_code = Team.where(['center_id = ?', self.id]).maximum('code')
     highest_code && highest_code.succ || 1
   end
     
   def next_journal_code(code = nil)
-    highest_code = Journal.maximum('code', :conditions => ["center_id = ?", self.id])
+    highest_code = Journal.where(['center_id = ?', self.id]).maximum('code')
     return code if highest_code == code
     highest_code && highest_code.succ || 1 # Journal.find(highest_id).code.succ || 1
   end

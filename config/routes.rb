@@ -128,6 +128,7 @@ Cbcl4::Application.routes.draw do
 
   post '/journal_entries/show/(/:id)', :to => 'journal_entries#show', :as => 'show_survey'
   # center
+  post 'centers/activate', :to => 'centers#activate', :as => 'activate_center'
   get '/centers/delete/(/:id)', :to => 'centers#delete', :as => 'delete_center'
   match '/centers/live_search/(/:id)', :to => 'centers#live_search', :as => 'center_search', :via => [:get, :post]
   get 'subscriptions/new/(/:id)', :to => 'subscriptions#new', :as => 'new_subscription_in_group'

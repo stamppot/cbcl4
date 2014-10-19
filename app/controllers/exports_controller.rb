@@ -29,14 +29,14 @@ class ExportsController < ApplicationController
     # clean params
     params.delete(:action); params.delete(:controller); params.delete(:limit); params.delete(:offset)
 
-    @centers = current_user.centers.sort_by {|c| c.title }.to_a
+    @centers = current_user.all_centers.sort_by {|c| c.title }.to_a
     @count_survey_answers = SurveyAnswer.filter_finished_count(current_user, params.merge({:surveys => filter_surveys}))
   end
   
   def filter
     params[:center] = params[:id].to_i
     center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
-    center = current_user.center if current_user.centers.size == 1
+    center = current_user.center if current_user.all_centers.size == 1
     args = params.clone
     params = filter_date(args)
     params = FilterArgs.filter_age(params)

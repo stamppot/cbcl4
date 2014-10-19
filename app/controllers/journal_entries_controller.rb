@@ -34,16 +34,10 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   # deletes and updates page with ajax call
   def remove
     elem = "entry" << params[:id]
-    # must also remove login-user
     entry = JournalEntry.find(params[:id])
-    entry.remove_login! && entry.destroy
+    entry.destroy
 
     render :json => {:ok => true}
-    # if entry.destroy
-    #   render :update do |page|
-    #     page.remove elem
-    #   end
-    # end
   end
 
   # remove an answer and the associated login-user. Remove entries from the journal_entry
@@ -101,8 +95,10 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   def check_access
     if current_user and ((current_user.access?(:all_users) || current_user.access?(:login_user))) and params[:id]
       # j_id = JournalEntry.find(params[:id]).journal_id
-      current_user.has_journal_entry? params[:id]
-      # access = journal_ids.include? j_id
+      access = current_user.has_journal_entry? params[:id]
+      # puts "journal_entries: #{params[:action]} access? #{access}"
+      # access
+      # # access = journal_ids.include? j_id
     end  # cookie and session are not set before after this check, so it's old/wrong data
     logger.info "check_access: params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
     redirect_to login_path if !current_user

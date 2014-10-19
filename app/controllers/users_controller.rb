@@ -45,14 +45,13 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @roles = current_user.pass_on_roles.to_a || []  # logged-in user can give his own roles to new user
     @user = User.new
     
-    params[:id] = current_user.centers.first.id if params[:id] == "0"
+    params[:id] = current_user.center if params[:id] == "0"
     
     if !params[:id].nil?  # create new user for specific center/team
       @groups = Group.this_or_parent(params[:id])
       @group = Group.find(params[:id])
       @user.groups += @groups
     else
-      # @group = current_user.center || current_user.centers.first
       @groups = current_user.center_and_teams
     end
   end
@@ -63,7 +62,6 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       redirect_to new_user_url(params[:id]) and return
     end
 
-    # group_id = params[:user][:groups].first
     role_ids = params[:user][:roles]
     group_ids = params[:user][:groups]
     
@@ -76,11 +74,12 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       redirect_to users_path and return
     end
 
-    roles = Role.where(id: role_ids).to_a
-    g = Group.where(id: group_ids).to_a
-    @user.groups = g
-    @user.roles = roles
-    @user.center = @user.groups.first.center
+    @user.assign_groups_and_roles(group_ids, role_ids)
+    # roles = Role.where(id: role_ids).to_a
+    # g = Group.where(id: group_ids).to_a
+    # @user.groups = g
+    # @user.roles = roles
+    # @user.center = @user.groups.first.center
 
     if @user.save
       flash[:notice] = 'Brugeren blev oprettet.'
@@ -89,10 +88,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       puts "user.groups: #{@user.groups.inspect}"
       puts "ERRORS: #{@user.errors.inspect}"
       @roles = current_user.pass_on_roles || []
-      # @group = Group.find(group_id)
       @groups = Group.this_or_parent(params[:id])
       render :new
-      # redirect_to new_user_url(group_id) #, :flash => { :error => @user.errors.to_a.join }
     end
   end
   
@@ -190,6 +187,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       else
         @user = User.in_center(current_user.center).find(params[:id])
       end
+      raise ActiveRecord::RecordNotFound if @user.login_user?
+      @user 
     end
 
   rescue ActiveRecord::RecordNotFound

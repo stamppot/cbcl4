@@ -63,12 +63,13 @@ class ScoreRefsController < ApplicationController
   def destroy
     elem = "score_ref_" << params[:id]
 
-    if ScoreRef.destroy(params[:id])
-      render :update do |page|
-        page[elem].visual_effect :blind_up
-        page[elem].remove
-      end
-    end
+    ScoreRef.destroy(params[:id])
+    # if 
+    #   render :update do |page|
+    #     page[elem].visual_effect :blind_up
+    #     page[elem].remove
+    #   end
+    # end
   end
     
 

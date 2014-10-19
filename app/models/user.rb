@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
     # end
   end
   
-  def centers(options = {})
+  def all_centers(options = {})
     column = options.delete(:column) || 'title'
     order = options.delete(:order) || 'desc'
 
@@ -29,6 +29,18 @@ class User < ActiveRecord::Base
     else
       Center.for_user(self.id).includes(options[:includes]).order_by(column,order)
     end
+  end
+  
+  def centers(options = {})
+    column = options.delete(:column) || 'title'
+    order = options.delete(:order) || 'desc'
+
+    puts "options user.rb:centers: #{options.inspect}"
+    # if self.has_access? :superadmin
+    #   Center.all.order_by(column,order)
+    # else
+      Center.for_user(self.id).includes(options[:includes]).order_by(column,order)
+    # end
   end
 
    # users have a n:m relation to roles
@@ -175,10 +187,7 @@ class User < ActiveRecord::Base
     self.groups += g
     puts "groups: #{self.groups.inspect}"
 
-    self.center = self.groups.first.center # unless groups.empty? # or user.has_role?(:superadmin)
-    # self.valid?
-    # puts ":erros: #{self.errors.inspect}" unless self.valid?
-    # self.save
+    self.center = self.groups.first.center 
     return self
   end
 
@@ -192,7 +201,27 @@ class User < ActiveRecord::Base
   def access_to_groups?(groups)
     groups = Group.find(groups || [])
     owner_groups = self.center_and_teams
-    groups.all? { |group| owner_groups.include?(group) }
+    direct_access = groups.all? { |group| owner_groups.include?(group) }
+    if self.has_role? :centeradmin
+      return direct_access || access_to_groups_thru_center(groups)
+    else
+      direct_access
+    end
+  end
+
+  def access_to_groups_thru_center(groups)
+    correct_center = groups.select {|group| group.is_a?(Center)}.map {|group| group.id == self.center_id}
+    teams_in_center = groups.map { |group| group.center_id }.compact.all? {|c_id| self.center_id == c_id }
+    correct_center && teams_in_center
+  end
+
+  def assign_groups_and_roles(group_ids, role_ids)
+    roles = Role.where(id: role_ids).to_a
+    g = Group.where(id: group_ids).to_a
+    self.groups = g
+    self.roles = roles
+    self.center = self.groups.first.center
+    self
   end
 
   def highest_role

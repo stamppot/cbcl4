@@ -12,7 +12,7 @@
 		<li class="tab" id="subscription_tab"><a href="#center_subscriptions"><%= t('menu.subscriptions') %></a></li>
 		<% end %>
 	</ul>
-	<div class="tab_canvas" id="tab_canvas_<%= @group.id %>">
+	<div class="tab_canvas" id="tab_canvas_<%= @group.id %>" style="position:relative;">
 	<br/>
 	
 	<div class="center_info" id="info">
@@ -20,35 +20,36 @@
 	</div>
 	
 	<div class="center_teams" id="center_teams">
+		<div class="button" style="">
+			<%= link_button t('team.new'), new_team_path(@group), 'team_new', :title => t('team.new') %>
+		</div>
+		<br/>
+
 		<div id="teams_content"></div>
-			<div class="button">
-				<%= link_button t('team.new'), new_team_path(@group), 'team_new', :title => t('team.new') %>
-			</div>	
 		
-			<%= render :partial => 'commands' %>
-		</div>
+		<%= render :partial => 'commands' %>
+	</div>
 		
-		<div class="center_users" id="center_users">
-			<div id="users_content"></div>
-		</div>
+	<div class="center_users" id="center_users">
+		<div id="users_content"></div>
+	</div>
 		
-		<% if false && show_journals? %>
+	<% if false && show_journals? %>
 		<div class="center_journals" id="center_journals">
 		<%= render :partial => 'shared/journals' %>
 		</div>
-		<% end %>
+	<% end %>
 		
-		<div class="center_subscriptions" id="center_subscriptions">
-			<div id="subscription_content"></div>
-		<%# render :partial => 'subscriptions' %>
-		</div>
+	<div class="center_subscriptions" id="center_subscriptions">
+		<div id="subscription_content"></div>
+	</div>
 	</div>
 </div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#tab-container').easytabs({  
-			animate: true,
+			animate: false,
 		  	animationSpeed: "fast"
 		});
 	});

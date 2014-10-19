@@ -28,6 +28,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     @page_title = "CBCL - Liste af teams"
 		@hide_team = true
     @teams_by_center = current_user.teams.group_by { |team| team.center }
+    @group = current_user.center
     @teams = current_user.teams
 
     respond_to do |format|
@@ -56,7 +57,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     @page_title = "CBCL - Center " + @group.center.title + ", team " + @group.title
     @journals = Journal.in_center(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page) || []
     @journal_count = Journal.in_center(@group).count
-    @users = @group.users
+    @users = @group.users.where(:login_user => false)
     @user_count = @users.count
     @users = WillPaginate::Collection.create(1, 10000) do |pager|
        pager.replace(@users)
@@ -85,6 +86,8 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
       @groups = current_user.centers # + current_user.center  # teams can only be subgroup of center, not of teams
       @groups.compact.uniq  # if superadmin, center is nil
     end
+
+    @groups = Center.all if current_user.access?(:superadmin) && params[:id] == "0"
 
     @group = Team.new(params[:group])
     if @groups.size == 1

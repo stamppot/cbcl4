@@ -46,7 +46,8 @@ class ScoresController < ApplicationController
   end
 
   def edit
-    @score = Score.find(params[:id], :include => :survey)
+    # @score = Score.find(params[:id], :include => :survey)
+    @score = Score.includes(:survey).find(params[:id])
     puts "score: #{@score.inspect}"
     puts "score_refs: #{@score.score_refs}"
     @page_title = @score.title + " " + @score.short_name

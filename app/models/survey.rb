@@ -30,11 +30,12 @@ class Survey < ActiveRecord::Base
   end
   
   def valid_values
-    params = {}
-    self.questions.each do |question|
-      params["Q#{question.number}"] = question.valid_values
+    Rails.cache.fetch("survey/valid_values_#{id}") do
+      self.questions.inject({}) do |h, question|
+        h["Q#{question.number}"] = question.valid_values
+        h
+      end
     end
-    return params
   end
   
   def no_questions
