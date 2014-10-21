@@ -273,6 +273,7 @@ class SurveyAnswer < ActiveRecord::Base
       end
     end
     params.each_key { |question| params.delete(question) if params[question].empty? }
+    # logger.info "survey: #{survey.id}  valid_values: #{survey.valid_values.inspect}"
     the_valid_values = survey.valid_values # TODO: cache #cache_fetch("survey_valid_values_#{self.survey_id}") { self.survey.valid_values }
     insert_cells = []
     update_cells = []

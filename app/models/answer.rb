@@ -119,14 +119,22 @@ class Answer < ActiveRecord::Base
 		types = AnswerCell.answer_types
 
     cells.each do |cell_id, fields|  # hash is {item=>x, value=>y, qtype=>z, col=>a, row=>b}
+      # next if valid_values[cell_id].nil?
+      # logger.info "cell_id: #{cell_id}"
       value = fields[:value]
       next if value.blank? # skip blanks
-      # puts "cell_id: #{cell_id.inspect} fields: #{fields.inspect}"
-      # puts "valid_values: #{valid_values.inspect}"
+
       fields[:answer_id] = self.id
       # fields[:answertype] = valid_values[cell_id][:type]  # not necessarily needed
-			fields[:cell_type] = valid_values[cell_id] && AnswerCell.answer_types[valid_values[cell_id][:type]] || "TextBox"
+      answertype = valid_values[cell_id][:type]
+			fields[:cell_type] = valid_values[cell_id] && AnswerCell.answer_types[answertype] || "TextBox"
 			# 09-10-2010
+
+      # if valid_values[cell_id].nil?
+      #   logger.info "!cell_id: #{cell_id}: fields: #{fields.inspect} vv: #{valid_values[cell_id]}  "
+      #   puts "!cell_id: #{cell_id}: fields: #{fields.inspect} vv: #{valid_values[cell_id]}  "
+      # end
+      # logger.info "nil cell_id: #{cell_id}  valid_values: #{valid_values.inspect}" unless valid_values[cell_id]
 			fields[:rating] = valid_values[cell_id][:type] == "Rating"  # set boolean
       fields[:item] = valid_values[cell_id][:item]        # save item, used to calculate score
       

@@ -33,7 +33,8 @@ class Question < ActiveRecord::Base
     params = {}
     self.question_cells.each do |question_cell|
       q_cell = "q#{self.number}_#{question_cell.row}_#{question_cell.col}"
-      params[q_cell] = { :type => question_cell.class.to_s, :item => question_cell.answer_item } # TODO: maybe not needed
+      # puts "vv: #{q_cell}"
+      params[q_cell] = { :type => question_cell.class.to_s, :item => question_cell.answer_item, :id => question_cell.id } # TODO: maybe not needed
       unless (values = question_cell.values).empty?
         params[q_cell][:values] = values
       end
@@ -154,8 +155,8 @@ class Question < ActiveRecord::Base
           item << "hv" if !(item =~ /hv$/) && cell.type =~ /Comment|Text/
           cell.var = "#{prefix}#{q}#{item}"
         end
-      else
-        cell.var = "" unless cell.var.nil?
+      # else
+        # cell.var = "" unless cell.var.nil?
       end
       cell.save
 			cell
@@ -193,24 +194,56 @@ class Question < ActiveRecord::Base
   
   # contains only answerable cells
   def cell_variables(prefix = nil)
-    cells = Dictionary.new
+    cells = ActiveSupport::OrderedHash.new
     prefix ||= survey.prefix
 
     q = self.number.to_roman.downcase
     # puts "answerable cells for q: #{self.id} n: #{self.number} :: #{self.question_cells.answerable.count}"
-    self.question_cells.map do |cell|
+    self.question_cells.compact.map do |cell|
       if cell.class.to_s =~ /Rating|Checkbox|ListItemComment|ListItem|SelectOption|TextBox/
         var = Variable.get_by_question(id, cell.row, cell.col)
         if var
           cells[var.var.to_sym] = cell.value || "#NULL!"
         else  # default var name
-          item = cell.answer_item
+          puts "cell: #{cell.inspect} qno: #{number}"
+          item = cell.answer_item || ""
+          puts "item: #{item.inspect}"
           item << "hv" if !(item =~ /hv$/) && cell.type =~ /Comment|Text/
           cells["#{prefix}#{q}#{item}".to_sym] = cell.value.blank? && "#NULL!" || cell.value # !! default value is "", not nil
         end
       end
     end
     return cells
+  end
+
+  def new_variables(prefix = nil)
+    cells = ActiveSupport::OrderedHash.new
+    prefix ||= survey.prefix
+    variables = []
+
+    q = self.number.to_roman.downcase
+    # puts "answerable cells for q: #{self.id} n: #{self.number} :: #{self.question_cells.answerable.count}"
+    self.question_cells.compact.map do |cell|
+      if cell.class.to_s =~ /Rating|Checkbox|ListItemComment|SelectOption|TextBox/  # removed ListItem, is not answerable for bpm surveys
+        var = Variable.get_by_question(id, cell.row, cell.col)
+        if var
+          cells[var.var.to_sym] = cell.value || "#NULL!"
+        else  # default var name
+          puts "cell: #{cell.inspect} qno: #{number}"
+          item = cell.answer_item || ""
+          puts "item: #{item.inspect}"
+          item << "hv" if !(item =~ /hv$/) && cell.type =~ /Comment|Text/
+          cells["#{prefix}#{q}#{item}".to_sym] = cell.value.blank? && "#NULL!" || cell.value # !! default value is "", not nil
+          datatype = item.include?("hv") && "string" || "numeric"
+          if !item.blank?
+            var = Variable.new({:var => "#{prefix}#{item}", :row => cell.row, :col => cell.col, 
+              :question_id => id, :datatype => datatype, :survey_id => survey_id })
+          end
+        end
+        variables << var if var
+      end
+    end
+    return variables
   end
 
   # def test_variables(prefix = nil)

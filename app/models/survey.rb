@@ -30,6 +30,7 @@ class Survey < ActiveRecord::Base
   end
   
   def valid_values
+    # puts "valid values survey: #{self.id}"
     Rails.cache.fetch("survey/valid_values_#{id}") do
       self.questions.inject({}) do |h, question|
         h["Q#{question.number}"] = question.valid_values
@@ -110,7 +111,7 @@ class Survey < ActiveRecord::Base
 
   # set variable values in survey's question cells. Use vars when they exist, otherwise create a value
   def set_variables
-    d = Dictionary.new
+    d = ActiveSupport::OrderedHash.new
     self.questions.each { |question| question.set_variables }
     d.order_by
   end
@@ -122,9 +123,15 @@ class Survey < ActiveRecord::Base
   # end
     
   def cell_variables # do not cache, coz the cells are merged with answer cells
-    d = Dictionary.new
+    d = ActiveSupport::OrderedHash.new
     self.questions.each { |question| d = d.merge!(question.cell_variables(self.prefix)) }
-    d.order_by
+    d #.order_by
+  end
+
+  def new_variables
+    d = []
+    self.questions.each {|q| d << q.new_variables}
+    d
   end
 
   def csv_headers

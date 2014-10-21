@@ -23,6 +23,7 @@ class ScoreItem < ActiveRecord::Base
       s_items = s_items.select {|a| !a.value.blank? }  # count only non-blank answer_cells
       surveytype = self.score.survey.surveytype
       hits = s_items.size
+      puts "score: #{score.inspect} items_count: #{self.score.items_count}"
       # answered_items = s_items.map {|ac| ac.item }.join(",")
       missing = self.score.items_count - hits
 

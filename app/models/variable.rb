@@ -16,6 +16,8 @@ class Variable < ActiveRecord::Base
 
   attr_accessor :short, :value
 
+  attr_accessible :var, :row, :col, :question_id, :survey_id, :datatype
+
   @@question_hash = nil
   @@survey_hash = nil
 

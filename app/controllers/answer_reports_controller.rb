@@ -16,7 +16,7 @@ class AnswerReportsController < ApplicationController
     @group_titles = score_report.group_titles
 
     @answer_texts = []
-    params[:answers].keys.each do |journal_id|
+    params[:answers].select {|k,v| v == "1"}.keys.each do |journal_id|
       journal_entry = JournalEntry.and_survey_answer.find(journal_id)
       survey_answer = SurveyAnswer.and_answer_cells.find(journal_entry.survey_answer_id)
       survey = Survey.and_questions.find(survey_answer.survey_id)
