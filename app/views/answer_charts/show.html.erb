@@ -1,0 +1,35 @@
+<%= stylesheet_link_tag 'blueprint/screen', :media => :all %>
+<%= stylesheet_link_tag 'blueprint/print', :media => :print %>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Score', 'Total problem score', 'Eksternalisering', 'Internalisering', 'ADHD'],
+          ['Diag.',  1000, 400, 321, 200 ],
+          ['1. Opf', 1170, 460, 423, 210],
+          ['2. Opf', 1160, 520, 500, 220],
+          ['3. Opf', 1030, 540, 490, 230]
+        ]);
+
+        var options = {
+          title: 'Testperson',
+          hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+<h1 class="score_report">BPM-Rapport</h1>
+<hr>
+
+<%= render :partial => "shared/center_info", :object => @journal %>
+
+<br/>
+<hr>
+
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
