@@ -79,7 +79,7 @@ class SurveysController < ApplicationController
     logger.info "SHOWFAST JOURNAL_ENTRY: #{@journal_entry.inspect}"
     @journal = @journal_entry.journal
     survey_id = @journal_entry.survey_id
-    puts "show_fast survey: #{survey_id}"
+    # puts "show_fast survey: #{survey_id}"
     # @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
     @survey = Survey.and_questions.find(survey_id) # @@surveys[survey_id] #Survey.and_questions.find(params[:id])
 
@@ -92,11 +92,11 @@ class SurveysController < ApplicationController
         :journal => @journal, :surveytype => @survey.surveytype, :nationality => @journal.nationality, 
         :journal_entry => @journal_entry, :center_id => @journal.center_id)
       @survey_answer_json = @survey_fast_answer.answers.map {|a| a.answer_cells.map {|cell| CellJson.new(cell) } }.flatten.to_json
-      puts "#{@survey_answer_json.inspect}"
+      # puts "#{@survey_answer_json.inspect}"
     else  # survey_answer was started/created, so a draft is saved
       survey_answer = SurveyAnswer.and_answer_cells.and_questions.find(@journal_entry.survey_answer_id, :include => {:survey => :questions}) # removed .and_answers
       @survey_answer_json = survey_answer.answers.map {|a| a.answer_cells.map {|cell| CellJson.new(cell) } }.flatten.to_json
-      puts "#{@survey_answer_json.inspect}"
+      # puts "#{@survey_answer_json.inspect}"
     end
     unless @journal_entry.survey_answer
       @journal_entry.survey_answer = survey_answer

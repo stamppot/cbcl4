@@ -220,7 +220,7 @@ class QuestionCell < ActiveRecord::Base
 	end
 
 	def switch_target(options = {})
-		puts "preferences: #{preferences.inspect} #{self.id}" if preferences.blank?
+		# puts "preferences: #{preferences.inspect} #{self.id}" if preferences.blank?
 		return "" if preferences.blank?
 
 		if options[:disabled]

@@ -1,16 +1,15 @@
 class ScoreChartPresenter
 
-  attr_accessor :journal, :titles, :groups, :scales, :group_titles
+  attr_accessor :journal, :title, :titles, :groups, :scales, :group_titles
 
-  def build(answers_hash, journal_id)
-    # puts "ScoreReportPresenter"
-    answers = answers_hash.select {|k,v| v == "1"}.keys
+  def build(answers, journal_id, entries)
 
-    entries = JournalEntry.find(answers, :include => [ :journal, {:survey => {:scores => [:score_items, :score_refs]}} ] )
-    if entries.empty? # if no entries are chosen, show the first three
-      entries = Journal.find(journal_id).answered_entries.reverse.slice(0,3)
-    end
-    survey_answers = entries.map { |entry| entry.survey_answer }.sort_by {|sa| sa.survey.position }
+    # entries = JournalEntry.find(answers, :include => [ :journal, {:survey => {:scores => [:score_items, :score_refs]}} ] )
+    # # if no entries are chosen, show the first three
+    # if entries.empty? 
+    #   entries = Journal.find(journal_id).answered_entries.reverse.slice(0,3)
+    # end
+    survey_answers = entries.sort_by {|e| e.follow_up }.map { |entry| entry.survey_answer }.sort_by {|sa| sa.survey.position }
 
     @journal = entries.first.journal # show journal info
     # create survey titles row  # first header is empty, is in corner
@@ -35,6 +34,7 @@ class ScoreChartPresenter
       csg.description = sc.survey_name
       csg.titles = sc.score_results.map { |sr| sr.title }
       csg.scores = sc.score_results.map { |sr| sr.result }
+      csg.period = FollowUp.get[sc.follow_up || 0].first
       col << csg
       col
     end

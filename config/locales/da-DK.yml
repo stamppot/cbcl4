@@ -482,6 +482,7 @@ da-DK:
       :add_item: "Tilføj beregning"
       :calculate: Beregn score
       :show_report: 'Vis scorerapport'
+      :show_chart: 'Sammenlign scores'
       :add_ref: "Tilføj referenceværdi"
     password: 
       :suggest: "Foreslå password"

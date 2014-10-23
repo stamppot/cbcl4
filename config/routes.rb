@@ -63,6 +63,7 @@ Cbcl4::Application.routes.draw do
   # map.resources :skemas
   # resource  :home
   # resources :logins
+  resources :answer_charts, :only => [:show]
   resources :answer_reports
   resources :centers
   resources :code_books
@@ -246,7 +247,7 @@ Cbcl4::Application.routes.draw do
 
   get 'score_reports/create', :to => 'score_reports#create', :as => 'create_score_report'
   
-  # match 'answer_reports/show/(/:id)', :to => 'answer_reports#show', :as => 'answer_report', :via => [:post]
+  # post 'answer_charts/show/(/:id)', :to => 'answer_charts#show', :as => 'answer_chart', :via => [:post]
   
   get 'registration', :to => 'active_rbac/registration#lostpassword', :as => 'lostpassword'
   # is this used?

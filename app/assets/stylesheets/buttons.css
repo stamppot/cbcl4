@@ -296,6 +296,9 @@ input.survey_remove {
 input.score_calculate {
 	background:url('/images/table.png') no-repeat 10px 5px;
 }
+input.score_compare {
+	background:url('/images/chart_bar.png') no-repeat 10px 5px;
+}
 input.subscribe {
 	background:url('/images/table_add.png') no-repeat 10px 5px;
 }

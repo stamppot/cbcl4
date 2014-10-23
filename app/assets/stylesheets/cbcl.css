@@ -1140,6 +1140,11 @@ input.score_calculate {
 input.score_calculate.large {
 	background:url('/assets/patient_data_x32.png') no-repeat 50% 2px;
 }
+
+input.score_compare {
+	background:url('/assets/chart_bar.png') no-repeat 10px 5px;
+}
+
 input.subscribe {
 	background:url('/assets/table_add.png') no-repeat 10px 5px;
 }

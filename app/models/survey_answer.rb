@@ -16,7 +16,7 @@ class SurveyAnswer < ActiveRecord::Base
   has_one :csv_survey_answer, dependent: :destroy
   has_one :csv_score_rapport, dependent: :destroy
 
-  attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id, :survey, :journal_entry_id, :journal_id
+  attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id, :survey, :journal_entry_id, :journal_id, :follow_up
   
   scope :finished, -> { where('done = ?', true) }
   scope :in_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
@@ -70,6 +70,7 @@ class SurveyAnswer < ActiveRecord::Base
       survey_answer = journal_entry.survey_answer
       survey_answer.done = false
       survey_answer.journal_entry_id ||= journal_entry.id
+      survey_answer.follow_up = journal_entry.follow_up
       survey_answer.set_answered_by(params)
       survey_answer.save_answers(params)
       survey_answer.center_id ||= journal_entry.journal.center_id
@@ -79,11 +80,11 @@ class SurveyAnswer < ActiveRecord::Base
   end
   
 
-  def save_final(params, save_the_answers = true)
+  def save_final(params)
     set_answered_by(params)
     self.done = true
     self.save   # must save here, otherwise partial answers cannot be saved becoz of lack of survey_answer.id
-    self.save_answers(params) if save_the_answers
+    self.save_answers(params) #if save_the_answers
     # self.answers.each { |a| a.update_ratings_count }
     Answer.transaction do
       answers.each {|a| a.save!}

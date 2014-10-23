@@ -4,22 +4,33 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Score', 'Total problem score', 'Eksternalisering', 'Internalisering', 'ADHD'],
-          ['Diag.',  1000, 400, 321, 200 ],
-          ['1. Opf', 1170, 460, 423, 210],
-          ['2. Opf', 1160, 520, 500, 220],
-          ['3. Opf', 1030, 540, 490, 230]
-        ]);
+      google.setOnLoadCallback(drawCharts);
+
+
+      function drawCharts() {
+      	<% @presenters.each_with_index do |p, i| %>
+      	var data<%= i %> = google.visualization.arrayToDataTable([
+	        <%= ([p.title] + p.groups.first.titles).inspect.html_safe %>,
+        	<% p.groups.each_with_index do |group, i| %>
+          	["<%= group.period %>", <%= group.scores.join(', ') %>]<%= i+1 < p.groups.size && "," || "" %>
+        	<% end %>
+        	]);
+
+			var title<%= i %> = '<%= p.title %>';
+    	    drawChart(data<%= i %>, title<%= i %>, <%= i %>);
+      	<% end %>
+
+      }
+
+      function drawChart(data, title, i) {
 
         var options = {
-          title: 'Testperson',
-          hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}
+          title: title,
+          hAxis: {title: 'Opfølgning', titleTextStyle: {color: 'blue'}}
         };
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        var element = 'chart_div' + i;
+        var chart = new google.visualization.ColumnChart(document.getElementById(element));
         chart.draw(data, options);
       }
     </script>
@@ -32,4 +43,7 @@
 <br/>
 <hr>
 
-<div id="chart_div" style="width: 900px; height: 500px;"></div>
+<div id="chart_div0" style="width: 900px; height: 500px;"></div>
+<div id="chart_div1" style="width: 900px; height: 500px;"></div>
+<div id="chart_div2" style="width: 900px; height: 500px;"></div>
+<div id="chart_div3" style="width: 900px; height: 500px;"></div>

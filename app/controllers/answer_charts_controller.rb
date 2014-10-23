@@ -1,32 +1,49 @@
 class AnswerChartsController < ApplicationController
   
-  layout 'no_menu'
+  layout 'no_menu_jq'
   
   def show
     if params[:answers].nil?
       journal_id = params[:journal_id].to_i
       redirect_to journals(journal_id) and return 
     end
-    # score_report = ScoreReportPresenter.new.build(params[:answers], params[:journal_id])
-    score_chart = ScoreChartPresenter.new.build(params[:answers], params[:journal_id])
-    puts "score_chart: #{score_chart.inspect}"
-    @journal = score_chart.journal
-    @titles  = score_chart.titles #.map {|t| t.gsub("nn", "<br/>")}
-    @groups  = score_chart.groups
-    @scales  = score_chart.scales
-    @group_titles = score_chart.group_titles
 
-    @answer_texts = []
-    params[:answers].select {|k,v| v == "1"}.keys.each do |journal_id|
-      journal_entry = JournalEntry.and_survey_answer.find(journal_id)
-      survey_answer = SurveyAnswer.and_answer_cells.find(journal_entry.survey_answer_id)
-      survey = Survey.and_questions.find(survey_answer.survey_id)
-      questions = survey.merge_report_answer(survey_answer)
-      puts "created_at: #{survey_answer.created_at}"
-      @answer_texts << {:questions => questions, :survey => survey, :answer_date => survey_answer.created_at}
+    answers = params[:answers].select {|k,v| v == "1"}.keys
+    entries = JournalEntry.find(answers, :include => [ :journal, {:survey => {:scores => [:score_items, :score_refs]}} ] )
+    journal_id = params[:journal_id]
+
+    # if no entries are chosen, show the first three
+    if entries.empty? 
+      entries = Journal.find(journal_id).answered_entries.reverse.slice(0,15)
     end
+
+    entries_by_survey = entries.group_by {|e| e.survey} #.order_by {|e| e.survey.title}
+    @journal = Journal.find(params[:journal_id])
+
+    @presenters = []
+    entries_by_survey.each do |survey, entries|
+    # score_report = ScoreReportPresenter.new.build(params[:answers], params[:journal_id])
+      score_chart = ScoreChartPresenter.new.build(answers, journal_id, entries)
+      titles  = [@journal.title] + score_chart.groups.first.titles #.map {|t| t.gsub("nn", "<br/>")}
+      groups  = score_chart.groups
+      score_chart.title = survey.title
+      group_titles = score_chart.group_titles
+      @presenters << score_chart
+    end
+
+    entries_by_survey.each do |survey, entries|
+      puts "survey: #{survey.title}  e: #{entries.size}"
+    end
+    # puts "entries_by_survey: #{entries_by_survey.keys.map{|s| s.title}}"
+
+    # puts "presenters: #{@presenters.inspect}"
+
+    # puts "titles: #{@titles.inspect}"
+    # puts "group_titles: #{@group_titles.inspect}"
+    @journal_name = @journal.title
+
     
-    @page_title = "CBCL - Udvidet Svarrapport: " << @journal.title
+    @page_title = "CBCL - Svargrafik: " << @journal.title
     # render 'show'
   end 
 end

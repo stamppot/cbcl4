@@ -71,7 +71,7 @@
 			<th><%= "Besvarelse" %></th>
 			<th><%= "af" %></th>
 			<th class="nosort"><%= t('action') %></th>
-			<% @answered_entries.each do |entry| %>
+			<% @answered_entries.sort_by {|e| e.follow_up }.each do |entry| %>
 		 	 	<tr id='<%= "entry_answer" + entry.id.to_s %>' class="entry_answer" data-entry="<%= entry.id %>">
 					 <td class="no_border" style='background-color: #<%= entry.survey.color %>; min-width: 320px;'>
 						<%= check_box "answers", entry.id, { :class => 'no_border'} %>
@@ -118,10 +118,11 @@
 		
 					<%= submit_tag t('score.show_report'), :class => 'button score_calculate', :format => 'pdf' %>
 					<label><input type="checkbox" checked="checked" name="extended_scorereport" id="select_scorereport" onchange="toggleReportType('show_score_rapports', 'select_scorereport');">Med besvarelser</label>&nbsp;&nbsp;
-					<select autocomplete="off" id="select_format" name="format" onchange="toggleActionFormat('show_score_rapports', 'select_format')">
+					<select autocomplete="off" id="select_format" name="format" onchange="toggleActionFormat('show_score_rapports', $('#select_format').val())">
 						<option value="pdf">PDF</option>
 						<option value="html">HTML</option>
 					</select>
+					<%= submit_tag t('score.show_chart'), :class => 'button score_compare', :title => 'Sammenlign scores', :onclick => "show_answer_chart(#{@journal.id});" %>
 				</div>
 			<% end %>
 		</div>
@@ -137,8 +138,8 @@
 	
 	<script type="text/javascript">
 
-		function toggleActionFormat(formid, element) {
-			var format = $('#'+element).val();
+		function toggleActionFormat(formid, format) {
+			// var format = $('#'+element).val();
 			var input = $('#'+formid).attr('action');
 			// alert("input before: " + input);
 			if(input.lastIndexOf('http') > -1) {
@@ -157,6 +158,7 @@
 		
 			// alert("output: " + output);
 			document.getElementById(formid).action = output;
+			$('#select_format').val(format);
 		}
 
 
@@ -193,7 +195,13 @@
 				});
 			}
 		}
-		
+
+		function show_answer_chart(journal_id) {
+			var checked_ids = jQuery.map($('.entry_answer input:checked'), 
+				function(a) { return a.id.replace("answers_", "") });
+			toggleActionFormat('show_score_rapports', 'html');
+			$('#show_score_rapports').attr('action', '/answer_charts/' + journal_id);
+		}		
 
 		$(document).ready(function() {
 			$('.entry_survey .delete_entry').each(function () {
