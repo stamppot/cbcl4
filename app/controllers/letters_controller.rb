@@ -45,6 +45,7 @@ class LettersController < ApplicationController
 
   def edit
     @letter = Letter.find(params[:id])
+    puts "edit: #{@letter.letter}"
     @role_types = Survey.surveytypes
     @groups = current_user.center_and_teams.map {|g| [g.title, g.id] }
     @groups.unshift ["Alle grupper", nil] if current_user.admin?
@@ -58,6 +59,7 @@ class LettersController < ApplicationController
   end
 
   def create
+    params[:letter][:letter] = params[:letter_contents]
     @letter = Letter.new(params[:letter])
     @group = Group.find_by_id params[:letter][:group_id]
     @letter.group = @group
@@ -82,7 +84,9 @@ class LettersController < ApplicationController
 
   def update
     @letter = Letter.find(params[:id])
-    @letter.letter = params[:letter]
+    params[:letter][:letter] = params[:letter_contents]
+
+    @letter.letter = params[:letter][:letter]
 
     if @letter.save
       flash[:notice] = 'Brevet er rettet.'
@@ -96,6 +100,10 @@ class LettersController < ApplicationController
     end
   end
   
+  def delete
+    @letter = Letter.find(params[:id])
+  end
+
   def destroy
       @letter = Letter.find(params[:id])
       @letter.destroy

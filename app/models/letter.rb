@@ -8,6 +8,8 @@ class Letter < ActiveRecord::Base
   validates_presence_of :surveytype
   validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølning for gruppen. Har du valgt den rigtige gruppe?"
 
+  attr_accessible :name, :surveytype, :group_id, :follow_up, :letter
+
   scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
   # scope :in_center, -> { where('center_id = ?', ), lambda { |group| { :conditions => ['center_id = ?', group.is_a?(Center) ? group.id : group] } }
   scope :with_cond, lambda { |cond| cond }

@@ -22,13 +22,14 @@
 	</tr>
 	<tr>
 		<td class="t_i">Indhold:</td>
-		<td><%= @letter.letter.html_safe %></td>
+		<td style="width: 500px;"><%= @letter.letter.html_safe %></td>
 	</tr>
 </table>
 
 <div class="button">
 	<%= link_button t('letter.edit'), edit_letter_url(@letter), 'letter', :title => 'Rediger brev' %> 
-	<%= link_button t('letter.delete'), letter_url(@letter), 'remove', :method => :delete, :confirm => t('letter.confirm'), :title => 'Slet brev' %> 
+
+	<a title="Slet brev" href="/letters/delete/<%= @letter.id %>" class="button"><span class="remove">Slet brev</span></a>
 </div>	
 
 <p>

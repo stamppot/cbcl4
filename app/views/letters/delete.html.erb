@@ -21,7 +21,7 @@
 	</tr>
 	<tr>
 		<td class="t_i">Indhold:</td>
-		<td><%= @letter.letter %></td>
+		<td><%= @letter.letter.html_safe %></td>
 	</tr>
 </table>
 
@@ -29,7 +29,7 @@
 Er du sikker på at du vil slette brevet &quot;<%= @letter.name %>&quot;?  <strong>Denne handling kan ikke fortrydes</strong>.
 </p>
 
-<%= form_tag destroy_letter_path(@letter), :method => :delete do %>
+<%= form_tag letter_path(@letter), :method => :delete do %>
   <%= submit_tag 'Ja', :name => 'yes', :class => 'button delete'  %>
   <%= submit_tag 'Nej', :name => 'no', :class => 'button deny' %>
 <% end %>
