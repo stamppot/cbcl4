@@ -230,16 +230,26 @@ class SurveyAnswersController < ApplicationController
     # end
   end
   
+  # for saving parameters manually
+  def save(params)
+    journal_id = params[:journal_id] || params["journal_id"]
+    id = params.delete("id")
+    journal_entry = JournalEntry.by_id_and_journal(id, journal_id).first
+    survey_answer = journal_entry.make_survey_answer
+    survey_answer.save_final(params)
+    journal_entry.answered! 
+  end
+
   def create
     if current_user.login_user && (journal_entry = session[:journal_entry])
       params[:id] = journal_entry # login user can access survey with survey_id instead of journal_entry_id
     end
     id = params.delete("id")
-    journal_id = params[:journal_id]
-    logger.info "session je_id: #{session[:journal_entry]} journal_id: #{journal_id}"
+    logger.info "session je_id: #{session[:journal_entry]} journal_id: #{params[:journal_id]}"
+    journal_id = params[:journal_id] || params["journal_id"]
     journal_entry = JournalEntry.by_id_and_journal(id, journal_id).first
     journal_entry ||= JournalEntry.find(id)  # sometimes journal_id is null, browser issue?
-    # puts "SURVEY AnSWER create #{journal_entry.inspect}"
+
     center = journal_entry.journal.center
     subscription = center.subscriptions.detect { |sub| sub.survey_id == journal_entry.survey_id }
 
@@ -248,10 +258,7 @@ class SurveyAnswersController < ApplicationController
       redirect_to journal_entry.journal and return
     end
 
-    # TODO: cache
-    survey = # cache_fetch("survey_entry_#{journal_entry.id}", :expires_in => 20.minutes) do
-      Survey.and_questions.find(journal_entry.survey_id)
-    # end
+    survey = Survey.and_questions.find(journal_entry.survey_id)
     survey_answer = journal_entry.make_survey_answer
 
     if !survey_answer.save_final(params)

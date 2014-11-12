@@ -60,7 +60,6 @@ class JournalEntry < ActiveRecord::Base
   end
   
   def make_survey_answer
-    puts "jes follow_up: #{self.follow_up}"
     self.survey_answer ||= self.build_survey_answer(:survey => self.survey,
                              :sex => self.journal.sex,
                              :age => self.journal.age, # age at moment of answering
@@ -74,7 +73,6 @@ class JournalEntry < ActiveRecord::Base
     self.survey_answer.journal_entry_id = self.id
     self.survey_answer.survey_id = self.survey.id
     self.survey_answer.follow_up = self.follow_up
-    puts "sa follow_up: #{self.survey_answer.follow_up}"
     self.survey_answer
   end
 

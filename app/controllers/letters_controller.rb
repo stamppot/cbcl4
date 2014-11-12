@@ -36,7 +36,7 @@ class LettersController < ApplicationController
       @role_types.delete_if {|r| used_roles.include?(r.last) }
       Group.find([params[:id]])
     else
-      current_user.assigned_centers_and_teams
+      current_user.center_and_teams
     end
     @groups = @groups.map {|g| [g.title, g.id] } if @groups.any?
     @groups.unshift ["Alle grupper", nil] if current_user.admin? && !params[:id] && !Letter.default_letters_exist?

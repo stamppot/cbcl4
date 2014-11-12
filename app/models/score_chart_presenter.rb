@@ -29,11 +29,12 @@ class ScoreChartPresenter
     # end
 
     @groups = score_rapports.inject([]) do |col, sc|
+      results = sc.score_results.sort_by {|sr| sr.position }
       csg = ChartScoreGroup.new
       csg.title = sc.short_name
       csg.description = sc.survey_name
-      csg.titles = sc.score_results.map { |sr| sr.title }
-      csg.scores = sc.score_results.map { |sr| sr.result }
+      csg.titles = results.map { |sr| sr.title }
+      csg.scores = results.map { |sr| sr.result }
       csg.period = FollowUp.get[sc.follow_up || 0].first
       col << csg
       col

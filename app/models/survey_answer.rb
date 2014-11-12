@@ -202,7 +202,7 @@ class SurveyAnswer < ActiveRecord::Base
               :created_at => self.created_at,  # set to date of survey_answer
                :center_id => self.center_id,
         :survey_answer_id => self.id,
-               :follow_up => self.journal_entry.follow_up 
+               :follow_up => (self.journal_entry && self.journal_entry.follow_up || 0)
             }
             
     rapport = ScoreRapport.create(args) unless rapport

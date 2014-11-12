@@ -298,9 +298,15 @@ class User < ActiveRecord::Base
     self.has_access?(:superadmin) || self.center_and_teams.map(&:id).include?(group_id)
   end
 
+  # get all groups the user is a member of. 
+  # If a superadmin get all centers, the user is a member of and *all* teams in the centers
   def center_and_teams()
     if(self.has_access?(:superadmin))
-      Group.all
+      self.centers.inject([]) do |col, c|
+        col << c
+        c.teams.map {|t| col << t }
+        col
+      end
     else
       groups = self.groups
     end
