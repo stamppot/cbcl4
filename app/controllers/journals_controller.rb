@@ -73,7 +73,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @page_title = "Opret ny journal"
     @journal = Journal.new
     # if journal is created from Team.show, then team is set to parent
-    @groups = current_user.my_groups # Group.get_teams_or_centers(params[:id], current_user)
+    @groups = current_user.center_and_teams # Group.get_teams_or_centers(params[:id], current_user)
     puts "my_groups: #{@groups.map &:id}"
     @journal.group, @journal.center = @groups.first, @groups.first.center if @groups.any?
     alt_ids = []
