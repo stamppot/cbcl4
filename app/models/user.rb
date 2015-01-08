@@ -199,6 +199,7 @@ class User < ActiveRecord::Base
   end
 
   def access_to_groups?(groups)
+    return true if self.access? :superadmin
     groups = Group.find(groups || [])
     owner_groups = self.center_and_teams
     direct_access = groups.all? { |group| owner_groups.include?(group) }
