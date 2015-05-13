@@ -18,8 +18,9 @@ class ImportJournals # AddJournalsFromCsv
 		group = Group.find(team_id)
 		center = group.center
 
+		i = 1
 		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
-			puts "Row: #{row}"
+			puts "Row: #{i} #{row}"
 			next if row.blank?
 
 			alt_id = row["alt_id"] || row["Graviditetsid"]
@@ -62,7 +63,8 @@ class ImportJournals # AddJournalsFromCsv
 			end
 			
 			add_surveys_and_entries(journal, surveys, do_save)
-				
+			i = i + 1
+
 		end
 	end
 

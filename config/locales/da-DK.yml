@@ -379,6 +379,8 @@ da-DK:
           :code: ID
           :title: Navn
           :name: Navn
+          :alt_id: Projektnr
+          :alt: Projektnr
         :letter: 
           :group: Gruppe
           :surveytype: Skematype

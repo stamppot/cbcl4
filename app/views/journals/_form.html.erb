@@ -25,7 +25,7 @@
   <dd><%= text_field('journal', 'parent_email', {:size => 25}) %></dd>
 
   <dt><label for="journal_alt_id"><%= 'Projektnr' %></label></dt>
-  <dd><%= text_field('journal', 'alt_id', {:size => 25}) %></dd>
+  <dd><%= text_field('journal', 'alt_id', :maxlength => 21, :size => 25) %></dd>
 
   <br/>
 

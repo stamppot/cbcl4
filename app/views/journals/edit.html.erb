@@ -29,7 +29,7 @@
   <dd><%= text_field('journal', 'parent_email', {:size => 25}) %></dd>
 
   <dt><label for="journal_alt_id"><%= 'Projektnr' %></label></dt>
-  <dd><%= text_field('journal', 'alt_id', {:size => 25}) %></dd>
+  <dd><%= text_field('journal', 'alt_id', {:maxlength => 22, :size => 25}) %></dd>
 
   <dt><%= center_or_team_text(@journal.group) %></label></dt>
   <dd><%= @journal.group.title %></dd>

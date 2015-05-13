@@ -132,7 +132,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     else
       @nationalities = Nationality.all
       @groups = current_user.my_groups
-      render edit_journal_path(@journal)
+      logger.error "Errors: #{@journal.errors.inspect}"
+      render :edit # "journals/#{@journal.id}/edit"
     end
 
   rescue ActiveRecord::RecordNotFound

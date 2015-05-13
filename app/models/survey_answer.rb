@@ -355,9 +355,27 @@ class SurveyAnswer < ActiveRecord::Base
     csa = self.csv_survey_answer
     if csa
       csa.update_attributes(options)
+      update_info
     else
       csa = CsvSurveyAnswer.create(options)
     end
+  end
+
+  def update_info
+    return if journal.nil?
+    alt_id = journal.alt_id
+    return if alt_id.blank?
+    self.alt_id = alt_id
+    self.save
+
+    csa = CsvSurveyAnswer.find_by_survey_answer_id(self.id)
+    if csa.nil?
+      puts "CSA for survey_answer #{self.id} not found"
+      return
+    end
+    csa.journal_info = to_danish(journal.info.values.join(';;'))
+    csa.save
+    puts "fixed #{id}"
   end
   
   def to_danish(str)

@@ -58,6 +58,8 @@ class Journal < ActiveRecord::Base #< Group
   validates_presence_of :sex, :message => "Køn skal angives"
   validates_presence_of :nationality, :message => "Nationalitet skal angives"
 
+  validates_length_of :alt_id, :maximum => 22, :allow_nil => true, :message => 'skal have mindre end 22 bogstaver.' 
+
   scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
   scope :for_group, lambda { |group| group && where(:group_id => (group.is_a?(Group) ? group.id : group)) || scoped }
