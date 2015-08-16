@@ -10,6 +10,7 @@ class SubscriptionsQuery
     end
   end
   
+
   # def select_all
   #   ["select journal_entry_id, journal_entries.journal_id, journal_entries.survey_id, journal_entries.survey_answer_id, person_infos.birthdate "]
   # end

@@ -96,16 +96,17 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def edit
     @user = User.find params[:id]
     @roles = current_user.pass_on_roles
-    @groups = current_user.center_and_teams
+    @groups = @user.groups + current_user.center_and_teams
     @user.password = ""
   end
 
   def update
     @user = User.find(params[:id])
 
+    logger.info "users ctrl update"
     if current_user.update_user(@user, params[:user])
       save = @user.save
-      puts "saved: #{save}, #{@user.inspect}"
+      logger.info "saved: #{save}, #{@user.inspect}"
       flash[:notice] = 'Brugeren er ændret.'
       redirect_to user_url(@user)
     else
@@ -217,7 +218,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     id = params[:id].to_i
     # puts "CHECK ACCESS #{current_user.inspect}"
     redirect_to login_path and return false unless current_user
-    if current_user.access?(:user_show_all) || params[:action] == 'new' || params[:id] == 'new'
+    if current_user.access?(:superadmin) || current_user.access?(:user_show_all) || params[:action] == 'new' || params[:id] == 'new'
+      logger.info "check_access true"
       return true
     else
       access_list = User.users.in_center(current_user.center).map { |u| u.id } << 0

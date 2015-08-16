@@ -9,6 +9,6 @@ Journaler i teamet vil ikke blive slettet, men flyttes til centeret.<br>
 </p>
 
 <%= form_tag team_path(@group), :method => :delete do %>
-  <%= submit_tag 'Ja', :name => 'yes' %>
-  <%= submit_tag 'Nej', :name => 'no' %>
+  <%= submit_tag 'Ja', :name => 'yes', :class => 'button accept' %>
+  <%= submit_tag 'Nej', :name => 'no', :class => 'button deny' %>
 <% end %>

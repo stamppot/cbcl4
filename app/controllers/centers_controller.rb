@@ -245,7 +245,7 @@ class CentersController < ApplicationController
   before_filter :admin_access, :only => [ :new, :delete, :create, :edit, :pay_subscriptions, :undo_pay_subscriptions ]
   
   def admin_access
-    if !current_user.access?(:admin)
+    if !current_user.access?(:superadmin) || !current_user.access?(:admin)
       flash[:notice] = "Du har ikke adgang til denne side"
       redirect_to centers_path
     end

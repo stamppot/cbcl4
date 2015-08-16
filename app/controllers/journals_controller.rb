@@ -126,6 +126,11 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @journal.update_attributes(params[:journal])
     @journal.delta = 1
 
+    # if projektnr changed, update in survey answers too
+    if !params[:journal][:alt_id].blank?
+      @journal.answered_entries.map {|e| e.survey_answer }.map {|sa| sa.update_info }
+    end
+
     if @journal.save
       flash[:notice] = 'Journalen er opdateret.'
       redirect_to journal_path(@journal)

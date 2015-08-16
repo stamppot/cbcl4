@@ -147,6 +147,7 @@ class User < ActiveRecord::Base
     user.state = 2
 
     if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
+      logger.info "access_to_roles: #{role_ids.inspect}"
       user.update_roles_and_groups(role_ids, group_ids)
     end
     user.password_hash_type = "md5"
@@ -162,9 +163,10 @@ class User < ActiveRecord::Base
     group_ids = params.delete(:groups) || []
 
     # TODO: needed? check user/edit
-    if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
+    if self.access?(:superadmin) ||self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
       user.update_roles_and_groups(role_ids, group_ids)
     else
+      logger.info "update_user: no permission"
       return false
     end
 
@@ -181,11 +183,13 @@ class User < ActiveRecord::Base
   # helper method used by methods above
   def update_roles_and_groups(role_ids, group_ids)
     # if self.access_to_roles?(roles) && self.access_to_groups?(groups)
-    roles = Role.where(id: role_ids).to_a
+    logger.info "role_ids; #{role_ids.inspect}"
+    self.roles = Role.where(id: role_ids).to_a
+    logger.info "roles: #{self.roles.inspect}"
     g = Group.where(id: group_ids).to_a
-    puts "g; #{g.inspect}"
+    logger.info "g; #{g.inspect}"
     self.groups += g
-    puts "groups: #{self.groups.inspect}"
+    logger.info "groups: #{self.groups.inspect}"
 
     self.center = self.groups.first.center 
     return self

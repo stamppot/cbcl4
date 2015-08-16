@@ -85,7 +85,7 @@ class Center < Group
 
   # returns subscription for the specified survey
   def get_subscription(survey_id) # TODO: include periods
-    (s = self.subscriptions.by_survey(survey_id)) && s.first
+    (s = self.subscriptions.by_survey(self.id, survey_id)) && s.first
   end
   
   # returns subscribed surveys
@@ -102,12 +102,12 @@ class Center < Group
   end
     
   # increment subscription count - move to journal_entry, higher abstraction
-  def use_subscribed(survey) # TODO: include periods
-    # find subscription to increment, must be same as is journal_entry
-    subscription = self.subscriptions.by_survey(survey) 
-    return false unless Subscription
-    subscription.copy_used!  #  if sub.nil?  => no abbo
-  end
+  # def use_subscribed(survey) # TODO: include periods
+  #   # find subscription to increment, must be same as is journal_entry
+  #   subscription = self.subscriptions.by_survey(survey) 
+  #   return false unless Subscription
+  #   subscription.copy_used!  #  if sub.nil?  => no abbo
+  # end
 
   # shows no. used questionnaires in subscriptions
   def used_subscriptions # TODO: include periods
