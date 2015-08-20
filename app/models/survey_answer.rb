@@ -3,6 +3,8 @@
 # require 'ar-extensions/adapters/mysql'
 # require 'ar-extensions/import/mysql'
 # require 'facets'
+require 'hashery'
+
 
 class SurveyAnswer < ActiveRecord::Base
   belongs_to :survey

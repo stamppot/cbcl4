@@ -30,7 +30,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     @teams_by_center = current_user.teams.group_by { |team| team.center }
     @group = current_user.center
     @teams = current_user.teams
-
+    
     respond_to do |format|
       # format.json {
       #   @teams = Team.all(:conditions => ['parent_id = ?', params[:id]], :order => "title")

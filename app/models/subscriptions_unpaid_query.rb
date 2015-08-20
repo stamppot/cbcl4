@@ -25,4 +25,12 @@ group by sa.survey_id"].join(" ")
   end
 
 
+  def find_start_end_periods(center_id)
+  	first_period = ""
+  	"select * from periods p
+inner join subscriptions sub on sub.id = p.subscription_id
+where center_id = 52
+group by paid_on"
+  end
+
 end
