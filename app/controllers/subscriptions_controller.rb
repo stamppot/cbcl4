@@ -31,7 +31,9 @@ class SubscriptionsController < ApplicationController
     # @subscription_count = @subscription.subscriptions_count
     @group = @subscription.center
     @subscription_presenter = @group.subscription_presenter(@group.surveys)
-    @subscription_summaries = @group.subscription_service.subscription_summary(params) # @group.subscription_summary(params)
+    @subscription_summary = @group.subscription_service.subscription_summary(params) # @group.subscription_summary(params)
+    puts "subs presenter: #{@subscription_presenter.inspect}"
+    puts "subs summary: #{@subscription_summary.inspect}"
     # @surveys = []
   end
 
@@ -133,6 +135,8 @@ class SubscriptionsController < ApplicationController
     subscription_presenter = group.subscription_presenter
     @subscriptions = group.subscriptions(:include => :periods)
     @surveys = current_user.surveys.group_by {|s| s.id}
+
+    puts "subs presenter: #{subscription_presenter.inspect}"
 
     # respond_to do |format|
       # format.html {

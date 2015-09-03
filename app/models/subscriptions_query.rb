@@ -89,7 +89,7 @@ class SubscriptionsQuery
        joins << 'groups'
      end
 
-     self.select(["periods.id, subscriptions.center_id, subscriptions.total_used as total_used, subscriptions.active_used as active_used, survey_id, state, subscription_id, used, active, paid as paid, paid_on as paid_on, periods.created_on"])
+     self.select(["periods.id, subscriptions.center_id, subscriptions.total_used as total_used, subscriptions.active_used as active_used, periods.survey_id, state, subscription_id, used, active, paid as paid, paid_on as paid_on, periods.created_on"])
      self.join_clause(joins, conditions)
      self.query = (self.select_clause << self.from_where).join(' ')
      # puts "subscription_periods_in_center: query: #{self.query}"
@@ -151,7 +151,7 @@ class SubscriptionsQuery
      if center.is_a? Subscription
        conditions["subscriptions.id"] = center.id
      end
-     self.select(["subscriptions.center_id, survey_id, subscriptions.id as subscription_id, SUM(used) as sum, created_on, paid_on, note, state"])
+     self.select(["subscriptions.center_id, periods.survey_id, subscriptions.id as subscription_id, SUM(used) as sum, created_on, paid_on, note, state"])
      self.join_clause(joins, conditions)
      self.query = (self.select_clause << self.from_where << self.group_by('subscriptions.id')).join(' ')
    end

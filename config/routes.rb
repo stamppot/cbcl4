@@ -163,6 +163,7 @@ Cbcl4::Application.routes.draw do
 
   # journal entries
   get 'journal_entries/show_answer/(/:id)', :to => 'journal_entries#show_answer', :as => 'entry_show_answer'
+  post 'journal_entries/update_notes/(/:id)', :to => 'journal_entries#update_notes', :as => 'update_notes', :only => :post
   post 'journal_entries/remove/(/:id)', :to => 'journal_entries#remove', :as => 'entry_remove', :only => :post
   post 'journal_entries/remove_answer/(/:id)', :to => 'journal_entries#remove_answer', :as => 'entry_remove_answer', :only => :post
   get 'letters/show_login/(/:id)', :to => 'letters#show_login', :as => 'login_letter'

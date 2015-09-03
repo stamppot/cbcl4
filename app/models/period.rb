@@ -1,5 +1,6 @@
 class Period < ActiveRecord::Base
   belongs_to :subscription
+  belongs_to :center
 
   attr_accessible :active, :used, :subscription
   
@@ -7,16 +8,16 @@ class Period < ActiveRecord::Base
   scope :inactive, -> { where('active = ?', false) }
   scope :paid, -> { where('paid = ?', true).order('paid_on DESC') }
 
-  attr_accessor :survey_id, :center_id, :state
+  attr_accessor :state
 
 
-  def survey
-    self.survey_id && Survey.find(self.survey_id) || nil
-  end
+  # def survey
+  #   self.survey_id && Survey.find(self.survey_id) || nil
+  # end
 
-  def center
-    self.center_id && Center.find(self.center_id) || nil
-  end
+  # def center
+  #   self.center_id && Center.find(self.center_id) || nil
+  # end
   
   def active?
     self.active

@@ -23,14 +23,20 @@ class UpdateCsvSurveyAnswerInfo
 		end
 	end
 
+	def create_or_update_center(center_id)
+		SurveyAnswer.where(:center_id => center_id).finished.find_each(:batch_size => 100) do |sa|
+			sa.save_csv_survey_answer
+		end
+	end
+
 	def create_or_update_team(team_id)
-		SurveyAnswer.where(:team_id => team_id).finished.each do |sa|
+		SurveyAnswer.where(:team_id => team_id).finished.find_each(:batch_size => 100) do |sa|
 			sa.save_csv_survey_answer
 		end
 	end
 
 	def create_or_update_journal(journal_id)
-		JournalEntry.where(:journal_id => journal_id).map {|je| je.survey_answer }.to_a.select {|sa| !sa.nil?}.each do |sa|
+		JournalEntry.where(:journal_id => journal_id).map {|je| je.survey_answer }.find_each(:batch_size => 100).to_a.select {|sa| !sa.nil?}.each do |sa|
 			sa.save_csv_survey_answer
 		end
 	end
