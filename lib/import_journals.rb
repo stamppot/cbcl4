@@ -43,6 +43,8 @@ class ImportJournals # AddJournalsFromCsv
 
 			birthdate = get_date(b)
 
+			raise "DateError: #{birthdate} row: #{row.inspect}" if birthdate.year < 1980
+
 			puts "birthdate: #{birthdate}"
 			args = {
 				:title => journal_name, :group_id => group.id, :center_id => group.center_id,

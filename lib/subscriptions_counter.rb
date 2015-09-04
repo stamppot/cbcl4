@@ -46,16 +46,16 @@ class SubscriptionsCounter
     end
 
     # counts what really has been used
-    def count_used(center_id)
-    	periods = count_sum_per_period(center_id).values
-    	periods.map do |hash|
-    		start = hash[:start]
-    		stop = hash[:stop]
-    		survey_id = hash[:survey_id]
+    # def count_used(center_id)
+    # 	periods = count_sum_per_period(center_id).values
+    # 	periods.map do |hash|
+    # 		start = hash[:start]
+    # 		stop = hash[:stop]
+    # 		survey_id = hash[:survey_id]
     	
-    		# TODO: count survey_answers in period
-    	end
-    end
+    # 		# TODO: count survey_answers in period
+    # 	end
+    # end
 
     def count_real_used_all(start, stop)
     	query = []
