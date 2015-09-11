@@ -63,4 +63,26 @@ class Period < ActiveRecord::Base
     self.used = 0
     self.save
   end
+
+  def fix_used(update = false)
+    counter = PeriodsCounter.new
+    summary = counter.real_total_in_period(self.center_id, self.created_on, self.paid_on)
+    real = summary.per_survey.key?(self.survey_id) && summary.per_survey[self.survey_id] || 0
+    if used != real
+      puts "used: #{used}  real: #{real}"
+      self.used = summary.per_survey[self.survey_id]
+      self.save if update
+    else
+      puts "OK #{used}  p.id #{id}  c: #{center.id}  s: #{survey_id}"
+    end
+  end
+
+  def check_used(update = false)
+    counter = PeriodsCounter.new
+    summary = counter.real_total_in_period(self.center_id, self.created_on, self.paid_on)
+    real = summary.per_survey.key?(self.survey_id) && summary.per_survey[self.survey_id] || 0
+    if used != real
+      return "used: #{used}  real: #{real}"
+    end
+  end
 end

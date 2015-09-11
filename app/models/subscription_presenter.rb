@@ -15,7 +15,7 @@ class SubscriptionPresenter
     @subscriptions = subscriptions.sort_by { |s| s.survey_id }
     # puts "surveys: #{surveys.inspect}" 
     @surveys = surveys.to_a.to_hash_with_key { |s| s.id }
-    self.periods_summary
+    self.periods_summary(group)
     self.details
     self
   end
@@ -23,18 +23,42 @@ class SubscriptionPresenter
   # survey.title -> counts total, active per subscription (now in dbtable subscriptions)
   # counts total for all subscriptions
   def detail(subscription)
-    active_count = subscription.find_active_period.used
+    active_period = subscription.find_active_period
+    # active_count = subscription.find_active_period.used
     survey = @surveys[subscription.survey_id]
+
+    date = active_period.created_on 
+    stop = active_period.paid_on || DateTime.now
+          puts "Current_period: #{active_period.inspect}  date: #{date.inspect} stop: #{stop}"
+
+    beginning = DateTime.new(2000,1,1).to_s(:db)
+    counter = PeriodsCounter.new
+    count_active = counter.count_real_used(subscription.center_id, date.to_s(:db), stop.to_s(:db))
+    puts "stop: #{stop}  #{count_active.inspect}"
+    count_active[subscription.survey_id] ||= {:used => 0}
+    
+    puts "count_used between: #{beginning} #{date.to_s(:db)}"
+    count_used = counter.count_real_used(subscription.center_id, beginning, date.to_s(:db))
+    puts "count_used: #{count_used.inspect}"
+    count_used[subscription.survey_id] ||= {:used => 0}
+
+    count_all = counter.count_real_used(subscription.center_id, beginning, DateTime.now.to_s(:db))
+    puts "count_all: #{count_all.inspect}"
+    count_all[subscription.survey_id] ||= {:used => 0}
+
     @detailed_view << {
       :subscription => subscription,
       :title => (survey && survey.get_title || "Ingen titel"),
-      :total => subscription.total_used,
+      :total => count_all[subscription.survey_id][:used], # subscription.total_used,
+      :unpaid => count_active[subscription.survey_id][:used], # subscription.unpaid_used,
+      :paid => count_used[subscription.survey_id][:used], # subscription.paid_used,
       :note => subscription.note || "",
-      :active => subscription.unpaid_used,
-      :paid => subscription.paid_used,
       # :paid => subscription.total_paid,
       :state => Subscription.states.invert[subscription.state],
-      :start => subscription.created_at
+      :start => subscription.created_at,
+      # :count_total => subscription.total_used,
+      # :count_paid => subscription.paid_used,
+      # :count_unpaid => subscription.unpaid_used 
     }
   end
 
@@ -56,30 +80,40 @@ class SubscriptionPresenter
     @group.subscriptions.sum { |s| s.active_used }
   end
 
-  def periods_summary # count totals in periods
+  def periods_summary(group) # count totals in periods
+    counter = PeriodsCounter.new
     summaries = @group.subscription_service.subscription_summary(@params).sort_by {|s| s.first }
     summaries.each do |summary|
       date, periods = *summary
-      # puts "periods_summary: #{date.inspect} Summary: #{summary.inspect}"
-      used = periods.sum {|p| p["used"].to_i }
+      puts "periods_summary: #{date.inspect}  #{periods.inspect}"
+        #used = periods.sum {|p| p["used"].to_i }
 			# find period for date, get used amount
-			current_period = get_period_for_date(periods, date)
-      # puts "Current_period: #{current_period.inspect}"
+			 #current_period = get_period_for_date(periods, date)
+
+      # puts "Current_period: #{current_period.inspect}  date: #{date.inspect}"
       active = periods.sum {|p| p["active_used"].to_i }
       is_paid = periods.all? { |p| p['paid'].to_i > 0 && p['paid_on']}
       paid_on = periods.detect { |p| p['paid_on'] }
       paid_on &&= paid_on['paid_on']
       stopped_on = periods.first["paid_on"]
+
+      stop = (paid_on || stopped_on) #.to_s(:db)
+      # puts "stop: #{stop}"
+      count = counter.count_real_used(group.id, date.to_s(:db), stop)
+      # puts "real count: #{count.inspect} #{count.to_a.inspect} "
+      real_used = count.values.sum {|v| v[:used] }
+
+      # puts "real used: #{real_used} #{date} #{stop}    used: #{used} #{date} #{stopped_on} #{paid_on}"
       @summary_view[:periods] << {
         :start_on => date, 
-        :used => used, #current_period["used"].to_i, #used,
+        :used => real_used, #used, #current_period["used"].to_i, #used,
         :active => active,
         :paid => is_paid,
         :created => date,
         :stopped_on => stopped_on,
         :paid_on => paid_on
       }  
-      @summary_view[:total_periods] += used  
+      @summary_view[:total_periods] += real_used   # used
     end
   end
 

@@ -100,9 +100,9 @@ class Subscription < ActiveRecord::Base
     active_period.destroy && old_period.save && self.save
   end
   
-  def periods_used
-    self.periods.map { |c| c.used }.sum
-  end
+  # def periods_used
+  #   self.periods.map { |c| c.used }.sum
+  # end
   
   def subscriptions_count
     result = SubscriptionsQuery.new.query_subscriptions_count(self)
@@ -197,4 +197,5 @@ class Subscription < ActiveRecord::Base
         'Slettet' => 4
       }
     end
+
 end

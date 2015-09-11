@@ -220,7 +220,9 @@ class SurveyAnswer < ActiveRecord::Base
         next
       else
         result, percentile, mean, missing, hits, age_group = score.calculate(self)
-        score_ref = score.find_score_ref(self.journal)
+        score_ref = score.find_score_ref(self.age, self.sex)
+        puts "CALC SCORE: #{result} #{percentile}  scoreref: #{score_ref.inspect}"
+
         # ADHD score (id: 57 has no items)
         missing_percentage = if score.items_count.blank? or score.items_count == 0
           99.99

@@ -136,7 +136,7 @@ class SubscriptionsController < ApplicationController
     @subscriptions = group.subscriptions(:include => :periods)
     @surveys = current_user.surveys.group_by {|s| s.id}
 
-    puts "subs presenter: #{subscription_presenter.inspect}"
+    # puts "subs presenter: #{subscription_presenter.inspect}"
 
     # respond_to do |format|
       # format.html {

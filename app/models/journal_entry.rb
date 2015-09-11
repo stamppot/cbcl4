@@ -266,9 +266,7 @@ class JournalEntry < ActiveRecord::Base
     
     csv_score_rapport = CsvScoreRapport.find_by_survey_answer_id(self.survey_answer_id)
     if csv_score_rapport
-      csv_score_rapport.age = age if csv_score_rapport
-      csv_score_rapport.created_at = created
-      csv_score_rapport.save
+      csv_score_rapport.destroy
     end
     csv_survey_answer = CsvSurveyAnswer.find_by_journal_entry_id(self.id)
     if csv_survey_answer
@@ -278,9 +276,7 @@ class JournalEntry < ActiveRecord::Base
     end
     score_rapport = ScoreRapport.find_by_survey_answer_id(self.survey_answer_id)
     if score_rapport
-      score_rapport.age = age
-      score_rapport.created_at = created
-      score_rapport.save
+      score_rapport.regenerate
     end
   end
 

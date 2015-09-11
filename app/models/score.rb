@@ -30,9 +30,9 @@ class Score < ActiveRecord::Base
   end
   
   # returns score ref with the right age_group and gender
-  def find_score_ref(journal)
+  def find_score_ref(age, sex)
     score_ref = self.score_refs.detect do |score_ref|
-      score_ref.age_range === journal.age && score_ref.gender == journal.sex
+      score_ref.age_range === age && score_ref.gender == sex
     end
     return false if score_ref.nil?
     return score_ref
@@ -44,7 +44,7 @@ class Score < ActiveRecord::Base
     
     # find matching type in score_items, so only the score item for the type of survey is calculated
     score_item = self.score_items.first
-    score_ref  = self.find_score_ref(survey_answer.journal)
+    score_ref  = self.find_score_ref(survey_answer.age, survey_answer.sex)
     
     mean = score_ref && score_ref.mean || 0.0
     missing = 0

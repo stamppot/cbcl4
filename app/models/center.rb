@@ -3,6 +3,7 @@ class Center < Group
   has_many :teams, :dependent => :destroy
   has_many :journals #, :dependent => :destroy  # should never delete journals. TODO: some way to reclaim deleted/dangling journals
   has_many :subscriptions #, -> { includes(:periods) } #, :include => [:survey, :periods], :dependent => :destroy
+  has_many :periods 
   has_many :surveys, -> { order('position').uniq }, :through => :subscriptions
   has_one  :center_info
   has_many :users,

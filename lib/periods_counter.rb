@@ -1,6 +1,6 @@
-class SubscriptionsCounter
+class PeriodsCounter
 
-
+	# counts *counted* usage, not real usage (can differ)
 	def count_sum_per_period(center_id)
 		query = []
 		query << "select created_on as start, ifnull(paid_on, Now()) as end, survey_id, center_id, sum(used) as total_used "
@@ -18,6 +18,7 @@ class SubscriptionsCounter
       	end
     end
 
+	# counts *counted* usage, not real usage (can differ)
     def count_per_period_per_survey(center_id)
 		query = []
 		query << "select created_on as start, ifnull(paid_on, Now()) as end, survey_id, center_id, sum(used) as used "
@@ -38,6 +39,22 @@ class SubscriptionsCounter
       	end
     end
 
+
+	# counts *counted* usage, not real usage (can differ)
+    def print_used_per_period(center_id)
+		query = []
+		query << "select created_on as start, ifnull(paid_on, Now()) as end, survey_id, center_id, sum(used) as used "
+		query << " from periods where center_id = #{center_id} "
+		query << " group by start, end"
+		periods_count = ActiveRecord::Base.connection.execute(query.join).each(:as => :hash).inject([]) do |col,j| 
+			col << "#{j['start']} - #{j['end']} \tsurvey: #{j['survey_id']} \tc: #{j['center_id']} \tused: #{j['used']}"
+   			col
+      	end
+      	puts periods_count.join("\n")
+      	periods_count
+    end
+
+	# counts *counted* usage, not real usage (can differ)
     def count_per_period_all
     	count = Center.all.inject({}) do |col,center|
     		col[center.id] = count_sum_per_period(center.id)
@@ -45,24 +62,13 @@ class SubscriptionsCounter
     	end
     end
 
-    # counts what really has been used
-    # def count_used(center_id)
-    # 	periods = count_sum_per_period(center_id).values
-    # 	periods.map do |hash|
-    # 		start = hash[:start]
-    # 		stop = hash[:stop]
-    # 		survey_id = hash[:survey_id]
-    	
-    # 		# TODO: count survey_answers in period
-    # 	end
-    # end
 
     def count_real_used_all(start, stop)
     	query = []
 		query << "select center_id, survey_id, count(id) as used  from survey_answers "
 		query << "where  done = 1 "
-		# query << "and created_at between '#{start}' and '#{stop}'"
-		query << "and created_at between '2013-12-10' and '2015-09-03 20:48:55' "
+		query << "and created_at between '#{start}' and '#{stop}'"
+		# query << "and created_at between '2013-12-10' and '2015-09-03 20:48:55' "
 		query << "group by center_id, survey_id "
 
 		survey_answer_count = ActiveRecord::Base.connection.execute(query.join).each(:as => :hash).inject({}) do |col,j| 
@@ -78,17 +84,38 @@ class SubscriptionsCounter
 				}
    			col
       	end
+	end
 
+	# total used in period
+	def real_total_in_period(center_id, start, stop)
+		stop_date = stop.blank? && "Now()" || "'#{stop.to_s(:db)}'"
+		query = []
+		query << "select center_id, survey_id, count(id) as used from survey_answers "
+		query << "where  done = 1 and center_id = #{center_id.to_i} "
+		query << "and created_at between '#{start.to_s(:db)}' and #{stop_date} "
+		# query << "and created_at between '2013-12-10' and '2015-09-03 20:48:55' "
+		query << "group by center_id, survey_id"
+
+		count = ActiveRecord::Base.connection.execute(query.join).each(:as => :hash).inject(PeriodCount.new) do |p,j| 
+			key = j['survey_id']
+			p.start = start
+			p.stop = stop
+			p.center_id = center_id.to_i
+			p.per_survey ||= {} #j['used']
+      		p.per_survey[key] ||= []
+      		p.per_survey[key] = j['used']
+   			p
+      	end
 	end
 
     # counts survey_answer to determine how many were really used
     def count_real_used(center_id, start, stop)
+    	stop = stop.blank? && "Now()" || "'#{stop}'"
+    	puts "count stop: #{stop}"
 		query = []
 		query << "select center_id, team_id, survey_id, count(id) as used from survey_answers "
 		query << "where center_id = #{center_id} and done = 1 "
-		query << "and created_at between '#{start}' and '#{stop}'"
-		# query << "and created_at between '2013-12-10' and '2015-09-03 20:48:55' "
-		# query << "and survey_id = #{survey_id} "
+		query << "and created_at between '#{start}' and #{stop} "
 		query << "group by survey_id"
 
 		survey_answer_count = ActiveRecord::Base.connection.execute(query.join).each(:as => :hash).inject({}) do |col,j| 
@@ -101,4 +128,18 @@ class SubscriptionsCounter
    			col
       	end
     end
+
+    def count_real_used_in_period(period)
+    	count_real_used(period.center_id, period.created_on, period.paid_on)
+    end
+end
+
+class PeriodCount
+ 	attr_accessor :center_id, :start, :stop, :total_used, :per_survey
+
+ 	def initialize
+ 		self.center_id = 0
+ 		self.total_used = 0
+ 		self.per_survey = {}
+ 	end
 end

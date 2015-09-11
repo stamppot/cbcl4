@@ -316,11 +316,7 @@ class SurveyAnswersController < ApplicationController
 
   def edit_date
     @journal_entry = JournalEntry.find(params[:id])
-    # @date = @journal_entry.created
-    # @follow_up = @journal_entry.get_follow_up
     @follow_ups = FollowUp.get
-    puts "follow_up: #{@follow_up}"
-    puts "follow_ups: #{@follow_ups.inspect}"
     render :layout => 'cbcl'
   end
 
@@ -333,40 +329,19 @@ class SurveyAnswersController < ApplicationController
     if date_param.blank?
       entry.save
       flash[:notice] = "Opfølgning er rettet"
-      redirect_to journaL_path(entry.journal)
+      redirect_to journal_path(entry.journal)
     end
 
     sep = date_param.include?("/") && "/" || date_param.include?("-") && "-"
     d = date_param.split(sep).map {|p| p.to_i }
     date = [d[2],d[1],d[0]]
-    created = Date.new(*date)
-    entry.update_date(created)
-    # age = ((created - entry.journal.birthdate).to_i / 365.25).floor
-    # entry.survey_answer.age = age
-    # entry.answered_at = created
-    # entry.save
-    
-    # entry.survey_answer.created_at = created
-    # entry.survey_answer.save
-    
-    # csv_score_rapport = CsvScoreRapport.find_by_survey_answer_id(entry.survey_answer_id)
-    # if csv_score_rapport
-    #   csv_score_rapport.age = age if csv_score_rapport
-    #   csv_score_rapport.created_at = created
-    #   csv_score_rapport.save
-    # end
-    # csv_survey_answer = CsvSurveyAnswer.find_by_journal_entry_id(entry.id)
-    # if csv_survey_answer
-    #   csv_survey_answer.created_at = created
-    #   csv_survey_answer.age = age if csv_survey_answer
-    #   csv_survey_answer.save
-    # end
-    # score_rapport = ScoreRapport.find_by_survey_answer_id(entry.survey_answer_id)
-    # if score_rapport
-    #   score_rapport.age = age
-    #   score_rapport.created_at = created
-    #   score_rapport.save
-    # end
+    answered = Date.new(*date)
+    puts "year: #{answered.year}  #{date.inspect}, #{answered.inspect}"
+    if answered.year < 2000 || answered.year > 2150
+      flash[:error] = "Dato er ugyldig"
+      redirect_to edit_date_survey_answers_url(entry.id) and return
+    end
+    entry.update_date(answered)
     
     flash[:notice] = "Besvarelsesdato og opfølgning er rettet"
     redirect_to journal_path(entry.journal)
