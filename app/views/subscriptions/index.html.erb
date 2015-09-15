@@ -1,8 +1,32 @@
 <p><span class="h3"><%= t('subscription.list') %></span></p>
 <br/>
 
-<% @subscription_presenters.each do |subscription_presenter| %>
-	<h3><%= link_to( h(subscription_presenter.group.title), center_path(subscription_presenter.group) ) %></h3>
-	<%= render :partial => 'subscriptions', :locals => {:subscription_presenter => subscription_presenter} %>
+	<%= select_tag :active_center, options_for_select(@centers.map {|c| [c.title, c.id]}, :selected => @active.id) %>
+
+	<a class="button save" onclick="show_subscription(this); return false;" href="#"><span class="save">Vis forbrug</span></a>
+
+		<script type="text/javascript">
+			function show_subscription(elem) {
+				var center_id = $('#active_center').val();
+				$.getHtml('/subscriptions/center/' + center_id, 
+					function(response) {
+						$('#subscription').html(response);
+					}
+				);
+			}
+
+			$(document).ready(function() {
+				console.log('ready');
+				show_subscription($('#active_center').val());
+			});
+		</script>
+
+	<p>
+		<div id="subscription"></div>
+	</p>
+
+<%# @subscription_presenters.each do |subscription_presenter| %>
+	<!-- <h3><%# link_to( h(subscription_presenter.group.title), center_path(subscription_presenter.group) ) %></h3> -->
+	<%# render :partial => 'subscriptions', :locals => {:subscription_presenter => subscription_presenter} %>
 	<%# @subscription_presenter.inspect %>
-<% end %>
+<%# end %>

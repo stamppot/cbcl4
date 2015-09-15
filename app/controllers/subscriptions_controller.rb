@@ -7,7 +7,6 @@ class SubscriptionsController < ApplicationController
 
   def index
     @page_title = "CBCL - Abonnementer på spørgeskemaer"
-    # TODO: kun surveys som der er adgang til
     @options = params
     @surveys = current_user.surveys.to_a
     @centers = 
@@ -17,19 +16,20 @@ class SubscriptionsController < ApplicationController
       current_user.centers
     end 
     
-    @centers = @centers.sort_by {|c| c.title }
-    @subscription_presenters = @centers.map { |center| center.subscription_presenter(@surveys) }
+    @active = current_user.center || current_user.centers.last
 
-    @subscription_counts_per_center = @centers.inject({}) {|hash, center| hash[center.id] = Subscription.subscriptions_count(center); hash }
+    @centers = @centers.sort_by {|c| c.title }
+    # @subscription_presenters = @centers.map { |center| center.subscription_presenter(@surveys) }
+
+    # @subscription_counts_per_center = @centers.inject({}) {|hash, center| hash[center.id] = Subscription.subscriptions_count(center); hash }
     # @subscription_summaries_per_center = @centers.inject({}) {|hash, center| hash[center.id] = center.subscription_summary(params); hash }
   end
 
   def show
     @page_title = "CBCL - Abonnementer på spørgeskemaer"
     @options = params  # for show options
-    @subscription = Subscription.find(params[:id])
+    @group = Center.find(params[:id])
     # @subscription_count = @subscription.subscriptions_count
-    @group = @subscription.center
     @subscription_presenter = @group.subscription_presenter(@group.surveys)
     @subscription_summary = @group.subscription_service.subscription_summary(params) # @group.subscription_summary(params)
     puts "subs presenter: #{@subscription_presenter.inspect}"
@@ -136,19 +136,7 @@ class SubscriptionsController < ApplicationController
     @subscriptions = group.subscriptions(:include => :periods)
     @surveys = current_user.surveys.group_by {|s| s.id}
 
-    # puts "subs presenter: #{subscription_presenter.inspect}"
-
-    # respond_to do |format|
-      # format.html {
-        render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
-         # redirect_to team_path(@group) and return if @group.instance_of?(Team) }
-        
-      # format.rjs {
-      #   render :update do |page|
-      #     page.replace_html 'subscription_content', :partial => 'center'
-      #   end
-      # }
-    # end
+    render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
   end
     
   protected

@@ -64,10 +64,11 @@ class PeriodsCounter
 
 
     def count_real_used_all(start, stop)
+		stop_date = stop.blank? && "Now()" || "'#{stop.to_s(:db)}'"
     	query = []
 		query << "select center_id, survey_id, count(id) as used  from survey_answers "
 		query << "where  done = 1 "
-		query << "and created_at between '#{start}' and '#{stop}'"
+		query << "and created_at between '#{start}' and #{stop_date}"
 		# query << "and created_at between '2013-12-10' and '2015-09-03 20:48:55' "
 		query << "group by center_id, survey_id "
 
@@ -110,6 +111,7 @@ class PeriodsCounter
 
     # counts survey_answer to determine how many were really used
     def count_real_used(center_id, start, stop)
+    	# logger.info ("stop: #{stop}")
     	stop = stop.blank? && "Now()" || "'#{stop}'"
     	puts "count stop: #{stop}"
 		query = []
@@ -132,7 +134,58 @@ class PeriodsCounter
     def count_real_used_in_period(period)
     	count_real_used(period.center_id, period.created_on, period.paid_on)
     end
+
+
+    def details_usage(center_id, last_pay_date)
+    	query = []
+    	query << "SELECT COUNT(*) as used, survey_id, 1 as paid
+    			  FROM survey_answers sa
+    			  WHERE center_id = #{center_id.to_i} AND done = 1 
+    		 	  AND (created_at >= '2000-01-01 00:00:00' AND created_at < '#{last_pay_date}')
+				  GROUP BY survey_id 
+				"
+		query << " UNION
+		  		  SELECT COUNT(*) as used, survey_id, 0 as paid
+		  		  FROM survey_answers sa
+		  		  WHERE center_id = #{center_id.to_i} AND done = 1 
+		  		  AND (created_at >=  '#{last_pay_date}' AND created_at < Now())
+		  		  GROUP BY survey_id"
+
+		paid = 0
+		unpaid = 0
+		
+		count = ActiveRecord::Base.connection.execute(query.join).each(:as => :hash).inject({}) do |col,j| 
+			key = j['survey_id']
+			if j['paid'] == 1
+				puts "j: #{j.inspect}"
+				paid += j['used']
+				col[:paid] ||= {}
+				col[:paid][key] = { 
+	      			:used => j['used'],
+    	  			:paid => j['paid'],
+	      			:survey_id => j['survey_id']
+				}	
+			else
+				unpaid += j['used']
+				col[:unpaid] ||= {}
+				col[:unpaid][key] = { 
+	      			:used => j['used'],
+    	  			:paid => j['paid'],
+ 	     			:survey_id => j['survey_id']
+				}
+			end
+   			col
+      	end
+
+      	total = paid + unpaid
+      	count[:total_paid] = paid
+      	count[:total_unpaid] = unpaid
+      	count[:total] = total
+      	puts "details_usage count: #{count.inspect}"
+      	count
+    end
 end
+
 
 class PeriodCount
  	attr_accessor :center_id, :start, :stop, :total_used, :per_survey

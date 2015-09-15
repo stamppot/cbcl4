@@ -10,7 +10,6 @@
 		<br/>
 	<div class="summary_view" id="summary_view_<%= group_id %>">
 		<% if group.subscriptions.length > 0 %>
-			<%= puts "-- #{subscription_presenter.summary_view.inspect}" %>
 			<%= render :partial => "shared/subscription_summary", :locals => { :summary_view => subscription_presenter.summary_view } %>
 		<% else %>
 			<h4><%= t('subscription.none') %></h4>
@@ -23,7 +22,7 @@
 	</div>
 	<br/>
 	<% if current_user.access?(:subscription_new_edit) || (@options && !@options[:hide_buttons] || false) %>
-			<%= link_button t('subscription.change_subscription'), new_subscription_in_group_path(group), 'subscription_edit', :title => 'Forandr abonnementer' %>
+		<%= link_button t('subscription.change_subscription'), new_subscription_in_group_path(group), 'subscription_edit', :title => 'Forandr abonnementer' %>
 	<% end %>
 	</div>
 </div>
