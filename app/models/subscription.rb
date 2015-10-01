@@ -63,10 +63,13 @@ class Subscription < ActiveRecord::Base
   end
 
   def find_active_period
-    active_period = self.periods.active.first
+    active_period = self.periods.active.last
     if active_period.nil?
-      new_copy = self.periods.create({:active => true, :used => 0})
-      active_period = self.periods.last
+      new_copy = self.periods.new({:active => true, :used => 0})
+      new_copy.center_id = self.center_id # not accessible
+      new_copy.survey_id = self.survey_id
+      new_copy.save
+      active_period = new_copy
     end
     active_period
   end
@@ -120,7 +123,10 @@ class Subscription < ActiveRecord::Base
   def new_period!
     active_period = find_active_period
     active_period.pay!
-    self.periods.create(:active => true, :subscription => self, :used => 0)
+    new_period = self.periods.new(:active => true, :subscription => self, :used => 0)
+    new_period.survey_id = self.survey_id
+    new_period.center_id = self.center_id
+    new_period.save
   end
 
   # use when merging periods with no used surveys
@@ -157,19 +163,19 @@ class Subscription < ActiveRecord::Base
 	end
 	
 	# TODO: fix
-  def undo_pay!
-    active_period = self.periods.active.last # find_active_period
-    if active_period
-      used = active_period.used
-      if last_paid_period = self.periods.paid.last
-        last_paid_period.used += used
-        last_paid_period.undo_pay!
-        self.most_recent_payment = last_paid_period.paid_on
-        active_period.destroy
-				active_period = nil
-      end
-    end
-  end
+  # def undo_pay!
+  #   active_period = self.periods.active.last # find_active_period
+  #   if active_period
+  #     used = active_period.used
+  #     if last_paid_period = self.periods.paid.last
+  #       last_paid_period.used += used
+  #       last_paid_period.undo_pay!
+  #       self.most_recent_payment = last_paid_period.paid_on
+  #       active_period.destroy
+		# 		active_period = nil
+  #     end
+  #   end
+  # end
   
   def summary(options = {})
     results = case options[:show]
@@ -184,7 +190,12 @@ class Subscription < ActiveRecord::Base
   def begin_new_period!
 		p = self.periods.last
 		p.active = false
-    self.periods.create(:active => true, :subscription => self, :used => 0) if p.save
+    if p.save
+      new_period = self.periods.new(:active => true, :subscription => self, :used => 0)
+      new_period.center_id = self.center_id
+      new_period.survey_id = self.survey_id
+      new_period.save
+    end
   end
 
     # This method returns a hash which contains a mapping of user states 

@@ -17,25 +17,55 @@ class SubscriptionsController < ApplicationController
     end 
     
     @active = current_user.center || current_user.centers.last
-
     @centers = @centers.sort_by {|c| c.title }
     # @subscription_presenters = @centers.map { |center| center.subscription_presenter(@surveys) }
-
     # @subscription_counts_per_center = @centers.inject({}) {|hash, center| hash[center.id] = Subscription.subscriptions_count(center); hash }
     # @subscription_summaries_per_center = @centers.inject({}) {|hash, center| hash[center.id] = center.subscription_summary(params); hash }
   end
 
-  def show
-    @page_title = "CBCL - Abonnementer på spørgeskemaer"
-    @options = params  # for show options
-    @group = Center.find(params[:id])
-    # @subscription_count = @subscription.subscriptions_count
-    @subscription_presenter = @group.subscription_presenter(@group.surveys)
-    @subscription_summary = @group.subscription_service.subscription_summary(params) # @group.subscription_summary(params)
-    puts "subs presenter: #{@subscription_presenter.inspect}"
-    puts "subs summary: #{@subscription_summary.inspect}"
-    # @surveys = []
+  def all
+    @centers = 
+    if current_user.has_access? :subscription_show_all
+      Center.all.to_a
+    elsif current_user.has_access? :subscription_show
+      current_user.centers
+    end 
+
+    @subscription_presenters = @centers.map &:subscription_presenter
+    @surveys = current_user.surveys.group_by {|s| s.id}
+
+    # render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
+
+    @centers = @centers.sort_by {|c| c.title }
+    # @subscription_presenters = @centers.map { |center| center.subscription_presenter(@surveys) }
+
+    @subscription_counts_per_center = @centers.inject({}) {|hash, center| hash[center.id] = Subscription.subscriptions_count(center); hash }
+    @subscription_summaries_per_center = @centers.inject({}) do |hash, center| 
+      sub_service = SubscriptionService.new(center)
+      hash[center.id] = sub_service.subscription_summary(params); hash 
+    end    
   end
+
+  
+  def center
+    group = Center.find params[:id]
+    subscription_presenter = group.subscription_presenter
+    @subscriptions = group.subscriptions(:include => :periods)
+    @surveys = current_user.surveys.group_by {|s| s.id}
+
+    render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
+  end
+  # def show
+  #   @page_title = "CBCL - Abonnementer på spørgeskemaer"
+  #   @options = params  # for show options
+  #   @group = Center.find(params[:id])
+  #   # @subscription_count = @subscription.subscriptions_count
+  #   @subscription_presenter = @group.subscription_presenter(@group.surveys)
+  #   @subscription_summary = @group.subscription_service.subscription_summary(params) # @group.subscription_summary(params)
+  #   puts "subs presenter: #{@subscription_presenter.inspect}"
+  #   puts "subs summary: #{@subscription_summary.inspect}"
+  #   # @surveys = []
+  # end
 
   def new
     @group = Group.find(params[:id])
@@ -128,15 +158,6 @@ class SubscriptionsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'Dette abonnement kunne ikke findes.'
     redirect_to subscriptions_path
-  end
-  
-  def center
-    group = Center.find params[:id]
-    subscription_presenter = group.subscription_presenter
-    @subscriptions = group.subscriptions(:include => :periods)
-    @surveys = current_user.surveys.group_by {|s| s.id}
-
-    render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
   end
     
   protected

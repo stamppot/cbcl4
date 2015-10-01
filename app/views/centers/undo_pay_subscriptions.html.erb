@@ -3,7 +3,7 @@
 	Start på den nuværende periode fortrydes, og den foregående periode bliver genaktiveret.
 	Brugte skemaer i den nuværende periode vil blive tilføjet tælleren for den foregående periode.
 </p>
-<p><%= render :partial => "subscriptions/subscriptions" %></p>
+<p><%= render :partial => "subscriptions/subscriptions", locals: {:subscription_presenter => @subscription_presenter, :summary_view => @subscription_presenter.summary_view, :hide_buttons => true } %></p>
 <p>
 Er du sikker på at du vil fortryde betaling af abonnementer?
 <p>

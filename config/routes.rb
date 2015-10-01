@@ -54,6 +54,8 @@ Cbcl4::Application.routes.draw do
   #     resources :products
   #   end
 
+  get 'subscriptions/all', :to => 'subscriptions#all', :as => 'subscriptions_all'
+
    get '/score_scales/order', :to => 'score_scales#order', :as => 'order'
 
   get 'users/list', :to => 'users#list', :as => 'user_list'
@@ -140,8 +142,8 @@ Cbcl4::Application.routes.draw do
   get 'users/new/(/:id)', :to => 'users#new', :as => 'new_user'
   # get 'users/(/:page)?partial=true', :to => 'users#indexjs', :as => 'users_indexjs'
 
-  get 'centers/pay_subscriptions/(/:id)', :to => 'centers#pay_subscriptions', :as => 'pay_subscriptions'
-  get 'centers/undo_pay_subscriptions/(/:id)', :to => 'centers#undo_pay_subscriptions', :as => 'undo_pay_subscriptions'
+  match 'centers/pay_subscriptions/(/:id)', :to => 'centers#pay_subscriptions', :as => 'pay_subscriptions', :via => [:get, :post]
+  match 'centers/undo_pay_subscriptions/(/:id)', :to => 'centers#undo_pay_subscriptions', :as => 'undo_pay_subscriptions', :via => [:get, :post]
   get 'centers/pay_periods/(/:id)', :controller => 'centers',                       :action => 'pay_periods'
   get 'centers/merge_periods/(/:id)', :controller => 'centers',                   :action => 'merge_periods'
   
@@ -283,6 +285,11 @@ Cbcl4::Application.routes.draw do
 
   get '/export_logins/:action/:id.:format', :to => 'export_logins#download'
   # get '/reminders/:action/:id.:format', :to => 'reminders#download', :as => 'download'
+
+
+  post '/api_login/create/', :to => 'api_login#create'
+
+
 
   get 'main', :to => 'main#index', :as => 'main'
   root :to => 'login#index'

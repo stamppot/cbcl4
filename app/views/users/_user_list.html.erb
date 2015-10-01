@@ -19,7 +19,7 @@
 				<% @userlist.users.each do |user| %>
 				<tr>
 					<td><%= link_to user.name, user_path(user), :title => t('user.show') %></td>
-					<% roles = @userlist.roles[user.id] %>
+					<% roles = @userlist.roles &&  @userlist.roles[user.id] || [] %>
 					<td><%= roles.any? && t("roles.#{roles.first}").capitalize || " " -%></td>
 
 					<% groups = @userlist.groups[user.id] %>

@@ -39,7 +39,11 @@ class SubscriptionService
   
   # set active periods to paid. Create new periods  
   def pay_active_subscriptions!
-    result = @center.subscriptions.map { |sub| sub.pay! }
+    result = false
+    Subscription.transaction do
+      result = @center.subscriptions.map { |sub| sub.pay! }
+    end
+    result
   end
   
   def undo_pay_subscriptions!

@@ -3,7 +3,7 @@
 
 <h2>Ret besvarelsesdato</h2>
 
-Den oprindelige besvarelsesdato er: <%= @journal_entry.created_at.strftime("%-d-%m-%-y") %>.
+Den oprindelige oprettelsesdato er: <%= @journal_entry.created_at.strftime("%-d-%m-%-y") %>.
 
 <%= form_tag :action => 'update_date', :id => @journal_entry do %>
 	<p>

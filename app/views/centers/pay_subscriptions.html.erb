@@ -2,7 +2,8 @@
 <p>
 	Dette vil nulstille den aktive tæller. 
 </p>
-<p><%= render partial: "shared/subscription_summary", locals: {subscription_presenter => @subscription_presenter %></p>
+
+<p><%= render partial: "shared/subscription_summary", locals: {:subscription_presenter => @subscription_presenter, :summary_view => @subscription_presenter.summary_view } %></p>
 <p>
 Er du sikker på at abonnementer er betalt?
 

@@ -34,7 +34,11 @@ class Score < ActiveRecord::Base
     score_ref = self.score_refs.detect do |score_ref|
       score_ref.age_range === age && score_ref.gender == sex
     end
-    return false if score_ref.nil?
+    if score_ref.nil?
+      puts "age: #{age}  sex: #{sex}"
+      puts "#{self.score_refs.inspect}"
+      return false 
+    end
     return score_ref
   end
   

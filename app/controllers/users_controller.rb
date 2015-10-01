@@ -52,7 +52,11 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       @group = Group.find(params[:id])
       @user.groups += @groups
     else
-      @groups = current_user.center_and_teams
+      @groups = if current_user.has_role?(:centeradmin)
+	Group.where(:center_id => current_user.center_id)
+	else	
+ 	  current_user.center_and_teams
+	end
     end
   end
 
@@ -96,7 +100,11 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def edit
     @user = User.find params[:id]
     @roles = current_user.pass_on_roles
-    @groups = @user.groups + current_user.center_and_teams
+    @groups = if current_user.has_role?(:centeradmin)
+	Group.where(:center_id => current_user.center_id)
+	else
+	  @user.groups + current_user.center_and_teams
+	end
     @user.password = ""
   end
 
@@ -169,6 +177,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def center
     @group = Center.find params[:id]
     @userlist = UserList.new(@group, {:page => params[:page], :per_page => 100})
+    #@userlist.roles = current_user.pass_on_roles.group_by {|r| || []
     render :partial => 'user_list', locals: {group: @group, user_list: @userlist}, :layout => false
   end
 
