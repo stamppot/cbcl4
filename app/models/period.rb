@@ -10,6 +10,9 @@ class Period < ActiveRecord::Base
 
   attr_accessor :state
 
+  def after_initialize
+    self.start ||= Date.now if new_record?
+  end
 
   # def survey
   #   self.survey_id && Survey.find(self.survey_id) || nil

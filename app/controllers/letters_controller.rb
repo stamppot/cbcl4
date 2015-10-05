@@ -130,7 +130,7 @@ class LettersController < ApplicationController
     # find letter for team, center, system
 		entry_letters = []
 		entry_letters = entries.map do |entry|
-      letter = Letter.find_by_priority(entry)
+      letter = Letter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
 			[entry, letter]
 		end
 		@letters = entry_letters.map do |pair|

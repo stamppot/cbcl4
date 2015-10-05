@@ -64,13 +64,14 @@ class Subscription < ActiveRecord::Base
 
   def find_active_period
     active_period = self.periods.active.last
-    if active_period.nil?
-      new_copy = self.periods.new({:active => true, :used => 0})
-      new_copy.center_id = self.center_id # not accessible
-      new_copy.survey_id = self.survey_id
-      new_copy.save
-      active_period = new_copy
-    end
+#    if active_period.nil?
+#      new_copy = self.periods.new({:active => true, :used => 0})
+#      new_copy.center_id = self.center_id # not accessible
+#      new_copy.survey_id = self.survey_id
+#      new_copy.start = DateTime.now
+#      new_copy.save
+#      active_period = new_copy
+#    end
     active_period
   end
   
