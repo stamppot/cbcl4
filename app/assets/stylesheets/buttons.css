@@ -293,6 +293,10 @@ input.survey_remove {
 	background:url('/images/table_delete.png') no-repeat 10px 5px;
 }
 
+input.letters_print {
+	background:url('/assets/letter.png') no-repeat 10px 5px;
+}
+
 input.score_calculate {
 	background:url('/images/table.png') no-repeat 10px 5px;
 }
