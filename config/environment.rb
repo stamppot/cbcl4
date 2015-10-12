@@ -6,6 +6,7 @@ require File.expand_path('../application', __FILE__)
   # end << "#{RAILS_ROOT}/app/sweepers"
 
 Rails.application.config.filter_parameters += [:password, :password_confirmation]
+Rails.application.config.action_dispatch.cookies_serializer = :hybrid
 
 # Initialize the Rails application.
 Cbcl4::Application.initialize!
