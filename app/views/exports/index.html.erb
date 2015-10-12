@@ -14,6 +14,12 @@
 
  $(document).ready(function () {
  	select_center($('#center_selector').val());
+ 	var center = "<%= @center.id %>";
+ 	if(center > 0) {
+	 	var action = $('#export_form').attr('action')
+	 	$('#export_form').attr('action', action.replace('undefined', center));
+ 	}
+ 	// alert($('#export_form').attr('action'));
  });
  </script>
 
@@ -23,7 +29,7 @@
 </p>
 <br/>
 
-<%= form_tag(csv_download_path, :id => 'export_form') do %>
+<%= form_tag(csv_download_path(@center.id), :id => 'export_form') do %>
 
 <div id="export_type">
 	<input checked="checked" id="export_raw" name="export" onchange="toggle_export(this.value);" type="radio" value="raw">

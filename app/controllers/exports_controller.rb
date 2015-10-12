@@ -2,7 +2,7 @@ class ExportsController < ApplicationController
   
   def index
     @center = current_user.center || current_user.centers.first #unless current_user.access? :admin
-    @center = Center.find(params[:id]) if params[:id]
+    @center ||= Center.find(params[:id]) if params[:id]
     
     puts "center: #{@center.inspect}"
     args = params
