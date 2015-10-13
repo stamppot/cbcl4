@@ -210,7 +210,9 @@ class Journal < ActiveRecord::Base #< Group
   def Journal.sexes
     {
       'dreng' => 1,
-      'pige' => 2
+      'pige' => 2,
+      'm' => 1,
+      'f' => 2
     }
   end
 
@@ -221,7 +223,7 @@ class Journal < ActiveRecord::Base #< Group
   # sets the next journal code based on its center or current_user
   def next_journal_code(user)
     center = self.center && self.center || user.center
-    return user.centers.map {|c| c.next_journal_code}.max if user.centers.size > 1
+    return user.centers.map {|c| c.next_journal_code}.max if user && user.centers.size > 1
     center.next_journal_code
   end
   
@@ -241,7 +243,7 @@ class Journal < ActiveRecord::Base #< Group
   end
   
   # creates entries with logins
-  def create_journal_entries(surveys, follow_up = 0)
+  def create_journal_entries(surveys, follow_up = 0, save = true)
     return true if surveys.empty?
     surveys.map do |survey|
       entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up})
@@ -253,7 +255,7 @@ class Journal < ActiveRecord::Base #< Group
       unless login_user.valid?
         puts "login_user errors: #{login_user.errors.inspect}"
       end
-      entry.login_user.save && entry.save
+      entry.login_user.save && entry.save if save
       entry
       # if entry.valid?
       #   entry.print_login!

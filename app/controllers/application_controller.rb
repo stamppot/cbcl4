@@ -167,9 +167,9 @@ class ApplicationController < ActionController::Base
   def check_access
     return true if params[:controller] =~ /newrelic|login|heartbeat|awstats/
 
-    if params[:controller] =~ "api_login"
-      logger.info "APILOGIN: #{params.inspect}"
-    end
+    #if params[:controller] =~ "api_login"
+    #  logger.info "APILOGIN: #{params.inspect}"
+    #end
     # check controller
     if !params[:id].blank? && params[:controller] =~ /score|faq/
       if current_user && (current_user.access?(:all_users) || current_user.access?(:login_user))
