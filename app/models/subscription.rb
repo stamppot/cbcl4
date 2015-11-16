@@ -123,10 +123,11 @@ class Subscription < ActiveRecord::Base
   
   def new_period!
     active_period = find_active_period
-    active_period.pay!
+    active_period.pay! if active_period
     new_period = self.periods.new(:active => true, :subscription => self, :used => 0)
     new_period.survey_id = self.survey_id
     new_period.center_id = self.center_id
+    new_period.start = DateTime.now
     new_period.save
   end
 

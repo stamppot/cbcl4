@@ -38,7 +38,7 @@ class ScoreExportsController < ApplicationController
     # center = current_user.center if current_user.centers.size == 1
     
     # params[:team] = params[:team].delete :team if params[:team] && params[:team][:team]
-    params[:center] = params[:center].first
+    params[:center] = params[:center].is_a?(Array) && params[:center].first || params[:center]
     center = Center.find params[:center] unless params[:center].blank? || params[:id] == '0'
     center = current_user.center if current_user.centers.size == 1
     args = params.clone

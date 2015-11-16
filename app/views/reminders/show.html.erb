@@ -2,7 +2,7 @@
 
 	<h3>Status</h3>
 	<%= form_tag(csv_entry_status_download_path(@group.id, :format => 'csv') +".csv", :id => 'reminders', :class => 'form', :method => :post) do %>
-	<span>
+	<span id="filter_fields">
 		<%= link_button "Ubesvarede", answer_status_path(@group, [2,4].join("-")), "status_unanswered", :class => 'answer_state' %>&nbsp;&nbsp;
 		<%= link_button "Kladder", answer_status_path(@group, [4]), "button status_draft", :class => 'answer_state' %>&nbsp;&nbsp;
 		<%= link_button "Besvarede", answer_status_path(@group, [5,6].join("-")), "status_answered", :class => 'answer_state' %>&nbsp;&nbsp;
@@ -10,7 +10,19 @@
 		<%= link_button "Alle", answer_status_path(@group, [1,2,3,4,5,6].join("-")), "button status_all", :class => 'answer_state' %>&nbsp;&nbsp;
 		
 		<%# link_button "Rykket", answer_status_path(@group, [7]), "status_reminder", :class => 'answer_state' %>&nbsp;&nbsp;
-		<%# link_button "Afsluttet", answer_status_path(@group, [8]), "status_finished", :class => 'answer_state' %>&nbsp;&nbsp;
+		<%# link_button "Afsluttet", answer_status_path(@group, [8]), "status_finished", :class => 'answer_state' %>
+
+		<select id="follow_up" name="follow_up">
+			<%= options_for_select [["Alle", -1]] + FollowUp.get %>
+		</select>
+
+		&nbsp;&nbsp;
+
+		<a class="button filter_entries" href="/reminders/show/<%= @group.id %>"><span class="button filter">Filtrer</span></a>
+		&nbsp;&nbsp;
+		
+
+		<br/>
 		<br/>
 
 		<input type="hidden" name="selected_state" class="selected_state" value="<%= @answer_state %>" />
@@ -41,6 +53,7 @@
 	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (@stop_date.year), :end_year => @start_date.year ) %>
 	<br>
 
+
 	<span style="padding: 3px;" id='send_form' class="btn-submit">
 		<span id='filter'>
 			<%# link_button_to_remote("Filtrer", 'filter', :submit => "filter_fields", :method => 'get', :url => {:action => :show, :id => @group}) %>
@@ -61,15 +74,16 @@
 	<% @hide_team = true %>
 	<div id="journal_entries">
 		<% if !@is_answered %>
-		<a class="button status_all" href="javascript:void(0);" onclick="update_reminder_status(<%= @group.id %>)" >
-		<span class="">Marker som </span></a>
-		<select id="reminder_status" name="reminder_status">
-			<option value="Passiv">Passive</option>
-			<option value="">Aktive</option>
-<!-- 			<option value="Afsluttet">Afsluttet</option> -->
-		</select>
+			<a class="button status_all" href="javascript:void(0);" onclick="update_reminder_status(<%= @group.id %>)" >
+			<span class="">Marker som </span></a>
+			<select id="reminder_status" name="reminder_status">
+				<option value="Passiv">Passive</option>
+				<option value="">Aktive</option>
+			</select>
 		<% end %>
-		<%= render :partial => 'entries', :locals => {:hide_team => true} %>
+		<div id="entries">
+			<%= render :partial => 'entries', :locals => {:hide_team => true, :surveys => @surveys} %>
+		</div>
 	</div>
 	<%# render :partial => 'shared/ajax_pagination' %>
 	<% end %>
@@ -115,7 +129,34 @@ $(document).ready(function() {
 			$(this).prop('checked', isChecked);
 		});
 	});
+
+	$("a.filter_entries").click(function(ev) {
+		alert('filter function');
+		var state = $('input[name="selected_state"]').val();
+		var follow_up = $('#follow_up').val();
+		var url = "/reminders/<%= @group.id %>/" + state + "/" + follow_up;
+		console.log("url: " + url);
+		var data = $("#reminders").serialize();
+		console.log(data);
+		$.ajax({
+			url: url,
+			data: data,
+			dataType: 'json',
+			method: 'get',
+			success: function(result) {
+				// console.log(result);
+				// alert("!! " + result);
+				$("#entries").innerHTML = result;
+				// $("#journal_entries").highlight();
+			}
+		});
+
+		// ev.stopPropagation();
+		return false;
+	});
+
 });
+
 
 function generate_file(id) {
 	var state = $("input[name='selected_state']").val();

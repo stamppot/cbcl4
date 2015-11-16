@@ -1,10 +1,12 @@
 <script type="text/javascript">
+ 	var center = "<%= @center.id %>";
+
  function toggle_export(value) {
  	if(value == "rapport")
  		changeAction('export_form', "/score_exports/download");
 	else
 		changeAction('export_form', "/exports/download");
-	select_center($('#center_selector').val());
+	select_center($('#center_selector').val() || center);
  }
 
   function select_center(id) {
@@ -13,8 +15,7 @@
  }
 
  $(document).ready(function () {
- 	select_center($('#center_selector').val());
- 	var center = "<%= @center.id %>";
+ 	select_center($('#center_selector').val() || center);
  	if(center > 0) {
 	 	var action = $('#export_form').attr('action')
 	 	$('#export_form').attr('action', action.replace('undefined', center));

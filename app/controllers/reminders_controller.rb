@@ -4,6 +4,8 @@ class RemindersController < ApplicationController
   
   def show
     @group = Group.find params[:id]
+    
+    puts "ParaMS: #{params.inspect}"
     # @state = params[:state] || 2
     # @start_date = @group.created_at
     # @stop_date = DateTime.now
@@ -13,6 +15,8 @@ class RemindersController < ApplicationController
     # puts "#{params[:state]}"
     set_params_and_find(params)
     
+    puts "params:: #{params.inspect}"
+    @answer_state = params[:state].join('-') ||  "2-4"
     @surveys = Survey.all.to_a.inject({}) { |h,elem| h[elem.id] = elem; h }.invert
     @states = {'Alle' => 0, 'Ubesvaret' => 2, 'Besvaret' => "5,6", 'Kladde' => 4} #JournalEntry.states
     respond_to do |format|
@@ -20,6 +24,16 @@ class RemindersController < ApplicationController
       format.js { render :partial => 'entries' }
     end
   end
+
+  # def filter
+  #   @group = Group.find params[:id]
+  #   set_params_and_find(params)
+
+  #   respond_to do |format|
+  #     format.html
+  #     format.js { puts "JS!!!"; render :partial => 'entries'}
+  #   end
+  # end
   
   # update reminder status for multiple journal_entries
   def update
@@ -70,32 +84,6 @@ class RemindersController < ApplicationController
     end    
   end
 
-  # old, download csv
-  # def download
-  #   @group = Group.find(params[:id])
-  #   selected_state = params[:selected_state]
-  #   selected_state = [2,3,4,5,6] if selected_state == "0"
-
-  #   @state = selected_state.to_a
-  #   @start_date = @group.created_at
-  #   @stop_date = DateTime.now
-
-  #   @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-  #     between(@start_date, @stop_date).all(:order => 'created_at desc') unless @state.empty?
-  #   export_csv_helper = ExportCsvHelper.new
-  #   rows = export_csv_helper.get_entries_status(@journal_entries)
-  #   csv = export_csv_helper.to_csv(rows)
-  #   respond_to do |wants|
-  #     timestamp = Time.now.strftime('%Y%m%d%H%M')
-  #     filename = "journalstatus_#{@group.group_name_abbr.underscore}-#{timestamp}.csv" 
-  #     wants.html {
-  #       export_csv(csv, filename, 'text/csv;charset=utf-8; encoding=utf-8')
-  #     }
-  #     wants.csv {
-  #       export_csv(csv, filename, 'text/csv;charset=utf-8; encoding=utf-8')
-  #     }
-  #   end    
-  # end
 
   protected 
   
@@ -128,5 +116,9 @@ class RemindersController < ApplicationController
     @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
       between(@start_date, @stop_date).all(:order => 'journals.title asc', :include => :journal) unless @state.empty?
     @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
+  end
+
+  def check_access
+    return !!current_user
   end
 end

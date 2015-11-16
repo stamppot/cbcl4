@@ -127,6 +127,9 @@ class LettersController < ApplicationController
   def show_logins
     journal = Journal.find(params[:id])
     logger.info("params: #{params.inspect}")
+    if params[:letters].all? {|k,v| v.to_i == 0}
+	params[:letters] = params[:letters].inject({}) {|h,e| h[e.first] = 1; h }
+    end 
     selected = params[:letters].select {|k,v| v.to_i == 1 }.inject([]) { |col,v| col << v.first.to_i; col }
     logger.info("selected: #{selected.inspect}")
 		entries = journal.not_answered_entries.select {|e| selected.include?(e.id)}

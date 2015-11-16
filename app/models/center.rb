@@ -137,7 +137,7 @@ class Center < Group
     
   def next_journal_code(code = nil)
     highest_code = Journal.where(['center_id = ?', self.id]).maximum('code')
-    return code if highest_code == code
+    return code if !code.nil? && highest_code == code
     highest_code && highest_code.succ || 1 # Journal.find(highest_id).code.succ || 1
   end
 

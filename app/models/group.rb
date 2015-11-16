@@ -144,6 +144,10 @@ class Group < ActiveRecord::Base
   
   def group_name_abbr
     group_name = title.split.map {|w| w.first }.join.downcase.slice(0,4)
+    if group_name.size < 2
+      group_name = (group_name.scan /\p{Upper}/).join
+    end
+    group_name
   end
   
 def login_prefix

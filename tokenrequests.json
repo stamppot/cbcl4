@@ -1,0 +1,39 @@
+
+Request login-token for journal:
+{
+	"APIKey": "Yt+jRKoBOFe2hN4A+z6kSEYLSQQ6KtGypZFqw21VJyw=",
+	"Journal": "Pelle Sørensen",
+	"Skemaer":  ["TRF", "CBCL"]
+}
+
+Svar:
+{"Tokens":
+	{
+		"TRF": "+JpMcle+UhoA0yONpQIrRIKbP9JKLV3EHR2NHf3RhCp9QBxjhp0NXoa6B0B4xzApgCatp3O7ixDkewxAL4fpDQ==",
+		"CBCL": "CiMPhuI9EJksqANlVyYWSgxsEAA70KuugP0mw0eZ+iv00kpZ74i5vUVrltpwbKqMcVpTCmzahsTb0ITbl2u/pA=="
+	}
+}
+
+Forklaring: TRF-token er følgende besked i krypteret form:
+{
+	"TRF": {
+		"user": "t-5967",
+		"pass": "test1hund2"
+	} 
+}
+
+Ligeledes er CBCL-token følgende besked i krypteret form:
+{
+	"CBCL": {
+		"user": "t-5968",
+		"pass": "test2kat3"
+	} 
+}
+
+
+Når der logges ind sendes en besked til cbcl-sdu.dk/login-token:
+{
+	"APIKey": "Yt+jRKoBOFe2hN4A+z6kSEYLSQQ6KtGypZFqw21VJyw=",
+	"Token": "+JpMcle+UhoA0yONpQIrRIKbP9JKLV3EHR2NHf3RhCp9QBxjhp0NXoa6B0B4xzApgCatp3O7ixDkewxAL4fpDQ=="
+}
+

@@ -210,6 +210,8 @@ class SurveyAnswer < ActiveRecord::Base
     rapport = ScoreRapport.create(args) unless rapport
     rapport.update_attributes(args) if update && !rapport.new_record?
     
+    logger.info "Rapport gender: #{rapport.gender} #{self.journal.title}"
+
     scores = self.survey.scores
     scores.each do |score|
       score_result = ScoreResult.where('score_id = ? AND score_rapport_id = ?', score.id, rapport.id).first
