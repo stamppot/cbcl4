@@ -1,0 +1,8 @@
+<p><span class="h3"><%= t('subscription.list') %></span></p>
+
+<% @subscription_presenters.each do |subscription_presenter| %>
+        <h2><%= subscription_presenter.group.title %></h2>
+	<%= render :partial => 'subscriptions/subscriptions', :locals => {:subscription_presenter => subscription_presenter, :group => subscription_presenter.group, :hide_buttons => true } %>
+
+	<p/>
+<% end %>
