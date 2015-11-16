@@ -22,6 +22,7 @@ module Cbcl4
     config.assets.enabled = true
 
     config.i18n.default_locale = :'da-DK'
+    # config.i18n.default_locale = :'en'
     I18n.locale = config.i18n.locale = config.i18n.default_locale
 
     config.exceptions_app = self.routes

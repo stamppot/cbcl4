@@ -146,7 +146,8 @@ class Subscription < ActiveRecord::Base
   # pay active period
   def pay!
     active_period = find_active_period
-    self.most_recent_payment = Date.today.to_s(:db)
+    puts "PAY! #{self.inspect}"
+    self.most_recent_payment = Date.today #.to_s(:db)
     active_period.pay!
 		update_used_and_total_paid
 		self.save
@@ -193,6 +194,7 @@ class Subscription < ActiveRecord::Base
 		p.active = false
     if p.save
       new_period = self.periods.new(:active => true, :subscription => self, :used => 0)
+      new_period.start = DateTime.now
       new_period.center_id = self.center_id
       new_period.survey_id = self.survey_id
       new_period.save

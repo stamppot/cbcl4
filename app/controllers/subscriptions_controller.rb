@@ -23,6 +23,13 @@ class SubscriptionsController < ApplicationController
     # @subscription_summaries_per_center = @centers.inject({}) {|hash, center| hash[center.id] = center.subscription_summary(params); hash }
   end
 
+  def show
+    p = Period.find(params[:id])
+    sas = SurveyAnswer.where(:done => 1, :updated_at > p.start)
+    sas = sas.where(:updated_at < p.start) if p.paid_on
+    @surveys = Survey.all.to_hash
+  end
+
   def all
     @centers = 
     if current_user.has_access? :subscription_show_all
