@@ -1,6 +1,6 @@
 class JournalService
 
-	def create_journal(center, journal_params, surveys)
+	def create_journal(center, journal_params, surveys, save = true)
 		date = DateTime.parse(journal_params["birthdate"])
 		puts "birthdate: #{date.inspect}"
 		name = journal_params["name"]
@@ -15,7 +15,7 @@ class JournalService
 		journal.group_id = center.id
 
 		if journal.valid?
-	    	entries = journal.create_journal_entries(surveys, 0, true)
+	    	entries = journal.create_journal_entries(surveys, 0, save)
 	    	# journal.save && entries.map &:save
 	    	api_key = ApiKey.find_by_center_id(center.id)
 	    	logins = entries.inject({}) do |col,e|

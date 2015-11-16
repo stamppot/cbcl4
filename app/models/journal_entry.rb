@@ -73,6 +73,7 @@ class JournalEntry < ActiveRecord::Base
     self.survey_answer.journal_entry_id = self.id
     self.survey_answer.survey_id = self.survey.id
     self.survey_answer.follow_up = self.follow_up
+    self.survey_answer.sex = self.journal.sex
     self.survey_answer
   end
 

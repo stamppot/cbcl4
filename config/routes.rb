@@ -56,7 +56,7 @@ Cbcl4::Application.routes.draw do
 
   get 'subscriptions/all', :to => 'subscriptions#all', :as => 'subscriptions_all'
 
-   get '/score_scales/order', :to => 'score_scales#order', :as => 'order'
+  get '/score_scales/order', :to => 'score_scales#order', :as => 'order'
 
   get 'users/list', :to => 'users#list', :as => 'user_list'
   # get 'login', :to => 'login#login', :as => 'login'
@@ -214,8 +214,9 @@ Cbcl4::Application.routes.draw do
 
   # get 'reminders/download/(/:id)', :to => 'reminders#download', :as => 'download'
   match 'reminders/download/(:id).:format', :to => 'reminders#download', :as => 'csv_entry_status_download', :format => 'csv', :via => [:get, :post]
-  get 'reminders/show/(:id)/(:state)', :to => 'reminders#show', :as => 'answer_status'
-  match 'reminders/generate_file/(:id)/(:state)', :to => 'reminders#generate_file', :as => 'generate_file', :via => [:get, :post]
+  match 'reminders/show/(:id)/(:state)/(:followup)', :to => 'reminders#show', :as => 'answer_status', :via => [:get, :post]
+  # post 'reminders/filter/(:id)', :to => 'reminders#filter', :as => 'reminders_filter'
+  match 'reminders/generate_file/(:id)/(:state)/(:followup)', :to => 'reminders#generate_file', :as => 'generate_file', :via => [:get, :post]
   get 'export_files/show/(/:id)', :to => 'export_files#show', :as => 'export_login'
   get 'export_files/download/(/:id).:format', :to => 'export_files#download', :as => 'file_download', :format => 'csv'
   match 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv', :via => [:get, :post]
@@ -286,8 +287,12 @@ Cbcl4::Application.routes.draw do
   get '/export_logins/:action/:id.:format', :to => 'export_logins#download'
   # get '/reminders/:action/:id.:format', :to => 'reminders#download', :as => 'download'
 
-
+  get "*all" => "api_login#cors_preflight_check", :constraints => { :method => "OPTIONS" }
   post '/api_login/create/', :to => 'api_login#create'
+  post '/api_login/open/', :to => 'api_login#open'
+  post '/api_login/index/', :to => 'api_login#index'
+
+  # post '/api_login/show/', :to => 'api_login#show'
 
 
 
