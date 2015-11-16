@@ -1,6 +1,10 @@
 class StartController < ApplicationController
 
   def start
+    token = params[:token]
+    if token
+
+    end
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
@@ -55,7 +59,44 @@ class StartController < ApplicationController
   end
 
   def check_access
+    token = params[:token]
+
+    if token
+      key = params[:api_key]
+
+      api_key = ApiKey.find_by_api_key(key)
+      if api_key.nil?
+        logger.info "ApiKey not found: #{key}"
+        return false
+      end
+
+      puts "api_key: #{api_key.inspect}"
+      login = eval(api_key.unlock token)
+      puts "login: #{login.inspect}"
+      puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
+
+      login_user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
+      user = User.find_with_credentials(login["login"], login["password"])
+    
+      if login_user.nil?
+        logger.info "User not found" 
+        return false
+      end
+      puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
+      write_user_to_session(user)
+
+      entry = login_user.journal_entry
+      puts "entry: #{entry.inspect}"
+      session[:journal_entry] = entry.id
+      session[:journal_id] = entry.journal_id
+    end
+
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
     redirect_to login_path and return if @journal_entry.nil? 
   end
+
+  def write_user_to_session(user)
+    session[:rbac_user_id] = user.id
+  end
+
 end

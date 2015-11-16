@@ -5,6 +5,7 @@ class ApiLoginController < ApplicationController
 	# protect_from_forgery
  	before_filter :cors_preflight_check
  	after_filter :cors_set_access_control_headers
+
 # http://0.0.0.0:3000/api_login/create application/json
 # {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},"surveys":["CBCL_6-16", "TRF_6-16"]}
 	def create

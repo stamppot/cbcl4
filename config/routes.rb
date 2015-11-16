@@ -182,6 +182,7 @@ Cbcl4::Application.routes.draw do
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   get 'start', :to => 'start#start', :as => 'survey_start'
+  get 'start/(/:api_key)/(/:token)', :to => 'start#start', :as => 'api_survey_start'
   get 'continue', :to => 'start#continue', :as => 'survey_continue'
   get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
