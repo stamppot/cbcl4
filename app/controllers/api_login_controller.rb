@@ -18,33 +18,31 @@ class ApiLoginController < ApplicationController
 		api_key = ApiKey.find_by_api_key(key)
 		if api_key.nil?
 			render :text => "Not found" and return
-		else
-			# render :text => api_key.name and return
 		end
 
 		journal_params = param["journal"]
 
 		center = Center.find(api_key.center_id || 1) # TODO: fix
 
-		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
-		tokens = 
-		if !journal
-			survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
-			surveys = survey_params.map {|s| Survey.where(s).first}
-			service = JournalService.new
-			journal, tokens = service.create_journal(center, journal_params, surveys, false)
-			tokens
-		else
-			create_tokens(journal)
+		# journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
+		surveys = survey_params.map {|s| Survey.where(s).first}
+		service = JournalService.new
+		journal, tokens = service.create_journal(center, journal_params, surveys, true)
+		puts "new journal: #{journal.inspect}"
+		tokens
+
+		if !tokens.any?
+			puts "existing journal: #{journal.inspect}"
+			tokens = create_tokens(journal)
 		end
 
 		puts "tokens: #{tokens.inspect}"
-		encrypted_tokens = encrypt_tokens(api_key, tokens) # tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
+		encrypted_tokens = encrypt_tokens(api_key, tokens)
 
 		# TODO: Kristian vil gerne have et ID på journalen. Check hvad han mente (se papir)
-		puts "New journal: #{journal.inspect}"
 		puts "Tokens: #{tokens.inspect}  Encrypted tokens: #{encrypted_tokens.inspect}"
-		render :text => "#{journal.title}: #{journal.birthdate}   #{encrypted_tokens.inspect}"
+		render :text => encrypted_tokens # "#{journal.title}: #{journal.birthdate}   #{encrypted_tokens.inspect}"
 	end
 
 	def open # login og åbne skema
@@ -79,7 +77,7 @@ class ApiLoginController < ApplicationController
 
         login_user = current_user
         logger.info "open, current_user: #{login_user.inspect}"
-        render :text => survey_start_path
+        render :text => (survey_start_path + "/" + token + "/" + token)
 		# render :text => "#{entry.journal.name} #{entry.survey.short_name}"		
 	end
 

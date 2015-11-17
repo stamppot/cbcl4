@@ -16,11 +16,15 @@ class ApiKey < ActiveRecord::Base
 	end
 
 	def lock(data)
-		AESCrypt::encrypt(data, salt + self.salt)
+		# Base64.strict_encode64(
+		CGI::escape(
+			AESCrypt::encrypt(data, salt + self.salt)
+		)
+			# )
 	end
 
 	def unlock(data)
-		AESCrypt::decrypt(data, salt + self.salt)
+		AESCrypt::decrypt(CGI::unescape(data), salt + self.salt)
 	end
 
 
