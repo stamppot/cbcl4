@@ -1,10 +1,53 @@
 require 'json'
 
-class ApiLoginController < ApplicationController
+class ApiLoginController < ApiController
 
 	# protect_from_forgery
  	before_filter :cors_preflight_check
  	after_filter :cors_set_access_control_headers
+
+
+	def start
+		logger.info "api_login/start check_access: #{params.inspect}"
+    token = params[:token]
+
+  #   if token
+  #     key = params[:api_key]
+
+  #     api_key = ApiKey.find_by_api_key(key)
+  #     if api_key.nil?
+  #       logger.info "ApiKey not found: #{key}"
+  #       return false
+  #     end
+
+  #     puts "api_key: #{api_key.inspect}"
+  #     login = eval(api_key.unlock token)
+  #     puts "login: #{login.inspect}"
+  #     puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
+
+  #     login_user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
+  #     user = User.find_with_credentials(login["login"], login["password"])
+    
+  #     if login_user.nil?
+  #       logger.info "User not found" 
+  #       return false
+  #     end
+  #     puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
+  #     write_user_to_session(user)
+		# @current_user_cached = user
+		puts "current_user: #{current_user.inspect}"
+		login_user = LoginUser.find(current_user.id)
+    entry = login_user.journal_entry
+    puts "entry: #{entry.inspect}"
+    session[:journal_entry] = entry.id
+    session[:journal_id] = entry.journal_id
+    session[:api] = token
+    @journal_entry = JournalEntry.find_by_user_id(current_user.id)
+    redirect_to login_path and return if @journal_entry.nil?
+    puts "redirect to /start"
+    redirect_to survey_start_path
+  end
+
 
 # http://0.0.0.0:3000/api_login/create application/json
 # {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},"surveys":["CBCL_6-16", "TRF_6-16"]}
@@ -20,6 +63,8 @@ class ApiLoginController < ApplicationController
 			render :text => "Not found" and return
 		end
 
+		puts "current_user: #{current_user.inspect}"
+
 		journal_params = param["journal"]
 
 		center = Center.find(api_key.center_id || 1) # TODO: fix
@@ -29,7 +74,7 @@ class ApiLoginController < ApplicationController
 		surveys = survey_params.map {|s| Survey.where(s).first}
 		service = JournalService.new
 		journal, tokens = service.create_journal(center, journal_params, surveys, true)
-		puts "new journal: #{journal.inspect}"
+		puts "new journal: #{journal.inspect} tokens: #{tokens.inspect}"
 		tokens
 
 		if !tokens.any?
@@ -73,17 +118,12 @@ class ApiLoginController < ApplicationController
 		entry = login_user.journal_entry
 
 		session[:journal_entry] = entry.id
-        session[:journal_id] = entry.journal_id
+    session[:journal_id] = entry.journal_id
 
-        login_user = current_user
-        logger.info "open, current_user: #{login_user.inspect}"
-        render :text => (survey_start_path + "/" + token + "/" + token)
+    login_user = current_user
+    logger.info "open, current_user: #{login_user.inspect}"
+    render :text => (survey_start_path + "/" + token + "/" + token)
 		# render :text => "#{entry.journal.name} #{entry.survey.short_name}"		
-	end
-
-	
-	def start
-
 	end
 
 

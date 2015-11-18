@@ -3,7 +3,7 @@
 <p>
 	Du kan udskrive besvarelsen før du logger af.
 	<% if @can_update_answer %>
-	 		Vil du rette eller udskrive din besvarelse, kan du logge ind igen indtil <%= I18n::localize(@update_date, :format => "%A %e. %B") %>.
+	 		Vil du rette eller udskrive din besvarelse, kan du logge ind igen indtil <%= I18n::localize(@update_date, :format => "%A %e. %b") %>.
 	<% end %>
 </p>
 
@@ -21,5 +21,9 @@
 <p>Du kan nu logge af.<p/>
 <br>
 <span style="font-size: 14pt; ">
-	<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
+	<% if @token.blank? %>
+		<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
+	<% else %>
+		<a title="Log ud af systemet" href="https://trialpartner.dk/ECITIZEN/<%= @token %>" format="html" class="button"><span class="logout">Gå tilbage til Mind my Mind</span></a>
+	<% end %>
 </span>

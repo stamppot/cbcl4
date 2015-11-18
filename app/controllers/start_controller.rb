@@ -18,6 +18,9 @@ class StartController < ApplicationController
     logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
+    @token = session[:api]
+    session.delete "token"
+
     redirect_to survey_continue_path if @journal_entry.draft?
     redirect_to survey_finish_path(@journal_entry) and return if @journal_entry.answered?
     @survey = @journal_entry.survey
@@ -44,10 +47,14 @@ class StartController < ApplicationController
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
     session.delete "journal_entry"
+    session.delete "journal_id"
+    Rails.cache.delete("j_#{@journal_entry.id}")
+    @token = session[:api]
+    session.delete "token"
+    puts "token: #{@token}"
     survey_answer = @journal_entry.survey_answer
     @update_date = survey_answer && (survey_answer.created_at.end_of_day + 2.weeks) || Date.today
     @can_update_answer = @update_date >= Date.today
-    Rails.cache.delete("j_#{@journal_entry.id}")
   end
 
   def upgrade
@@ -59,6 +66,7 @@ class StartController < ApplicationController
   end
 
   def check_access
+  	logger.info "start check_access: #{params.inspect}"
     token = params[:token]
 
     if token
@@ -84,7 +92,8 @@ class StartController < ApplicationController
       end
       puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
       write_user_to_session(user)
-
+ 	@current_user_cached = user
+	current_user
       entry = login_user.journal_entry
       puts "entry: #{entry.inspect}"
       session[:journal_entry] = entry.id

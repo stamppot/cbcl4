@@ -46,7 +46,11 @@ Cbcl4::Application.routes.draw do
   #   end
   #   resources :posts, concerns: :toggleable
   #   resources :photos, concerns: :toggleable
-
+  # namespace :api do
+  #   namespace :v1 do
+  #     # resources
+  #   end
+  # end
   # Example resource route within a namespace:
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
@@ -182,9 +186,12 @@ Cbcl4::Application.routes.draw do
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   get 'start', :to => 'start#start', :as => 'survey_start'
-  get 'start/(/:api_key)/(/:token)', :to => 'start#start', :as => 'api_survey_start'
+  # get 'start/(/:api_key)/(/:token)', :to => 'start#start', :as => 'api_survey_start'
+  get 'api_login/start/(/:api_key)/(/:token)', :to => 'api_login#start', :as => 'api_survey_start'
+
   get 'continue', :to => 'start#continue', :as => 'survey_continue'
   get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
+  # get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
   get 'surveys/show_only/(/:id)', :to => 'surveys#show_only', :as => 'survey_show_only' # :id is entry
   # get 'surveys/show_only_fast/(/:id)', :to => 'surveys#show_only_fast', :as => 'survey_show_only_fast' # :id is entry

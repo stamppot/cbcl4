@@ -67,6 +67,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @alt_id_name = "Projektnr" # alt_id && alt_id.value || "Projektnr"
 		@answered_entries = @journal.answered_entries
 		@not_answered_entries = @journal.not_answered_entries
+    puts "Journal/show #{@journal.inspect} #{@journal.get_name}"
   end
 
   def new

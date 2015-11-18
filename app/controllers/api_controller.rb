@@ -1,31 +1,103 @@
+class ApiController < ActionController::Base
+
 # encoding: utf-8
 # require_dependency 'user'
 # require_dependency 'role'
 
-class CustomNotFoundError < RuntimeError; end
-class AccessDenied < StandardError; end
-
-class ApplicationController < ActionController::Base
   # include CacheableFlash
   # include ExceptionNotification::Notifiable
   layout 'cbcl'
 
   before_filter :configure_charsets
-  before_filter :set_permissions, :except => [:dynamic_data, :logout, :finish]
-  before_filter :check_logged_in, :except => [:login]
-  before_filter :check_access, :except => [:dynamic_data, :finish, :logout, :shadow_logout, :check_controller_access]
+  # before_filter :set_permissions, :except => [:dynamic_data, :logout, :finish]
+	before_filter :check_api_key
+  before_filter :url_token_login, :if => Proc.new {|c| request.get? } #, :except => [:login]
+  # before_filter :post_token_login, :if => Proc.new {|c| request.post? }
+  # before_filter :check_access, :except => [:dynamic_data, :finish, :logout, :shadow_logout, :check_controller_access]
   before_filter :center_title, :except => [:dynamic_data, :logout, :login]
   before_filter :cookies_required, :except => [:login, :logout, :upgrade]
 
-  def check_logged_in
-    puts "check_logged_in: #{params.inspect}"
-    is_api = (params[:controller] =~ /start/) && !params[:token].blank? 
-	  logger.info("is_api: #{is_api}  params: #{params.inspect}")
-    if !is_api && (!current_user && !params[:controller] =~ /login/)
-      store_location
-      redirect_to login_path
-    end
-  end
+
+
+	def check_api_key
+	 	key = 
+	 	if request.get?
+	 		puts "GET check_api_key"
+  		params[:api_key]
+	 	else
+ 			puts "POST check_api_key"
+  		param = ActiveSupport::JSON.decode(request.raw_post)
+  		param["api_key"]
+  	end
+  	
+		api_key = ApiKey.find_by_api_key(key)
+		
+		render :text => "Not found" and return if api_key.nil?
+		return true
+	end
+
+ 	def url_token_login  # check api_key and token
+ 		puts "GET url_token_login"
+		logger.info "GET api url token_login: #{params.inspect}"
+   	token = params[:token]
+
+   	return false if token.blank?
+   	  
+   	key = params[:api_key]
+
+   	api_key = ApiKey.find_by_api_key(key)
+   	if api_key.nil?
+   	  logger.info "ApiKey not found: #{key}"
+   	  return false
+   	end
+
+   	login = eval(api_key.unlock token)
+   	puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
+
+   	# user_exists = User.where(center_id: api_key.center_id, login: login["login"]).first
+   	user = User.find_with_credentials(login["login"], login["password"])
+   	
+   	if user.nil?
+   	  logger.info "User not found" 
+   	  render :text => "User not found" and return false
+   	  # return false
+   	end
+   	puts "(login)user: #{user.inspect}  user: #{user.inspect} #{user.nil?}"
+   	write_user_to_session(user)
+		@current_user_cached = user
+		current_user
+		return true
+	end
+
+
+ 	def post_token_login
+ 		puts "POST post_token_login"
+  	param = ActiveSupport::JSON.decode(request.raw_post)
+		puts "API POST param: #{param.class} #{param.inspect}"
+
+		key = param["api_key"]
+
+		puts "key: #{key}"
+		api_key = ApiKey.find_by_api_key(key)
+		if api_key.nil?
+			render :text => "Not found" and return
+		else
+			return true
+		end
+
+		token = params["token"]
+		login = eval(api_key.unlock token)
+		puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
+
+		user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
+		# user = User.find_with_credentials(login["login"], login["password"])
+		
+		if user.nil?
+			render :text => "User not found" and return
+		end
+		puts "user: #{user.inspect}  user: #{user.inspect} #{user.nil?}"
+		write_user_to_session(user)
+	end
 
   def set_permissions
     if current_user
@@ -240,24 +312,24 @@ class ApplicationController < ActionController::Base
 
 end
 
-JS_ESCAPE_MAP	=	{ '\\' => '\\\\', '</' => '<\/', "\r\n" => '\n', "\n" => '\n', "\r" => '\n', '"' => '\\"', "'" => "\\'" }
+# JS_ESCAPE_MAP	=	{ '\\' => '\\\\', '</' => '<\/', "\r\n" => '\n', "\n" => '\n', "\r" => '\n', '"' => '\\"', "'" => "\\'" }
 
-def escape_javascript(javascript)
-  # puts "escape_javascript: #{javascript.inspect}"
-  return javascript.gsub("\r\n", ' ') # .gsub("\r\n", '\n')
-    gsub('\n', '\t').
-    gsub("\r", '\t').
-    gsub("\n", '\t').
-    gsub('"', '\\"').
-    gsub("'", "\\'").
-    gsub('\\', '\\\\')
-  # if javascript
-  #   result = javascript.gsub(%r(\\|<\/|\r\n|\3342\2200\2250|[\n\r"'])) {|match| JS_ESCAPE_MAP[match] }
-  #   javascript.html_safe? ? result.html_safe : result
-  # else
-  #   ''
-  # end
-end
+# def escape_javascript(javascript)
+#   # puts "escape_javascript: #{javascript.inspect}"
+#   return javascript.gsub("\r\n", ' ') # .gsub("\r\n", '\n')
+#     gsub('\n', '\t').
+#     gsub("\r", '\t').
+#     gsub("\n", '\t').
+#     gsub('"', '\\"').
+#     gsub("'", "\\'").
+#     gsub('\\', '\\\\')
+#   # if javascript
+#   #   result = javascript.gsub(%r(\\|<\/|\r\n|\3342\2200\2250|[\n\r"'])) {|match| JS_ESCAPE_MAP[match] }
+#   #   javascript.html_safe? ? result.html_safe : result
+#   # else
+#   #   ''
+#   # end
+# end
 
 # class String
 #   def clean_quotes!
@@ -291,134 +363,3 @@ class Hash
   end
 end
 end
-
-#example: journals = entries.build_hash { |elem| [elem.journal_id, elem.survey_id] }
-# module Enumerable
-#   def foldr(o, m = nil)
-#     reverse.inject(m) {|m, i| m ? i.send(o, m) : i}
-#   end
-
-#   def foldl(o, m = nil)
-#     inject(m) {|m, i| m ? m.send(o, i) : i}
-#   end
-
-#   def build_hash
-#     is_hash = false
-#     inject({}) do |target, element|
-#       key, value = yield(element)
-#       is_hash = true if !is_hash && value.is_a?(Hash)
-#       if is_hash
-#         target[key] = {} unless target[key]
-#         target[key].merge! value
-#       else
-#         target[key] = [] unless target[key]
-#         target[key] << value
-#       end
-#       target
-#     end
-#   end
-
-#   def dups
-#     inject({}) {|h,v| h[v]=h[v].to_i+1; h}.reject{|k,v| v==1}.keys
-#   end
-
-#   # creates a hash with elem as key, result of block as value
-#   # def to_hash
-#   #   result = {}
-#   #   each do |elt|
-#   #     result[elt] = yield(elt)
-#   #   end
-#   #   result
-#   # end
-#   # creates a hash with result of block as key, elem as value
-#   def to_hash_with_key
-#     result = {}
-#     each do |elt|
-#       result[yield(elt)] = elt
-#     end
-#     result
-#   end
-
-#   def collect_if(condition)
-#     inject([]) do |target, element|
-#       value = yield(element)
-#       target << value if element.send(condition) #eval("element.#{condition}")
-#       target
-#     end
-#   end
-# end
-
-# # http://mspeight.blogspot.com/2007/06/better-groupby-ingroupsby-for.html
-# class Array
-
-#   def in_groups_by
-#     # Group elements into individual array's by the result of a block
-#     # Similar to the in_groups_of function.
-#     # NOTE: assumes array is already ordered/sorted by group !!
-#     curr=nil.class 
-#     result=[]
-#     each do |element|
-#       group=yield(element) # Get grouping value
-#       result << [] if curr != group # if not same, start a new array
-#       curr = group
-#       result[-1] << element
-#     end
-#     result
-#   end
-
-#   # fill 2-d array so all rows has equal number of items
-#   def fill_2d(obj = nil)
-#     # find longest
-#     longest = self.max { |a,b| a.length <=> b.length }.size
-#     self.each do |row|
-#       row[longest-1] = obj if row.size < longest  # fill with nulls
-#     end
-#     return self
-#   end
-
-#   def to_h
-#     Hash[*self]
-#   end
-
-#   def to_hash_flat
-#     is_hash = false
-#     inject({}) do |target, element|
-#       key, value = yield(element)
-#       target[key] = value
-#       target
-#     end
-#   end
-
-# end
-
-# class Float
-#   def to_danish
-#     ciphers = self.to_s.split(".")
-#     return ciphers[0] + "," + ciphers[1]
-#   end
-# end
-
-# class Fixnum
-#   def to_roman
-#     value = self
-#     str = ""
-#     (str << "C"; value = value - 100) while (value >= 100)
-#     (str << "XC"; value = value - 90) while (value >= 90)
-#     (str << "L"; value = value - 50) while (value >= 50)
-#     (str << "XL"; value = value - 40) while (value >= 40)
-#     (str << "X"; value = value - 10) while (value >= 10)
-#     (str << "IX"; value = value - 9) while (value >= 9)
-#     (str << "V"; value = value - 5) while (value >= 5)
-#     (str << "IV"; value = value - 4) while (value >= 4)
-#     (str << "I"; value = value - 1) while (value >= 1)
-#     str
-#   end
-# end
-
-# # def cache_fetch(key, options = {}, &block)
-# #   if Rails.env.production? 
-# #     Rails.cache.fetch key, options, &block
-# #   else
-# #     yield
-# #   end
-# # end

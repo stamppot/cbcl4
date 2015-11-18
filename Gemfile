@@ -73,7 +73,7 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'newrelic_rpm'
 
-gem 'aescrypt'
+# gem 'aescrypt'
 
 gem 'rack-cors', :require => 'rack/cors'
 

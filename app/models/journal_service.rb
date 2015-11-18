@@ -4,6 +4,7 @@ class JournalService
 		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
 
 		if !journal
+			puts "create_journal #{journal_params.inspect}"
 			date = DateTime.parse(journal_params["birthdate"])
 			puts "birthdate: #{date.inspect}"
 			name = journal_params["name"]
@@ -23,6 +24,7 @@ class JournalService
 			end
 
 		else # create surveys if not exist
+			puts "existing create_journal #{journal_params.inspect}"
 			surveys = surveys.select do |survey|
 				!journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
 			end
@@ -30,7 +32,7 @@ class JournalService
 
 		entries = journal.create_journal_entries(surveys, follow_up = 0, save)
 		logins = entries.inject({}) do |col,e|
-	    	col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
 	    
@@ -39,8 +41,18 @@ class JournalService
 
 	def get_cpr(date_str)
     	dato = date_str.split("-")
-    	dato[0] = dato[0][2..3]
-    	dato.reverse.join
+    	
+    	# puts "dato: #{dato.inspect}  [2].length #{dato[2].length}"
+    	if dato[2].length == 4
+    		year, month, day = *(dato.reverse)
+    	elsif dato.first.length == 4
+    		year, month, day = *dato
+    	else
+    		raise "Invalid date: #{date_str}"
+    	end
+
+    	# puts "day: #{day}, month: #{month}, year: #{year}"
+    	return "#{day}#{month}#{year.slice(2, 2)}"
 	end
 
 end

@@ -244,7 +244,7 @@ class Journal < ActiveRecord::Base #< Group
   
   # creates entries with logins
   def create_journal_entries(surveys, follow_up = 0, save = true)
-    return true if surveys.empty?
+    return [] if surveys.empty?
     surveys.map do |survey|
       entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up})
       entry.group_id = self.group_id || self.center_id

@@ -16,4 +16,10 @@ Du skal besvare nedenstående spørgeskema. Du begynder ved at trykke på start.
 <p>Du kan udskrive spørgeskemaet før du begynder din besvarelse. Tryk på print-knappen ovenfor.</p>
 
 <br>
-<%= link_button t('finish'), logout_path, 'logout', :format => 'html', :title => 'Log ud af systemet' %>
+
+
+<% if @token.blank? %>
+	<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
+<% else %>
+	<a title="Log ud af systemet" href="https://trialpartner.dk/ECITIZEN/<%= @token %>" format="html" class="button"><span class="logout">Gå tilbage til Mind my Mind</span></a>
+<% end %>
