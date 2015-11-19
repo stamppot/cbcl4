@@ -185,12 +185,12 @@ Cbcl4::Application.routes.draw do
   get '/centers/new_team/(/:id)', :to => 'centers#new_team', :as => 'new_team_in_center'
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
-  get 'start', :to => 'start#start', :as => 'survey_start'
-  # get 'start/(/:api_key)/(/:token)', :to => 'start#start', :as => 'api_survey_start'
   get 'api_login/start/(/:api_key)/(/:token)', :to => 'api_login#start', :as => 'api_survey_start'
+  get 'api_login/logout//:api_key/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
 
-  get 'continue', :to => 'start#continue', :as => 'survey_continue'
-  get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
+  get 'start/(:api_key)/(:token)', :to => 'start#start', :as => 'survey_start'
+  get 'continue/(:api_key)/(:token)', :to => 'start#continue', :as => 'survey_continue'
+  get 'finish/(/:id)/(:api_key)/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   # get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
   get 'surveys/show_only/(/:id)', :to => 'surveys#show_only', :as => 'survey_show_only' # :id is entry

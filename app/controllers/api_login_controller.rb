@@ -11,43 +11,38 @@ class ApiLoginController < ApiController
 		logger.info "api_login/start check_access: #{params.inspect}"
     token = params[:token]
 
-  #   if token
-  #     key = params[:api_key]
-
-  #     api_key = ApiKey.find_by_api_key(key)
-  #     if api_key.nil?
-  #       logger.info "ApiKey not found: #{key}"
-  #       return false
-  #     end
-
-  #     puts "api_key: #{api_key.inspect}"
-  #     login = eval(api_key.unlock token)
-  #     puts "login: #{login.inspect}"
-  #     puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
-
-  #     login_user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
-  #     user = User.find_with_credentials(login["login"], login["password"])
-    
-  #     if login_user.nil?
-  #       logger.info "User not found" 
-  #       return false
-  #     end
-  #     puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
-  #     write_user_to_session(user)
-		# @current_user_cached = user
 		puts "current_user: #{current_user.inspect}"
 		login_user = LoginUser.find(current_user.id)
-    entry = login_user.journal_entry
-    puts "entry: #{entry.inspect}"
-    session[:journal_entry] = entry.id
-    session[:journal_id] = entry.journal_id
-    session[:api] = token
-    @journal_entry = JournalEntry.find_by_user_id(current_user.id)
+    @journal_entry = login_user.journal_entry
+    puts "entry: #{@journal_entry.inspect}"
+    session[:journal_entry] = @journal_entry.id
+    session[:journal_id] = @journal_entry.journal_id
+    session[:api_key] = params[:api_key]
+    session[:token] = token
+    @center = login_user.center
     redirect_to login_path and return if @journal_entry.nil?
     puts "redirect to /start"
-    redirect_to survey_start_path
+    redirect_to survey_start_path(params[:api_key], token)
   end
 
+  def logout
+  	logger.info "find api_key: #{params[:api_key] || session[:api_key]}"
+  	api_key = ApiKey.find_by_api_key (params[:api_key] || session[:api_key])
+  	logger.info "Return to: #{api_key.return_to}"
+		goto = "#{api_key.return_to}#{params[:token]}" 
+		logger.info "goto: #{goto}"
+ 		redirect_to goto
+
+	 	ensure
+	 		session[:rbac_user_id] = nil
+    	# session.delete :journal_entry
+	    cookies.delete :journal_entry
+  	  cookies.delete :journal_id
+    	cookies.delete :user_name
+	 		session.clear
+ 			reset_session
+			logger.info "Ensure we're logged out"
+  end
 
 # http://0.0.0.0:3000/api_login/create application/json
 # {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},"surveys":["CBCL_6-16", "TRF_6-16"]}
@@ -122,7 +117,7 @@ class ApiLoginController < ApiController
 
     login_user = current_user
     logger.info "open, current_user: #{login_user.inspect}"
-    render :text => (survey_start_path + "/" + token + "/" + token)
+    render :text => ( "/api_login" + survey_start_path + "/" + key + "/" + token)
 		# render :text => "#{entry.journal.name} #{entry.survey.short_name}"		
 	end
 
