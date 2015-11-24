@@ -1,5 +1,5 @@
 <%# cache @journal.cache_key do  %>
-	<h2>Journal &quot;<%=h @journal.get_name %>&quot;</h2>
+	<h2>Journal &quot;<%=h @journal.title %>&quot;</h2>
 	<%# puts "journal: #{@journal.inspect}" %>
 	<%# cache "#{@journal.cache_key}_info" do %>
 		<%= render :partial => 'journal_info' %>
@@ -171,7 +171,7 @@
 			document.getElementById(formid).action = input;
 		}
 
-		var journal_name = '<%= @journal.get_name %>';
+		var journal_name = '<%= @journal.title %>';
 		function ask_delete_entry(entry_id, survey_title, journal) {
 			if(confirm("Vil du fjerne spørgeskemaet " + survey_title + "\n fra journalen " + journal + "?")) {
 				$.post('/journal_entries/remove/' + entry_id, function(response) {

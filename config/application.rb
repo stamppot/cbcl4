@@ -14,6 +14,12 @@ module Cbcl4
         origins '*'
         resource '/api_login/open', :headers => :any, :methods => [:get, :post, :options]
         resource '/api_login/*', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/start', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/login', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/start/*', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/login/*', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/answer_reports/show', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/answer_reports/*', :headers => :any, :methods => [:get, :post, :options]
       end
     end
 

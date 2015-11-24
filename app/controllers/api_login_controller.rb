@@ -118,7 +118,7 @@ class ApiLoginController < ApiController
     login_user = current_user
     logger.info "open, current_user: #{login_user.inspect}"
     render :text => ( "/api_login" + survey_start_path + "/" + key + "/" + token)
-		# render :text => "#{entry.journal.name} #{entry.survey.short_name}"		
+		# render :text => "#{entry.journal.title} #{entry.survey.short_name}"
 	end
 
 

@@ -5,7 +5,7 @@ class AnswerReportsController < ApplicationController
   def show
     if params[:answers].nil?
       journal_id = params[:journal_id].to_i
-      redirect_to journals(journal_id) and return 
+      redirect_to journals_path(journal_id) and return 
     end 
     score_report = ScoreReportPresenter.new.build(params[:answers], params[:journal_id])
     puts "score_report: #{score_report.inspect}"
@@ -24,8 +24,8 @@ class AnswerReportsController < ApplicationController
       puts "created_at: #{survey_answer.created_at}"
       @answer_texts << {:questions => questions, :survey => survey, :answer_date => survey_answer.created_at}
     end
-    
+
+    puts "answer_texts: #{@answer_texts.inspect}"    
     @page_title = "CBCL - Udvidet Svarrapport: " << @journal.title
-    # render 'show'
   end 
 end

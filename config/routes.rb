@@ -46,11 +46,11 @@ Cbcl4::Application.routes.draw do
   #   end
   #   resources :posts, concerns: :toggleable
   #   resources :photos, concerns: :toggleable
+ 
   # namespace :api do
-  #   namespace :v1 do
-  #     # resources
-  #   end
+  #   resources :answer_reports
   # end
+ 
   # Example resource route within a namespace:
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
@@ -185,7 +185,7 @@ Cbcl4::Application.routes.draw do
   get '/centers/new_team/(/:id)', :to => 'centers#new_team', :as => 'new_team_in_center'
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
-  get 'api_login/start/(/:api_key)/(/:token)', :to => 'api_login#start', :as => 'api_survey_start'
+  get 'api_login/start/(/:api_key)/(/:token)', :to => 'api_login#start', :as => 'api_login_survey_start'
   get 'api_login/logout//:api_key/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
 
   get 'start/(:api_key)/(:token)', :to => 'start#start', :as => 'survey_start'
@@ -283,6 +283,12 @@ Cbcl4::Application.routes.draw do
   
   # get 'survey_builder/destroy', :to => 'survey_builder#destroy', :as => 'destroy', :method => 'delete'
 
+
+  # scope path: "/api" do
+    get '/api/answer_reports/show/(/:api_key)/(/:token)', :to => 'api/answer_reports#show', :as => 'api_answer_report'
+  # end
+
+
   get '/register/confirm/:user/:token', :to => 'active_rbac/registration#confirm'
   # get '/register/:action/(/:id)', :controller => 'active_rbac/registration'
   # get '/registration/lostpassword', :controller => 'active_rbac/registration', :action => :lostpassword
@@ -300,6 +306,12 @@ Cbcl4::Application.routes.draw do
   post '/api_login/open/', :to => 'api_login#open'
   post '/api_login/index/', :to => 'api_login#index'
 
+  get '/api/login/:api_key/:token', :to => 'api/login#login', :as => "api_login"
+  get '/api/start/:api_key/:token', :to => 'api/start#start', :as => "api_survey_start"
+  # get '/api/start/start/:api_key/:token', :to => 'api/start#start', :as => "api_survey_start"
+  # post '/api_login/open/', :to => 'api_login#open'
+  # post '/api_login/index/', :to => 'api_login#index'
+
   # post '/api_login/show/', :to => 'api_login#show'
 
 
@@ -307,7 +319,7 @@ Cbcl4::Application.routes.draw do
   get 'main', :to => 'main#index', :as => 'main'
   root :to => 'login#index'
   get '', :to => 'login#index'
-  
+
   # hide '/active rbac/*'
   #get '/active_rbac/*foo', :controller => 'error'
   

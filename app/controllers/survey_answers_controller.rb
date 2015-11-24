@@ -153,12 +153,12 @@ class SurveyAnswersController < ApplicationController
     json[:journal_entry_id] = params[:id]
 
     if current_user && !current_user.login_user
-      json[:journal_info] = @journal.name
+      json[:journal_info] = @journal.title
       json[:journal_code] = @journal.qualified_id
-      json[:name] = @journal.name
+      json[:name] = @journal.title
       json[:birthdate] = @journal.birth_short 
     elsif current_user && current_user.login_user # login users
-      json[:journal_info] = @journal.name
+      json[:journal_info] = @journal.title
     end
 
     respond_to do |format|

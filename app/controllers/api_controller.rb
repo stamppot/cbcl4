@@ -18,7 +18,6 @@ class ApiController < ActionController::Base
   before_filter :cookies_required, :except => [:login, :logout, :upgrade]
 
 
-
 	def check_api_key
 	 	key = 
 	 	if request.get?
@@ -302,6 +301,12 @@ class ApiController < ActionController::Base
   end
 
   private
+
+  def write_user_to_session(user)
+    session[:rbac_user_id] = user.id
+  end
+
+
   def cache(key)
     unless output = CACHE.get(key)
       output = yield

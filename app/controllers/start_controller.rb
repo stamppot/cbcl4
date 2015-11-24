@@ -10,6 +10,7 @@ class StartController < ApplicationController
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
     # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
     @name = @journal_entry.journal.title
+    @center = @journal_entry.journal.center
     session[:journal_entry] ||= @journal_entry.id
     session[:journal_id] ||= @journal_entry.journal_id
     j = @journal_entry.journal
@@ -52,13 +53,13 @@ class StartController < ApplicationController
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
     @center = @journal_entry.journal.center
-    session.delete "journal_entry"
-    session.delete "journal_id"
+    # session.delete "journal_entry"
+    # session.delete "journal_id"
     Rails.cache.delete("j_#{@journal_entry.id}")
     @token = session[:token]
     @api_key = session[:api_key]
-    session.delete "token"
-    session.clear
+    # session.delete "token"
+    # session.clear
     cookies.delete :journal_entry
     cookies.delete :journal_id
     puts "token: #{@token}"

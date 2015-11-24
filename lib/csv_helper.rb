@@ -134,8 +134,8 @@ class CSVHelper
       end
 
       results["journal_#{journal.code}"] = { 
-        :name => journal.name,
-        :first_name => journal.name.split(" ").first,
+        :name => journal.title,
+        :first_name => journal.title.split(" ").first,
         :parent_email => journal.parent_email,
         :parent_name => journal.parent_name,
         :alt_id => journal.alt_id,
