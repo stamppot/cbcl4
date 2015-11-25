@@ -211,7 +211,7 @@ class SurveyAnswer < ActiveRecord::Base
     rapport.update_attributes(args) if update && !rapport.new_record?
     
     logger.info "Rapport gender: #{rapport.gender} #{self.journal.title}"
-
+    
     scores = self.survey.scores
     scores.each do |score|
       score_result = ScoreResult.where('score_id = ? AND score_rapport_id = ?', score.id, rapport.id).first
@@ -379,7 +379,7 @@ class SurveyAnswer < ActiveRecord::Base
       puts "CSA for survey_answer #{self.id} not found"
       return
     end
-    csa.journal_info = to_danish(journal.info.values.join(';;'))
+    csa.journal_info = to_danish(self.info.values.join(';;'))
     csa.save
     puts "fixed #{id}"
   end

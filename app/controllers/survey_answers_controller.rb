@@ -153,12 +153,12 @@ class SurveyAnswersController < ApplicationController
     json[:journal_entry_id] = params[:id]
 
     if current_user && !current_user.login_user
-      json[:journal_info] = @journal.title
+      json[:journal_info] = @journal.name
       json[:journal_code] = @journal.qualified_id
-      json[:name] = @journal.title
+      json[:name] = @journal.name
       json[:birthdate] = @journal.birth_short 
     elsif current_user && current_user.login_user # login users
-      json[:journal_info] = @journal.title
+      json[:journal_info] = @journal.name
     end
 
     respond_to do |format|
@@ -282,7 +282,16 @@ class SurveyAnswersController < ApplicationController
     else
       flash[:notice] = "Tak for dit svar!"
 			# puts "GOING TO FINISH PAGE: #{journal_entry.inspect}\n   current_user: #{current_user.inspect}"
-      redirect_to survey_finish_path(journal_entry) and return
+	
+      if session[:token] && session[:api_key]
+        token = session[:token]
+	api = ApiKey.find_by_api_key(session[:api_key])
+	return_to = "#{api.return_to}?#{api.api_key}/#{token}"
+        logger.info "Return to: #{return_to}"
+        redirect_to return_to and return
+      else
+        redirect_to survey_finish_path(journal_entry) and return
+      end
     end
   rescue RuntimeError
     flash[:error] = survey_answer.print

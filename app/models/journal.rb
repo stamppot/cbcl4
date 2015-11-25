@@ -288,7 +288,7 @@ class Journal < ActiveRecord::Base #< Group
     c["pkoen"] = self.sex
     c["palder"] = get_age(self.birthdate, self.created_at)  # alder på oprettelsesdato
     c["pnation"] = self.nationality
-    c["besvarelsesdato"] = self.created_at.strftime("%d-%m-%Y")
+    c["besvarelsesdato"] = "" # self.created_at.strftime("%d-%m-%Y")
     c["pfoedt"] = self.birthdate.strftime("%d-%m-%Y")  # TODO: translate month to danish
     c
   end

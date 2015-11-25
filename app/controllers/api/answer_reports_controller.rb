@@ -37,7 +37,7 @@ module Api
 	      @answer_texts << {:questions => questions, :survey => survey, :answer_date => survey_answer.created_at}
 	    end
 	    
-	    render :json => @answer_texts
+	    render :json => { :survey => score_report.titles.last, :data => score_report.groups } #  @answer_texts
 	    # @page_title = "CBCL - Udvidet Svarrapport: " << @journal.title
 	  end 
 	end
