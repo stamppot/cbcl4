@@ -40,15 +40,19 @@ class SurveyAnswer < ActiveRecord::Base
   end
 
   def age_when_answered
-     ( (self.created_at.to_datetime - self.journal.birthdate).to_i / 365.25).floor
+     ( (self.created_at.to_datetime - self.journal.birthdate).to_i / 365.25).floor if self.journal
   end
    
   def age_now
-    ( (DateTime.now - self.journal.birthdate).to_i / 365.25).floor
+    ( (DateTime.now - self.journal.birthdate).to_i / 365.25).floor if self.journal
   end
   
   def update_age!
     age = age_when_answered
+    if !age
+      logger.info "SurveyAnswer #{self.id} has no journal (deleted): #{self.inspect}"
+      return
+    end 
     csv_survey_answer.age = age
     csv_score_rapport.age = age
     self.save
@@ -93,9 +97,11 @@ class SurveyAnswer < ActiveRecord::Base
     end
       # survey_answer.add_missing_cells unless current_user.login_user # 11-01-10 not necessary with ratings_count
     # Spawnling.new(:method => :fork) do
-      score_rapport = self.generate_score_report(update = true) # generate score report
-      self.save_csv_survey_answer
-      score_rapport.save_csv_score_rapport
+    # puts "survey_answer: #{self.inspect}"
+    # puts "params[:id]: #{params["id"]}"
+    score_rapport = self.generate_score_report(update = true) # generate score report
+    score_rapport.save_csv_score_rapport
+    self.save_csv_survey_answer
       # self.create_csv_answer!
     # end
     self.save
@@ -133,7 +139,7 @@ class SurveyAnswer < ActiveRecord::Base
     c["pid"] = j.code #settings && eval("self.#{settings.value}") || j.code
     c["projekt"] = j.alt_id || ""
     c["pkoen"] = j.sex
-    c["palder"] = self.age_when_answered  # alder på besvarelsesdatoen
+    c["palder"] = self.age_when_answered if self.age_when_answered  # alder på besvarelsesdatoen
     c["pnation"] = j.nationality
     c["besvarelsesdato"] = self.created_at.strftime("%d-%m-%Y")
     c["pfoedt"] = j.birthdate.strftime("%d-%m-%Y")  # TODO: translate month to danish
@@ -153,16 +159,55 @@ class SurveyAnswer < ActiveRecord::Base
   end
 
   def max_answer
-    self.answers.max {|q,p| q.count_items <=> p.count_items }
+    max = self.answers.where(id: problem_item_answer_id).first
+  end
+
+  def problem_item_answer_id
+    query = "select a.id as answer_id from answers a
+      inner join question_cells qc on qc.question_id = a.question_id
+      where a.survey_answer_id = #{self.id} and qc.problem_item = 1
+      limit 1"
+    answer = ActiveRecord::Base.connection.execute(query).each(:as => :hash).first
+    if answer
+      answer["answer_id"]
+    else 
+      answer = self.answers.max {|q,p| q.count_items <=> p.count_items }  # last is for when answer is not created
+      answer && answer.id || 0
+    end
+  end
+
+  def no_answered_problem_items
+    # count values in largest answer
+    answer_id = self.problem_item_answer_id || 0 # answers.detect {|answer| answer.question_id == score_item.question_id }
+    query = "select count(distinct(ac.id)) as answered_problem_items from answer_cells ac
+      inner join answers a on a.id = ac.answer_id
+      inner join questions q on q.id = a.question_id
+      inner join question_cells qc on qc.question_id = q.id
+      where answer_id = #{answer_id} and qc.problem_item = 1 and ac.value != 9
+      order by qc.id"
+
+    answered_problem_items = ActiveRecord::Base.connection.execute(query).each(:as => :hash).first
+    # puts "#{answered_problem_items.inspect}"
+    answered_problem_items && answered_problem_items["answered_problem_items"] || 0
   end
 
   def no_unanswered
     # count values in largest answer
-    answer = self.max_answer # answers.detect {|answer| answer.question_id == score_item.question_id }
-    return answer.ratings_count if answer # 11-01-10 was answer.not_answered_ratings
-    return 0
+    answer = self.max_answer
+    answered = self.no_answered_problem_items
+    unanswered = if answer 
+      (answer.question.ratings_count - answered)
+    else
+      self.survey.question_with_most_items.ratings_count
+    end
   end
-  
+
+  def answered_percentage
+    answer = self.max_answer
+    answered = self.no_answered_problem_items
+    answered_percentage = answer && (answered*100) / answer.question.ratings_count || 0
+  end
+
   def add_missing_cells
     self.max_answer.add_missing_cells
   end
@@ -181,15 +226,25 @@ class SurveyAnswer < ActiveRecord::Base
     args = { :survey_name => self.survey.get_title,
                   :survey => self.survey,
               :unanswered => self.no_unanswered,
+       :answer_percentage => self.answered_percentage,
               :short_name => self.survey.category,
-                     :age => self.age_when_answered,
-                  :gender => self.journal.sex,
                :age_group => self.survey.age,
               :created_at => self.created_at,  # set to date of survey_answer
                :center_id => self.center_id,
         :survey_answer_id => self.id
             }
-    rapport.update_attributes(args) if update && !rapport.new_record?
+    if self.journal
+      args[:age] = self.age_when_answered
+      args[:gender] = self.journal.sex
+    end
+
+    if rapport
+      args[:age] ||= rapport.age
+      args[:gender] ||= rapport.gender
+      rapport.update_attributes(args) if update && !rapport.new_record?
+    else
+      generate_score_report
+    end
   end
 
   def generate_score_report(update = false)
@@ -197,16 +252,19 @@ class SurveyAnswer < ActiveRecord::Base
     args = { :survey_name => self.survey.get_title,
                   :survey => self.survey,
               :unanswered => self.no_unanswered,
+       :answer_percentage => self.answered_percentage,
               :short_name => self.survey.category,
-                     :age => self.age_when_answered,
-                  :gender => self.journal.sex,
                :age_group => self.survey.age,
               :created_at => self.created_at,  # set to date of survey_answer
                :center_id => self.center_id,
         :survey_answer_id => self.id,
                :follow_up => (self.journal_entry && self.journal_entry.follow_up || 0)
             }
-            
+    if self.journal
+      args[:age] = self.age_when_answered
+      args[:gender] = self.journal.sex
+    end
+
     rapport = ScoreRapport.create(args) unless rapport
     rapport.update_attributes(args) if update && !rapport.new_record?
     

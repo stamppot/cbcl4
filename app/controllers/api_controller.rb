@@ -36,7 +36,7 @@ class ApiController < ActionController::Base
 	end
 
  	def url_token_login  # check api_key and token
- 		puts "GET url_token_login"
+ 		# puts "GET url_token_login"
 		logger.info "GET api url token_login: #{params.inspect}"
    	token = params[:token]
 

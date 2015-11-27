@@ -74,6 +74,9 @@ class JournalEntry < ActiveRecord::Base
     self.survey_answer.survey_id = self.survey.id
     self.survey_answer.follow_up = self.follow_up
     self.survey_answer.sex = self.journal.sex
+    self.answered_at = self.survey_answer.updated_at = DateTime.now
+    self.answered!
+    self.survey_answer.save && self.save
     self.survey_answer
   end
 

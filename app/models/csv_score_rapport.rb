@@ -10,7 +10,7 @@ class CsvScoreRapport < ActiveRecord::Base
   scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
 
-  attr_accessible :answer, :variables, :journal_id, :survey_answer_id, :team_id, :center_id, :survey_id, :age, :created_at, :updated_at, :sex
+  attr_accessible :answer, :variables, :journal_id, :survey_answer_id, :team_id, :center_id, :survey_id, :age, :answer_percentage, :created_at, :updated_at, :sex
   
   def self.with_options(user, options)
     o = self.filter_params(user, options)

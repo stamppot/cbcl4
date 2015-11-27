@@ -18,9 +18,9 @@ class ApplicationController < ActionController::Base
   before_filter :cookies_required, :except => [:login, :logout, :upgrade]
 
   def check_logged_in
-    puts "check_logged_in: #{params.inspect}"
+    # puts "check_logged_in: #{params.inspect}"
     is_api = (params[:controller] =~ /start/) && !params[:token].blank? 
-	  logger.info("is_api: #{is_api}  params: #{params.inspect}")
+	  logger.info("is_api: #{is_api}  params: #{params.inspect}") if is_api
     if !is_api && (!current_user && !params[:controller] =~ /login/)
       store_location
       redirect_to login_path

@@ -9,40 +9,40 @@ class ApiLoginController < ApiController
 
 	def start
 		logger.info "api_login/start check_access: #{params.inspect}"
-    token = params[:token]
+	    token = params[:token]
 
 		puts "current_user: #{current_user.inspect}"
 		login_user = LoginUser.find(current_user.id)
-    @journal_entry = login_user.journal_entry
-    puts "entry: #{@journal_entry.inspect}"
-    session[:journal_entry] = @journal_entry.id
-    session[:journal_id] = @journal_entry.journal_id
-    session[:api_key] = params[:api_key]
-    session[:token] = token
-    @center = login_user.center
-    redirect_to login_path and return if @journal_entry.nil?
-    puts "redirect to /start"
-    redirect_to survey_start_path(params[:api_key], token)
-  end
+	    @journal_entry = login_user.journal_entry
+	    puts "entry: #{@journal_entry.inspect}"
+	    session[:journal_entry] = @journal_entry.id
+	    session[:journal_id] = @journal_entry.journal_id
+	    session[:api_key] = params[:api_key]
+	    session[:token] = token
+	    @center = login_user.center
+	    redirect_to login_path and return if @journal_entry.nil?
+	    puts "redirect to /start"
+	    redirect_to survey_start_path(params[:api_key], token)
+  	end
 
-  def logout
-  	logger.info "find api_key: #{params[:api_key] || session[:api_key]}"
-  	api_key = ApiKey.find_by_api_key (params[:api_key] || session[:api_key])
-  	logger.info "Return to: #{api_key.return_to}"
-		goto = "#{api_key.return_to}#{params[:token]}" 
+  	def logout
+  		logger.info "find api_key: #{params[:api_key] || session[:api_key]}"
+  		api_key = ApiKey.find_by_api_key (params[:api_key] || session[:api_key])
+  		logger.info "Return to: #{api_key.return_to}"
+		goto = "#{api_key.return_to}?#{params[:token]}" 
 		logger.info "goto: #{goto}"
  		redirect_to goto
-
-	 	ensure
-	 		session[:rbac_user_id] = nil
+		
+		ensure
+		session[:rbac_user_id] = nil
     	# session.delete :journal_entry
-	    cookies.delete :journal_entry
-  	  cookies.delete :journal_id
+		cookies.delete :journal_entry
+  		cookies.delete :journal_id
     	cookies.delete :user_name
-	 		session.clear
- 			reset_session
-			logger.info "Ensure we're logged out"
-  end
+		session.clear
+ 		reset_session
+		logger.info "Ensure we're logged out"
+	end
 
 # http://0.0.0.0:3000/api_login/create application/json
 # {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},"surveys":["CBCL_6-16", "TRF_6-16"]}
@@ -118,7 +118,7 @@ class ApiLoginController < ApiController
     login_user = current_user
     logger.info "open, current_user: #{login_user.inspect}"
     render :text => ( "/api_login" + survey_start_path + "/" + key + "/" + token)
-		# render :text => "#{entry.journal.title} #{entry.survey.short_name}"
+		# render :text => "#{entry.journal.name} #{entry.survey.short_name}"		
 	end
 
 

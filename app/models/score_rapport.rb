@@ -13,7 +13,7 @@ class ScoreRapport < ActiveRecord::Base
   # scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   # scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
 
-  attr_accessible :survey_name, :survey, :unanswered, :short_name, :age, :gender, :age_group, :created_at, :center_id, :survey_answer_id, :follow_up
+  attr_accessible :survey_name, :survey, :unanswered, :answer_percentage, :short_name, :age, :gender, :age_group, :created_at, :center_id, :survey_answer_id, :follow_up
 
 
   def to_csv(csv_survey_answers, survey_id)
@@ -84,6 +84,7 @@ class ScoreRapport < ActiveRecord::Base
 
   def save_csv_score_rapport
     vals = variable_values
+    puts "save_csv_score_rapport: vals: #{vals.inspect}"
     return if self.survey_answer.nil?
     journal = self.survey_answer.journal
     journal_info = self.survey_answer.info
@@ -98,6 +99,7 @@ class ScoreRapport < ActiveRecord::Base
       :age => self.age,
       :created_at => self.created_at,
       :updated_at => self.updated_at,
+      :answer_percentage => self.answer_percentage
     }
     options[:sex] = journal.sex # info_options[:pkoen]
     csv_score_rapport = CsvScoreRapport.find_by_survey_answer_id(options[:survey_answer_id])

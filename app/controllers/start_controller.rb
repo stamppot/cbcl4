@@ -24,7 +24,7 @@ class StartController < ApplicationController
     # session.delete "token"
 
     redirect_to survey_continue_path(@token, @api_key) if @journal_entry.draft?
-    redirect_to survey_finish_path(@journal_entry, @token, @api_key) and return if @journal_entry.answered?
+    redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
     @survey = @journal_entry.survey
   end
 

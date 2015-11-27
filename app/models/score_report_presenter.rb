@@ -11,6 +11,8 @@ class ScoreReportPresenter
     if entries.empty? # if no entries are chosen, show the first three
       entries = Journal.find(journal_id).answered_entries.reverse.slice(0,3)
     end
+
+    # TODO!!! some entries don't have a survey_answer. Bad data?!  Get survey_answers per journal instead?
     survey_answers = entries.map { |entry| entry.survey_answer }.sort_by {|sa| sa.survey.position }
 
     @journal = entries.first.journal # show journal info
@@ -63,6 +65,16 @@ class ScoreReportPresenter
       follow_ups << report
     end
     info_group << follow_ups
+
+    answered_percent = ["Svarprocent"]
+    survey_answers.map do |sa|
+      sr = sa.score_rapport
+      report = ScoreReport.new
+      report.result = sr.answer_percentage
+      report.percentile = "info"
+      answered_percent << report
+    end
+    info_group << answered_percent
 
     # TODO: besvarelsesdato
 
