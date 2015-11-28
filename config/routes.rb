@@ -304,6 +304,7 @@ Cbcl4::Application.routes.draw do
   get "*all" => "api_login#cors_preflight_check", :constraints => { :method => "OPTIONS" }
   post '/api_login/create/', :to => 'api_login#create'
   post '/api_login/open/', :to => 'api_login#open'
+  get '/api_login/index/:api_key', :to => 'api_login#index'
   post '/api_login/index/', :to => 'api_login#index'
 
   get '/api/login/:api_key/:token', :to => 'api/login#login', :as => "api_login"

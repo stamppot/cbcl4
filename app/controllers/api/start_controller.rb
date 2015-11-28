@@ -22,9 +22,8 @@ module Api
       session[:journal_id] = @journal_entry.journal_id
       session[:api_key] = params[:api_key]
       session[:token] = token
-      # @center = @journal_entry.journal.center
-      redirect_to login_path and return if @journal_entry.nil?
-      puts "redirect to /start/#{params[:api_key]}/#{token}"
+ 	    @center = login_user.center
+	    render :text => "INVALID TOKEN" and return if @journal_entry.nil?
       redirect_to survey_start_path(params[:api_key], token)
     end
   end

@@ -21,7 +21,6 @@ class ApiLoginController < ApiController
 	    session[:token] = token
 	    @center = login_user.center
 	    redirect_to login_path and return if @journal_entry.nil?
-	    puts "redirect to /start"
 	    redirect_to survey_start_path(params[:api_key], token)
   	end
 
@@ -68,7 +67,8 @@ class ApiLoginController < ApiController
 		survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
 		surveys = survey_params.map {|s| Survey.where(s).first}
 		service = JournalService.new
-		journal, tokens = service.create_journal(center, journal_params, surveys, true)
+		follow_up = 0
+		journal, tokens = service.create_journal(center, journal_params, surveys, follow_up, true)
 		puts "new journal: #{journal.inspect} tokens: #{tokens.inspect}"
 		tokens
 
@@ -86,47 +86,51 @@ class ApiLoginController < ApiController
 	end
 
 	def open # login og åbne skema
-		param = ActiveSupport::JSON.decode(request.raw_post)
-		puts "param: #{param.class} #{param.inspect}"
+		render :text => "INVALID REQUEST: OPEN" and return
+		# param = ActiveSupport::JSON.decode(request.raw_post)
+		# puts "param: #{param.class} #{param.inspect}"
 
-		key = param["api_key"]
+		# key = param["api_key"]
 
-		puts "key: #{key}"
-		api_key = ApiKey.find_by_api_key(key)
-		if api_key.nil?
-			render :text => "Not found" and return
-		end
+		# puts "key: #{key}"
+		# api_key = ApiKey.find_by_api_key(key)
+		# if api_key.nil?
+		# 	render :text => "Not found" and return
+		# end
 
-		token = params["token"]
-		login = eval(api_key.unlock token)
-		puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
+		# token = params["token"]
+		# login = eval(api_key.unlock token)
+		# puts "token: #{token}  login: #{login.inspect}  #{login['login']}"
 
-		login_user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
-		user = User.find_with_credentials(login["login"], login["password"])
+		# login_user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
+		# user = User.find_with_credentials(login["login"], login["password"])
 		
-		if login_user.nil?
-			render :text => "User not found" and return
-		end
-		puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
-		write_user_to_session(user)
+		# if login_user.nil?
+		# 	render :text => "User not found" and return
+		# end
+		# puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
+		# write_user_to_session(user)
 
-		entry = login_user.journal_entry
+		# entry = login_user.journal_entry
 
-		session[:journal_entry] = entry.id
-    session[:journal_id] = entry.journal_id
+		# session[:journal_entry] = entry.id
+  #   session[:journal_id] = entry.journal_id
 
-    login_user = current_user
-    logger.info "open, current_user: #{login_user.inspect}"
-    render :text => ( "/api_login" + survey_start_path + "/" + key + "/" + token)
+  #   login_user = current_user
+  #   logger.info "open, current_user: #{login_user.inspect}"
+  #   render :text => ( "/api_login" + survey_start_path + "/" + key + "/" + token)
 		# render :text => "#{entry.journal.name} #{entry.survey.short_name}"		
 	end
 
 
 	def index
-		param = ActiveSupport::JSON.decode(request.raw_post)
-		puts "param: #{param.class} #{param.inspect}"
-		key = param["api_key"]
-
+		key = if request.post?
+			param = ActiveSupport::JSON.decode(request.raw_post)
+			puts "param: #{param.class} #{param.inspect}"
+			key = param["api_key"]
+		elsif request.get?
+			key = params[:api_key]
+		end
 		puts "key: #{key}"
 		# check api_key
 		api_key = ApiKey.find_by_api_key(key)
@@ -135,7 +139,7 @@ class ApiLoginController < ApiController
 		end
 
 		center = api_key.center
-		response = center.journals.map {|j| {j.title => encrypt_tokens(api_key, create_tokens(j))}}.join("<br/>")
+		response = center.journals.map {|j| {j.title => encrypt_tokens(api_key, to_token(j))}}.join("<br/>")
 		render :text => response
 	end
 
@@ -167,7 +171,7 @@ class ApiLoginController < ApiController
 
 	private 
 
-	def create_tokens(journal)
+	def to_token(journal)
 		journal.not_answered_entries.inject({}) do |h, e| 
 			h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 			h

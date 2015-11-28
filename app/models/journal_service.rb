@@ -1,6 +1,6 @@
 class JournalService
 
-	def create_journal(center, journal_params, surveys, save = true)
+	def create_journal(center, journal_params, surveys, follow_up = 0, save = true)
 		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
 
 		if !journal
@@ -26,7 +26,8 @@ class JournalService
 		else # create surveys if not exist
 			puts "existing create_journal #{journal_params.inspect}"
 			surveys = surveys.select do |survey|
-				!journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
+				# !journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
+				!journal.journal_entries.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up }
 			end
 		end
 
