@@ -25,6 +25,10 @@ class Question < ActiveRecord::Base
     self.question_cells.ratings
   end
 
+  def problem_items?
+    self.question_cells.where(problem_item: 1).any?
+  end
+
   def add_question_cell(question_cell)
     self.question_cells << question_cell
   end

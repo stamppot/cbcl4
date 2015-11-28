@@ -39,6 +39,10 @@ class Survey < ActiveRecord::Base
     end
   end
   
+  def question_with_problem_items
+    q = self.questions.reverse.detect {|q| q.problem_items? }
+  end
+
   def no_questions
     Question.by_survey(self.id).count #(:conditions => ['survey_id = ?', self.id]) # self.questions.count
   end

@@ -1,7 +1,7 @@
 <% no = question.number %>
 <% id = question.id.to_s %>
 
-<div id='question_number<%= no %>'>
+<div id='question_number<%= no %>' class='<%= question.problem_items? && "problem_items" || "info_q" %>'>
 
 	<div class='edit_question'></div>
 <%# end %>

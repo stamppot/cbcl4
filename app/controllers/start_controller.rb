@@ -17,10 +17,10 @@ class StartController < ApplicationController
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
     logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
-    cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
-    cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
     @token = session[:token]
     @api_key = session[:api_key]
+    cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
+    cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
     # session.delete "token"
 
     redirect_to survey_continue_path(@token, @api_key) if @journal_entry.draft?

@@ -164,6 +164,16 @@ function add_to_changed(arr, e) {
 	// console.dir(arr);
 };
 
+function show_only_problem_items() {
+	var show_only_q = $.cookie('show_only_question');
+	if(typeof(show_only_q) === "undefined" || show_only_q === "") {
+		return;
+	}
+
+	$('.question').hide();
+	$('#question' + show_only_q).show();
+}
+
 var changed_items = {};
 
 jQuery(document).ready(function ($) {
@@ -194,6 +204,7 @@ jQuery(document).ready(function ($) {
 	}
 	console.log("journal_entry: " + journal_entry);
 
+	show_only_problem_items();
 
 	if((typeof(journal_entry) === "undefined")) {
 		alert("Fejl: Kan ikke hente journal brugerinformation: ");

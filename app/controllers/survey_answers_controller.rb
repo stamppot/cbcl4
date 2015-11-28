@@ -285,9 +285,10 @@ class SurveyAnswersController < ApplicationController
 	
       if session[:token] && session[:api_key]
         token = session[:token]
-	api = ApiKey.find_by_api_key(session[:api_key])
-	return_to = "#{api.return_to}?#{api.api_key}/#{token}"
+        api = ApiKey.find_by_api_key(session[:api_key])
+	      return_to = "#{api.return_to}?#{api.api_key}/#{token}"
         logger.info "Return to: #{return_to}"
+        remove_user_from_session!
         redirect_to return_to and return
       else
         redirect_to survey_finish_path(journal_entry) and return

@@ -102,6 +102,8 @@ class ApplicationController < ActionController::Base
 
   def remove_user_from_session!
     session[:rbac_user_id] = nil
+    journal_entry_id = session[:journal_entry]
+    Rails.cache.delete("j_#{journal_entry_id}") if journal_entry_id
     session.delete :journal_entry
     cookies.delete :journal_entry
     cookies.delete :user_name

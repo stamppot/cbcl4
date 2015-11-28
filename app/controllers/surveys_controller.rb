@@ -11,8 +11,6 @@ class SurveysController < ApplicationController
   # 19-2-8 TODO: replace in_place_edit with some other edit function
   # in_place_edit_for :question, :number
 
-  @@surveys = {}
-  
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   # verify :method => "post", :only => [ :destroy, :create, :update, :answer ],
   # :redirect_to => { :action => :list }
@@ -33,8 +31,7 @@ class SurveysController < ApplicationController
   def show_only
     @options = {:show_all => true, :show_only => true, :action => 'show_answer', :validation => true}
     survey_id = params[:id].to_i
-    @@surveys[survey_id] ||= Survey.and_questions.find(params[:id])
-    @survey = @@surveys[survey_id] #Survey.and_questions.find(params[:id])
+    @survey = Survey.and_questions.find(params[:id])
     @color = @survey.color
     @page_title = @survey.get_title
     # flash[:notice] = "Denne side viser ikke et brugbart spørgeskema. Du har tilgang til besvarelser gennem journaler."
@@ -59,11 +56,13 @@ class SurveysController < ApplicationController
     @journal = journal_entry.journal
     @is_login_user = current_user.login_user?
      
-    # survey_id = params[:id].to_i
-    # @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
-    @survey = Survey.and_questions.find(params[:id]) # @@surveys[survey_id] #Survey.and_questions.find(params[:id])
+    @survey = Survey.and_questions.find(params[:id])
+
     @color = @survey.color
     @page_title = @survey.get_title
+
+    cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
+
     # render :text => "Survey: #{@survey.inspect}" and return
     # raise ActiveRecord::RecordNotFound "SURVEY: #{@survey.inspect}: answer_by: #{@answer_by.inspect}"
       rescue ActiveRecord::RecordNotFound
@@ -80,8 +79,7 @@ class SurveysController < ApplicationController
     @journal = @journal_entry.journal
     survey_id = @journal_entry.survey_id
     # puts "show_fast survey: #{survey_id}"
-    # @@surveys[survey_id] ||= Survey.and_questions.find(survey_id)
-    @survey = Survey.and_questions.find(survey_id) # @@surveys[survey_id] #Survey.and_questions.find(params[:id])
+    @survey = Survey.and_questions.find(survey_id)
 
     @page_title = @survey.get_title
   
