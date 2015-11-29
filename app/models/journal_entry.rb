@@ -14,7 +14,7 @@ class JournalEntry < ActiveRecord::Base
   scope :by_id_and_journal, lambda { |id, journal_id| where('id = ? AND journal_id = ?', id, journal_id) }
   scope :and_login_user, -> { includes(:login_user) }
   scope :and_survey_answer, -> { includes([:survey, :survey_answer]) }
-	scope :in_center, lambda { |center_id| { :joins => :journal, :conditions => ["center_id = ?", center_id] } }
+	scope :in_center, lambda { |center_id| { :joins => :journal, :conditions => ["journal_entries.center_id = ?", center_id] } }
   scope :with_surveys, lambda { |survey_ids| { :joins => :survey_answer,
    :conditions => ["survey_answers.survey_id IN (?)", survey_ids] } }
   scope :for_surveys, lambda { |survey_ids| where("survey_id IN (?)", survey_ids) }
@@ -24,6 +24,7 @@ class JournalEntry < ActiveRecord::Base
   scope :for_states, lambda { |states| where("journal_entries.state IN (?)", states) }
   scope :with_cond, lambda { |cond| cond }
   scope :between, lambda { |start, stop| where('journal_entries.created_at' => start..stop) } 
+  scope :answered_between, lambda { |start, stop| where('journal_entries.answered_at' => start..stop) } 
   scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
   scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
   scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }

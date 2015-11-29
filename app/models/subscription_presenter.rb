@@ -16,6 +16,8 @@ class SubscriptionPresenter
     # puts "surveys: #{surveys.inspect}" 
     @surveys = surveys.to_a.to_hash_with_key { |s| s.id }
     self.periods_summary(group)
+    puts "periods_summaries: #{@summary_view.inspect}"
+    puts "periods_: #{@periods.inspect}"
     self.details
     self
   end
@@ -100,10 +102,13 @@ class SubscriptionPresenter
       stop = ((paid_on || stopped_on) || DateTime.now)
       count = counter.count_real_used(group.id, date, stop)
       real_used = count.values.sum {|v| v[:used] }
+      # id = periods["id"]
+      puts "pperiods: #{periods.inspect}"
       puts "start/stop: #{date.inspect} #{stop.inspect}"
       puts "count real_used: #{real_used}"
       # puts "real used: #{real_used} #{date} #{stop}    used: #{used} #{date} #{stopped_on} #{paid_on}"
       @summary_view[:periods] << {
+        # :id => id,
         :start_on => date, 
         :used => real_used, #used, #current_period["used"].to_i, #used,
         :real_used => real_used,

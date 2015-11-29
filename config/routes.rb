@@ -141,6 +141,7 @@ Cbcl4::Application.routes.draw do
   get 'subscriptions/new/(/:id)', :to => 'subscriptions#new', :as => 'new_subscription_in_group'
   get 'subscriptions/new_period/(/:id)', :to => 'centers#new_subscription_period', :as => 'subscriptions_new_period'
   get 'subscriptions/undo_new_period/(/:id)', :to => 'centers#undo_new_subscription_period', :as => 'subscriptions_undo_last_period'
+  get 'subscriptions/show/:id/:start/:stop', :to => 'subscriptions#show', :as => 'show_subscription_in_period'
 
   get 'users/center/(/:id)/partial=:partial', :to => 'users#center', :as => 'users_center'
   get 'users/new/(/:id)', :to => 'users#new', :as => 'new_user'

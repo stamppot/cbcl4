@@ -1,43 +1,54 @@
-<h2>Detaljer for Abonnement &quot;<%=h @subscription.center.get_title %>&quot;</h2>
+<h2>Detaljer for forbrug</h2>
 
 <dl>
-  <dt>Center:</dt>
-  <dd><%=h @subscription.center.get_title %></dd>
+	<dt>Center:</dt>
+	<dd><%=h @group.title %></dd>
 
-	<dt>Spørgeskema:</dt>
-	<dd><%= @subscription.survey.get_title %><dd>
+	<dt>Periode:</dt>
+	<dd><%=h @start.to_date.to_s(:long) %> - <%=h @stop.to_date.to_s(:long) %><dd>
 	
-  <dt><%= t('status.created') %></dt>
-  <dd><%= @subscription.created_at.to_formatted_s(:long) %></dd>
-
-  <dt>Ændret</dt>
-  <dd><%= @subscription.updated_at.to_formatted_s(:long) %></dd>
+	<dt>Forbrug</dt>
+	<dd><%= @count %></dd>
 	
-	<dt><%= t('state') %></dt>
-	<dd><%= @subscription.states.invert[@subscription.state] %><dd>
-
-	<dt>Brugt</dt>
+	<dt>Heraf login-brugere</dt>
+	<dd><%= @login_count %></dd>
 	
-	<% @periods = @subscription.summary(@options) %>
-	<dd><%= render :partial => "shared/subscription_summary", :object => @periods %></dd>
-
-	<dt><span id="subscription_note">Noter</span></dt>
-	<dd><%# in_place_editor_field :subscription, :note, {}, :rows => 5,
-                     :external_control => 'subscription_note', :style => "border: 1px solid #888;" %>
-	</dd>
 <dl>
 
+
+
+
+<div class="team_journals" id="team_journals">
+	<h3>Besvarelser</h3>
+	</p>
+	
+	<% if @journal_entries.empty? %>
+	<%= t('none') %>
+	<% else %>
+	<% @hide_team = true %>
+	<div id="journal_entries">
+		<% if false && !@is_answered %>
+			<a class="button status_all" href="javascript:void(0);" onclick="update_reminder_status(<%= @group.id %>)" >
+			<span class="">Marker som </span></a>
+			<select id="reminder_status" name="reminder_status">
+				<option value="Passiv">Passive</option>
+				<option value="">Aktive</option>
+			</select>
+		<% end %>
+		<div id="entries">
+			<%= render :partial => 'reminders/entries', :locals => {:hide_team => true, :surveys => @surveys} %>
+		</div>
+	</div>
+	<%# render :partial => 'shared/ajax_pagination' %>
+	<% end %>
+</div>
+
 	
 
-
+<br/>
 <div class="commands">
 <% if current_user.access? :subscription_new_edit %>
-<%= link_button 'Nulstil', subscription_reset_path(@subscription), 'subscription_reset', :title => 'Nulstil' %>
-	<% if @subscription.state == 1 %>
-		<%= link_button 'Deaktiver', subscription_deactivate_path(@subscription), 'subscription_deactivate', :title => 'Deaktiver abonnement' %>
-	<% else %>
-		<%= link_button 'Aktiver', subscription_activate_path(@subscription), 'subscription_activate', :title => 'Aktiver abonnement' %>
-	<% end %>
+	<%# link_button 'Nulstil', subscription_reset_path(@subscription), 'subscription_reset', :title => 'Nulstil' %>
 <% end %>
 <%= link_button t('go_back_to_list'), subscriptions_path, 'go_back', :title => 'Tilbage til liste af abonnementer' %>
 </div>

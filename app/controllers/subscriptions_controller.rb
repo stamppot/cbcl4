@@ -24,10 +24,29 @@ class SubscriptionsController < ApplicationController
   end
 
   def show
-    p = Period.find(params[:id])
-    sas = SurveyAnswer.where(:done => 1, :updated_at > p.start)
-    sas = sas.where(:updated_at < p.start) if p.paid_on
-    @surveys = Survey.all.to_hash
+    puts "PARAMS: #{params.inspect}"
+    @group = Center.find(params[:id])
+    @start = DateTime.parse(params[:start])
+    @stop = DateTime.parse(params[:stop])
+    # counts all answers, also for deleted entries
+    # sas = SurveyAnswer.where(:center_id => @group.id, :done => 1)
+    #         .where("created_at > ?", @start)
+    #         .where("created_at < ?", @stop)
+    states = [5,6]
+    jes = JournalEntry.in_center(@group.id).for_states(states).answered_between(@start, @stop)
+            # .where("answered_at > ?", @start)
+            # .where("answered_at < ?", @stop)
+    @count = jes.count
+    @login_count = JournalEntry.in_center(@group.id).answered_by_login_user.answered_between(@start, @stop).count
+    
+    @journal_entries = JournalEntry.in_center(@group.id).for_states(states).
+      answered_between(@start, @stop).all(:order => 'journals.title asc', :include => :journal)
+
+
+    respond_to do |format|
+      format.html
+      format.js { render :partial => 'reminders/entries' }
+    end
   end
 
   def all

@@ -36,7 +36,12 @@
 		end
 	%>
 	<tr>
-		<td><%= summary[:start_on].to_date.strftime("%e %b %y") %> - <%= stopped_on.strftime("%e %b %y") %></td>
+		<% start = URI.encode(summary[:start_on].to_date.to_s) %>
+		<% stop = URI.encode(stopped_on.to_date.to_s) %>
+		<td><a href="/subscriptions/show/<%= center_id %>/<%= start %>/<%= stop %>">
+			<%= summary[:start_on].to_date.strftime("%e %b %y") %> - <%= stopped_on.strftime("%e %b %y") %>
+			</a>
+		</td>
 		<td class="number"><%= summary[:used] %></td>
 		<td class="number"><%= summary[:paid] ? t('yes') : t('no') %></td>
 		<td><% if summary[:paid_on] && summary[:paid] %>
