@@ -170,8 +170,10 @@ function show_only_problem_items() {
 		return;
 	}
 
-	$('.question').hide();
-	$('#question' + show_only_q).show();
+	if(parseInt(show_only_q) > 0) {
+		$('.question').hide();
+		$('#question' + show_only_q).show();
+	}
 }
 
 var changed_items = {};
