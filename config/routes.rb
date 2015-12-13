@@ -222,10 +222,10 @@ Cbcl4::Application.routes.draw do
   # get 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download'
 
   # get 'reminders/download/(/:id)', :to => 'reminders#download', :as => 'download'
+  match 'reminders/show/:id/(:state)/(:follow_up)(.:format)', :to => 'reminders#show', :as => 'answer_status', :via => [:get, :post]
+  match 'reminders/filter/:id/(:state)/(:follow_up)', :to => 'reminders#filter', :as => 'filter_status', :via => [:get, :post]
   match 'reminders/download/(:id).:format', :to => 'reminders#download', :as => 'csv_entry_status_download', :format => 'csv', :via => [:get, :post]
-  match 'reminders/show/(:id)/(:state)/(:followup)', :to => 'reminders#show', :as => 'answer_status', :via => [:get, :post]
-  # post 'reminders/filter/(:id)', :to => 'reminders#filter', :as => 'reminders_filter'
-  match 'reminders/generate_file/(:id)/(:state)/(:followup)', :to => 'reminders#generate_file', :as => 'generate_file', :via => [:get, :post]
+  match 'reminders/generate_file/(:id)/(:state)/(:follow_up)', :to => 'reminders#generate_file', :as => 'generate_file', :via => [:get, :post]
   get 'export_files/show/(/:id)', :to => 'export_files#show', :as => 'export_login'
   get 'export_files/download/(/:id).:format', :to => 'export_files#download', :as => 'file_download', :format => 'csv'
   match 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv', :via => [:get, :post]

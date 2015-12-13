@@ -35,11 +35,11 @@ tr.roweven {
 }
 .sortasc {
 	background-color: #DDFFAC;
-	background-image: url(/images/up.gif);
+	background-image: url(/assets/up.gif);
 }
 .sortdesc {
 	background-color: #B9DDFF;
-	background-image: url(/images/down.gif);
+	background-image: url(/assets/down.gif);
 }
 .nosort {
 	cursor: default;

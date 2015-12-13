@@ -13,9 +13,7 @@
 
 
 	<div id='draft-message' style='color:red;'></div>
-	<div id="survey_fast_input" class="command" style="display:none;">
-<!-- 		<a href="/surveys/show_fast/" class="button" title="Besvar med hurtig indtastning"><span class="survey_fast_input/<%= @survey.id %>">Hurtig indtastning</span></a>
- -->	</div>
+	<div id="survey_fast_input" class="command" style="display:none;"></div>
 	<br/>
 
 
@@ -60,6 +58,16 @@
 		<a href="javascript:void(0);" onclick="history.go(-1);" class="button" title="Gå tilbage">
 			<span class="go_back">Tilbage</span></a>
 	</div>
+
+<% if ["CBCL", "C-TRF", "TRF", "YSR"].include?(@survey.category) %>
+	<span id="copyright">Copyright TM. Achenbach - Oversat til dansk af Niels Bilenberg med tilladelse fra TM. Achenbach.</span>
+<% elsif "ASQ" == @survey.category %>
+	<span id="copyright">
+		<div>Ages & Stages Questionnaires®: Social-Emotional, Squires et al. © 2002</div>
+		<div>and Danish translation © 2015 Brookes Publishing Co. Translated by permission.</div>
+	<span>
+<% end %>
+
 
 <script type="text/javascript">
 

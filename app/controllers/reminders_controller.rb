@@ -21,7 +21,23 @@ class RemindersController < ApplicationController
     @states = {'Alle' => 0, 'Ubesvaret' => 2, 'Besvaret' => "5,6", 'Kladde' => 4} #JournalEntry.states
     respond_to do |format|
       format.html
-      format.js { render :partial => 'entries' }
+      format.js { puts "JSSSSS"; render :partial => 'entries' }
+      format.json { puts "JSON"; render :partial => 'entries' }
+    end
+  end
+
+  
+  def filter
+    @group = Group.find params[:id]
+
+    set_params_and_find(params)
+    
+    puts "params:: #{params.inspect}"
+    @answer_state = params[:state].join('-') ||  "2-4"
+    @surveys = Survey.all.to_a.inject({}) { |h,elem| h[elem.id] = elem; h }.invert
+    @states = {'Alle' => 0, 'Ubesvaret' => 2, 'Besvaret' => "5,6", 'Kladde' => 4} #JournalEntry.states
+    respond_to do |format|
+      format.html { render :partial => 'entries'}
     end
   end
 
@@ -110,11 +126,14 @@ class RemindersController < ApplicationController
     @state = JournalEntry.states.values if params[:state] == "0"
     @start_date = @group.created_at.beginning_of_day
     @stop_date = DateTime.now.end_of_day
+    @follow_up = params[:follow_up].to_i
     puts "@state: #{@state}"
-    @journal_entries_count = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).count
-    @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).all(:order => 'journals.title asc', :include => :journal) unless @state.empty?
+    entries_relation = JournalEntry.for_parent_with_state(@group, @state).between(@start_date, @stop_date)
+    if @follow_up > -1
+      entries_relation = entries_relation.where(follow_up: @follow_up)
+    end
+    @journal_entries_count = entries_relation.count
+    @journal_entries = entries_relation.all(:order => 'journals.title asc', :include => :journal) unless @state.empty?
     @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
   end
 

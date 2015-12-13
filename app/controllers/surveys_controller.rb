@@ -35,7 +35,7 @@ class SurveysController < ApplicationController
     @color = @survey.color
     @page_title = @survey.get_title
     # flash[:notice] = "Denne side viser ikke et brugbart spørgeskema. Du har tilgang til besvarelser gennem journaler."
-    render :template => 'surveys/show', :layout => "layouts/survey"
+    render :template => 'surveys/show', :layout => "layouts/jsurvey"
   end
   
   def show_only_fast

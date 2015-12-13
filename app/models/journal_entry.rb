@@ -215,7 +215,7 @@ class JournalEntry < ActiveRecord::Base
   end
   
   def JournalEntry.for_parent_with_state(group, states)
-    puts "for_parent_with_state states: #{states}"
+    # puts "for_parent_with_state states: #{states}"
     JournalEntry.for_states(states).where('journal_entries.group_id = ?', (group.is_a?(Group) && group.id || group)).joins(:journal) #, :joins => :journal)
   end
   
