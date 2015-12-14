@@ -25,7 +25,7 @@ class ExportAnswersHelper
         survey_answer_id: csr.survey_answer_id,
         center_id: csr.center_id, 
         group_id: csr.team_id).first
-      info = 
+      info =
       if !journal_entry.nil?
         journal_entry.answer_info.split(";")
       elsif csr.survey_answer
