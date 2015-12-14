@@ -75,7 +75,7 @@ class RemindersController < ApplicationController
     @is_answered = @state == [5,6]
     @start_date = @group.created_at
     @stop_date = DateTime.now
-
+    @follow_up = params[:follow_up].to_i
     status = JournalEntry.status_name[selected_state]
     timestamp = Time.now.strftime('%Y%m%d%H%M')
     filename = "journalstatus_#{@group.group_name_abbr.underscore}-#{status}-#{timestamp}.xls" 
@@ -84,8 +84,13 @@ class RemindersController < ApplicationController
     filter = params[:active]
 
     done_file = true
-    @journal_entries = JournalEntry.for_parent_with_state(@group, @state).
-      between(@start_date, @stop_date).active_state(filter).all(:order => 'journal_entries.created_at desc', :include => [:journal, :login_user]) unless @state.empty?
+    entries_relation = JournalEntry.for_parent_with_state(@group, @state).between(@start_date, @stop_date).active_state(filter)
+    if @follow_up > -1
+      entries_relation = entries_relation.where(follow_up: @follow_up)
+    end
+
+    @journal_entries = entries_relation.all(:order => 'journal_entries.created_at desc', :include => [:journal, :login_user]) unless @state.empty?
+
     export_csv_helper = ExportCsvHelper.new
     rows = export_csv_helper.get_entries_status(@journal_entries)
     done_file = rows.any?
