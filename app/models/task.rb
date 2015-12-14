@@ -38,7 +38,7 @@ class Task < ActiveRecord::Base
 
       self.status = "Completed"
       self.save
-      # logger.info "create_survey_answer_export: finished!  survey: #{survey_id} #{survey_answers.size}"
+      logger.info "create_survey_answer_export: finished!  survey: #{survey_id} #{survey_answers.size}"
     end
   end
 

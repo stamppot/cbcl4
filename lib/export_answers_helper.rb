@@ -15,8 +15,25 @@ class ExportAnswersHelper
     survey = Survey.find(survey_id)
     header = journal_csv_header.keys + survey.scores.map {|s| s.variable}
     
-    csv_rows = csv_score_rapports.inject([]) do |rows,csa|
-      rows << csa.survey_answer.info.values.map {|v| to_danish(v)} + csa.answer.split(';;')
+    csv_rows = csv_score_rapports
+      .select {|csr| !csr.survey_answer.nil? }
+      .inject([]) do |rows,csr|
+      if csr.survey_answer.nil?
+        puts "csr.survey_answer.nil? #{csr.inspect}" 
+      end
+      journal_entry = JournalEntry.where(
+        survey_answer_id: csr.survey_answer_id,
+        center_id: csr.center_id, 
+        group_id: csr.team_id).first
+      info = 
+      if !journal_entry.nil?
+        journal_entry.answer_info.split(";")
+      elsif csr.survey_answer
+        csr.survey_answer.info.values
+      else
+        puts "no answer_info found in journal_entry or survey_answer: #{csr.inspect}  je: #{csr.journal_entry.inspect}"
+      end
+      rows << info + csr.answer.split(';;')
       rows
     end
 
@@ -32,7 +49,9 @@ class ExportAnswersHelper
     header = journal_csv_header.keys + survey.variables.map {|v| v.var}
     
     csv_rows = csv_survey_answers.inject([]) do |rows,csa|
-      header_values = csa.journal.get_journal_info
+      puts "csa.journal.nil? #{csa.inspect} #{csa.journal.inspect}  sa: #{csa.survey_answer.inspect}" if csa.journal.nil?
+
+      header_values = Journal.header_info
       # header_values = csa.journal_info.split(';;')
       rows << header_values + csa.answer.split(';;')
       rows

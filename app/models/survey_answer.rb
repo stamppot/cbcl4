@@ -91,19 +91,16 @@ class SurveyAnswer < ActiveRecord::Base
     self.done = true
     self.save   # must save here, otherwise partial answers cannot be saved becoz of lack of survey_answer.id
     self.save_answers(params) #if save_the_answers
+    self.journal_entry.answer_info = self.info.values.join(";");
     # self.answers.each { |a| a.update_ratings_count }
     Answer.transaction do
       answers.each {|a| a.save!}
     end
       # survey_answer.add_missing_cells unless current_user.login_user # 11-01-10 not necessary with ratings_count
     # Spawnling.new(:method => :fork) do
-    # puts "survey_answer: #{self.inspect}"
-    # puts "params[:id]: #{params["id"]}"
     score_rapport = self.generate_score_report(update = true) # generate score report
     score_rapport.save_csv_score_rapport
     self.save_csv_survey_answer
-      # self.create_csv_answer!
-    # end
     self.save
   end
   

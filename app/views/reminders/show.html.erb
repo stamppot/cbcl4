@@ -164,9 +164,10 @@ $(document).ready(function() {
 function generate_file(id) {
 	var state = $("input[name='selected_state']").val();
 	var export_reminder = $("#export_reminder_status").val();
+	var follow_up = $('#follow_up').val();
 
 	$.ajax({
-		url: '/reminders/generate_file/' + id + '?state='+state + '&active=' + export_reminder,
+		url: '/reminders/generate_file/' + id + '?state='+state + '&active=' + export_reminder + '&follow_up=' + follow_up,
 		dataType: 'html',
 		method: 'post',
 		success: function(response) {
