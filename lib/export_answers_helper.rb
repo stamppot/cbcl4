@@ -25,7 +25,7 @@ class ExportAnswersHelper
         survey_answer_id: csr.survey_answer_id,
         center_id: csr.center_id, 
         group_id: csr.team_id).first
-      info =
+      info = 
       if !journal_entry.nil?
         journal_entry.answer_info.split(";")
       elsif csr.survey_answer
@@ -52,18 +52,23 @@ class ExportAnswersHelper
       puts "csa.journal.nil? #{csa.inspect} #{csa.journal.inspect}  sa: #{csa.survey_answer.inspect}" if csa.journal.nil?
 
       journal_entry = JournalEntry.where(
-        survey_answer_id: csr.survey_answer_id,
-        center_id: csr.center_id, 
-        group_id: csr.team_id).first
+        survey_answer_id: csa.survey_answer_id,
+        center_id: csa.center_id, 
+        group_id: csa.team_id).first
       info = 
-      if !journal_entry.nil?
+      if !journal_entry.nil? && journal_entry.answer_info
         journal_entry.answer_info.split(";")
-      elsif csr.survey_answer
-        csr.survey_answer.info.values
+      elsif csa.survey_answer
+        csa.survey_answer.info.values
       else
-        puts "no answer_info found in journal_entry or survey_answer: #{csr.inspect}  je: #{csr.journal_entry.inspect}"
+        puts "no answer_info found in journal_entry or survey_answer: #{csa.inspect}  je: #{csa.journal_entry.inspect}"
       end
 
+	logger.info "info nil: csa: #{csa.inspect}" if info.nil?
+	logger.info "csa.journal_info nil: csa: #{csa.inspect}" if csa.journal_info.nil?
+        if(csa.journal_info.nil?)
+ 	  next
+	end
       # header_values = csa.journal_info.split(';;')
       rows << info + csa.answer.split(';;')
       rows
