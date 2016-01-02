@@ -339,8 +339,11 @@ class SurveyAnswer < ActiveRecord::Base
     the_valid_values = survey.valid_values # TODO: cache #cache_fetch("survey_valid_values_#{self.survey_id}") { self.survey.valid_values }
     insert_cells = []
     update_cells = []
-    
+  
+    puts "save_answers:: params: #{params.inspect}"
+
     params.each do |key, q_cells|   # one question at a time
+      puts "key: #{key}  q_cells: #{q_cells.inspect}"
       next unless key.include? "Q"
       q_id = q_cells.delete("id")
       q_number = key.split("Q").last
@@ -355,11 +358,14 @@ class SurveyAnswer < ActiveRecord::Base
 
       new_cells ||= {}
       q_cells.each do |cell, value|
+        # puts "cell: #{cell.inspect}  value: #{value.inspect}"
         if cell =~ /q(\d+)_(\d+)_(\d+)/   # match col, row
           q = "Q#{$1}"
           a_cell = {:answer_id => an_answer.id, :row => $2.to_i, :col => $3.to_i, :value => value, :number => q_number}
           if answer_cell = an_answer.exists?(a_cell[:row], a_cell[:col]) # update
-            update_cells << [answer_cell.id,  answer_cell.value, answer_cell.value_text] if answer_cell.change_value(value, the_valid_values[q][cell])
+            changed_val = answer_cell.change_value(value, the_valid_values[q][cell])
+            # puts "answer_cell exists: @#{answer_cell.inspect}  a_cell: #{a_cell.inspect} changed_val: #{changed_val.inspect}"
+            update_cells << [answer_cell.id,  answer_cell.value, answer_cell.value_text] if changed_val
           else
             new_cells[cell] = a_cell  # insert
           end
@@ -374,6 +380,7 @@ class SurveyAnswer < ActiveRecord::Base
     # puts "MASS IMPORT ANSWER CELLS (#{new_cells_no.num_inserts}): #{e-t}"
 
     t = Time.now; updated_cells_no = AnswerCell.import([:id, :value, :value_text], update_cells, :on_duplicate_key_update => [:value, :value_text]); e = Time.now
+    # puts "updated cells: #{update_cells.inspect}"
     # puts "MASS IMPORT (update) ANSWER CELLS (#{updated_cells_no.num_inserts}): #{e-t}"
 
     self.answers.each { |a| a.update_ratings_count }

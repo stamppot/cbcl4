@@ -40,7 +40,7 @@ class Journal < ActiveRecord::Base #< Group
   after_save    :expire_cache
 	after_create  :index_search, :expire_cache
   after_destroy :expire_cache
-  after_destroy :destroy_journal_entries
+  before_destroy :destroy_journal_entries
   
   # ID is mandatory
   # validates_presence_of :code #, :message => "ID skal gives"
@@ -182,7 +182,7 @@ class Journal < ActiveRecord::Base #< Group
   end
   
   def destroy_journal_entries
-    self.journal_entries.compact.each { |entry| puts "Entry: #{entry.inspect}"; entry.destroy_and_remove_answers! }
+    self.journal_entries.compact.each { |entry| entry.destroy_and_remove_answers! }
   end
   
   # show all login-users for journal. Go through journal_entries

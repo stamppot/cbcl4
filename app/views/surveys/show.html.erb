@@ -59,9 +59,9 @@
 			<span class="go_back">Tilbage</span></a>
 	</div>
 
-<% if ["CBCL", "C-TRF", "TRF", "YSR"].include?(@survey.category) %>
+<% if @survey.bundle == "CBCL" %>
 	<span id="copyright">Copyright TM. Achenbach - Oversat til dansk af Niels Bilenberg med tilladelse fra TM. Achenbach.</span>
-<% elsif "ASQ" == @survey.category %>
+<% elsif "ASQ" == @survey.bundle %>
 	<span id="copyright">
 		<div>Ages & Stages Questionnaires®: Social-Emotional, Squires et al. © 2002</div>
 		<div>and Danish translation © 2015 Brookes Publishing Co. Translated by permission.</div>
@@ -92,6 +92,12 @@ function setDraftData(d, id) {
 			}
 			else if(input_type == "text") {
 				$('#' + elem_id).val(decodeURIComponent(val));
+			}
+			else if(input_type == "checkbox") {
+				if(val == 1) {
+					$('#' + elem_id).prop("checked", true);
+					$('#' + elem_id + '_h').val(val);
+				}
 			}
 			else {
 				$('#' + elem_id).val(val);
@@ -154,22 +160,29 @@ function onReceivedDynamicData(data) {
 function auto_save(url, changed_items) {
 	// console.log("auto save: " + new Date().toString());
 	var params = $('#surveyform').serialize();
+	/* Get input values from form */
+    // var values = jQuery("#surveyform").serializeArray();
+
 //	if((typeof journal_id) !== 'undefined')
 	params.journal_id = journal_id;
 	// console.log("params: " + params);
 	// console.dir(params);
-	$.post(url, params) //'/survey_answers/save_draft/' + id + "?journal_id=" + journal_id, params)
+	// alert('auto_save values: ' + values);
+	// alert('auto_save: ' + params);
+	// alert('auto_save: changed_items: ' + changed_items.length);
+	$.post(url, params) // params) //'/survey_answers/save_draft/' + id + "?journal_id=" + journal_id, params)
 	.done(function() { $('#surveyform').effect("highlight", {}, 500); });
+	// alert('auto_saved');
 };
 
 function add_to_changed(arr, e) {
-	// console.dir(e);
+	// console.log(e);
 	var id = e.target.id;
 	if(e.type == 'radio') {
 		id = id.substring(0, id.length-2);
 	}
 	arr[id] = e.target.value;
-	// console.dir(arr);
+	// console.log(arr);
 };
 
 function show_only_problem_items() {
@@ -192,7 +205,7 @@ jQuery(document).ready(function ($) {
 	var count = 0;
 
 	journal_id = $.cookie('journal_id');
-	console.log('journal_id: ' + journal_id);
+	// console.log('journal_id: ' + journal_id);
 
 	// do not add submit button when it's show only
 	var doNotCall = document.location.href.match(/show_only/);
@@ -212,7 +225,7 @@ jQuery(document).ready(function ($) {
 	if((typeof(journal_entry) === "undefined")) {
 		alert("Fejl: Kan ikke hente brugerinformation: ");
 	}
-	console.log("journal_entry: " + journal_entry);
+	// console.log("journal_entry: " + journal_entry);
 
 	show_only_problem_items();
 
@@ -256,11 +269,11 @@ jQuery(document).ready(function ($) {
 
 	var set_values_interval = 2;
 	var save_draft_url = '/survey_answers/save_draft/' + params['id'] + "?journal_id=" + journal_id;
-	console.log("save_draft_url: " + save_draft_url);
+	// console.log("save_draft_url: " + save_draft_url);
 
 	var timer = $.timer(function() {
 		count++;
-		console.log("Save draft: " + save_draft_url);
+		// console.log("Save draft: " + save_draft_url);
 		if(hasChanged) {
 			hasChanged = false;
 			timer.reset();
@@ -333,6 +346,7 @@ jQuery(document).ready(function ($) {
 	$('.comment').off('keyup').keyup(checkTextLength);
 	$('.comment').focusout(checkTextLength);
 	});
+
 });
 
 </script>

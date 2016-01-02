@@ -203,6 +203,7 @@ class SurveyAnswersController < ApplicationController
   end
 
   def save_draft
+    puts "PARAMETERS: #{params.inspect}"
     return if request.get?
     journal_id = params[:journal_id]
     journal_entry = JournalEntry.and_survey_answer.where('id = ? AND journal_id = ?', params[:id], journal_id).first

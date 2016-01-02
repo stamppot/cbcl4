@@ -45,14 +45,15 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   def remove_answer
     elem = "entry_answer" << params[:id]
     entry = JournalEntry.find(params[:id])
+
     # remove any score report created
-    if entry.survey_answer
+    if entry && entry.survey_answer
       sc = ScoreRapport.find_by_survey_answer_id(entry.survey_answer.id)
       sc.destroy if sc
     end
 
     # delete all answers and answer cells, delete login for journal_entry
-    entry.destroy
+    entry.destroy if entry
 
     render :json => {:ok => true} and return
     # if entry.destroy
@@ -61,8 +62,8 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     #     page.remove elem
     #   end
     # end
-  rescue ActiveRecordError
-    render :json => {:ok => true} and return
+  # rescue ActiveRecordError
+    # render :json => {:ok => true} and return
   end
 
   def edit # edit follow_up

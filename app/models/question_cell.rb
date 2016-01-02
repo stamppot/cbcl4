@@ -1198,7 +1198,6 @@ class Checkbox < QuestionCell
   		sp = ""
   		if prespan
   			s -= prespan
-  			# sp << "prepend-#{prespan} "
   		end
   		sp << "span-#{s}"
   		sp
@@ -1223,7 +1222,7 @@ class Checkbox < QuestionCell
 
 		self.question_items.each do |item|
 			label = "<label for='#{c_id}'>#{item.text}</label>"
-			checkbox = "<input id='#{c_id}' name='#{question_no}[#{c_id}]' #{klass_name} type='checkbox' value='1' "
+			checkbox = "<input id='#{c_id}' name='#{question_no}[#{c_id}]' onclick='toggleCheck(this);' #{klass_name} type='checkbox' value='1' "
 			checkbox += ((self.default_value || item.value).to_s == "1") ? "checked='checked' >" : ">" # removed />
 			checkbox += "<input name='#{question_no}[#{c_id}]' type='hidden' value='0' >" # removed />
 			newform << checkbox + label
@@ -1248,13 +1247,14 @@ class Checkbox < QuestionCell
 		newform = []
 		question_no = "Q" + no
 		klass_name = "#{switch_target(options)} #{switch_source(options)}".strip
+		klass_name = "" if klass_name == "{}"
 		klass_name = "class='#{klass_name}'" unless klass_name.empty?
 
 		self.question_items.each do |item|
 			label = "<label for='#{c_id}'>#{item.text}</label>"
-			checkbox = "<input id='#{c_id}' name='#{question_no}[#{c_id}]' #{klass_name} type='checkbox' value='1' #{disabled} "
-			checkbox += ((self.default_value || item.value).to_s == "1") ? "checked='checked' >" : ">" # removed />
-			checkbox += "<input name='#{question_no}[#{c_id}]' type='hidden' value='0' >" # removed />
+			checkbox = "<input id='#{c_id}' name='#{question_no}[#{c_id}]' onclick='toggleCheck(this);' #{klass_name} type='checkbox' value='1' #{disabled} "
+			checkbox += (self.default_value) ? "checked='checked' >" : ">" # removed />
+			checkbox += "<input name='#{question_no}[#{c_id}]' type='hidden' id='#{c_id}_h' value='0' >" # removed />
 			newform << div_item(checkbox + label, "checkbox")
 		end
 		newform.join
@@ -1491,7 +1491,7 @@ class Rating < QuestionCell
 		# todo switch target
 		class_switch = switch_target(options) unless switch_off
 		class_names  = class_name + ((class_switch.blank? or switch_off) ? " #{outer_span}" : " #{class_switch} #{outer_span}" )
-		klass_name = "class='#{class_names}'".rstrip unless class_name.blank?
+		klass_name = "class='#{class_names}'".rstrip unless class_name.blank? 
 
 		colspan = "colspan='3'" if class_name == "rating4"  # not needed anymore?
 		"<div #{colspan} id='td_#{cell_id(options[:number])}' #{onclick} #{klass_name}>#{form_template(options)}</div>"
@@ -1531,7 +1531,7 @@ class Rating < QuestionCell
 	end
 
   def outer_span(last = false)
-    span = case class_name
+    sp = case class_name
     when "rating3lab"  then "span-4"
     when "rating2lab1" then "span-3"
     when "rating3lab2" then "span-4"
@@ -1544,33 +1544,35 @@ class Rating < QuestionCell
     # when "rating7": "span-16"
     else ""
     end
-    span << " last" if last
-    span << " prepend-#{prespan}" if prespan
-    span
+    sp << " last" if last
+    sp << " prepend-#{prespan}" if prespan
+    sp
   end
   
   def inner_span(last = false)
-    span = case class_name
+    sp = case class_name
     when "rating3lab"  then "span-1"
     when "rating2lab1" then "span-2"
     when "rating3lab2" then "span-3"
     when "rating3lab3" then "span-4"
     when "rating3lab4" then "span-4"
     when "rating5lab4" then "span-4"
+    when "rating1" then "span-3"
     when "rating4" then "span-3"
     when "rating5" then "span-3"
     when "rating3" then "span-3"
     when "rating7" then "span-2_5"
     # when "rating7": "span-16"
     else
-      "span-#{9 / self.question_items.size}"
+      "span-#{9 / [self.question_items.size, 3].max}"
     end
-    span << " last" if last
-    span
+	sp << " prepend-#{prespan} " if prespan
+    sp << " last" if last && question_items.size > 1
+    sp
   end
   
   def fast_outer_span(last = false)
-    span = case class_name
+    sp = case class_name
     when "rating3lab"  then "span-4"
     when "rating2lab1" then "span-4"
     when "rating3lab2" then "span-4"
@@ -1584,12 +1586,12 @@ class Rating < QuestionCell
     # when "rating7": "span-16"
     else ""
     end
-    span << " last" if last
-    span
+    sp << " last" if last
+    sp
   end
   
   def fast_inner_span(last = false)
-    span = case class_name
+    sp = case class_name
     when "rating5"  "span-7"
     when "rating2lab1" then "span-3"
     when "rating3lab"  then "prepend-1 span-3"

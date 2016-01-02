@@ -130,13 +130,25 @@ function toggleRadio(rObj) {
 	if (!rObj) return false;
 	
 	rObj.__chk = rObj.__chk ? rObj.checked = !rObj.__chk : rObj.checked;
-
+	// console.log(rObj);
+	
 	// when a button is unchecked, the default button is checked
 	if(!rObj.checked) {
 		var def_radio = new String(rObj.id.match(/q[0-9]+_[0-9]+_[0-9]+_/));
 		def_radio = def_radio + "9";
 		$(def_radio).checked = true;
+		// console.log('checking default button: ' + def_radio);
 	}
+	return true;
+}
+
+function toggleCheck(rObj) {
+	// when clicking checkbox, set value in hidden input with same name
+	if (!rObj) return false;
+	var inputName = rObj.name;
+	var selectHidden = "input[name='" + inputName + "']";
+	var hiddenElem = $("input[name='" + inputName + "']");
+	hiddenElem.val(rObj.checked ? 1 : 0);
 	return true;
 }
 

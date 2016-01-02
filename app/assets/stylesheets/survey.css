@@ -211,6 +211,11 @@ input.button:active {
 	margin-right: 1.5em;
 }*/
 
+td.rating1 {
+  text-align: center;
+  
+}
+
 td.rating2 {
   text-align: center;
 }
