@@ -8,10 +8,11 @@ class Subscription < ActiveRecord::Base
   before_validation :set_totals
   after_create :new_period!
 
-  attr_accessible :total_used, :total_paid, :active_used, :center, :survey_id, :state
+  attr_accessible :total_used, :total_paid, :active_used, :center, :survey_id, :state, :start
 
   scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
   scope :by_survey, lambda { |center_id, survey| { :conditions => ['center_id = ? and survey_id = ?', center_id, (survey.is_a?(Survey) ? survey.id : survey)] } }
+  # scope :for_cbcl, -> { joins(:survey).where('surveys.bundle = ?', 'CBCL') }
   
   scope :active, -> { where('state = ?', 1) }
   scope :inactive, -> { where('state = ?', 2) }
@@ -29,10 +30,6 @@ class Subscription < ActiveRecord::Base
     self.total_paid ||= 0
     self.total_used ||= 0
     self.active_used ||= 0
-  end
-  
-  def new_period!
-    self.periods.build(:active => true, :used => 0)
   end
   
   def Subscription.states
@@ -127,7 +124,7 @@ class Subscription < ActiveRecord::Base
     new_period = self.periods.new(:active => true, :subscription => self, :used => 0)
     new_period.survey_id = self.survey_id
     new_period.center_id = self.center_id
-    new_period.start = DateTime.now
+    new_period.start = self.start
     new_period.save
   end
 

@@ -66,7 +66,7 @@ class Journal < ActiveRecord::Base #< Group
   scope :in_center, lambda { |group| group && where(:center_id => (group.is_a?(Center) ? group.id : group)) || scoped }
   scope :by_code, -> { order('code ASC') }
   scope :order_by, lambda { |column, order|
-    puts "column, order: #{column} #{order}"
+    # puts "column, order: #{column} #{order}"
     if ['title', 'code', 'birthdate', 'created_at'].include?(column)
       order("#{column} #{order == 'desc' && 'desc' || 'asc'}")
     else
@@ -77,7 +77,6 @@ class Journal < ActiveRecord::Base #< Group
   scope :for, lambda { |journal_id| where(:id => journal_id) }
   scope :all_groups, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
   scope :all_groups, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
-
 
   define_index do
      # fields

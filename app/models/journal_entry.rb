@@ -28,6 +28,7 @@ class JournalEntry < ActiveRecord::Base
   scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
   scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
   scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }
+  # scope :done, -> { includes(:survey_answer).where('survey_answers.done = 1') }
 
   # def self.follow_ups
   #   [["Diagnose", 0], ["1. opfølgning", 1], ["2. opfølgning", 2], ["3. opfølgning", 3], ["Afslutning", 4]]
@@ -76,7 +77,7 @@ class JournalEntry < ActiveRecord::Base
     self.survey_answer.follow_up = self.follow_up
     self.survey_answer.sex = self.journal.sex
     self.answered_at = self.survey_answer.updated_at = DateTime.now
-    self.answered!
+    # self.answered!
     self.survey_answer.save && self.save
     self.survey_answer
   end

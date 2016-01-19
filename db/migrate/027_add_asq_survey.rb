@@ -1,7 +1,7 @@
 class AddAsqSurvey < ActiveRecord::Migration
   def self.up
 
-    survey = Survey.new ({ id: 9, title: "ASQ:SE checkbox", category: "ASQ", description: "", age: "4.5-6.5", surveytype: "parent", position: 99, prefix: "asq-se", color: "66ff66" })
+    survey = Survey.new ({ id: 9, title: "ASQ:SE", category: "ASQ", description: "", age: "4.5-6.5", surveytype: "parent", position: 99, prefix: "asq-se", color: "66ff66" })
     question = Question.new ({ survey: survey, number: 1, ratings_count: 33, columns: 3})
 
     question.question_cells <<   (QuestionCell.new({ type: "Placeholder", col: 1, row: 1, items: "desc::::", span: 6, prop_mask: 0}))

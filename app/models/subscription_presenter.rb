@@ -5,8 +5,9 @@ class SubscriptionPresenter
   # periods -> total used in period 
   attr_accessor :group, :subscriptions, :summary_view, :surveys, :periods, :detailed_view, :total_periods, :params
 
-  def initialize(group, surveys = nil, subscriptions = nil, params = {}) # for a group
+  def initialize(group, subscriptions = nil, params = {}) # for a group
     subscriptions ||= group.subscriptions(:include => :periods).to_a
+    # surveys ||= subscriptions.map &:survey
     surveys ||= group.surveys
     @group = group
     @params = params
@@ -15,7 +16,8 @@ class SubscriptionPresenter
     @subscriptions = subscriptions.sort_by { |s| s.survey_id }
     # puts "surveys: #{surveys.inspect}" 
     @surveys = surveys.to_a.to_hash_with_key { |s| s.id }
-    self.periods_summary(group)
+    self.periods_summary(group, subscriptions)
+    puts "surveys: #{surveys.map(&:id)}"
     puts "periods_summaries: #{@summary_view.inspect}"
     puts "periods_: #{@periods.inspect}"
     self.details
@@ -31,21 +33,21 @@ class SubscriptionPresenter
 
     date = active_period.created_on 
     stop = active_period.paid_on || DateTime.now
-          puts "Current_period: #{active_period.inspect}  date: #{date.inspect} stop: #{stop}"
+    # puts "Current_period: #{active_period.inspect}  date: #{date.inspect} stop: #{stop}"
 
     beginning = DateTime.new(2000,1,1).to_s(:db)
     counter = PeriodsCounter.new
-    count_active = counter.count_real_used(subscription.center_id, date.to_s(:db), stop.to_s(:db))
+    count_active = counter.count_real_used(subscription.center_id, date.to_s(:db), stop.to_s(:db), [survey.id])
     # puts "stop: #{stop}  #{count_active.inspect}"
     count_active[subscription.survey_id] ||= {:used => 0}
     
-    puts "count_used between: #{beginning} #{date.to_s(:db)}"
-    count_used = counter.count_real_used(subscription.center_id, beginning, date.to_s(:db))
-    puts "count_used: #{count_used.inspect}"
+    # puts "count_used between: #{beginning} #{date.to_s(:db)}"
+    count_used = counter.count_real_used(subscription.center_id, beginning, date.to_s(:db), [survey.id])
+    # puts "count_used: #{count_used.inspect}"
     count_used[subscription.survey_id] ||= {:used => 0}
 
-    count_all = counter.count_real_used(subscription.center_id, beginning, DateTime.now.to_s(:db))
-    puts "count_all: #{count_all.inspect}"
+    count_all = counter.count_real_used(subscription.center_id, beginning, DateTime.now.to_s(:db), [survey.id])
+    # puts "count_all: #{count_all.inspect}"
     count_all[subscription.survey_id] ||= {:used => 0}
 
     @detailed_view << {
@@ -82,9 +84,9 @@ class SubscriptionPresenter
     @group.subscriptions.sum { |s| s.active_used }
   end
 
-  def periods_summary(group) # count totals in periods
+  def periods_summary(group, subscriptions) # count totals in periods
     counter = PeriodsCounter.new
-    summaries = @group.subscription_service.subscription_summary(@params).sort_by {|s| s.first }
+    summaries = @group.subscription_service.subscription_summary(subscriptions, @params).sort_by {|s| s.first }
     summaries.each do |summary|
       date, periods = *summary
       puts "periods_summary: #{date.inspect}  #{periods.inspect}"

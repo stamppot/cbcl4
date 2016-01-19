@@ -14,7 +14,7 @@
   <dd><%= text_field 'journal', 'title'  %></dd>
 
   <dt><label for="journal_sex"><%= t('gender') %></label></dt>
-  <dd><%= select 'journal', 'sex', Journal.sexes.to_a %></dd>
+  <dd><%= select 'journal', 'sex', Journal.sexes.to_a[0..1] %></dd>
 
   <dt><label for="journal_birthdate"><%= t('birthdate') %></label></dt>
   <dd><%= date_select 'journal', 'birthdate', {:start_year => Date.today.year-25, :end_year => Date.today.year, :order => [:day, :month, :year] } %></dd>

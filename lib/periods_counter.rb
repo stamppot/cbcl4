@@ -110,14 +110,15 @@ class PeriodsCounter
 	end
 
     # counts survey_answer to determine how many were really used
-    def count_real_used(center_id, start, stop)
+    def count_real_used(center_id, start, stop, survey_ids = nil)
     	# logger.info ("stop: #{stop}")
     	stop = stop.blank? && "Now()" || "'#{stop}'"
-    	puts "count stop: #{stop}"
+    	# puts "count stop: #{stop}"
 		query = []
 		query << "select center_id, team_id, survey_id, count(id) as used from survey_answers "
 		query << "where center_id = #{center_id} and done = 1 "
 		query << "and created_at between '#{start}' and #{stop} "
+		query << "and survey_id IN (#{survey_ids.join(',')}) " if survey_ids
 		query << "group by survey_id"
 
 		survey_answer_count = ActiveRecord::Base.connection.execute(query.join).each(:as => :hash).inject({}) do |col,j| 

@@ -17,8 +17,10 @@ class SubscriptionService
       surveys.delete sub.survey_id.to_s   # remove already done subs
     end
     # elsif not exists in db, create new subscription
+    created_on = subscriptions.any? && subscriptions.first.created_at || DateTime.now
+    puts "create sub: #{created_on}"
     surveys.each do |survey|
-      sub = Subscription.new(:total_used => 0, :total_paid => 0, :active_used => 0)
+      sub = Subscription.new(:total_used => 0, :total_paid => 0, :active_used => 0, :created_at => created_on)
       sub.state = 1
       sub.survey_id = survey
       sub.center = @center
@@ -32,8 +34,9 @@ class SubscriptionService
   end
 
   # finds all periods for all subscriptions
-  def subscription_summary(options = {})
-    periods = SubscriptionsQuery.new.query_subscription_periods_in_centers(@center.id)
+  def subscription_summary(subscriptions = nil, options = {})
+    subscriptions ||= @center.subscriptions
+    periods = SubscriptionsQuery.new.query_subscription_periods_in_centers(@center.id, subscriptions, options)
     periods.group_by {|c| c["created_on"] }
   end
   

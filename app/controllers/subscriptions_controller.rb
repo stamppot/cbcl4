@@ -75,9 +75,9 @@ class SubscriptionsController < ApplicationController
   
   def center
     group = Center.find params[:id]
-    subscription_presenter = group.subscription_presenter
-    @subscriptions = group.subscriptions(:include => :periods)
-    @surveys = current_user.surveys.group_by {|s| s.id}
+    subscriptions = group.subscriptions(:include => :periods).select {|sub| sub.survey.bundle == "CBCL"}
+    subscription_presenter = group.subscription_presenter(subscriptions)
+    # @surveys = surveys.group_by {|s| s.id}
 
     render :partial => 'center', :locals => {:subscription_presenter => subscription_presenter, :group => group }
   end
@@ -99,7 +99,7 @@ class SubscriptionsController < ApplicationController
     @subscribed = Subscription.active.in_center(@group)
   end
 
-   # TODO 31-1-9: possible to rewrite to use subscription id?
+
   def create
     @group = Group.find(params[:group][:id])
     if @group.valid?
@@ -114,7 +114,14 @@ class SubscriptionsController < ApplicationController
         surveys.delete sub.survey_id.to_s   # remove already done subs
       end
       # elsif not exists in db, create new subscription
-      surveys.each { |survey| @group.subscriptions.create(:center => @group, :survey_id => survey.to_i, :state => 1) }
+
+      start_date = subscriptions.any? && subscriptions.first.periods.last.start || DateTime.now
+      puts "start_date: #{start_date.to_s(:long)}"
+
+      surveys.each do |survey| @group.subscriptions.create(
+          :center => @group,
+         :survey_id => survey.to_i, :state => 1, :start => start_date)
+      end
       if @group.save
         flash[:notice] = "Abonnementer for center #{@group.title} blev ændret."
         redirect_to center_path(@group)

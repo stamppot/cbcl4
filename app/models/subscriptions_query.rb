@@ -21,7 +21,7 @@ class SubscriptionsQuery
   # end  
   
   # TODO: join arrays/hashes - {"journal_entries.journal_id" => "groups.id" }
-  def join_clause(from_columns = nil, joins = nil)
+  def join_clause(from_columns = nil, joins = nil, in_clause = nil)
     self.from_where = 
     if joins && from_columns
       joins = joins.to_h if joins.is_a? Array
@@ -29,6 +29,7 @@ class SubscriptionsQuery
       clause = ["FROM #{from_columns.join(', ')}"] <<
               "WHERE #{joins.shift.join(' = ')} "
       joins.each {|a,b| clause << "AND #{a} = #{b}"}
+      in_clause.each {|a,b| clause << "AND #{a} IN (#{b})"}
       clause
     else
       ["FROM journal_entries, groups, survey_answers, journals ",
@@ -76,7 +77,7 @@ class SubscriptionsQuery
    #       age_filter(age_low, age_high) << survey_filter(surveys) << entries << group_by("survey_answer_id")).join
    # end
    
-   def subscription_periods_in_center(center = nil, options = {})
+   def subscription_periods_in_center(center = nil, subscriptions = [], options = {})
      joins = ['subscriptions', 'periods']
      conditions = { 'subscriptions.id' => 'periods.subscription_id', 'subscriptions.state' => 1}
      conditions["periods.active"] = 1 if options["active"] #options["active"]
@@ -89,15 +90,17 @@ class SubscriptionsQuery
        joins << 'groups'
      end
 
+     in_clause = subscriptions.any? && {'subscriptions.id' => (subscriptions.map {|s| s.id}.join(',')) } || []
      self.select(["periods.id, subscriptions.center_id, subscriptions.total_used as total_used, subscriptions.active_used as active_used, periods.survey_id, state, subscription_id, used, active, paid as paid, paid_on as paid_on, periods.created_on"])
-     self.join_clause(joins, conditions)
+
+     self.join_clause(joins, conditions, in_clause)
      self.query = (self.select_clause << self.from_where).join(' ')
-     # puts "subscription_periods_in_center: query: #{self.query}"
+     puts "subscription_periods_in_center: query: #{self.query}"
 		self.query
    end
 
-   def query_subscription_periods_in_centers(center = nil, options = {})
-     self.subscription_periods_in_center(center, options)
+   def query_subscription_periods_in_centers(center = nil, subscriptions = [], options = {})
+     self.subscription_periods_in_center(center, subscriptions, options)
      self.do_query
    end
 

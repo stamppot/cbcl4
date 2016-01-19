@@ -120,8 +120,8 @@ class Center < Group
     !self.subscriptions.map { |sub| sub.periods.paid }.flatten.empty?
   end
 
-  def subscription_presenter(surveys = nil)
-    @subscription_presenter ||= SubscriptionPresenter.new(self, surveys)
+  def subscription_presenter(subscriptions = nil)
+    @subscription_presenter ||= SubscriptionPresenter.new(self, subscriptions)
   end
 
   def subscription_service
