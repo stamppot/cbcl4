@@ -10,10 +10,10 @@ class ImportJournals # AddJournalsFromCsv
     # when 5 then "ycy" # YSR 6-16
     
     def initialize
-    	puts "update(file, [survey_ids], team_id, do_save)"
+    	puts "update(file, [survey_ids], team_id, follow_up, do_save)"
     end
 
-	def update(file, survey_ids, team_id, do_save = false)
+	def update(file, survey_ids, team_id, follow_up = 0, do_save = false)
 		surveys = Survey.find(survey_ids)
 		group = Group.find(team_id)
 		center = group.center
@@ -64,21 +64,21 @@ class ImportJournals # AddJournalsFromCsv
 				end
 			end
 			
-			add_surveys_and_entries(journal, surveys, do_save)
+			add_surveys_and_entries(journal, surveys, follow_up, do_save)
 			i = i + 1
 
 		end
 	end
 
-	def add_surveys_and_entries(journal, surveys = [], do_save = false)
+	def add_surveys_and_entries(journal, surveys = [], follow_up = 0, do_save = false)
 		if surveys.any?
 			if journal.journal_entries.any? # add extra surveys
 				je_surveys = journal.journal_entries.map &:survey
 				add_surveys = surveys - je_surveys
 				puts "surveys: #{add_surveys.map &:inspect}"
-				journal.create_journal_entries(add_surveys) if do_save
+				journal.create_journal_entries(add_surveys, follow_up) if do_save
 			elsif !journal.journal_entries.any?
-				journal.create_journal_entries(surveys) if do_save
+				journal.create_journal_entries(surveys, follow_up) if do_save
 			end
 		end
 	end

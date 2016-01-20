@@ -163,3 +163,5 @@ class AddAsqSurvey < ActiveRecord::Migration
     survey.destroy
   end
 end
+
+AddAsqSurvey.up
