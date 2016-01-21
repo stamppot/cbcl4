@@ -34,8 +34,11 @@ class ImportJournals # AddJournalsFromCsv
 			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
 			# next
 
-			journal = Journal.find_by_title_and_group_id(journal_name, team_id)
-			
+			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
+			# if !journal || (journal && journal.alt_id == alt_id)
+			# 	journal = Journal.find_by_code_and_group_id(alt_id, team_id)
+			# end
+
 			if b.blank?
 				puts "ERROR: no birthdate: #{row}"
 				next
@@ -62,6 +65,14 @@ class ImportJournals # AddJournalsFromCsv
 					journal.save
 					puts "Saved journal: #{journal.id}  #{journal.title}"
 				end
+			else
+				journal.title = args[:title]
+				journal.parent_email = args[:parent_mail]
+				journal.birthdate = args[:birthdate]
+				if do_save
+					journal.save
+					puts "Saved journal: #{journal.id}  #{journal.title}"
+				end
 			end
 			
 			add_surveys_and_entries(journal, surveys, follow_up, do_save)
@@ -73,11 +84,11 @@ class ImportJournals # AddJournalsFromCsv
 	def add_surveys_and_entries(journal, surveys = [], follow_up = 0, do_save = false)
 		if surveys.any?
 			if journal.journal_entries.any? # add extra surveys
-				je_surveys = journal.journal_entries.map &:survey
+				je_surveys = journal.not_answered_entries.select {|je| je.follow_up == follow_up }.map &:survey
 				add_surveys = surveys - je_surveys
 				puts "surveys: #{add_surveys.map &:inspect}"
 				journal.create_journal_entries(add_surveys, follow_up) if do_save
-			elsif !journal.journal_entries.any?
+			elsif !journal.not_answered_entries.any?
 				journal.create_journal_entries(surveys, follow_up) if do_save
 			end
 		end
