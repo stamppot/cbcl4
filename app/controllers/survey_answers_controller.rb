@@ -256,6 +256,7 @@ class SurveyAnswersController < ApplicationController
 
     if subscription.nil? || subscription.inactive?
       flash[:error] = subscription && t('subscription.expired') || ('subscription.none_for_this_survey')
+      logger.info "Subscription inactive, will logout if login_user"
       redirect_to journal_entry.journal and return
     end
 
@@ -292,7 +293,11 @@ class SurveyAnswersController < ApplicationController
         remove_user_from_session!
         redirect_to return_to and return
       else
-        redirect_to survey_finish_path(journal_entry) and return
+        if journal_entry.next
+          redirect_to survey_next_path(journal_entry.next) and return
+        else
+          redirect_to survey_finish_path(journal_entry) and return
+        end
       end
     end
   rescue RuntimeError

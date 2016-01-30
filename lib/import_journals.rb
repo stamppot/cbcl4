@@ -10,10 +10,15 @@ class ImportJournals # AddJournalsFromCsv
     # when 5 then "ycy" # YSR 6-16
     
     def initialize
-    	puts "update(file, [survey_ids], team_id, follow_up, do_save)"
+    	puts "update(file, [survey_ids], team_id, follow_up, {couple}, do_save)"
     end
-
-	def update(file, survey_ids, team_id, follow_up = 0, do_save = false)
+ 	
+ 		# do_next couples journal_entries so one survey can be answered after the other without logging out/in
+	def update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)
+		puts "no survey_ids given" and return if !survey_ids.any?
+		puts "invalid follow_up: #{follow_up}" and return if follow_up.to_i < 0
+		puts "invalid coupling: #{couple.inspect}" and return if !couple.is_a?(Hash)
+		
 		surveys = Survey.find(survey_ids)
 		group = Group.find(team_id)
 		center = group.center
@@ -51,7 +56,7 @@ class ImportJournals # AddJournalsFromCsv
 			puts "birthdate: #{birthdate}"
 			args = {
 				:title => journal_name, :group_id => group.id, :center_id => group.center_id,
-				:birthdate => birthdate, :parent_email => parent_mail, :title => journal_name,
+				:birthdate => birthdate, :parent_email => parent_mail,
 				:parent_name => parent_name, :alt_id => alt_id, :nationality => "Dansk", :sex => sex
 			}
 			journal.sex = sex if journal
@@ -75,9 +80,11 @@ class ImportJournals # AddJournalsFromCsv
 				end
 			end
 			
-			add_surveys_and_entries(journal, surveys, follow_up, do_save)
-			i = i + 1
+			new_entries = add_surveys_and_entries(journal, surveys, follow_up, do_save)
+			puts "GOT entries: #{new_entries.inspect}"
+			connect_entries(new_entries, couple, do_save) unless couple.blank?
 
+			i = i + 1
 		end
 	end
 
@@ -91,6 +98,16 @@ class ImportJournals # AddJournalsFromCsv
 			elsif !journal.not_answered_entries.any?
 				journal.create_journal_entries(surveys, follow_up) if do_save
 			end
+		end
+		journal.not_answered_entries.with_followup(follow_up).where('survey_id IN (?)', surveys)
+	end
+
+	def connect_entries(entries, couple, do_save) 
+		couple.each do |k,v|
+			src = entries.select {|e| e.survey_id == k}.first
+			dst = entries.select {|e| e.survey_id == v}.first
+			src.next = dst.id
+			src.save if do_save
 		end
 	end
 

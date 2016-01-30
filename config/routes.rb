@@ -191,6 +191,7 @@ Cbcl4::Application.routes.draw do
 
   get 'start/(:api_key)/(:token)', :to => 'start#start', :as => 'survey_start'
   get 'continue/(:api_key)/(:token)', :to => 'start#continue', :as => 'survey_continue'
+  get 'next/:id/(:api_key)/(:token)', :to => 'start#next', :as => 'survey_next'      # :id is login_user
   get 'finish/(/:id)/(:api_key)/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   # get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry

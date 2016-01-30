@@ -28,6 +28,8 @@ class JournalEntry < ActiveRecord::Base
   scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
   scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
   scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }
+  scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
+
   # scope :done, -> { includes(:survey_answer).where('survey_answers.done = 1') }
 
   # def self.follow_ups
