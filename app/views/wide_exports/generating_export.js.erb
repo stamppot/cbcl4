@@ -1,0 +1,5 @@
+<% if @completed %>
+{ "completed": <%= @completed %>, "filename": "<%= @export_file.filename %>", "id": <%= @export_file.id %> }
+<% else %>
+ ..
+ <% end %>

@@ -219,6 +219,12 @@ Cbcl4::Application.routes.draw do
   get 'exports/filter/(/:id)', :to => 'exports#filter', :as => 'export_filter'
   get 'exports/generating_export/(/:id)', :to => 'exports#generating_export', :as => 'generating'
 
+  # wide table export
+  match 'wide_exports/download/(/:id)', :to => 'wide_exports#download', :as => 'wide_csv_download', :via => [:get, :post]
+  get 'wide_exports/set_age_range/(/:id)', :to => 'wide_exports#set_age_range', :as => 'wide_set_age_range'
+  get 'wide_exports/filter/(/:id)', :to => 'wide_exports#filter', :as => 'wide_export_filter'
+  get 'wide_exports/generating_export/(/:id)', :to => 'wide_exports#generating_export', :as => 'wide_generating'
+
   match 'score_exports/download/(/:id)', :to => 'score_exports#download', :as => 'csv_score_rapport_download', :via => [:get, :post]
   # get 'exports/download/(/:id)', :to => 'exports#download', :as => 'csv_download'
 

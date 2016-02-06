@@ -34,6 +34,7 @@ class SurveyAnswer < ActiveRecord::Base
   scope :for_survey, lambda { |survey_id| { :conditions => ["survey_answers.survey_id = ?", survey_id] } }
   scope :with_journals, -> { joins("INNER JOIN `journal_entries` ON `journal_entries`.journal_id = `journal_entries`.survey_answer_id").includes({:journal_entry => :journal}) }
   scope :for_entries, lambda { |entry_ids| where({ :journal_entry_id => entry_ids }) } # ["survey_answers.journal_entry_id IN (?)", 
+  scope :for_team, ->(team_id) { where(["survey_answers.team_id = ?", team_id]) }
 
   def answered_by_role
     return Role.get(self.answered_by)
@@ -58,6 +59,39 @@ class SurveyAnswer < ActiveRecord::Base
     self.save
     csv_survey_answer.save
     csv_score_rapport.save
+  end
+
+  def self.count_with_options(user, options = {})  # params are not safe, should only allow page/per_page
+    self.with_options(user, options).count #(params)
+  end  
+  
+  # filtrerer ikke på done, også kladder er med
+  def self.with_options(user, options)
+    puts "SurveyAnswer.with_options: #{options.inspect}"
+    o = self.filter_params(user, options)
+    survey_ids = o[:surveys]
+    puts "survey_ids: #{survey_ids} -- #{o[:surveys].inspect}"
+    options.delete(:team) if options[:team].blank?
+
+    query = if !options[:team].blank?
+      puts "with_options for_team: #{options[:team]}"
+      SurveyAnswer.between(o[:start_date], o[:stop_date])
+        .aged_between(o[:age_start], o[:age_stop])
+        .for_team(options[:team])
+        .for_surveys(survey_ids)
+      else
+        puts "with_options in_center: #{options[:center]}"
+        SurveyAnswer.between(o[:start_date], o[:stop_date])
+        .aged_between(o[:age_start], o[:age_stop])
+        .in_center(options[:center])
+        .for_surveys(survey_ids)
+      end
+      puts "query: #{query.to_sql.inspect}"
+    puts "options.: #{options.inspect}"
+    puts "options[:team]: #{options[:team].inspect}"
+    # query = query.in_center(options[:center]) if !options[:center].blank?
+    # query = query.for_team(options[:team]) if !options[:team].blank?
+    query
   end
 
   def self.save_manual(params)
@@ -477,9 +511,9 @@ class SurveyAnswer < ActiveRecord::Base
     # options[:surveys]     ||= Survey.all.map {|s| s.id}
     if !options[:center].blank?
       center = Center.find(options[:center])
-      options[:journal_ids] = center.journal_ids if center && !options[:journal_ids]
+      # options[:journal_ids] = center.journal_ids if center && !options[:journal_ids]
     end
-    options[:journal_ids] ||= user.journal_ids
+    # options[:journal_ids] ||= user.journal_ids
     options
   end
 

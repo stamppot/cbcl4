@@ -338,12 +338,11 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
     csv_helper = ExportCsvHelper.new
     @rows = csv_helper.get_mail_merge_login_users_rows(journal_entries)
-    # csv = csv_helper.to_csv(rows)
 
     respond_to do |wants|
       filename =  "logins_#{group.code.to_s.underscore}_#{Time.now.strftime('%Y%m%d%H%M')}.csv"
       wants.csv { export_csv csv_helper.to_csv(@rows), filename, "text/csv;charset=utf-8;" }
-      wants.xls # { send_data csv_helper.to_csv(@rows, "\t"), :filename => filename, :type => "text/csv;charset=utf-8; ", :disposition => 'attachment' }  
+      wants.xls
     end
   end
 

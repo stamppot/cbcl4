@@ -1,0 +1,137 @@
+<script type="text/javascript">
+ 	var center = "<%= @center.id %>";
+
+ function toggle_export(value) {
+ 	if(value == "rapport")
+ 		changeAction('export_form', "/wide_score_exports/download");
+	else
+		changeAction('export_form', "/wide_exports/download");
+	select_center($('#center_selector').val() || center);
+ }
+
+  function select_center(id) {
+  	var action = "/" + $('#export_form').attr('action').split('/')[1];
+  	changeAction('export_form', action + "/download/" + id);
+ }
+
+ $(document).ready(function () {
+ 	select_center($('#center_selector').val() || center);
+ 	if(center > 0) {
+	 	var action = $('#export_form').attr('action')
+	 	$('#export_form').attr('action', action.replace('undefined', center));
+ 	}
+ 	// alert($('#export_form').attr('action'));
+ });
+ </script>
+
+
+<p>
+<%= image_tag 'excel_export_48.png', :align => "middle" %><span class="h3">Dataudtræk (brede tabeller)</span>
+</p>
+<br/>
+
+<%= form_tag(wide_csv_download_path(@center.id), :id => 'export_form') do %>
+
+<div id="export_type">
+	<input checked="checked" id="export_raw" name="export" onchange="toggle_export(this.value);" type="radio" value="raw">
+	<label for="export_raw">Rå data</label> <br>
+<!-- 	<input id="export_rapport" name="export" onchange="toggle_export(this.value);" type="radio" value="rapport">
+	<label for="export_rapport">Scorerapporter</label> <br> -->
+</div>
+
+<div id='filter_fields'>
+
+
+<% if current_user.centers.size > 1 %>
+	<script type='text/javascript'>
+		$('#content').delegate('#center_selector', 'change', function() {
+			var center_id = $('#center_selector').val();
+			select_center(center_id);
+			$.ajax({
+				url: '/teams/center/' + center_id + '.json', 
+				dataType: 'json',
+				success: function(data) {
+					$('#team_selector').find('option').remove().end()
+					$('#team_selector').append($("<option>").attr('value', 'team').text('Vælg evt. et team'));
+					$(data).each(function() {
+						$('#team_selector').append($("<option>").attr('value',this.id).text(this.title));
+					});
+					$('#team_selector').toggle(data.length > 0);
+				}
+			});
+		});
+	</script>
+	<h3>Center</h3>
+	<select id='center_selector' name='center[]'>
+	<%= options_for_select @centers.map {|c| [c.title, c.id]}, {:include_blank => true} %>
+	<%# select('center', :id, @centers.map {|c| [c.title, c.id]}, {:include_blank => true}, :id => 'center_selector') %>
+	</select>
+	<br/>
+	<div>
+		<br/>
+		<select name="team" id="team_selector" style="display:none;"></select>
+	</div>
+<% else %>
+	<input type='hidden' name='center' value='<%= current_user.center_id %>' />
+	<% if @center.teams.any? %>
+			<div id="teams">
+				<h2>Team</h2>
+				<select name='team' id='team_selector'>
+					<%= options_for_select @center.teams.map {|t| [t.title, t.id]} %>
+				</select>
+			</div>
+	<% end %>
+<% end %>
+<br/>
+
+<h3>Besvaret mellem</h3>
+	<label for='start_date'>Startdato</label>
+	<%= select_date(@start_date, {:prefix => 'start_date', :order => [:day, :month, :year], :start_year => 2003, :end_year => Date.today.year } ) %>
+	<br>
+	<label for='stop_date'>Slutdato</label>
+	<%= select_date(@stop_date, :prefix => 'stop_date', :order => [:day, :month, :year], :start_year => (Date.today.year), :end_year => Date.today.year-20 ) %>
+	<br>
+	
+<h3>Alder</h3>
+	<%= render :partial => 'select_age' %>
+	
+	<p><h3>Vælg skemaer</h3></p>
+		<div id="survey_color" style='width: 25em;'>
+		<% @surveys.each do |survey| %>
+			<div style='background-color: #<%= survey.color %>; width: 25em;'>
+				<%= check_box( :survey, survey.id, { :class => 'no_border'}) %>		
+				<label for="survey_<%= survey.id %>"><%= survey.title %></label> <br>
+			</div>
+		<% end %>
+		</div>
+	<br>
+</div>	
+
+	<div>
+		<%= image_tag 'spinner.gif', :alt => 'Venter...', :id => 'filter_spinner', :style => 'display:none;' %>
+		<span id="results">Antal: <%= @count_survey_answers %></span>
+	</div>
+	<br>
+	
+<span style="padding: 3px;" id='send_form' class="btn-submit">
+	<script>
+		function filter_button() {
+			var url = '/wide_exports/filter/' + ($('#center_selector').val() || 0)
+			var team = $('#team_selector').val();
+			var args = $('#export_form').serialize('filter_fields');
+			if((typeof team) !== 'undefined')
+				args += '&team=' + $('#team_selector').val();
+			$.get(url, args, function(data) {
+				$('#results').html(data.text).fadeIn().pulse();
+			});
+		};
+	</script>
+	<span id='filter'>
+		<a class='button' id='filter_button' onclick='filter_button(); return false;'><span class="filter">Filtrer</span></a>
+	</span>
+</span>
+
+	<%= submit_tag 'Download', { :class => 'button download', :id => 'download' } %>
+<% end %>
+
+<br/>

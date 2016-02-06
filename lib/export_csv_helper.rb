@@ -51,16 +51,7 @@ class ExportCsvHelper
     results.unshift(header)
   end
 
-  def get_distinct_surveys(journal_entries)
-    surveys = {}
-    num_surveys = journal_entries.map(&:survey_id).uniq.size
-    journal_entries.each do |entry|
-      surveys[entry.survey_id] ||= entry.survey
-      break if(surveys.size == num_surveys) 
-    end
-    surveys
-  end
-
+  # used for reminders
   def get_entries_status(journal_entries)
     surveys = get_distinct_surveys(journal_entries).values # Survey.all.to_hash(&:id).invert
     journal_groups = journal_entries.group_by {|je| je.journal}
@@ -91,4 +82,14 @@ class ExportCsvHelper
     results
   end    
 
+
+  def get_distinct_surveys(journal_entries)
+    surveys = {}
+    num_surveys = journal_entries.map(&:survey_id).uniq.size
+    journal_entries.each do |entry|
+      surveys[entry.survey_id] ||= entry.survey
+      break if(surveys.size == num_surveys) 
+    end
+    surveys
+  end
 end

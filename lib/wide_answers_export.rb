@@ -9,7 +9,7 @@ require 'csv'
 #
 #
 
-class AnswersCsvExport
+class WideAnswersExport
 
   def get_columns(center_id)
     query = "select j.title as title, j.`code` as code, j.sex, j.birthdate, sa.survey_id, concat('s', sa.survey_id, '_', 'item', ac.item) as item,  ac.value, ac.value_text from survey_answers sa
@@ -24,6 +24,7 @@ class AnswersCsvExport
     end
   end
 
+  # a table with variables and values for the given surveys in one row
   def wide_table(center_id, survey_ids = [])
     vars = Variable.find_all_by_survey_id(survey_ids).map { |v| v.var.to_sym}
     # puts "vars: #{vars.inspect}"
@@ -50,60 +51,36 @@ class AnswersCsvExport
     output
   end
   
-  def score_rapports_to_csv(csv_score_rapports, survey_id)
-    survey = Survey.find(survey_id)
-    header = journal_csv_header.keys + survey.scores.map {|s| s.variable}
-    
-    csv_rows = csv_score_rapports.inject([]) do |rows,csa|
-      rows << csa.survey_answer.info.values.map {|v| to_danish(v)} + csa.answer.split(';;')
-      rows
-    end
+  # a table with variables and values for the given surveys in one row
+  def wide_table(survey_answers, survey_ids = [])
+    vars = Variable.find_all_by_survey_id(survey_ids).map { |v| v.var.to_sym}
+    # puts "vars: #{vars.inspect}"
+    vars.unshift :title
+    # TODO: must have same followup
+    by_journal = survey_answers.group_by {|sa| sa.journal_id}
+    puts "wide_table: sas: #{survey_answers.count}"
 
+    journal_titles = {}
+    by_journal.keys.in_groups_of(200).each {|batch| Journal.where("id IN (?)", batch.compact).select('id, title')
+      .each {|j| journal_titles[j.id] ||= j.title } }
+    
+    output = ""
     output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
-      csv_output << header
-      csv_rows.each { |line| csv_output << line }
-    end
-  end
-    
-  # merged pregenerated csv_answer string with header and journal information
-  def to_csv(csv_survey_answers, survey_id)
-    survey = Survey.find(survey_id)
-    header = journal_csv_header.keys + survey.variables.map {|v| v.var}
-    
-    csv_rows = csv_survey_answers.inject([]) do |rows,csa|
-      rows << csa.journal_info.split(';;') + csa.answer.split(';;')
-      rows
+      csv_output << vars
+
+      by_journal.each do |journal_id, sas|
+        title = journal_titles[journal_id]
+        vvs = sas.inject({}) {|h, sa| h.merge!(sa.variable_values); h }
+        row = vars.map { |var| vvs[var] || nil }
+
+        row.unshift title
+        csv_output << row
+      end
     end
 
-    output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
-      csv_output << header
-      csv_rows.each { |line| csv_output << line }
-    end
+    # puts "output:\n#{output}"
+    output
   end
 
-  # header vars grouped by survey
-  def survey_headers(survey_id)
-    s = Survey.find(survey_id)
-    s.variables.map {|var| var.var}
-  end
-
-  def journal_csv_header
-    c = Dictionary.new
-    c["ssghafd"] = nil
-    c["ssghnavn"] = nil
-    c["safdnavn"] = nil
-    c["pid"] = nil
-    c["projekt"] = nil
-    c["pkoen"] = nil
-    c["palder"] = nil
-    c["pnation"] = nil
-    c["besvarelsesdato"] = nil
-    c["pfoedt"] = nil
-    c
-  end
-
-  def journal_to_csv(journal)
-    journal.info.values
-  end
   
 end

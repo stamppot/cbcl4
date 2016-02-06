@@ -32,7 +32,9 @@ class ExportAnswersHelper
         csr.survey_answer.info.values
       else
         puts "no answer_info found in journal_entry or survey_answer: #{csr.inspect}  je: #{csr.journal_entry.inspect}"
+        "Ingen info #{journal_entry.inspect}"
       end
+
       rows << info + csr.answer.split(';;')
       rows
     end
@@ -42,7 +44,7 @@ class ExportAnswersHelper
       csv_rows.each { |line| csv_output << line }
     end
   end
-    
+  
   # merged pregenerated csv_answer string with header and journal information
   def export_survey_answers(csv_survey_answers, survey_id)
     survey = Survey.find(survey_id)
@@ -58,19 +60,19 @@ class ExportAnswersHelper
       info = 
       if !journal_entry.nil? && journal_entry.answer_info
         journal_entry.answer_info.split(";")
+      elsif csa.journal_info
+        csa.journal_info.split(";;")
       elsif csa.survey_answer
         csa.survey_answer.info.values
       else
         puts "no answer_info found in journal_entry or survey_answer: #{csa.inspect}  je: #{csa.journal_entry.inspect}"
+        ["ingen info: sa_id: #{csa.survey_answer_id} csa: #{csa.inspect} "]
       end
 
-	logger.info "info nil: csa: #{csa.inspect}" if info.nil?
-	logger.info "csa.journal_info nil: csa: #{csa.inspect}" if csa.journal_info.nil?
-        if(csa.journal_info.nil?)
- 	  next
-	end
-      # header_values = csa.journal_info.split(';;')
-      rows << info + csa.answer.split(';;')
+      if !csa || !csa.answer
+        puts "No csa: #{info.inspect}"
+      end
+      rows << info + (csa && csa.answer && csa.answer.split(';;') || [] )
       rows
     end
 
@@ -81,10 +83,10 @@ class ExportAnswersHelper
   end
 
   # header vars grouped by survey
-  def survey_headers(survey_id)
-    s = Survey.find(survey_id)
-    s.variables.map {|var| var.var}
-  end
+  # def survey_headers(survey_id)
+  #   s = Survey.find(survey_id)
+  #   s.variables.map {|var| var.var}
+  # end
 
   def journal_csv_header
     keys = %w{ssghafd ssghnavn safdnavn pid projekt pkoen palder pnation besvarelsesdato pfoedt}

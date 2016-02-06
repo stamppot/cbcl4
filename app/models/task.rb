@@ -42,6 +42,23 @@ class Task < ActiveRecord::Base
 #    end
   end
 
+
+  def create_wide_survey_answer_export(survey_ids, csv)
+    logger.info "W_EXPORT create_survey_answer_export: survey: #{survey_ids.inspect}"
+    # data = WideAnswersExport.new.export_survey_answers(survey_answers, survey_id)  # TODO: add csv generation on save_answer & change_answer
+    logger.info "create_survey_answer_export: created data survey: #{survey_ids.inspect}"
+    # write data
+    ids = survey_ids.join("_")
+    self.export_file = ExportFile.create(:data => csv,
+      :filename => "eksport_#{Time.now.to_date.to_s}_#{ids}" + ".csv",
+      :content_type => "application/vnd.ms-excel")
+
+    self.status = "Completed"
+    logger.info "W_EXPORT set status completed"
+    self.save
+    logger.info "W_EXPORT saved status"
+  end
+
   # def create_sumscores_export(find_options)
   #   spawn do
   #     score_rapports = ScoreRapport.find_with_options(find_options)
