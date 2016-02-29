@@ -36,7 +36,7 @@ class WideExportsController < ApplicationController
   def filter
     params[:center] = params[:id].to_i
     params[:surveys] = params[:survey].select { |k,v| v.to_i == 1 }.map &:first
-    puts "surveys: #{params[:surveys].inspect}"
+    # puts "surveys: #{params[:surveys].inspect}"
     center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
     center = current_user.center if current_user.all_centers.size == 1
     args = params.clone
@@ -61,7 +61,7 @@ class WideExportsController < ApplicationController
   def download
     params[:center] = params[:id]
     params[:surveys] = params[:survey].select { |k,v| v.to_i == 1 }.map &:first
-    puts "download: surveys: #{params[:surveys].inspect}"
+    # puts "download: surveys: #{params[:surveys].inspect}"
     center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
     center = current_user.center if current_user.centers.size == 1
     args = params.clone

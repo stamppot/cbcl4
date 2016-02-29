@@ -25,31 +25,31 @@ class WideAnswersExport
   end
 
   # a table with variables and values for the given surveys in one row
-  def wide_table(center_id, survey_ids = [])
-    vars = Variable.find_all_by_survey_id(survey_ids).map { |v| v.var.to_sym}
-    # puts "vars: #{vars.inspect}"
-    vars.unshift :title
-    # puts "vars: #{vars.inspect}"
+  # def wide_table(center_id, survey_ids = [])
+  #   vars = Variable.find_all_by_survey_id(survey_ids).map { |v| v.var.to_sym}
+  #   # puts "vars: #{vars.inspect}"
+  #   vars.unshift :title
+  #   # puts "vars: #{vars.inspect}"
 
-    output = ""
-    output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
-      csv_output << vars
+  #   output = ""
+  #   output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
+  #     csv_output << vars
 
-      journals = Journal.where(:center_id => center_id)
-      journals.find_each(:batch_size => 25) do |j|
-        sas = j.answered_entries.sort_by {|e| e.survey_id}.map {|e| e.survey_answer } # TODO: must have same followup
-        title = j.title
-        vvs = sas.inject({}) {|h, sa| h.merge!(sa.variable_values); h }
-        row = vars.map { |var| vvs[var] || nil }
+  #     journals = Journal.where(:center_id => center_id)
+  #     journals.find_each(:batch_size => 25) do |j|
+  #       sas = j.answered_entries.sort_by {|e| e.survey_id}.map {|e| e.survey_answer } # TODO: must have same followup
+  #       title = j.title
+  #       vvs = sas.inject({}) {|h, sa| h.merge!(sa.variable_values); h }
+  #       row = vars.map { |var| vvs[var] || nil }
 
-        row.unshift title
-        csv_output << row
-      end
-    end
+  #       row.unshift title
+  #       csv_output << row
+  #     end
+  #   end
 
-    puts "output:\n#{output}"
-    output
-  end
+  #   puts "output:\n#{output}"
+  #   output
+  # end
   
   # a table with variables and values for the given surveys in one row
   def wide_table(survey_answers, survey_ids = [])

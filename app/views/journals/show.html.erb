@@ -24,7 +24,11 @@
 						<%= link_to image_tag("icon_input.gif", :border => 0, :alt => "Hurtig indtastning", :title => "Vis hurtig indtastning"), journal_entry_path(entry, :fast => true), :title => 'Besvar med hurtig indtastning', :style => 'float: right; width: 16px;' %>
             <%= link_to entry.get_title, show_survey_path(entry), :title => 'Besvar' %>&nbsp;&nbsp;
         	</td>
-            <td style="max-width: 200px;"><%= entry.notes %> <%# t("roles.#{survey.surveytype}") %></td>
+            <td style="max-width: 200px;"><%= entry.notes %> 
+            	<% if entry.next %>
+            		<%= image_tag "link.png", :border => 0, :alt => "Koblet med #{entry.next_survey}" %>
+            	<% end %>
+            </td>
 					 <td><%= entry.created_at.strftime "%d-%m-%Y" %>
 					 <td><%= entry.status %></td>
 					 <td style="min-width: 100px;">

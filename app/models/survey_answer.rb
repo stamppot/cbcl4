@@ -35,6 +35,7 @@ class SurveyAnswer < ActiveRecord::Base
   scope :with_journals, -> { joins("INNER JOIN `journal_entries` ON `journal_entries`.journal_id = `journal_entries`.survey_answer_id").includes({:journal_entry => :journal}) }
   scope :for_entries, lambda { |entry_ids| where({ :journal_entry_id => entry_ids }) } # ["survey_answers.journal_entry_id IN (?)", 
   scope :for_team, ->(team_id) { where(["survey_answers.team_id = ?", team_id]) }
+  scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
 
   def answered_by_role
     return Role.get(self.answered_by)
@@ -86,7 +87,10 @@ class SurveyAnswer < ActiveRecord::Base
         .in_center(options[:center])
         .for_surveys(survey_ids)
       end
-      puts "query: #{query.to_sql.inspect}"
+
+    query = query.with_followup(options[:follow_up]) if options[:follow_up]
+
+    puts "query: #{query.to_sql.inspect}"
     puts "options.: #{options.inspect}"
     puts "options[:team]: #{options[:team].inspect}"
     # query = query.in_center(options[:center]) if !options[:center].blank?

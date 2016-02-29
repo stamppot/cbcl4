@@ -4,7 +4,7 @@ class RemindersController < ApplicationController
   
   def show
     @group = Group.find params[:id]
-    
+    params[:follow_up] ||= -1    
     puts "ParaMS: #{params.inspect}"
     # @state = params[:state] || 2
     # @start_date = @group.created_at
@@ -13,6 +13,7 @@ class RemindersController < ApplicationController
     #   paginate(:all, :page => params[:page], :per_page => 40, :order => 'created_at desc')
     # @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
     # puts "#{params[:state]}"
+    puts "follow_up params: #{params[:follow_up]}"
     set_params_and_find(params)
     
     puts "params:: #{params.inspect}"

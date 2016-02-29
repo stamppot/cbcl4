@@ -49,6 +49,10 @@ class JournalEntry < ActiveRecord::Base
     FollowUp.get[follow_up].first
   end
 
+  def next_survey
+    self.next && JournalEntry.find(self.next).survey.title || ""
+  end
+  
   # def follow_up_validation
   #   is_invalid = journal.has_follow_up?(self)
   #   errors.add(:follow_up, "Journalen har allerede et skema med denne opfølgning: #{get_follow_up}") if is_invalid

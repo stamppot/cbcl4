@@ -100,7 +100,15 @@
 			<%= select(:survey, :id, @surveys.map {|s| [s.title, s.id]}, { :class => 'no_border' }) %>		
 		</div>
 	<br>
+
+	<!-- csv_survey_answers needs a columns follow_up for this to work. Must update this from survey_answers table <p>
+		<h3>Opfølgning</h3>
+		<select id="follow_up" name="follow_up">
+			<%= options_for_select [["Alle", -1]] + FollowUp.get %>
+		</select>
+	</p> -->
 </div>	
+
 
 	<div>
 		<%= image_tag 'spinner.gif', :alt => 'Venter...', :id => 'filter_spinner', :style => 'display:none;' %>
@@ -131,3 +139,8 @@
 <% end %>
 
 <br/>
+
+<p>
+	<a class='button' href="/wide_exports/"><span class="download_excel_file">Flere besvarelser per række</span></a>
+</p>
+

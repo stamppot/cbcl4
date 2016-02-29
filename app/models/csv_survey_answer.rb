@@ -22,6 +22,8 @@ class CsvSurveyAnswer < ActiveRecord::Base
   scope :for_survey, ->(survey_id) { where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
   scope :in_center, ->(center_id) { where(["csv_survey_answers.center_id = ?", center_id]) }
   scope :for_team, ->(team_id) { where(["csv_survey_answers.team_id = ?", team_id]) }
+  scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
+
   # scope :in_group, lambda { |options| { (!options[:center].blank? && {:conditions => ["csv_survey_answers.center_id = ?", team_id]}) || (!options[:team].blank? && {:conditions => ["csv_survey_answers.team_id = ?", team_id]}) } }
 
   attr_accessible :answer, :journal_id, :survey_answer_id, :center_id, :team_id, :survey_id, :journal_entry_id, :age, :sex, :created_at, :updated_at, :journal_info, :answer_count
@@ -76,11 +78,15 @@ class CsvSurveyAnswer < ActiveRecord::Base
         .in_center(options[:center])
         .for_survey(survey_id)
       end
-      puts "query: #{query.to_sql.inspect}"
+
+    # query = query.with_followup(options[:follow_up]) if options[:follow_up]
+
+    puts "query: #{query.to_sql.inspect}"
     # puts "options.: #{options.inspect}"
     # puts "options[:team]: #{options[:team].inspect}"
     # query = query.in_center(options[:center]) if !options[:center].blank?
     # query = query.for_team(options[:team]) if !options[:team].blank?
+
     query
   end
   
