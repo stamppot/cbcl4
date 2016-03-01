@@ -20,6 +20,7 @@ module Cbcl4
         resource '/api/login/*', :headers => :any, :methods => [:get, :post, :options]
         resource '/api/answer_reports/show', :headers => :any, :methods => [:get, :post, :options]
         resource '/api/answer_reports/*', :headers => :any, :methods => [:get, :post, :options]
+        resource '/api/export/*', :headers => :any, :methods => [:get, :post, :options]
       end
     end
 

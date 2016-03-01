@@ -193,6 +193,7 @@ Cbcl4::Application.routes.draw do
   get 'continue/(:api_key)/(:token)', :to => 'start#continue', :as => 'survey_continue'
   get 'next/:id/(:api_key)/(:token)', :to => 'start#next', :as => 'survey_next'      # :id is login_user
   get 'finish/(/:id)/(:api_key)/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
+
   # get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
   get 'surveys/show_only/(/:id)', :to => 'surveys#show_only', :as => 'survey_show_only' # :id is entry
@@ -294,6 +295,8 @@ Cbcl4::Application.routes.draw do
 
   # scope path: "/api" do
     get '/api/answer_reports/show/(/:api_key)/(/:token)', :to => 'api/answer_reports#show', :as => 'api_answer_report'
+  get '/api/export/csv_raw/(:api_key)/(:token)', :to => 'api/export#csv_raw', :as => 'api/export_csv_raw'      # :id is login_user
+
   # end
 
 

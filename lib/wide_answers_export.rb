@@ -82,5 +82,8 @@ class WideAnswersExport
     output
   end
 
+  def csv_export_single_answer(survey_answer)
+    wide_table([survey_answer], [survey_answer.survey_id])
+  end
   
 end
