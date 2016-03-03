@@ -151,4 +151,75 @@ class ImportJournals # AddJournalsFromCsv
 			return Date.new(y,m,d)
 		end
 	end
+
+
+	def check_next(file = "aug_2010.csv", team_id = 9259)
+		i = 1
+		found = []
+		not_found = []
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			puts "Row: #{i} #{row}"
+			i = i.succ
+			next if row.blank?
+
+			alt_id = row["alt_id"] || row["Graviditetsid"]
+			b = row["birthdate"]
+			journal_name = row["journalnavn"] || row["Bnavn"]
+			parent_name = row["Mnavn"]
+			parent_mail = row["Email"]
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
+
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
+			# next
+
+			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
+
+
+			if journal
+				journal_entry = JournalEntry.where('group_id = ? and next > 0 and journal_id = ?', team_id, journal.id).first
+
+				if journal_entry
+					found << "Found #{journal_name} #{journal_entry.survey.title} => #{journal_entry.next_survey}"
+				else
+					puts "NOT FOUND: #{journal_name} #{journal.id}  alt_id: #{alt_id}"
+				end
+			else
+				puts "NOT FOUND: #{journal_name}  row: #{i}, #{row}"
+				not_found << alt_id
+			end
+			puts "Found: #{found.size}, not found: #{not_found.size}: alt_ids: #{not_found.inspect}"
+			puts found.join("\n")
+		end
+	end
+
+	def check_dupes(file = "aug_2010.csv", team_id = 9259)
+		i = 1
+		found = []
+		not_found = []
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			puts "Row: #{i} #{row}"
+			i = i.succ
+			next if row.blank?
+
+			alt_id = row["alt_id"] || row["Graviditetsid"]
+			b = row["birthdate"]
+			journal_name = row["journalnavn"] || row["Bnavn"]
+			parent_name = row["Mnavn"]
+			parent_mail = row["Email"]
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
+
+			# next
+
+			journal = Journal.find_all_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
+
+			if journal.size > 1
+				puts "DUPE #{alt_id} #{journal_name}"
+				found << alt_id
+			end
+			puts "Dupes: #{found.size}: alt_ids: #{found.uniq.inspect}"
+			puts found.join("\n")
+		end
+	end
 end

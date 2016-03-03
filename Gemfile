@@ -49,6 +49,9 @@ gem 'wkhtmltopdf-binary'
 gem 'pdfkit'
 
 gem 'writeexcel'
+
+gem  'awesome_print'
+
 # gem "spawn", :git => 'git://github.com/rfc2822/spawn'
 # gem 'spawnling', :git => 'git://github.com/tra/spawnling'
 # gem 'debugger'
