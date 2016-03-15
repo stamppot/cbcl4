@@ -19,7 +19,7 @@
 
 				index = 0
 				rows.sort.each do |row, cols|
-					if !cols.values.any? {|cell| !cell.value.blank?}
+					if !cols.values.any? {|cell| cell.value != nil && cell.value != "" }
 						next
 					end
 					
