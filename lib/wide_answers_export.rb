@@ -71,7 +71,7 @@ class WideAnswersExport
 
       by_journal.each do |journal_id, sas|
         title = journal_titles[journal_id]
-        vvs = sas.inject({}) {|h, sa| puts "h.size: #{h.size}   vals size: #{sa.variable_values.size}"; h.merge!(sa.variable_values); h }
+        vvs = sas.inject({}) {|h, sa| h.merge!(sa.variable_values_with_texts); h }
         row = vars.map { |var| vvs[var] || nil }.compact
 
         puts "title: #{title.inspect}   row: #{row.inspect}  size: #{row.size}"

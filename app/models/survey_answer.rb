@@ -162,6 +162,14 @@ class SurveyAnswer < ActiveRecord::Base
     self.answers.each { |answer| a.merge!(answer.cell_values(prefix)) }
     a.order_by
   end
+
+  # includes texts of rating comments
+  def cell_values_with_texts(prefix = nil)
+    prefix ||= self.survey.prefix
+    a = Dictionary.new
+    self.answers.each { |answer| a.merge!(answer.cell_values_with_texts(prefix)) }
+    a.order_by
+  end
   
     # info on journal in array of hashes
   def info
@@ -437,7 +445,16 @@ class SurveyAnswer < ActiveRecord::Base
       col[var] = values[var] || "#NULL!"
       col
     end
-    
+  end
+
+  # this includes text answers on ratings
+  def variable_values_with_texts
+    variables = self.survey.variables.map {|v| v.var.to_sym}
+    values = self.cell_values_with_texts
+    result = variables.inject(Dictionary.new) do |col,var|
+      col[var] = values[var] || "#NULL!"
+      col
+    end
   end
   
   def save_csv_survey_answer
