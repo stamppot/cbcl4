@@ -58,11 +58,12 @@ class WideAnswersExport
     vars.unshift :title
     # TODO: must have same followup
     by_journal = survey_answers.group_by {|sa| sa.journal_id}
-    puts "wide_table: sas: #{survey_answers.count}"
+    # puts "wide_table: sas: #{survey_answers.count}"
 
     journal_titles = {}
-    by_journal.keys.in_groups_of(200).each {|batch| Journal.where("id IN (?)", batch.compact).select('id, title')
-      .each {|j| journal_titles[j.id] ||= j.title } }
+    by_journal.keys.in_groups_of(200).each do |batch| 
+      Journal.where("id IN (?)", batch.compact).select('id, title').each {|j| journal_titles[j.id] ||= j.title }
+    end
     
     output = ""
     output = CSV.generate(:col_sep => ";", :row_sep => :auto, :encoding => 'utf-8') do |csv_output|
@@ -70,10 +71,12 @@ class WideAnswersExport
 
       by_journal.each do |journal_id, sas|
         title = journal_titles[journal_id]
-        vvs = sas.inject({}) {|h, sa| h.merge!(sa.variable_values); h }
-        row = vars.map { |var| vvs[var] || nil }
+        vvs = sas.inject({}) {|h, sa| puts "h.size: #{h.size}   vals size: #{sa.variable_values.size}"; h.merge!(sa.variable_values); h }
+        row = vars.map { |var| vvs[var] || nil }.compact
 
+        puts "title: #{title.inspect}   row: #{row.inspect}  size: #{row.size}"
         row.unshift title
+        puts "row: #{row.inspect} size: #{row.size}"
         csv_output << row
       end
     end
