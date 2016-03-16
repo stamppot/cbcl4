@@ -294,7 +294,7 @@ Cbcl4::Application.routes.draw do
 
 
   # scope path: "/api" do
-    get '/api/answer_reports/show/(/:api_key)/(/:token)', :to => 'api/answer_reports#show', :as => 'api_answer_report'
+  get '/api/answer_reports/show/(/:api_key)/(/:token)', :to => 'api/answer_reports#show', :as => 'api_answer_report'
   get '/api/export/csv_raw/(:api_key)/(:token)', :to => 'api/export#csv_raw', :as => 'api/export_csv_raw'      # :id is login_user
 
   # end
