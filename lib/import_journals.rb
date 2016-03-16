@@ -88,6 +88,53 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
+ 		# update parent_email
+ 	def list
+ 		puts "update_email(file, team_id, do_save = false)"
+ 		puts "check_next(file = 'aug_2010.csv', team_id = 9259)"
+ 		puts "update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)"
+ 	end
+
+	def update_email(file, team_id = 9259, do_save = false)
+		group = Group.find(team_id)
+		center = group.center
+
+		i = 1
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			puts "Row: #{i} #{row}"
+			next if row.blank?
+
+			alt_id = row["alt_id"] || row["Graviditetsid"]
+			b = row["birthdate"]
+			journal_name = row["journalnavn"] || row["Bnavn"]
+			parent_name = row["Mnavn"]
+			parent_mail = row["Email"]
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
+
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
+
+			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
+
+			next unless journal
+
+			birthdate = get_date(b)
+
+			raise "DateError: #{birthdate} row: #{row.inspect}" if birthdate.year < 1980
+
+			puts "birthdate: #{birthdate}"
+			args = {
+				:title => journal_name, :group_id => group.id, :center_id => group.center_id,
+				:birthdate => birthdate, :parent_email => parent_mail,
+				:parent_name => parent_name, :alt_id => alt_id, :nationality => "Dansk", :sex => sex
+			}
+			journal.parent_email = parent_mail
+			journal.save if do_save
+			
+			i = i + 1
+		end
+	end
+
 	def add_surveys_and_entries(journal, surveys = [], follow_up = 0, do_save = false)
 		if surveys.any?
 			if journal.journal_entries.any? # add extra surveys
