@@ -1,0 +1,6 @@
+---
+# This is all you need for a typical rails application.
+defaults:
+  migrate: false
+  migration_command: rake db:migrate
+  precompile_assets: true
