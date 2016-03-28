@@ -217,31 +217,23 @@ Validation.prototype = {
 					
 					  switch (ev.keyCode) {
 				    	case Event.KEY_RETURN:
-							// alert("Du har trykket return");
 							submitAction = false;
-							var valid_result = Validation.validate(Event.element(ev),{useTitle : useTitles}); //, onElementValidate : tabOnValidate });
+							var valid_result = Validation.validate(Event.element(ev),{useTitle : useTitles});
 							tabOnValidate(valid_result, input);
 				    	break;
 						case Event.KEY_ENTER:
 							var elem = (Event.element(ev)).id;
-							// alert("Du kom til at trykke enter. (" + elem.id + ")");
-							// todo: activate $(Event.element(ev).id).activate();
 							submitAction = false;
-							// $(elem).activate();
 							if (ev.stopPropagation) {
 								ev.stopPropagation();
 								if (ev.preventDefault) ev.preventDefault( );
 							  	else { ev.returnValue = false; }
 							}
 					  	  	Event.stop(ev);
-							// alert("Du har trykket enter.");
-							//tabOnValidate(valid_result, input);
 							break;
 						case 13: // enter in IE
 							var elem = (Event.element(ev)).id;
-							// alert("Du kom til at trykke enter. (" + elem.id + ")");
 							submitAction = false;
-							// $(elem).activate();
 							if (ev.stopPropagation) {
 								ev.stopPropagation();
 								if (ev.preventDefault) ev.preventDefault( );
@@ -250,41 +242,37 @@ Validation.prototype = {
 							submitAction = false;
 					  	  	Event.stop(ev);
 							break;
-						case 3: // enter in safari?
-						var elem = (Event.element(ev)).id;
-						// alert("Du kom til at trykke enter (3). (" + elem.id + ")");
-						submitAction = false;
-						// $(elem).activate();
-						if (ev.stopPropagation) {
-							ev.stopPropagation();
-							if (ev.preventDefault) ev.preventDefault( );
-						  	else { ev.returnValue = false; }
-						}
-						submitAction = false;
-				  	  	Event.stop(ev);
-						break;
-							// var valid_result = Validation.validate(Event.element(ev),{useTitle : useTitles}); //, onElementValidate : tabOnValidate });
-							// break;
+						case 3:
+							var elem = (Event.element(ev)).id;
+							submitAction = false;
+							if (ev.stopPropagation) {
+								ev.stopPropagation();
+								if (ev.preventDefault) ev.preventDefault( );
+							  	else { ev.returnValue = false; }
+							}
+							submitAction = false;
+					  	  	Event.stop(ev);
+							break;
 				    	case Event.KEY_UP: 
-				    	  return tabPrev(true, Event.element(ev));
-				    	break;
+			      	    	return tabPrev(true, Event.element(ev));
+					    	break;
 				    	case Event.KEY_DOWN: 
-				    	  return tabNext(true, Event.element(ev));
+				    	    return tabNext(true, Event.element(ev));
 				    	break;
-				    	case 72:  // when 'h' is pressed, field help is toggled
-				    	  var c_names = Event.element(ev).className.split(' ');
-				    	  for(var i=0; i < c_names.length; i++) {
-				    	  	if(c_names[i].indexOf('q') == 0) {
-				    	  		var help_tip = $('help_' + c_names[i]);
-				    	  		if(help_tip != null) {
-				    	  			Element.toggle("help_" + c_names[i]);
-				    	  			Event.element(ev).clear();
-					  	  			submitAction = false;
-				    	  			false;
-				    	  		}
-				    	  	}
-				    	  }
-				    	  break;
+				    		case 72:  // when 'h' is pressed, field help is toggled
+					    	  var c_names = Event.element(ev).className.split(' ');
+					    	  for(var i=0; i < c_names.length; i++) {
+					    	  	if(c_names[i].indexOf('q') == 0) {
+					    	  		var help_tip = $('help_' + c_names[i]);
+					    	  		if(help_tip != null) {
+				    		  			Element.toggle("help_" + c_names[i]);
+				    		  			Event.element(ev).clear();
+					  	  				submitAction = false;
+				    	  				false;
+					    	  		}
+					    	  	}
+					    	  }
+				    	    break;
 					  	default:
 					  	  // alert("key " + ev.keyCode);
 					  	  var wrong_key = false;
@@ -292,28 +280,28 @@ Validation.prototype = {
 					  	    wrong_key = $A(filter).any(function(i) {
 					  	    	return (ev.keyCode == i);
 					  	    });
-					  	  if(wrong_key) {
-					  	  	submitAction = false;
-							// alert("Wrong key pressed: " + ev.keyCode());
-					  	  	Event.stop(ev);
-				  			return false;
-				  	  	  }
-						  else {
-							// no wrong keys pressed, now do validation
-							var valid_result = Validation.validate(Event.element(ev),{useTitle : useTitles}); //, onElementValidate : tabOnValidate });
-							// alert("jeeah " + valid_result);
-							tabOnValidate(valid_result, input);
-						  }
-				      }
-						submitAction = false;
-						if (ev.stopPropagation) {
-							ev.stopPropagation();
-							if (ev.preventDefault) ev.preventDefault( );
-						  	else { ev.returnValue = false; }
+					  		if(wrong_key) {
+						  	  	submitAction = false;
+								// alert("Wrong key pressed: " + ev.keyCode());
+						  	  	Event.stop(ev);
+					  			return false;
+					  	  	  }
+							  else {
+								// no wrong keys pressed, now do validation
+								var valid_result = Validation.validate(Event.element(ev),{useTitle : useTitles}); //, onElementValidate : tabOnValidate });
+								// alert("jeeah " + valid_result);
+								tabOnValidate(valid_result, input);
+							  }
+				      		}
+							submitAction = false;
+							if (ev.stopPropagation) {
+								ev.stopPropagation();
+								if (ev.preventDefault) ev.preventDefault( );
+							  	else { ev.returnValue = false; }
+							}
 						}
-					}
-				}); // end observe
-			}
+					}); // end observe
+				}
 			});
 		}
 	},
