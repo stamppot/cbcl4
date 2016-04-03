@@ -50,7 +50,7 @@ class JournalEntry < ActiveRecord::Base
   end
 
   def next_survey
-    self.next && JournalEntry.find(self.next).survey.title || ""
+    self.next && (je = JournalEntry.find_by_id(self.next)) && je && je.survey.title || ""
   end
   
   # def follow_up_validation

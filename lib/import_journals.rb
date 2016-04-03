@@ -135,6 +135,61 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
+	def find_dupe_entries(team_id = 9259, survey_id = 9, follow_up = 1)
+		group = Group.find(team_id)
+		query = "select je.id, count(je.id) as count from journal_entries je
+			where je.group_id = #{team_id} and je.follow_up = #{follow_up} and je.survey_id = #{survey_id}
+			group by je.journal_id
+			having count > 1"
+
+		puts "query: #{query}"
+
+	    dupes = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 
+		    col[j['id'].to_i] = j['count'].to_i
+	    	col
+    	end
+
+    	results = []
+
+		dupes.each do |journal_entry_id, count|
+			puts "journal_entry_id: #{journal_entry_id}, count: #{count}"
+			
+			journal_entry = JournalEntry.find journal_entry_id
+			if !journal_entry
+				puts "not found: #{journal_entry_id}"
+			end
+
+			# double check that it's a duplicate
+			journal = journal_entry.journal
+
+			check_dupes = journal.journal_entries.where(:journal_id => journal.id, :group_id => team_id, :follow_up => follow_up, :survey_id => survey_id)
+			if check_dupes.size > 1
+				puts "dupes found (#{check_dupes.size}): #{check_dupes.map {|e| e.id}.inspect}"
+				answered, not_answered = check_dupes.partition {|je| je.answered_at}
+				puts "answered: #{answered.size}, not_answered: #{not_answered.size}"
+
+				results += not_answered
+			end
+		end
+
+		results
+	end
+
+	def delete_dupe_entries(team_id = 9259, survey_id = 9, follow_up = 1, do_save = false)
+		dupes = find_dupe_entries(team_id, survey_id, follow_up)
+
+		if dupes.any? && do_save
+			puts "Found dupes in journals: #{dupes.map {|e| [e.journal_id, e.survey_id, e.follow_up, e.answered_at]}.inspect}"
+			puts "Press 'y' to delete duplicates"
+			ok = gets.chomp
+			if ok == "y"
+				puts "Deleting #{dupes.map {|je| je.id}.inspect}"
+				dupes.map &:destroy
+			end
+		end
+	end
+
+
 	def add_surveys_and_entries(journal, surveys = [], follow_up = 0, do_save = false)
 		if surveys.any?
 			if journal.journal_entries.any? # add extra surveys
