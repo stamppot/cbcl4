@@ -35,6 +35,7 @@ gem 'protected_attributes'
 gem 'thinking-sphinx', '2.0.3'
 # gem 'thinking-sphinx', '3.1.0'
 
+gem 'rake', '11.1.2'
 gem 'dynamic_form'
 
 gem 'rails-observers'
