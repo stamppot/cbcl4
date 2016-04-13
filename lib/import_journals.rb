@@ -82,7 +82,7 @@ class ImportJournals # AddJournalsFromCsv
 			
 			new_entries = add_surveys_and_entries(journal, surveys, follow_up, do_save)
 			puts "GOT entries: #{new_entries.inspect}"
-			connect_entries(new_entries, couple, do_save) unless couple.blank?
+			connect_entries(new_entries, couple, do_save) unless couple.blank? && do_save
 
 			i = i + 1
 		end

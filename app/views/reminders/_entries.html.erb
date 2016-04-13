@@ -14,6 +14,7 @@ Der er ikke fundet nogen skemaer.
 <th title="Sorter efter navn" class="sortcol">Navn</th>
 <th class="small sortcol" title="Sorter efter dato">Tilføjet</th>
 <th class="small sortcol" title="Sorter efter besvarelsesdato">Svardato</th>
+<th class="small" title="">Opfølgning</th>
 <th class="small sortcol" title="Sorter">Status</th>
 
 </tr>
@@ -32,6 +33,7 @@ Der er ikke fundet nogen skemaer.
 	    <td class="pj small"><span class="nobr"><a href="/journals/<%= entry.journal_id %>"><%= journal.title %></a></span></td>
     	<td class="pj" style="text-align: left;"><%= entry.created_at.strftime "%d-%m-%Y" %></td>
     	<td class="pj" style="text-align: left;"><%= entry.answered_at && entry.answered_at.strftime("%d-%m-%Y") || "" %></td>
+    	<td class="pj" style="text-align: right;"><%= entry.get_follow_up %></td>
 	    <td class="pj" style="text-align: left;"><%= entry && entry.reminder_state || "" %></td>
   </tr>
 <% end %>
