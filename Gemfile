@@ -10,6 +10,8 @@ gem 'sqlite3'
 gem 'mysql2', '~> 0.3.18'
 gem 'activerecord-import'
 
+gem 'innertube'
+
 gem 'i18n', '~> 0.6.7'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
