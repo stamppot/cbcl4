@@ -76,6 +76,7 @@ Cbcl4::Application.routes.draw do
   resources :export_files
   resources :exports
   resources :journal_entries, :only => [:show, :edit, :update]
+  resources :journal_notes
   resources :journal_stats
   resources :journals
   resources :letters

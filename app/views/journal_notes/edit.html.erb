@@ -1,0 +1,16 @@
+<h3>Rediger noter</h3>
+
+<form action="/journal_notes/update/<%= @journal.id %>" method="put"
+<%= form_tag(@journal_entry, :method => :put) do %>
+
+<table class="center_info">
+	<tr>
+		<td class="p"><%= 'Noter' %>:</td>
+		<td class="p"><textarea name="notes" type="area" rows="6" cols="60" value="<%= @journal.notes %>" ></textarea></td>
+	</tr>
+</table>
+
+<%= submit_tag "Gem", :name => 'submit[update]', :class => 'button save' %>
+<% end %>
+<p/>
+<%= back_button @journal %>

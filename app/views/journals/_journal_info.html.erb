@@ -51,4 +51,13 @@
 		  <% end %>
 		  </td>
 		</tr>
+
+
+	<% if @journal.group_id == 9259 %>
+	<tr>
+		<td class="p_i"><%= 'Noter' %>:</td>
+		<% if !@journal.notes.blank? %><td><div id="journal_notes"><%= @journal.notes %></div></td><% end %>
+		<td class="p"><%= link_to image_tag("pencil.png", :border => 0, :alt => "Rediger noter", :title => "Rediger noter", :align => ""), edit_journal_note_path(@journal) %></td>
+	</tr>
+	<% end %>
 	</table>
