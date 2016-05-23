@@ -11,8 +11,13 @@ class ImportJournals # AddJournalsFromCsv
     
     def initialize
     	puts "update(file, [survey_ids], team_id, follow_up, {couple}, do_save)"
+    	puts "update_followup(file, do_save = false, survey_ids = [1,3,9], team_id = 9259, follow_up = 1, couple = {1 => 9}"
     end
  	
+ 	def update_followup(file, do_save = false, survey_ids = [1,3,9], team_id = 9259, follow_up = 1, couple = {1 => 9})
+ 		update file, survey_ids, team_id, follow_up, couple, do_save
+ 	end
+
  		# do_next couples journal_entries so one survey can be answered after the other without logging out/in
 	def update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)
 		puts "no survey_ids given" and return if !survey_ids.any?
