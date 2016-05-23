@@ -188,7 +188,7 @@ Cbcl4::Application.routes.draw do
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   get 'api_login/start/(/:api_key)/(/:token)', :to => 'api_login#start', :as => 'api_login_survey_start'
-  get 'api_login/logout//:api_key/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
+  get 'api_login/logout//(:api_key)/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
   get 'api/continue/(:api_key)/(:token)', :to => 'api_start#continue', :as => 'api_survey_continue'
   
   get 'start/(:api_key)/(:token)', :to => 'start#start', :as => 'survey_start'

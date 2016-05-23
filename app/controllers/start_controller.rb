@@ -17,23 +17,22 @@ class StartController < ApplicationController
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
     logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
-    @token = session[:token]
-    @api_key = session[:api_key]
+    @token = session[:token] || params[:token]
+    @api_key = session[:api_key] || params[:api_key]
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
-    # session.delete "token"
 
-    if @journal_entry.draft? && @token && @api_key
+    if @journal_entry.draft? && @api_key && @token
       logger.info "300 api_survey_continue_path"
-      redirect_to api_survey_continue_path(@token, @api_key) and return
+      redirect_to api_survey_continue_path(@api_key, @token) and return
     end
 
-    if @journal_entry.answered? && @token && @api_key
+    if @journal_entry.answered? && @api_key && @token
       logger.info "300 api_survey_finish_path"
-      redirect_to api_survey_finish_path(@token, @api_key) and return
+      redirect_to api_survey_finish_path(@api_key, @token) and return
     end
 
-    redirect_to survey_continue_path(@token, @api_key) if @journal_entry.draft?
+    redirect_to survey_continue_path(@api_key, @token) if @journal_entry.draft?
     redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
     @survey = @journal_entry.survey
   end
@@ -46,7 +45,7 @@ class StartController < ApplicationController
     # @token = session[:token]
     # @api_key = session[:api]
     @token = params[:token]
-    @api_key = params[:api]
+    @api_key = params[:api_key]
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
     je = @journal_entry
     @journal = je.journal

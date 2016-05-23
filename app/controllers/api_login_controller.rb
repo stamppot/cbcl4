@@ -21,7 +21,7 @@ class ApiLoginController < ApiController
 	    session[:token] = token
 	    @center = login_user.center
 	    redirect_to login_path and return if @journal_entry.nil?
-	    redirect_to survey_start_path(params[:api_key], token)
+	    redirect_to api_survey_start_path(params[:api_key], token)
   	end
 
   	def logout
