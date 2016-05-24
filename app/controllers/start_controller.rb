@@ -22,15 +22,15 @@ class StartController < ApplicationController
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
 
-    if @journal_entry.draft? && @api_key && @token
-      logger.info "300 api_survey_continue_path"
-      redirect_to api_survey_continue_path(@api_key, @token) and return
-    end
+    # if @journal_entry.draft? && @api_key && @token
+    #   logger.info "300 api_survey_continue_path"
+    #   redirect_to api_survey_continue_path(@api_key, @token) and return
+    # end
 
-    if @journal_entry.answered? && @api_key && @token
-      logger.info "300 api_survey_finish_path"
-      redirect_to api_survey_finish_path(@api_key, @token) and return
-    end
+    # if @journal_entry.answered? && @api_key && @token
+    #   logger.info "300 api_survey_finish_path"
+    #   redirect_to api_survey_finish_path(@api_key, @token) and return
+    # end
 
     redirect_to survey_continue_path(@api_key, @token) if @journal_entry.draft?
     redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
