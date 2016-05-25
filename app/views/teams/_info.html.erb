@@ -27,6 +27,17 @@
 				<td class="t_i"><%= t('journal.journals') %>:</td>
 				<td class="t"><%=h @journal_count %></td>
 			</tr>
+
+			<tr>
+				<td class="t_i"><%= t('survey.answered') %>:</td>
+				<td class="t"><%=h @answered_count %></td>
+			</tr>
+
+			<tr>
+				<td class="t_i"><%= "Forbrug" %>:</td>
+				<td class="t"><%= render :partial => 'shared/usage_simple' %></td>
+			</tr>
+
 			<tr>
 				<td class="t_i"><%= t('team.admins') %>:</td>
 				<td class="t"><%=h "" %></td>

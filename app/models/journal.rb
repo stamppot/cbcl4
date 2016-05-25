@@ -64,6 +64,7 @@ class Journal < ActiveRecord::Base #< Group
   # scope :and_login_users, :include => { :journal_entries => :login_user }
   scope :for_group, lambda { |group| group && where(:group_id => (group.is_a?(Group) ? group.id : group)) || scoped }
   scope :in_center, lambda { |group| group && where(:center_id => (group.is_a?(Center) ? group.id : group)) || scoped }
+  scope :in_team, lambda { |group| group && where(:group_id => (group.is_a?(Team) ? group.id : group)) || scoped }
   scope :by_code, -> { order('code ASC') }
   scope :order_by, lambda { |column, order|
     # puts "column, order: #{column} #{order}"

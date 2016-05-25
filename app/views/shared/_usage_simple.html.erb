@@ -1,0 +1,13 @@
+<table class="sortable list">
+	<tr>
+		<th>Spørgeskema</th>
+		<th class="number">Besvarede</th>
+	</tr>
+
+	<% @usage.each do |k,v| %>
+	<tr>
+		<td class="t_i"><%= v[:title] %></td>
+		<td class="t"><%= v[:count] %></td>
+	</tr>
+	<% end %>
+</table>

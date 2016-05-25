@@ -56,7 +56,9 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
     @group = Team.find(params[:id])
     @page_title = "CBCL - Center " + @group.center.title + ", team " + @group.title
     @journals = Journal.in_center(@group).by_code.paginate(:page => params[:page], :per_page => journals_per_page) || []
-    @journal_count = Journal.in_center(@group).count
+    @journal_count = Journal.in_team(@group).count
+    @answered_count = SurveyAnswer.for_team(@group).finished.count
+    @usage = SubscriptionsQuery.new.usage_for_team @group
     @users = @group.users.where(:login_user => false)
     @user_count = @users.count
     @users = WillPaginate::Collection.create(1, 10000) do |pager|

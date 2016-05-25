@@ -247,4 +247,18 @@ class SubscriptionsQuery
    def self.filter_date(start,stop)
      Query.new.filter_date(start, stop)
    end
+
+   
+  # get usage detail per survey for a team
+  def usage_for_team(team)
+    query = "SELECT survey_id, s.title as title, COUNT(*) as count FROM survey_answers sa
+      inner join surveys s on s.id = sa.survey_id
+      WHERE sa.team_id = #{team.id}
+      AND done = 1
+      group by sa.survey_id"
+
+    usage_count = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 
+      col[j['survey_id']] = {:count => j['count'], :title => j['title'] }; col
+    end
+  end
 end

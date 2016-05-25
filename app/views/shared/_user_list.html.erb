@@ -1,5 +1,4 @@
 <% can_edit_delete = current_user.access? :user_edit_delete %>
-<% puts "@users: #{@users.inspect}" %>
 <table id="user_list" class="sortable list" class="users">
 	<tr>
 	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
