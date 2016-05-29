@@ -69,7 +69,8 @@ class RemindersController < ApplicationController
 
   def generate_file
     @group = Group.find(params[:id])
-    selected_state = params[:state].split(",").map &:to_i
+    selected_state = params[:state].split("-").map &:to_i
+    puts "state: #{selected_state.inspect}"
     selected_state = [2,3,4,5,6] if selected_state == "0"
 
     @state = selected_state.to_a
@@ -95,7 +96,8 @@ class RemindersController < ApplicationController
     export_csv_helper = ExportCsvHelper.new
     rows = export_csv_helper.get_entries_status(@journal_entries)
     done_file = rows.any?
-    # puts "rows: #{rows.inspect}"
+    puts "rows: #{rows.inspect}"
+
     @export_file = ExportFile.export_xls_file rows, filename, "application/vnd.ms-excel" #if rows.first
     puts "export_file: #{@export_file.inspect}"
 
