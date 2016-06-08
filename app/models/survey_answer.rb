@@ -497,6 +497,7 @@ class SurveyAnswer < ActiveRecord::Base
       puts "CSA for survey_answer #{self.id} not found"
       return
     end
+    csa.follow_up = self.follow_up
     csa.journal_info = to_danish(self.info.values.join(';;'))
     csa.save
     puts "fixed #{id}"

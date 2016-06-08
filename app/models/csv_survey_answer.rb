@@ -40,12 +40,12 @@ class CsvSurveyAnswer < ActiveRecord::Base
   def self.filter_params(user, options = {})
     options[:start_date]  ||= SurveyAnswer.first.created_at.beginning_of_day
     options[:stop_date]   ||= SurveyAnswer.last.created_at.end_of_day
-    puts "filter_params before start_age: #{options.inspect}"
+    # puts "filter_params before start_age: #{options.inspect}"
     options[:start_age]   ||= 0
     options[:stop_age]    ||= 28
 
     options[:center] = user.center.id if !user.access?(:superadmin)
-    puts "filter_params options: #{options.inspect}"
+    # puts "filter_params options: #{options.inspect}"
     if !options[:center].blank?
       center = Center.find(options[:center])
       options[:conditions] = ['center_id = ?', center.id]
@@ -59,20 +59,20 @@ class CsvSurveyAnswer < ActiveRecord::Base
   
   # filtrerer ikke på done, også kladder er med
   def self.with_options(user, options)
-    puts "with_options: #{options.inspect}"
+    # puts "with_options: #{options.inspect}"
     o = self.filter_params(user, options)
     survey_id = o[:survey][:id]
-    puts "survey_id: #{survey_id} -- #{o[:survey][:id].inspect}"
+    # puts "survey_id: #{survey_id} -- #{o[:survey][:id].inspect}"
     options.delete(:team) if options[:team].blank?
 
     query = if !options[:team].blank?
-      puts "with_options for_team: #{options[:team]}"
+      # puts "with_options for_team: #{options[:team]}"
       CsvSurveyAnswer.between(o[:start_date], o[:stop_date])
         .aged_between(o[:age_start], o[:age_stop])
         .for_team(options[:team])
         .for_survey(survey_id)
       else
-        puts "with_options in_center: #{options[:center]}"
+        # puts "with_options in_center: #{options[:center]}"
         CsvSurveyAnswer.between(o[:start_date], o[:stop_date])
         .aged_between(o[:age_start], o[:age_stop])
         .in_center(options[:center])
@@ -81,7 +81,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
 
     # query = query.with_followup(options[:follow_up]) if options[:follow_up]
 
-    puts "query: #{query.to_sql.inspect}"
+    # puts "query: #{query.to_sql.inspect}"
     # puts "options.: #{options.inspect}"
     # puts "options[:team]: #{options[:team].inspect}"
     # query = query.in_center(options[:center]) if !options[:center].blank?
@@ -95,4 +95,16 @@ class CsvSurveyAnswer < ActiveRecord::Base
     %w{ssghafd ssghnavn safdnavn pid projekt pkoen palder pnation besvarelsesdato pfoedt}.join(';;')
   end
 
+  def update_follow_up
+    je = self.journal_entry
+    sa = self.survey_answer
+    # make sure survey_answer.follow_up is correct
+    if je && je.follow_up != sa.follow_up
+      sa.follow_up = je.follow_up
+      sa.save
+    end
+
+    self.follow_up = ( je || sa || {:follow_up => 0})[:follow_up]
+    self.save
+  end
 end
