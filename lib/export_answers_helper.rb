@@ -48,7 +48,7 @@ class ExportAnswersHelper
   # merged pregenerated csv_answer string with header and journal information
   def export_survey_answers(csv_survey_answers, survey_id)
     survey = Survey.find(survey_id)
-    header = journal_csv_header.keys + survey.variables.map {|v| v.var}
+    header = journal_csv_header.keys + ['follow_up'] + survey.variables.map {|v| v.var}
     
     csv_rows = csv_survey_answers.inject([]) do |rows,csa|
       puts "csa.journal.nil? #{csa.inspect} #{csa.journal.inspect}  sa: #{csa.survey_answer.inspect}" if csa.journal.nil?
@@ -72,7 +72,7 @@ class ExportAnswersHelper
       if !csa || !csa.answer
         puts "No csa: #{info.inspect}"
       end
-      rows << info + (csa && csa.answer && csa.answer.split(';;') || [] )
+      rows << info + [FollowUp.to_value(csa.follow_up)] + (csa && csa.answer && csa.answer.split(';;') || [] )
       rows
     end
 
