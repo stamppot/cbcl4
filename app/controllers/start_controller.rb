@@ -13,6 +13,8 @@ class StartController < ApplicationController
     @center = @journal_entry.journal.center
     session[:journal_entry] ||= @journal_entry.id
     session[:journal_id] ||= @journal_entry.journal_id
+    session[:api_key] = params[:api_key]
+    session[:token] = params[:token]
     j = @journal_entry.journal
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
