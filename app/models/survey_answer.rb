@@ -473,7 +473,7 @@ class SurveyAnswer < ActiveRecord::Base
       :updated_at => self.updated_at,
       :journal_info => to_danish(self.info.values.join(';;')),
       :answer_count => vals.values.size,
-      :follow_up => FollowUp.to_value(self.journal_entry && self.journal_entry.follow_up || 0)
+      :follow_up => (self.journal_entry && self.journal_entry.follow_up || 0)
     }
     
     csa = self.csv_survey_answer
