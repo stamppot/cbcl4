@@ -1,7 +1,21 @@
 class Task < ActiveRecord::Base
   belongs_to :export_file
+  belongs_to :survey_answer
 
   attr_accessible :status
+
+  def create_csv_survey_answer_task(survey_answer_id)
+    Task.create(:survey_answer_id => survey_answer_id, :status => "To do"))
+  end
+
+  def survey_answers_to_csv
+    logger.info "CSV save survey_answers: #{DateTime.now}"
+    Task.find_each(:batch_size => 50, :conditions => 'survey_answer_id is not null and status = "To do"') do |task|
+      sa = task.survey_answer
+      sa.save_csv_survey_answer
+      logger.info "CSV saved csv_survey_answer: #{sa.id}"   
+    end
+  end
 
   def create_survey_answer_export(survey_id, survey_answers)
     # Spawnling.new(:method => :fork) do

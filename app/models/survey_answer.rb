@@ -139,7 +139,9 @@ class SurveyAnswer < ActiveRecord::Base
     score_rapport = self.generate_score_report(update = true) # generate score report
     score_rapport.save_csv_score_rapport
     self.save_csv_survey_answer
-    self.save
+    result = self.save
+    Task.create_csv_survey_answer_task(self.id)
+    result
   end
   
 	def set_answered_by(params = {})
@@ -456,7 +458,7 @@ class SurveyAnswer < ActiveRecord::Base
       col
     end
   end
-  
+
   def save_csv_survey_answer
     vals = variable_values
     options = {
@@ -468,7 +470,7 @@ class SurveyAnswer < ActiveRecord::Base
       :survey_id => self.survey_id,
       :journal_entry_id => self.journal_entry_id,
       :age => self.age_when_answered,
-      :sex => self.journal.sex,
+      :sex => (self.journal || self).sex,
       :created_at => self.created_at,
       :updated_at => self.updated_at,
       :journal_info => to_danish(self.info.values.join(';;')),
