@@ -8,7 +8,7 @@ class Task < ActiveRecord::Base
     Task.create(:survey_answer_id => survey_answer_id, :status => "To do")
   end
 
-  def survey_answers_to_csv
+  def self.generate_survey_answers_to_csv
     logger.info "CSV save survey_answers: #{DateTime.now}"
     Task.find_each(:batch_size => 50, :conditions => 'survey_answer_id is not null and status = "To do"') do |task|
       sa = task.survey_answer
