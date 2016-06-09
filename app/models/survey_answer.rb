@@ -461,6 +461,7 @@ class SurveyAnswer < ActiveRecord::Base
 
   def save_csv_survey_answer
     vals = variable_values
+    puts "No journal: #{survey_answer.inspect}" if !self.journal
     options = {
       :answer => vals.values.join(';;'), 
       :journal_id => self.journal_id,
@@ -470,7 +471,7 @@ class SurveyAnswer < ActiveRecord::Base
       :survey_id => self.survey_id,
       :journal_entry_id => self.journal_entry_id,
       :age => self.age_when_answered,
-      :sex => ((self.journal || self).sex) || 3,
+      :sex => (self.journal || {:sex => 3})[:sex],
       :created_at => self.created_at,
       :updated_at => self.updated_at,
       :journal_info => to_danish(self.info.values.join(';;')),
