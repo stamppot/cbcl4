@@ -4,9 +4,9 @@ class Task < ActiveRecord::Base
 
   attr_accessible :status
 
-  def self.create_csv_survey_answer_task(survey_answer_id)
-    Task.create(:survey_answer_id => survey_answer_id, :status => "To do")
-  end
+  # def self.create_csv_survey_answer_task(survey_answer_id)
+  #   Task.create(:survey_answer_id => survey_answer_id, :status => "To do")
+  # end
 
   def self.generate_survey_answers_to_csv
     logger.info "CSV save survey_answers: #{DateTime.now}"
