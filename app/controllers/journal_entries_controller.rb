@@ -49,7 +49,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     # remove any score report created
     if entry && entry.survey_answer
       sc = ScoreRapport.find_by_survey_answer_id(entry.survey_answer.id)
-      sc.destroy if sc
+      sc.destroy unless sc.nil?
     end
 
     # delete all answers and answer cells, delete login for journal_entry
