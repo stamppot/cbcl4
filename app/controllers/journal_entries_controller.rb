@@ -45,11 +45,9 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   def remove_answer
     elem = "entry_answer" << params[:id]
     entry = JournalEntry.find(params[:id])
-
     # remove any score report created
-    
     # delete all answers and answer cells, delete login for journal_entry
-    entry.destroy if entry
+    entry.destroy
 
     if entry && entry.survey_answer
       sc = ScoreRapport.find_by_survey_answer_id(entry.survey_answer.id)
