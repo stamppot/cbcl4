@@ -1,7 +1,7 @@
 class JournalEntry < ActiveRecord::Base
   belongs_to :journal #, :touch => true
   belongs_to :survey
-  belongs_to :survey_answer, :dependent => :destroy #, :touch => true
+  belongs_to :survey_answer, :touch => true #, :dependent => :destroy #, :touch => true
   belongs_to :login_user, :class_name => "LoginUser", :foreign_key => "user_id", :dependent => :destroy
   belongs_to :group, :class_name => "Group"
 
