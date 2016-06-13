@@ -47,14 +47,15 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     entry = JournalEntry.find(params[:id])
 
     # remove any score report created
+    
+    # delete all answers and answer cells, delete login for journal_entry
+    entry.destroy if entry
+
     if entry && entry.survey_answer
       sc = ScoreRapport.find_by_survey_answer_id(entry.survey_answer.id)
       sc.destroy unless sc.nil?
     end
-
-    # delete all answers and answer cells, delete login for journal_entry
-    entry.destroy if entry
-
+    
     render :json => {:ok => true} and return
     # if entry.destroy
     #   render :update do |page|
