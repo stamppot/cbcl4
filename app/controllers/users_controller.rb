@@ -101,9 +101,9 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @user = User.find params[:id]
     @roles = current_user.pass_on_roles
     @groups = if current_user.has_role?(:centeradmin)
-	Group.where(:center_id => current_user.center_id)
+	  Group.where(:center_id => current_user.center_id)
 	else
-	  @user.groups + current_user.center_and_teams
+	  (@user.groups + current_user.center_and_teams).uniq
 	end
     @user.password = ""
   end
