@@ -149,7 +149,6 @@ class User < ActiveRecord::Base
     if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
       logger.info "access_to_roles: #{role_ids.inspect}"
       user.update_roles_and_groups(role_ids, group_ids)
-      user.save
     end
     user.password_hash_type = "md5"
     user.password = pw
@@ -190,8 +189,8 @@ class User < ActiveRecord::Base
     logger.info "roles: #{self.roles.inspect}"
     g = Group.where(id: group_ids).to_a
     logger.info "g; #{g.inspect}"
-    g.each {|group| self.groups << g }
-    # self.groups += g
+    # g.each {|group| self.groups << group unless self.groups.include?(group) }
+    self.groups = g
     logger.info "groups: #{self.groups.to_a.inspect}"
 
     self.center = self.groups.first.center 
