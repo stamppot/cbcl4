@@ -37,6 +37,7 @@ class StartController < ApplicationController
     redirect_to survey_continue_path(@api_key, @token) if @journal_entry.draft?
     redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
     @survey = @journal_entry.survey
+    cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
   end
 
   def continue
@@ -57,6 +58,7 @@ class StartController < ApplicationController
     user_name = je.login_user.name
     logger.info "LOGIN_USER conti #{user_name} journal: #{@journal.title} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' luser: '#{je.user_id}' @ #{9.hours.from_now.to_s(:short)}: #{request.env['HTTP_USER_AGENT']}"
     @survey = @journal_entry.survey
+    cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
   end
 
   def next
@@ -86,6 +88,8 @@ class StartController < ApplicationController
     # session.delete "token"
 
     @survey = @journal_entry.survey
+    cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
+
     redirect_to survey_continue_path(@token, @api_key) if @journal_entry.draft?
     redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
   end
