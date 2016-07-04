@@ -44,10 +44,16 @@ class ImportJournals # AddJournalsFromCsv
 			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
 			# next
 
-			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
-			# if !journal || (journal && journal.alt_id == alt_id)
-			# 	journal = Journal.find_by_code_and_group_id(alt_id, team_id)
-			# end
+			has_twins = Journal.where(:alt_id => "test", :group_id => 9259).count > 1
+
+			journal =
+			if has_twins
+				puts "twins: #{journal_name} #{alt_id}"
+				Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
+			else
+				Journal.find_by_alt_id_and_group_id(alt_id, team_id)
+			end
+
 
 			if b.blank?
 				puts "ERROR: no birthdate: #{row}"
@@ -91,6 +97,8 @@ class ImportJournals # AddJournalsFromCsv
 
 			i = i + 1
 		end
+
+		update_email(file, team_id, do_save)
 	end
 
  		# update parent_email
