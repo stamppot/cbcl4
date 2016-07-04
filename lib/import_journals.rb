@@ -46,12 +46,9 @@ class ImportJournals # AddJournalsFromCsv
 
 			has_twins = Journal.where(:alt_id => alt_id, :group_id => 9259).count > 1
 
-			journal =
+			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
 			if has_twins
-				puts "twins: #{journal_name} #{alt_id}"
-				Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
-			else
-				Journal.find_by_alt_id_and_group_id(alt_id, team_id)
+				puts "TWINS: #{journal_name} #{alt_id}"
 			end
 
 
