@@ -90,6 +90,28 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     redirect_to journal_path(@journal_entry.journal)
   end
 
+  def edit_chain
+    @journal_entry = JournalEntry.find(params[:id])
+    @journal_entries = @journal_entry.journal.not_answered_entries.select do |je| 
+      je != @journal_entry &&
+      je.follow_up == @journal_entry.follow_up &&
+      je.survey.surveytype == @journal_entry.survey.surveytype
+    end
+  end
+
+  def update_chain
+    journal_entry = JournalEntry.find(params[:id])
+    dest = JournalEntry.find(params[:chain])
+    flash[:notice] = "Intet valg" if !dest
+    if dest
+      first = journal_entry.survey_id
+      couple = {first => dest.survey_id}
+      JournalEntryService.new.connect_entries([journal_entry, dest], couple, true)
+      flash[:notice] = "Besvarelser er kædet sammen"
+    end
+    redirect_to journal_path(journal_entry.journal)
+  end
+
   protected
   
   def check_access

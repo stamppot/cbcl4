@@ -41,6 +41,10 @@
 					</a>
 
 					<a class="delete_entry" href="javascript:void(0);"><%= image_tag('icon_delete_survey.gif', :border => 0, :class => 'icon icon_delete', :title => 'Fjern skema') %></a>
+					<% unless entry.next && current_user.access?(:show_column_actions) %>
+					<%= link_to image_tag("chain_to.png", :border => 0, :alt => "Opret kæde med andet skema", :title => "Opret kæde med andet skema"), edit_journal_entry_chain_path(entry) %>
+					<% end %>
+
 			</td>
 				 </tr>
 		<% end %>

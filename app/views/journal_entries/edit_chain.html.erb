@@ -1,0 +1,17 @@
+<%= form_tag :action => :update_chain do %>
+<h3>Kæd <%= @journal_entry.survey.title %> sammen med:</h3>
+
+	<%= hidden_field_tag 'id', @journal_entry.id %>
+
+<% @journal_entries.each do |journal_entry| %>
+<div style='background-color: #<%= journal_entry.survey.color %>; width: 25em;'>
+	<%= radio_button_tag(:chain, journal_entry.id) %>		
+	<label for="chain_<%= journal_entry.id %>"><%= journal_entry.survey.title %></label> <br>
+</div>
+<% end %>
+
+<p/>
+<%= submit_tag t('save'), :class => 'button save' %>
+<%= back_button journal_path(@journal_entry.journal) %>
+
+<% end %>
