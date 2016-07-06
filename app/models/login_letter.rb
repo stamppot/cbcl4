@@ -1,0 +1,3 @@
+class LoginLetter < Letter
+
+end
