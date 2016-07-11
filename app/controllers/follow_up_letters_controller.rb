@@ -133,11 +133,11 @@ class FollowUpLettersController < ApplicationController
     selected = params[:letters].select {|k,v| v.to_i == 1 }.inject([]) { |col,v| col << v.first.to_i; col }
     logger.info("selected: #{selected.inspect}")
 		entries = journal.not_answered_entries.select {|e| selected.include?(e.id)}
-    # find FollowUpLetter.for team, center, system
+    # find letter for team, center, system
 		entry_letters = []
 		entry_letters = entries.map do |entry|
-      FollowUpLetter.= FollowUpLetter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
-			[entry, FollowUpLetter.
+      letter = FollowUpLetter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
+			[entry, letter]
 		end
 		@letters = entry_letters.map do |pair|
 			letter = pair.last
