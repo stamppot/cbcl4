@@ -6,9 +6,10 @@ class Letter < ActiveRecord::Base
   validates_presence_of :letter
   validates_presence_of :name
   validates_presence_of :surveytype
-  validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølning for gruppen. Har du valgt den rigtige gruppe?"
+  # validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølning for gruppen. Har du valgt den rigtige gruppe?"
 
-  attr_accessible :name, :surveytype, :group_id, :follow_up, :letter
+  # attr_accessible :name, :surveytype, :group_id, :follow_up, :letter
+  attr_accessible :name, :group_id, :letter
 
   scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
   # scope :in_center, -> { where('center_id = ?', ), lambda { |group| { :conditions => ['center_id = ?', group.is_a?(Center) ? group.id : group] } }
@@ -21,31 +22,31 @@ class Letter < ActiveRecord::Base
     FollowUp.get[self.follow_up].first
   end
 
-  def insert_text_variables(journal_entry)
-    self.letter.gsub!('{{login}}', journal_entry.login_user.login)
-    self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
-    self.letter.gsub!('{{password}}', journal_entry.password)
-    self.letter.gsub!('{{kodeord}}', journal_entry.password)
-    self.letter.gsub!('{{name}}', journal_entry.journal.title)
-    self.letter.gsub!('{{navn}}', journal_entry.journal.title)
-    self.letter.gsub!('{{firstname}}', journal_entry.journal.firstname)
-    self.letter.gsub!('{{fornavn}}', journal_entry.journal.firstname)
-    self.letter.gsub!('{{mor_navn}}', journal_entry.journal.parent_name || "")
-    self.letter.gsub!('{{projektnr}}', journal_entry.journal.alt_id || "")
-  end
+  # def insert_text_variables(journal_entry)
+  #   self.letter.gsub!('{{login}}', journal_entry.login_user.login)
+  #   self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
+  #   self.letter.gsub!('{{password}}', journal_entry.password)
+  #   self.letter.gsub!('{{kodeord}}', journal_entry.password)
+  #   self.letter.gsub!('{{name}}', journal_entry.journal.title)
+  #   self.letter.gsub!('{{navn}}', journal_entry.journal.title)
+  #   self.letter.gsub!('{{firstname}}', journal_entry.journal.firstname)
+  #   self.letter.gsub!('{{fornavn}}', journal_entry.journal.firstname)
+  #   self.letter.gsub!('{{mor_navn}}', journal_entry.journal.parent_name || "")
+  #   self.letter.gsub!('{{projektnr}}', journal_entry.journal.alt_id || "")
+  # end
   
-  def to_mail_merge
-    self.letter.gsub!('{{login}}', '{ MERGEFIELD login }')
-    self.letter.gsub!('{{brugernavn}}', '{ MERGEFIELD brugernavn }')
-    self.letter.gsub!('{{password}}', '{ MERGEFIELD password }')
-    self.letter.gsub!('{{kodeord}}', '{ MERGEFIELD kodeord }')
-    self.letter.gsub!('{{name}}', '{ MERGEFIELD name }')
-    self.letter.gsub!('{{navn}}', '{ MERGEFIELD navn }')
-    self.letter.gsub!('{{firstname}}', '{ MERGEFIELD firstname }')
-    self.letter.gsub!('{{fornavn}}', '{ MERGEFIELD fornavn }')
-    self.letter.gsub!('{{mor_navn}}', '{ MERGEFIELD mor_navn }')
-    self.letter.gsub!('{{projektnr}}', '{ MERGEFIELD projektnr }')
-  end
+  # def to_mail_merge
+  #   self.letter.gsub!('{{login}}', '{ MERGEFIELD login }')
+  #   self.letter.gsub!('{{brugernavn}}', '{ MERGEFIELD brugernavn }')
+  #   self.letter.gsub!('{{password}}', '{ MERGEFIELD password }')
+  #   self.letter.gsub!('{{kodeord}}', '{ MERGEFIELD kodeord }')
+  #   self.letter.gsub!('{{name}}', '{ MERGEFIELD name }')
+  #   self.letter.gsub!('{{navn}}', '{ MERGEFIELD navn }')
+  #   self.letter.gsub!('{{firstname}}', '{ MERGEFIELD firstname }')
+  #   self.letter.gsub!('{{fornavn}}', '{ MERGEFIELD fornavn }')
+  #   self.letter.gsub!('{{mor_navn}}', '{ MERGEFIELD mor_navn }')
+  #   self.letter.gsub!('{{projektnr}}', '{ MERGEFIELD projektnr }')
+  # end
 
   def self.find_default(surveytype)
     Letter.find_by_surveytype(surveytype, :conditions => ['group_id IS NULL or group_id = ?', 0] )

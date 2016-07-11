@@ -80,6 +80,8 @@ Cbcl4::Application.routes.draw do
   resources :journal_stats
   resources :journals
   resources :letters
+  resources :login_letters
+  resources :follow_up_letters
   resources :login_users
   resources :nationalities
   resources :reminders
@@ -176,8 +178,8 @@ Cbcl4::Application.routes.draw do
   post 'journal_entries/remove_answer/(/:id)', :to => 'journal_entries#remove_answer', :as => 'entry_remove_answer', :only => :post
   get 'journal_entries/edit_chain/(/:id)', :to => 'journal_entries#edit_chain', :as => 'edit_journal_entry_chain'
   post 'journal_entries/update_chain/(/:id)', :to => 'journal_entries#update_chain', :as => 'update_journal_entry_chain', :only => :post
-  get 'letters/show_login/(/:id)', :to => 'letters#show_login', :as => 'login_letter'
-  get 'letters/show_logins/(/:id)', :to => 'letters#show_logins', :as => 'print_letters'
+  get 'login_letters/show_login/(/:id)', :to => 'login_letters#show_login', :as => 'show_login_letter'
+  get 'login_letters/show_logins/(/:id)', :to => 'login_letters#show_logins', :as => 'print_letters'
   # get 'letters/new/(/:id)', :to => 'letters#new', :as => 'new_letter'
   
   # get 'journal_entries/destroy_login/(/:id)', :to => 'journal_entries#destroy_login', :as => 'destroy_login', :only => :post
