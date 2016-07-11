@@ -12,6 +12,8 @@ class FixGustav
 
       csa.journal_id = gus.id
       sa.journal_id = gus.id
+      je.journal_id = gus.id
+      puts "sa.journal_id: #{sa.journal_id}, csa.journal_id: #{csa.journal_id}"
 
       je.save && sa.save && csa.save
 
