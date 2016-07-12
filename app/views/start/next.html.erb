@@ -8,7 +8,7 @@ Vi beder dig nu gå videre til 2 .del, som omhandler dit barns følelsesmæssige
 		<span style="font-size: 14pt;"><%= @survey.title || @survey.description %></span>
 		<span>&nbsp;&nbsp;&nbsp;&nbsp;
 		<% url = "/survey_#{@survey.id}.pdf" %>
-		<%= link_to image_tag("printer-42x.png", :align => "center", :border=>0, :alt => 'Udskriv spørgeskema', :class => "new_window", :title => 'Udskriv spørgeskema' ),
+		<%# link_to image_tag("printer-42x.png", :align => "center", :border=>0, :alt => 'Udskriv spørgeskema', :class => "new_window", :title => 'Udskriv spørgeskema' ),
 						url, :onclick => "window.open(\"#{url}\"); return false;", :title => 'Udskriv spørgeskema' %></span>
 	</div>
 </p>
