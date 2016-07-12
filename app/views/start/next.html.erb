@@ -1,8 +1,8 @@
-<h2>Tak fordi du besvarede spørgeskemaet</h2>
-
 <p>
-	Du skal besvare det næste spørgeskema. Du begynder ved at trykke på start. 
-
+<span style="font-size: 14pt; ">
+Du har nu besvaret 1. del af spørgeskemaet om dit barns adfærd (CBCL-spørgeskema). 
+Vi beder dig nu gå videre til 2 .del, som omhandler dit barns følelsesmæssige og sociale kompetencer (ASQ:SE-spørgeskema)
+</span>
 	<div style=' width: 780px; padding: 20px 0px 20px 20px; font-size: 16pt; background-color: #<%= @survey.color %>;' >
 		<span class="survey_title"><%= link_button t('survey.start'), survey_url(@survey), 'survey_start', :format => 'html' %></span>
 		<span style="font-size: 14pt;"><%= @survey.title || @survey.description %></span>
@@ -12,13 +12,3 @@
 						url, :onclick => "window.open(\"#{url}\"); return false;", :title => 'Udskriv spørgeskema' %></span>
 	</div>
 </p>
-
-
-<br>
-<span style="font-size: 14pt; ">
-	<% if @token.blank? %>
-		<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
-	<% else %>
-		<%= link_button "Gå tilbage til #{@center.title}", api_logout_path(@api_key, @token), 'logout', :title => 'Afslut' %>
-	<% end %>
-</span>
