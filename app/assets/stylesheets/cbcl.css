@@ -1275,6 +1275,15 @@ a:active.bigbutton {
 	margin-left: 30px;
 }
 
+#letter_preview {
+	float: right;
+	padding: 2em;
+	margin-left: 550px;
+	font: 9px "Helvetica Neue" !important; 
+	width: 350px;
+	border: 1px solid #ccc;
+}
+
 label { word-wrap: break-word; }
 
 @media print {  

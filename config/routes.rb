@@ -180,6 +180,7 @@ Cbcl4::Application.routes.draw do
   post 'journal_entries/update_chain/(/:id)', :to => 'journal_entries#update_chain', :as => 'update_journal_entry_chain', :only => :post
   get 'login_letters/show_login/(/:id)', :to => 'login_letters#show_login', :as => 'show_login_letter'
   get 'login_letters/show_logins/(/:id)', :to => 'login_letters#show_logins', :as => 'print_letters'
+  get 'follow_up_letters/preview/(/:id)', :to => 'follow_up_letters#preview', :as => 'preview_letter'
   # get 'letters/new/(/:id)', :to => 'letters#new', :as => 'new_letter'
   
   # get 'journal_entries/destroy_login/(/:id)', :to => 'journal_entries#destroy_login', :as => 'destroy_login', :only => :post

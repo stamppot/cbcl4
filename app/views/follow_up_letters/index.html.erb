@@ -1,22 +1,22 @@
 <p>
 <%= image_tag 'mail_48.png', :align => "middle" %>
-<span class="h3">Formularer til loginbreve</span>
+<span class="h3">Breve til opfølgning</span>
 </p>
 
-<form id="filter" action="/letters/" method="get">
+<form id="filter" action="/follow_up_letters/" method="get">
 <table id="searchfilter">
 	<tr>
 		<td><%= select(:group, :id, @groups.map {|t| [t.title, t.id]}, {:include_blank => "Alle breve i Center og teams"}) %></td>
 		<td><%= select(:survey, :surveytype, @surveys.map {|s| [Survey.get_survey_type(s.surveytype), s.surveytype]}, :include_blank => 'Skema') %></td>
 		<td><%= select(:follow_up, :follow_up, @follow_ups, :include_blank => 'Opfølgning') %></td>
 		<td><input type="submit" name="filter" value="Filtrer" class="button"></td>
-		<td><a href="/letters/" class="button">Vis alle</a></td>
+		<td><a href="/follow_up_letters/" class="button">Vis alle</a></td>
 	<tr>
 </table>
 </form>
 
 <% if @letters.blank? %>
-	<h3><%= "Ingen breve fundet, tilpas dit filter" %></h3>
+	<h3><%= "Ingen breve fundet, tilpas filteret" %></h3>
 <% else %>
 
 <table id="letter_list" class="sortable list" class="letters">
@@ -30,12 +30,16 @@
 
 <% @letters.each do |letter| %>
   <tr>
-		<td><a href="/letters/<%= letter.id %>"><%= letter.name %></a><%# link_to letter.name, letter_path(letter) %></td>
+		<td><a href="/follow_up_letters/<%= letter.id %>"><%= letter.name %></a><%# link_to letter.name, letter_path(letter) %></td>
 		<td><%= t("roles.#{letter.surveytype}") %></td>
 		<td><%= letter.get_follow_up %></td>
 		<td><%= letter.group.nil? && "Alle centre" || letter.group.title %></td>
 	    <td>
-	    	<a title="Ret brev" href="/letters/<%= letter.id %>/edit">
+	    	<span class="preview" title="Ret brev" href="/follow_up_letters/preview/<%= letter.id %>" src="l" />
+	    		<%= image_tag 'letter.png', :class => "icon", :alt => "Preview brev" %>
+	    	</span>
+
+	    	<a title="Ret brev" href="/follow_up_letters/<%= letter.id %>/edit">
 	    		<%= image_tag 'icon_edit_mailbox.gif', :class => "icon", :alt => "Icon_edit_mailbox" %>
 	    	</a>
 	    	<a onclick="window.open(this.href,'new_window, height=800,width=700','new_window, height=800,width=700');return false;" href="/letters/mail_merge/1">
@@ -44,11 +48,36 @@
 	    	<%# link_to_icon 'icon_edit_mailbox.gif', edit_letter_url(letter), :title => t('letter.edit') %>
 	    	<%# link_to(image_tag('letter_forward.png', :border => 0, :class => 'icon', :title => t('letter.download')), download_letter_path(letter), :popup => ['new_window, height=800,width=700']) %>
 				<span>&nbsp;&nbsp;</span>
-				<%= link_to_icon 'delete2.png', letter_path(letter), :method => :delete, :confirm => t('letter.confirm') %></td>
+				<%= link_to_icon 'delete2.png', follow_up_letter_path(letter), :method => :delete, :confirm => t('letter.confirm') %></td>
   </tr>
 <% end %>
 </table>
+<div id="letter_preview"></div>
+
 <% end %>
 <br />
 
-<%= link_button t('letter.new'), new_letter_path, 'letter_new' %>
+<%= link_button t('letter.new'), new_follow_up_letter_path, 'letter_new' %>
+
+<script type="text/javascript">
+
+	function preview(result, some, other) {
+		$('#letter_preview').html(other.responseText);
+		return false;
+	}
+
+	$(document).ready(function () {
+		$('.preview').click(function() {
+			var url = $(this).attr('href');
+
+			$.ajax(
+				{
+					url: url, 
+					contentType: 'application/javascript',
+					datatype: 'html',
+					success: preview
+				});
+			return false;
+		});
+	});
+</script>

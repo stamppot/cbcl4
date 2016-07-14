@@ -29,4 +29,9 @@ class LoginLetter < Letter
     self.letter.gsub!('{{mor_navn}}', '{ MERGEFIELD mor_navn }')
     self.letter.gsub!('{{projektnr}}', '{ MERGEFIELD projektnr }')
   end
+
+  def self.filter(params)
+    params[:type] = "LoginLetter"
+    Letter.filter(params)
+  end
 end

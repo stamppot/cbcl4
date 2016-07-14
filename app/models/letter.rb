@@ -70,8 +70,8 @@ class Letter < ActiveRecord::Base
     letter
   end
 
-  def self.get_conditions(surveytype = nil, group_id = nil, follow_up = nil, include_null = false)
-    query = [""]
+  def self.get_conditions(type, surveytype = nil, group_id = nil, follow_up = nil, include_null = false)
+    query = ["'type' = '#{type}'"]
     if !surveytype.blank?
       # puts "filter letter surveytype #{options[:survey][:surveytype]}"
       s_query = (!query.first.blank? ? "and surveytype = ? " : "surveytype = ? ")
@@ -99,11 +99,12 @@ class Letter < ActiveRecord::Base
 
 
   def self.filter(options = {})
+    type = options[:type]
     surveytype = options[:survey] && options[:survey][:surveytype]
-    group_id = options[:group] && options[:group][:id]
+    group_id = options[:group] && options[:group][:id] || nil
     follow_up = options[:follow_up] && !options[:follow_up][:follow_up].blank? && options[:follow_up][:follow_up].to_i
     query = [""]
-    cond = Letter.get_conditions(surveytype, group_id, follow_up)
+    cond = Letter.get_conditions(type, surveytype, group_id, follow_up)
     puts "conditions: #{cond.inspect}"
     @letters = 
     if !cond[:conditions].first.blank?

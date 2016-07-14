@@ -29,4 +29,9 @@ class FollowUpLetter < Letter
     self.letter.gsub!('{{mor_navn}}', '{ MERGEFIELD mor_navn }')
     self.letter.gsub!('{{projektnr}}', '{ MERGEFIELD projektnr }')
   end
+
+  def self.filter(params)
+    params[:type] = "FollowUpLetter"
+    Letter.filter(params)
+  end
 end

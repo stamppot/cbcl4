@@ -62,20 +62,29 @@ class FollowUpLettersController < ApplicationController
     params[:letter][:letter] = params[:letter_contents]
     @letter = FollowUpLetter.new(params[:letter])
     @group = Group.find_by_id params[:letter][:group_id]
-    @letter.group = @group
-    @letter.center = @group.center
-    existing_letter = @group.letters.select {|l| l.group_id == @group.id && l.surveytype == params[:letter][:surveytype] && l.follow_up == params[:letter][:follow_up] }
-    if existing_letter.any?
-      flash[:error] = "Gruppen '#{@group.title}' har allerede et brev af typen '#{Survey.get_survey_type(@letter.surveytype)}'. V&aelig;lg en anden gruppe"
+
+    if @group
+      @letter.group = @group
+      @letter.center = @group.center if @group
+
+      existing_letter = @group.letters.select do |l| 
+        l.group_id == @group.id &&
+        l.surveytype == params[:letter][:surveytype] && 
+        l.follow_up == params[:letter][:follow_up]
+      end
+      if existing_letter && existing_letter.any?
+        flash[:error] = "Gruppen '#{@group.title}' har allerede et brev af typen '#{Survey.get_survey_type(@letter.surveytype)}'. V&aelig;lg en anden gruppe"
+      end
     end
-    
+
     if @letter.save
       flash[:notice] = 'Brevet er oprettet.'
       redirect_to(@letter) and return
     else
-      @group = [@letter.group.title, @letter.group.id]
+      puts "letter errors: #{@letter.errors.inspect}"
+      # @group = [@letter.group && @letter.group.title || "", @letter.group.id]
       @role_types = Survey.surveytypes
-      @groups = [@group]
+      @groups = @group && [@group] || current_user.center_and_teams.map {|g| [g.title, g.id] }
       # @letter.follow_up = params[:letter][:follow_up].blank? && -1 || params[:letter][:follow_up].to_i
       @follow_ups = FollowUp.get
       render :new, :params => params and return
@@ -145,6 +154,15 @@ class FollowUpLettersController < ApplicationController
 			letter
 		end
     render :layout => 'letters'
+  end
+
+  def preview
+    @letter = FollowUpLetter.find(params[:id])
+
+    respond_to do |wants|
+      wants.html  { render :layout => 'letters' }
+      wants.js   { render :layout => false }
+    end
   end
 
   def mail_merge
