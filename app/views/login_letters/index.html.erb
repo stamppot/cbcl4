@@ -52,3 +52,7 @@
 <br />
 
 <%= link_button t('letter.new'), new_login_letter_path, 'letter_new' %>
+
+<% if current_user.access?(:superadmin) %>
+<%= link_button t('letter.follow_up_letters'), follow_up_letters_path, 'follow_up_letters' %>
+<% end %>

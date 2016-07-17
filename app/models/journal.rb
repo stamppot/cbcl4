@@ -79,6 +79,11 @@ class Journal < ActiveRecord::Base #< Group
   scope :all_groups, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
   scope :all_groups, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
 
+  scope :P1, lambda { |group| where('journals.group_id = ?', group) }
+  scope :P2, lambda { |group| where('journal_entries.state >= 5', group) }
+  scope :P3, lambda { |group| where('survey_id IN (1,3,9)', group) }
+  scope :P4, lambda { |group| where('follow_up = 1', group) }
+
   define_index do
      # fields
      indexes :title, :sortable => true

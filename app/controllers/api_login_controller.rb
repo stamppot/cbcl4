@@ -74,7 +74,7 @@ class ApiLoginController < ApiController
 
 		if !tokens.any?
 			puts "existing journal: #{journal.inspect}"
-			tokens = create_tokens(journal)
+			tokens = to_token(journal)
 		end
 
 		puts "tokens: #{tokens.inspect}"

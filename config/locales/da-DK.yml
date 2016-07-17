@@ -192,6 +192,7 @@ da-DK:
       :confirm: "Er du sikker på, at du vil slette brevet?"
       :new: Opret brev
       :download: Hent brevskabelon
+      :follow_up_letters: "Opfølgningsbreve"
     previous: Forrige
     active_record: 
       :error: 
