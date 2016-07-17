@@ -112,7 +112,7 @@ class StartController < ApplicationController
     puts "token: #{@token}"
     survey_answer = @journal_entry.survey_answer
     setting = CenterSetting.where(:center_id => @center.id, :name => "edit_answer_in_weeks")
-    weeks_to_answer = setting && setting.value || 2
+    weeks_to_answer = setting && setting.first.value || 2
     @update_date = survey_answer && (survey_answer.created_at.end_of_day + weeks_to_answer.weeks) || Date.today
     @can_update_answer = @update_date >= Date.today
     logger.info "Editable until: #{@update_date.inspect}"
