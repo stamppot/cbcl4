@@ -111,7 +111,8 @@ class StartController < ApplicationController
     cookies.delete :journal_id
     puts "token: #{@token}"
     survey_answer = @journal_entry.survey_answer
-    @update_date = survey_answer && (survey_answer.created_at.end_of_day + 2.weeks) || Date.today
+    weeks_to_answer = CenterSetting.get(@center, "edit_answer_in_weeks", 2)
+    @update_date = survey_answer && (survey_answer.created_at.end_of_day + weeks_to_answer.weeks) || Date.today
     @can_update_answer = @update_date >= Date.today
     logger.info "Editable until: #{@update_date.inspect}"
   end
