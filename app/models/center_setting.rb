@@ -7,9 +7,9 @@ class CenterSetting < ActiveRecord::Base
 	scope :setting, lambda { |setting| where(:name => setting) }
 
 	def self.get(center, setting, default = nil)
-		setting = self.for_center(center).setting(setting)
+		setting = self.for_center(center).setting(setting).first
 		if setting
-			val = setting.first.value
+			val = setting.value
 			return default && default.is_a?(Integer) && val.to_i || val
 		else
 			default
