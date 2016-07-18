@@ -1,5 +1,11 @@
 class JournalService
 
+	attr_accessible :logger
+
+	def init(logger)
+		self.logger = logger
+	end
+
 	def create_journal(center, journal_params, surveys, follow_up = 0, save = true)
 		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
 
@@ -24,7 +30,7 @@ class JournalService
 			end
 
 		else # create surveys if not exist
-			RAILS_DEFAULT_LOGGER.info "existing create_journal #{journal_params.inspect}"
+			logger.info "existing create_journal #{journal_params.inspect}"
 			surveys = surveys.select do |survey|
 				# !journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
 				!journal.journal_entries.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up }
@@ -32,12 +38,12 @@ class JournalService
 		end
 
 		entries = journal.create_journal_entries(surveys, follow_up = 0, save)
-		RAILS_DEFAULT_LOGGER.info("created entries: #{entries.inspect}")
+		logger.info("created entries: #{entries.inspect}")
 		logins = entries.inject({}) do |col,e|
 	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
-		RAILS_DEFAULT_LOGGER.info("logins: #{logins.inspect}")
+		logger.info("logins: #{logins.inspect}")
 	    
 	    return [journal, logins]
 	end

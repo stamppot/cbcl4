@@ -66,7 +66,7 @@ class ApiLoginController < ApiController
 		# journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
 		survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
 		surveys = survey_params.map {|s| Survey.where(s).first}
-		service = JournalService.new
+		service = JournalService.new(logger)
 		follow_up = 0
 		journal, tokens = service.create_journal(center, journal_params, surveys, follow_up, true)
 		puts "new journal: #{journal.inspect} tokens: #{tokens.inspect}"
