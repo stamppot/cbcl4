@@ -234,6 +234,9 @@ class ApiLoginController < ApiController
 	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
+		if !logins.any?
+			return [journal, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}]
+		end
 		logger.info("logins: #{logins.inspect}")
 	    
 	    return [journal, logins]

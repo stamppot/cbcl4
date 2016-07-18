@@ -2,7 +2,7 @@ class Task < ActiveRecord::Base
   belongs_to :export_file
   belongs_to :survey_answer
 
-  attr_accessible :status
+  attr_accessible :status, :survey_answer
 
   # def self.create_csv_survey_answer_task(survey_answer_id)
   #   Task.create(:survey_answer_id => survey_answer_id, :status => "To do")
