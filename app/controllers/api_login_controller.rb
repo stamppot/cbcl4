@@ -75,6 +75,10 @@ class ApiLoginController < ApiController
 		if !tokens.any?
 			puts "existing journal: #{journal.inspect}"
 			tokens = to_token(journal)
+
+			if !tokens.any?
+				render :text => [journal, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}]
+			end
 		end
 
 		puts "tokens: #{tokens.inspect}"
@@ -233,9 +237,6 @@ class ApiLoginController < ApiController
 		logins = entries.inject({}) do |col,e|
 	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
-		end
-		if !logins.any?
-			return [journal, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}]
 		end
 		logger.info("logins: #{logins.inspect}")
 	    
