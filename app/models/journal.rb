@@ -79,10 +79,10 @@ class Journal < ActiveRecord::Base #< Group
   scope :all_groups, lambda { |group_ids| where(['group_id IN (?)', group_ids]) }
   scope :all_groups, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
 
-  scope :P1, lambda { |group| where('journals.group_id = ?', group) }
-  scope :P2, lambda { |group| where('journal_entries.state >= 5', group) }
-  scope :P3, lambda { |group| where('survey_id IN (1,3,9)', group) }
-  scope :P4, lambda { |group| where('follow_up = 1', group) }
+  scope :in_group, lambda { |group| where('journals.group_id = ?', group) }
+  scope :answered, lambda { |group| where('journal_entries.state >= 5', group) }
+  scope :for_surveys, lambda { |surveys| where('survey_id IN (?)', surveys) }
+  scope :with_follow_up, lambda { |follow_up| where('follow_up = 1', follow_up) }
 
   define_index do
      # fields
