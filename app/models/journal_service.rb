@@ -32,10 +32,12 @@ class JournalService
 		end
 
 		entries = journal.create_journal_entries(surveys, follow_up = 0, save)
+		logger.info("created entries: #{entries.inspect}")
 		logins = entries.inject({}) do |col,e|
 	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
+		logger.info("logins: #{logins.inspect}")
 	    
 	    return [journal, logins]
 	end

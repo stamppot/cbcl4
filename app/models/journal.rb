@@ -253,7 +253,7 @@ class Journal < ActiveRecord::Base #< Group
       # login_number = "#{self.code}#{survey.id}"
       login_user = entry.make_login_user
       unless login_user.valid?
-        puts "login_user errors: #{login_user.errors.inspect}"
+        logger.error "login_user errors: #{login_user.errors.inspect}"
       end
       entry.login_user.save && entry.save if save
       entry
