@@ -77,7 +77,7 @@ class ApiLoginController < ApiController
 			tokens = to_token(journal)
 
 			if !tokens.any?
-				render :text => [journal, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}]
+				render :text => [journal, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}] and return
 			end
 		end
 
