@@ -24,7 +24,7 @@ class JournalService
 			end
 
 		else # create surveys if not exist
-			puts "existing create_journal #{journal_params.inspect}"
+			RAILS_DEFAULT_LOGGER.info "existing create_journal #{journal_params.inspect}"
 			surveys = surveys.select do |survey|
 				# !journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
 				!journal.journal_entries.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up }
@@ -32,12 +32,12 @@ class JournalService
 		end
 
 		entries = journal.create_journal_entries(surveys, follow_up = 0, save)
-		logger.info("created entries: #{entries.inspect}")
+		RAILS_DEFAULT_LOGGER.info("created entries: #{entries.inspect}")
 		logins = entries.inject({}) do |col,e|
 	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
-		logger.info("logins: #{logins.inspect}")
+		RAILS_DEFAULT_LOGGER.info("logins: #{logins.inspect}")
 	    
 	    return [journal, logins]
 	end
