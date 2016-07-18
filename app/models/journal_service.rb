@@ -1,11 +1,5 @@
 class JournalService
 
-	attr_accessible :logger
-
-	def init(logger)
-		self.logger = logger
-	end
-
 	def create_journal(center, journal_params, surveys, follow_up = 0, save = true)
 		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
 
