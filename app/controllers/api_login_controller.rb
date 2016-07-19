@@ -252,7 +252,7 @@ class ApiLoginController < ApiController
 		logger.info "existing create_journal #{journal_params.inspect}"
 
 		entries = journal.journal_entries
-		found_entries = entries.select { |e| surveys.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up } }
+		found_entries = entries.select { |e| surveys.any? {|survey| e.survey_id == survey.id && e.follow_up == follow_up } }
 
 		logins = found_entries.inject({}) do |col,e|
     	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
