@@ -114,7 +114,7 @@ class ApiLoginController < ApiController
 		journal, logins = get_entries(center, journal_params, surveys, follow_up, true)
 		logins
 
-		if !tokens.any?
+		if !logins.any?
 			render :text => [journal.title, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}] and return
 		end
 
