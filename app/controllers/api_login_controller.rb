@@ -74,7 +74,7 @@ class ApiLoginController < ApiController
 
 		if !tokens.any?
 			puts "existing journal: #{journal.inspect}"
-			tokens = to_token(journal)
+			tokens = to_token(journal.not_answered_entries)
 
 			if !tokens.any?
 				render :text => [journal.title, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}] and return
@@ -87,6 +87,43 @@ class ApiLoginController < ApiController
 		# TODO: Kristian vil gerne have et ID på journalen. Check hvad han mente (se papir)
 		puts "Tokens: #{tokens.inspect}  Encrypted tokens: #{encrypted_tokens.inspect}"
 		render :text => encrypted_tokens # "#{journal.title}: #{journal.birthdate}   #{encrypted_tokens.inspect}"
+	end
+
+	def get
+		param = ActiveSupport::JSON.decode(request.raw_post)
+		puts "param: #{param.class} #{param.inspect}"
+		key = param["api_key"]
+
+		puts "key: #{key}"
+		# check api_key
+		api_key = ApiKey.find_by_api_key(key)
+		if api_key.nil?
+			render :text => "Not found" and return
+		end
+
+		puts "current_user: #{current_user.inspect}"
+
+		journal_params = param["journal"]
+
+		center = Center.find(api_key.center_id || 1) # TODO: fix
+
+		# journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
+		surveys = survey_params.map {|s| Survey.where(s).first}
+		follow_up = 0
+		journal, logins = get_entries(center, journal_params, surveys, follow_up, true)
+		logins
+
+		if !tokens.any?
+			render :text => [journal.title, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}] and return
+		end
+
+		puts "logins: #{logins.inspect}"
+		encrypted_tokens = encrypt_tokens(api_key, logins)
+
+		# TODO: Kristian vil gerne have et ID på journalen. Check hvad han mente (se papir)
+		puts "Logins: #{logins.inspect}  Encrypted tokens: #{encrypted_tokens.inspect}"
+		render :text => encrypted_tokens 
 	end
 
 	def open # login og åbne skema
@@ -182,6 +219,13 @@ class ApiLoginController < ApiController
 		end
 	end
 
+	def to_tokens(journal_entries)
+		journal_entries.inject({}) do |h, e| 
+			h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+			h
+		end
+	end
+
 	def encrypt_tokens(api_key, tokens)
 		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
 	end
@@ -201,44 +245,19 @@ class ApiLoginController < ApiController
 
   private
 
-  	def create_journal(center, journal_params, surveys, follow_up = 0, save = true)
+  	def get_entries(center, journal_params, surveys, follow_up = 0, save = true)
 		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		return [] if !journal
+			
+		logger.info "existing create_journal #{journal_params.inspect}"
 
-		if !journal
-			puts "create_journal #{journal_params.inspect}"
-			date = DateTime.parse(journal_params["birthdate"])
-			puts "birthdate: #{date.inspect}"
-			name = journal_params["name"]
-			gender = journal_params["gender"]
+		entries = journal.journal_entries
+		found_entries = entries.select { |e| surveys.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up } }
 
-			journal = Journal.new(title: name, sex: Journal.sexes[gender], birthdate: date, 
-				nationality: "Dansk")
-			journal.code = center.next_journal_code
-			journal.set_cpr_nr
-			puts "create_journal: #{journal.inspect}"
-			journal.center = center
-			journal.group_id = center.id
-
-			if !journal.valid?
-				puts "ERRORS: #{journal.errors.inspect}"
-				return [journal, {}]
-			end
-
-		else # create surveys if not exist
-			logger.info "existing create_journal #{journal_params.inspect}"
-			surveys = surveys.select do |survey|
-				# !journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
-				!journal.journal_entries.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up }
-			end
-		end
-
-		entries = journal.create_journal_entries(surveys, follow_up = 0, save)
-		logger.info("created entries: #{entries.inspect}")
-		logins = entries.inject({}) do |col,e|
-	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+		logins = found_entries.inject({}) do |col,e|
+    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
-		logger.info("logins: #{logins.inspect}")
 	    
 	    return [journal, logins]
 	end
