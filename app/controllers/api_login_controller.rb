@@ -176,7 +176,7 @@ class ApiLoginController < ApiController
 	private 
 
 	def to_token(journal)
-		journal.not_answered_entries.inject({}) do |h, e| 
+		journal.journal_entries.inject({}) do |h, e| 
 			h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 			h
 		end
