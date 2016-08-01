@@ -20,6 +20,12 @@
 			<td class="t_i"><%= select :letter, :follow_up, @follow_ups, :include_blank => true %></td>
 		</tr>
 		<tr>
+		<tr>
+			<td class="t_i"><label for="letter_problematic">Problembrev:</label></td>
+			<% problematic = @letter.problematic || 0 %>
+			<td class="t_i"><%= select :letter, :problematic, [["Ja", true],["Nej", false]], :include_blank => true %></td>
+		</tr>
+		<tr>
 		<%# text_area_tag :letter, "letter", :class => "aaatinymce", :rows => 40, :cols => 120 %>
 			<td class="t_i">Indhold:</td>
 			<td class="t"><%= text_area_tag :letter_contents, @letter.letter, :class => "tinymce", :rows => 40, :cols => 120, :value => @letter.letter, :id => 'letter_contents' %>

@@ -29,7 +29,7 @@ class FollowUpLettersController < ApplicationController
   end
 
   def new
-    @letter = FollowUpLetter.new
+    @letter = FollowUpLetter.new(:follow_up => 1)
     @role_types = Survey.surveytypes
     @groups = if params[:id]
       used_roles = FollowUpLetter.find_all_by_group_id(params[:id])

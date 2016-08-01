@@ -5,6 +5,9 @@ class ScoreRapport < ActiveRecord::Base
   belongs_to :survey
   belongs_to :score_scale
   
+  has_many :has_98th_percentile_scores, -> { where('score_results.percentile_98 = 1') },
+           :class_name => 'ScoreResult'
+
   scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
   scope :from_date, lambda { |start| { :conditions => { :created_at  => start..(Date.now) } } }
   scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)..stop } } }
@@ -12,6 +15,7 @@ class ScoreRapport < ActiveRecord::Base
   # scope :for_survey, lambda { |survey_id| { :conditions => ["survey_id = ?", survey_id] } }
   # scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   # scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
+  # scope :has_98th_percentile_scores?, -> { includes(:score_results).where('percentile98 = 1') }
 
   attr_accessible :survey_name, :survey, :unanswered, :answer_percentage, :short_name, :age, :gender, :age_group, :created_at, :center_id, :survey_answer_id, :follow_up
 
