@@ -139,8 +139,8 @@ class SurveyAnswer < ActiveRecord::Base
     score_rapport = self.generate_score_report(update = true) # generate score report
     score_rapport.save_csv_score_rapport
     # self.save_csv_survey_answer # this is done by cron job
-    task = Task.new :status => 'To do', :survey_answer => self
-    self.save && task.save
+    csv_task = CsvSurveyAnswerTask.new :status => 'To do', :survey_answer => self
+    self.save && csv_task.save
   end
   
 	def set_answered_by(params = {})
