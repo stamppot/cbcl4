@@ -29,7 +29,7 @@ class FollowUpLettersController < ApplicationController
   end
 
   def new
-    @letter = FollowUpLetter.new(:follow_up => 1)
+    @letter = FollowUpLetter.new(:follow_up => 1, :problematic => false)
     @role_types = Survey.surveytypes
     @groups = if params[:id]
       used_roles = FollowUpLetter.find_all_by_group_id(params[:id])
@@ -70,7 +70,8 @@ class FollowUpLettersController < ApplicationController
       existing_letter = @group.letters.select do |l| 
         l.group_id == @group.id &&
         l.surveytype == params[:letter][:surveytype] && 
-        l.follow_up == params[:letter][:follow_up]
+        l.follow_up == params[:letter][:follow_up] &&
+        l.problematic == params[:letter][:problematic]
       end
       if existing_letter && existing_letter.any?
         flash[:error] = "Gruppen '#{@group.title}' har allerede et brev af typen '#{Survey.get_survey_type(@letter.surveytype)}'. V&aelig;lg en anden gruppe"
@@ -82,9 +83,7 @@ class FollowUpLettersController < ApplicationController
       redirect_to(@letter) and return
     else
       puts "letter errors: #{@letter.errors.inspect}"
-      # @group = [@letter.group && @letter.group.title || "", @letter.group.id]
-      @role_types = Survey.surveytypes
-      @groups = @group && [@group] || current_user.center_and_teams.map {|g| [g.title, g.id] }
+      @groups = @group && [[@group.title, @group.id]] || current_user.center_and_teams.map {|g| [g.title, g.id] }
       # @letter.follow_up = params[:letter][:follow_up].blank? && -1 || params[:letter][:follow_up].to_i
       @follow_ups = FollowUp.get
       render :new, :params => params and return
@@ -117,7 +116,7 @@ class FollowUpLettersController < ApplicationController
       @letter = FollowUpLetter.find(params[:id])
       @letter.destroy
       flash[:notice] = "Brevet #{@letter.name} er blevet slettet."
-      redirect_to FollowUpLetter._path
+      redirect_to follow_up_letters_path
   end
   
   def show_login
@@ -133,28 +132,28 @@ class FollowUpLettersController < ApplicationController
     render :layout => 'letters'
   end
   
-  def show_logins
-    journal = Journal.find(params[:id])
-    logger.info("params: #{params.inspect}")
-    if params[:letters].all? {|k,v| v.to_i == 0}
-	params[:letters] = params[:letters].inject({}) {|h,e| h[e.first] = 1; h }
-    end 
-    selected = params[:letters].select {|k,v| v.to_i == 1 }.inject([]) { |col,v| col << v.first.to_i; col }
-    logger.info("selected: #{selected.inspect}")
-		entries = journal.not_answered_entries.select {|e| selected.include?(e.id)}
-    # find letter for team, center, system
-		entry_letters = []
-		entry_letters = entries.map do |entry|
-      letter = FollowUpLetter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
-			[entry, letter]
-		end
-		@letters = entry_letters.map do |pair|
-			letter = pair.last
-			letter.insert_text_variables(pair.first)
-			letter
-		end
-    render :layout => 'letters'
-  end
+ #  def show_logins
+ #    journal = Journal.find(params[:id])
+ #    logger.info("params: #{params.inspect}")
+ #    if params[:letters].all? {|k,v| v.to_i == 0}
+	# params[:letters] = params[:letters].inject({}) {|h,e| h[e.first] = 1; h }
+ #    end 
+ #    selected = params[:letters].select {|k,v| v.to_i == 1 }.inject([]) { |col,v| col << v.first.to_i; col }
+ #    logger.info("selected: #{selected.inspect}")
+	# 	entries = journal.not_answered_entries.select {|e| selected.include?(e.id)}
+ #    # find letter for team, center, system
+	# 	entry_letters = []
+	# 	entry_letters = entries.map do |entry|
+ #      letter = FollowUpLetter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
+	# 		[entry, letter]
+	# 	end
+	# 	@letters = entry_letters.map do |pair|
+	# 		letter = pair.last
+	# 		letter.insert_text_variables(pair.first)
+	# 		letter
+	# 	end
+ #    render :layout => 'letters'
+ #  end
 
   def preview
     @letter = FollowUpLetter.find(params[:id])

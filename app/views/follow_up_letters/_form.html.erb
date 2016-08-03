@@ -7,7 +7,7 @@
 		</tr>
 		<tr>
 			<td class="t_i"><label for="letter_surveytype">Brev til:</label></td>
-			<td class="t_i"><%= select :letter, :surveytype, @role_types.map {|role| [t("roles.#{role}"), role]} %></td>
+			<td class="t_i"><%= select :letter, :surveytype, [[t("roles.parent"), "parent"]] %></td>
 		</tr>
 		<tr>
 			<td class="t_i"><label for="letter_group">Gruppe:</label></td>
@@ -23,7 +23,7 @@
 		<tr>
 			<td class="t_i"><label for="letter_problematic">Problembrev:</label></td>
 			<% problematic = @letter.problematic || 0 %>
-			<td class="t_i"><%= select :letter, :problematic, [["Ja", true],["Nej", false]], :include_blank => true %></td>
+			<td class="t_i"><%= select :letter, :problematic, [["Ja", 1],["Nej", 0]] %></td>
 		</tr>
 		<tr>
 		<%# text_area_tag :letter, "letter", :class => "aaatinymce", :rows => 40, :cols => 120 %>

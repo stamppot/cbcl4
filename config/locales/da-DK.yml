@@ -456,7 +456,9 @@ da-DK:
               :letter:
                 :blank: er tomt
               :surveytype: 
-                :taken: Der findes allerede et brev for denne skematype og opfølning for gruppen. Har du valgt den rigtige gruppe?
+                :taken: Der findes allerede et brev for denne skematype og opfølgning for gruppen. Har du valgt den rigtige gruppe?
+              :problematic:
+                :taken: Der findes allerede et brev for denne opfølgning og problemtype for gruppen. Har du valgt den rigtige gruppe og problemtype?
           :center: 
             :attributes: 
               :code: 

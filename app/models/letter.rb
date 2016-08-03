@@ -5,7 +5,6 @@ class Letter < ActiveRecord::Base
   validates_associated :group, :allow_blank => true
   validates_presence_of :letter
   validates_presence_of :name
-  validates_presence_of :surveytype
   # validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølning for gruppen. Har du valgt den rigtige gruppe?"
 
   # attr_accessible :name, :surveytype, :group_id, :follow_up, :letter
@@ -71,7 +70,7 @@ class Letter < ActiveRecord::Base
   end
 
   def self.get_conditions(type, surveytype = nil, group_id = nil, follow_up = nil, include_null = false)
-    query = ["'type' = '#{type}'"]
+    query = ["`type` = '#{type}'"]
     if !surveytype.blank?
       # puts "filter letter surveytype #{options[:survey][:surveytype]}"
       s_query = (!query.first.blank? ? "and surveytype = ? " : "surveytype = ? ")
@@ -96,7 +95,6 @@ class Letter < ActiveRecord::Base
     {:conditions => query}
 #    @letters = Letter.all(:conditions => query)
   end
-
 
   def self.filter(options = {})
     type = options[:type]

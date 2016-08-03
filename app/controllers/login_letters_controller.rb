@@ -9,7 +9,6 @@ class LoginLettersController < ApplicationController
     else
       @groups = current_user.center_and_teams
     end
-    puts "groups: #{@groups.inspect}"
     params[:center_id] = current_user.center_id || 1
     params[:group].delete :id if params[:group] && params[:group][:id].blank?
     logger.info "params: #{params.inspect}"

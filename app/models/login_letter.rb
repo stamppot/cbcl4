@@ -1,6 +1,7 @@
 class LoginLetter < Letter
 
-  validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølning for gruppen. Har du valgt den rigtige gruppe?"
+  validates_presence_of :surveytype
+  validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølgning for gruppen. Har du valgt den rigtige gruppe?"
 
   attr_accessible :surveytype, :follow_up
 
