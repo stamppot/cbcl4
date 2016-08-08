@@ -68,7 +68,7 @@ class ApiLoginController < ApiController
 		surveys = survey_params.map {|s| Survey.where(s).first}
 		service = JournalService.new
 		follow_up = 0
-		journal, tokens = create_journal(center, journal_params, surveys, follow_up, true)
+		journal, tokens = service.create_journal(center, journal_params, surveys, follow_up, true)
 		puts "new journal: #{journal.inspect} tokens: #{tokens.inspect}"
 		tokens
 
