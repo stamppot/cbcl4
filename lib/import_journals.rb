@@ -124,7 +124,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
 
-			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
+			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
 
 			next unless journal
 
