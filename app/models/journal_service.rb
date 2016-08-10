@@ -24,7 +24,6 @@ class JournalService
 			end
 
 		else # create surveys if not exist
-			puts "existing create_journal #{journal_params.inspect}"
 			surveys = surveys.select do |survey|
 				# !journal.not_answered_entries.any? {|e| e.survey_id == survey.id }
 				!journal.journal_entries.any? {|e| e.survey_id == survey.id && e.follow_up == follow_up }

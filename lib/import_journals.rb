@@ -103,6 +103,7 @@ class ImportJournals # AddJournalsFromCsv
  		puts "update_email(file, team_id, do_save = false)"
  		puts "check_next(file = 'aug_2010.csv', team_id = 9259)"
  		puts "update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)"
+ 		puts "update_connect(file, team_id, couple = {}, do_save = false)"
  	end
 
 	def update_email(file, team_id = 9259, do_save = false)
@@ -124,7 +125,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
 
-			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id) #Journal.find_by_title_and_group_id(journal_name, team_id)
+			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
 
 			next unless journal
 
@@ -140,6 +141,35 @@ class ImportJournals # AddJournalsFromCsv
 			}
 			journal.parent_email = parent_mail
 			journal.save if do_save
+			
+			i = i + 1
+		end
+	end
+
+	def update_connect(file, team_id = 9259, follow_up = 1, couple = {1 => 9}, do_save = false)
+		group = Group.find(team_id)
+		center = group.center
+
+		i = 1
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			puts "Row: #{i} #{row}"
+			next if row.blank?
+
+			alt_id = row["alt_id"] || row["Graviditetsid"]
+			b = row["birthdate"]
+			journal_name = row["journalnavn"] || row["Bnavn"]
+			parent_name = row["Mnavn"]
+			parent_mail = row["Email"]
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
+
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
+
+			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
+
+			next unless journal
+
+			connect(journal, follow_up, couple, do_save)
 			
 			i = i + 1
 		end
@@ -222,6 +252,15 @@ class ImportJournals # AddJournalsFromCsv
 		# 	src.next = dst.id
 		# 	src.save if do_save
 		# end
+	end
+
+	def connect(journal, follow_up, couple, do_save) 
+		couple.each do |k,v|
+			src = journal.journal_entries.select {|e| e.follow_up == follow_up && e.survey_id == k}.first
+			dst = journal.journal_entries.select {|e| e.follow_up == follow_up && e.survey_id == v}.first
+			src.next = dst.id
+			src.save if do_save
+		end
 	end
 
 	def get_date(d)

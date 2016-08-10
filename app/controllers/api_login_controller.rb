@@ -75,6 +75,10 @@ class ApiLoginController < ApiController
 		if !tokens.any?
 			puts "existing journal: #{journal.inspect}"
 			tokens = to_token(journal)
+
+			if !tokens.any?
+				render :text => [journal.title, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}] and return
+			end
 		end
 
 		puts "tokens: #{tokens.inspect}"
@@ -83,6 +87,43 @@ class ApiLoginController < ApiController
 		# TODO: Kristian vil gerne have et ID på journalen. Check hvad han mente (se papir)
 		puts "Tokens: #{tokens.inspect}  Encrypted tokens: #{encrypted_tokens.inspect}"
 		render :text => encrypted_tokens # "#{journal.title}: #{journal.birthdate}   #{encrypted_tokens.inspect}"
+	end
+
+	def get
+		param = ActiveSupport::JSON.decode(request.raw_post)
+		puts "param: #{param.class} #{param.inspect}"
+		key = param["api_key"]
+
+		puts "key: #{key}"
+		# check api_key
+		api_key = ApiKey.find_by_api_key(key)
+		if api_key.nil?
+			render :text => "Not found" and return
+		end
+
+		puts "current_user: #{current_user.inspect}"
+
+		journal_params = param["journal"]
+
+		center = Center.find(api_key.center_id || 1) # TODO: fix
+
+		# journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
+		surveys = survey_params.map {|s| Survey.where(s).first}
+		follow_up = 0
+		journal, logins = get_entries(center, journal_params, surveys, follow_up, true)
+		logins
+
+		if !logins.any?
+			render :text => [journal.title, {:result => 0, :message => 'No surveys created and logins created, already exists and answered'}] and return
+		end
+
+		puts "logins: #{logins.inspect}"
+		encrypted_tokens = encrypt_tokens(api_key, logins)
+
+		# TODO: Kristian vil gerne have et ID på journalen. Check hvad han mente (se papir)
+		puts "Logins: #{logins.inspect}  Encrypted tokens: #{encrypted_tokens.inspect}"
+		render :text => encrypted_tokens 
 	end
 
 	def open # login og åbne skema
@@ -178,6 +219,13 @@ class ApiLoginController < ApiController
 		end
 	end
 
+	def to_tokens(journal_entries)
+		journal_entries.inject({}) do |h, e| 
+			h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+			h
+		end
+	end
+
 	def encrypt_tokens(api_key, tokens)
 		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
 	end
@@ -193,5 +241,41 @@ class ApiLoginController < ApiController
   def write_user_to_session(user)
     session[:rbac_user_id] = user.id
   end
+
+
+  private
+
+  	def get_entries(center, journal_params, surveys, follow_up = 0, save = true)
+		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		return [] if !journal
+			
+		logger.info "existing create_journal #{journal_params.inspect}"
+
+		entries = journal.journal_entries
+		found_entries = entries.select { |e| surveys.any? {|survey| e.survey_id == survey.id && e.follow_up == follow_up } }
+
+		logins = found_entries.inject({}) do |col,e|
+    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+		    col
+		end
+	    
+	    return [journal, logins]
+	end
+
+	def get_cpr(date_str)
+    	dato = date_str.split("-")
+    	
+    	# puts "dato: #{dato.inspect}  [2].length #{dato[2].length}"
+    	if dato[2].length == 4
+    		year, month, day = *(dato.reverse)
+    	elsif dato.first.length == 4
+    		year, month, day = *dato
+    	else
+    		raise "Invalid date: #{date_str}"
+    	end
+
+    	# puts "day: #{day}, month: #{month}, year: #{year}"
+    	return "#{day}#{month}#{year.slice(2, 2)}"
+	end
 
 end
