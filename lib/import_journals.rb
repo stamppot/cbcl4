@@ -254,6 +254,15 @@ class ImportJournals # AddJournalsFromCsv
 		# end
 	end
 
+	def connect(journal, couple, do_save) 
+		couple.each do |k,v|
+			src = journal.not_answered_entries.select {|e| e.survey_id == k}.first
+			dst = journal.not_answered_entries.select {|e| e.survey_id == v}.first
+			src.next = dst.id
+			src.save if do_save
+		end
+	end
+
 	def connect(journal, surveys, couple, do_save) 
 		JournalEntryService.new.connect(journal, surveys, couple, do_save)
 	end
