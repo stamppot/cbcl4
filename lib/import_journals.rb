@@ -103,6 +103,7 @@ class ImportJournals # AddJournalsFromCsv
  		puts "update_email(file, team_id, do_save = false)"
  		puts "check_next(file = 'aug_2010.csv', team_id = 9259)"
  		puts "update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)"
+ 		puts "update_connect(file, team_id, couple = {}, do_save = false)"
  	end
 
 	def update_email(file, team_id = 9259, do_save = false)
