@@ -145,6 +145,35 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
+	def update_connect(file, team_id = 9259, couple = {1 => 9}, do_save = false)
+		group = Group.find(team_id)
+		center = group.center
+
+		i = 1
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			puts "Row: #{i} #{row}"
+			next if row.blank?
+
+			alt_id = row["alt_id"] || row["Graviditetsid"]
+			b = row["birthdate"]
+			journal_name = row["journalnavn"] || row["Bnavn"]
+			parent_name = row["Mnavn"]
+			parent_mail = row["Email"]
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
+
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
+
+			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
+
+			next unless journal
+
+			JournalEntryService.connect(journal, couple, do_save)
+			
+			i = i + 1
+		end
+	end
+
 	def find_dupe_entries(team_id = 9259, survey_id = 9, follow_up = 1)
 		group = Group.find(team_id)
 		query = "select je.id, count(je.id) as count from journal_entries je
@@ -222,6 +251,10 @@ class ImportJournals # AddJournalsFromCsv
 		# 	src.next = dst.id
 		# 	src.save if do_save
 		# end
+	end
+
+	def connect(journal, surveys, couple, do_save) 
+		JournalEntryService.new.connect(journal, surveys, couple, do_save)
 	end
 
 	def get_date(d)
