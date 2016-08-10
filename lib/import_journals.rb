@@ -256,8 +256,8 @@ class ImportJournals # AddJournalsFromCsv
 
 	def connect(journal, couple, do_save) 
 		couple.each do |k,v|
-			src = journal.not_answered_entries.select {|e| e.survey_id == k}.first
-			dst = journal.not_answered_entries.select {|e| e.survey_id == v}.first
+			src = journal.journal_entries.select {|e| e.survey_id == k}.first
+			dst = journal.journal_entries.select {|e| e.survey_id == v}.first
 			src.next = dst.id
 			src.save if do_save
 		end
