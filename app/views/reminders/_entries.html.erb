@@ -35,9 +35,10 @@ Der er ikke fundet nogen skemaer.
     	<td class="pj" style="text-align: left;"><%= entry.created_at.strftime "%d-%m-%Y" %></td>
     	<td class="pj" style="text-align: left;"><%= entry.answered_at && entry.answered_at.strftime("%d-%m-%Y") || "" %></td>
     	<td class="pj" style="text-align: right;"><%= entry.get_follow_up %></td>
-    	<% unless entry.next %>
-		<td><%= link_to image_tag("chain_to.png", :border => 0, :alt => "Opret kæde med andet skema", :title => "Opret kæde med andet skema"), edit_journal_entry_chain_path(entry) %></td>
-		<% end %>
+    	<% if entry.next %>
+    	<td>
+		<%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey}", :alt => "Koblet med #{entry.next_survey}" %>
+					    <% end %></td>
 	    <td class="pj" style="text-align: left;"><%= entry && entry.reminder_state || "" %></td>
   </tr>
 <% end %>
