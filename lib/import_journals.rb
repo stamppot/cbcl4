@@ -146,7 +146,7 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
-	def update_connect(file, team_id = 9259, couple = {1 => 9}, do_save = false)
+	def update_connect(file, team_id = 9259, follow_up = 1, couple = {1 => 9}, do_save = false)
 		group = Group.find(team_id)
 		center = group.center
 
@@ -169,7 +169,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			next unless journal
 
-			connect(journal, couple, do_save)
+			connect(journal, follow_up, couple, do_save)
 			
 			i = i + 1
 		end
@@ -254,10 +254,10 @@ class ImportJournals # AddJournalsFromCsv
 		# end
 	end
 
-	def connect(journal, couple, do_save) 
+	def connect(journal, follow_up, couple, do_save) 
 		couple.each do |k,v|
-			src = journal.journal_entries.select {|e| e.survey_id == k}.first
-			dst = journal.journal_entries.select {|e| e.survey_id == v}.first
+			src = journal.journal_entries.select {|e| e.follow_up == follow_up && e.survey_id == k}.first
+			dst = journal.journal_entries.select {|e| e.follow_up == follow_up && e.survey_id == v}.first
 			src.next = dst.id
 			src.save if do_save
 		end
