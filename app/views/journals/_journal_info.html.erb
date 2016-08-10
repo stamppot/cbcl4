@@ -9,7 +9,7 @@
 		</tr>
 		<tr>
 			<td class="p_i">Køn:</td>
-			<td class="p"><%=h @journal.sex_text %></td>
+			<td class="p"><%=h @journal.sex_text == "m" && "Dreng" || "Pige" %></td>
 		</tr>
 		<tr>
 			<td class="p_i">Fødselsdato:</td>
