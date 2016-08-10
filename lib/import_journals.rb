@@ -263,10 +263,6 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
-	def connect(journal, surveys, couple, do_save) 
-		JournalEntryService.new.connect(journal, surveys, couple, do_save)
-	end
-
 	def get_date(d)
 		# d = d.gsub("/", "-") if d.include? "/"
 		i = d.index "-"
