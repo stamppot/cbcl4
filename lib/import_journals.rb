@@ -169,7 +169,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			next unless journal
 
-			JournalEntryService.connect(journal, couple, do_save)
+			connect(journal, couple, do_save)
 			
 			i = i + 1
 		end
