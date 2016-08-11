@@ -20,7 +20,9 @@ class SubscriptionService
     created_on = subscriptions.any? && subscriptions.first.created_at || DateTime.now
     puts "create sub: #{created_on}"
     surveys.each do |survey|
-      sub = Subscription.new(:total_used => 0, :total_paid => 0, :active_used => 0, :created_at => created_on)
+      sub = Subscription.new(:total_used => 0, :total_paid => 0, :active_used => 0)
+      sub.created_at = created_on
+      sub.start = created_on
       sub.state = 1
       sub.survey_id = survey
       sub.center = @center
