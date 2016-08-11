@@ -2,7 +2,7 @@ class Period < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :center
 
-  attr_accessible :active, :used, :subscription
+  attr_accessible :active, :used, :subscription, :start
   
   scope :active, -> { where('active = ?', true) }
   scope :inactive, -> { where('active = ?', false) }
