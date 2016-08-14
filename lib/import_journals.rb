@@ -10,8 +10,7 @@ class ImportJournals # AddJournalsFromCsv
     # when 5 then "ycy" # YSR 6-16
     
     def initialize
-    	puts "update(file, [survey_ids], team_id, follow_up, {couple}, do_save)"
-    	puts "update_followup(file, do_save = false, survey_ids = [1,3,9], team_id = 9259, follow_up = 1, couple = {1 => 9}"
+    	list
     end
  	
  	def update_followup(file, do_save = false, survey_ids = [1,3,9], team_id = 9259, follow_up = 1, couple = {1 => 9})
@@ -100,10 +99,13 @@ class ImportJournals # AddJournalsFromCsv
 
  		# update parent_email
  	def list
+    	puts "update(file, [survey_ids], team_id, follow_up, {couple}, do_save)"
+    	puts "update_followup(file, do_save = false, survey_ids = [1,3,9], team_id = 9259, follow_up = 1, couple = {1 => 9}"
  		puts "update_email(file, team_id, do_save = false)"
  		puts "check_next(file = 'aug_2010.csv', team_id = 9259)"
  		puts "update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)"
  		puts "update_connect(file, team_id, couple = {}, do_save = false)"
+ 		puts "fix_twin_email(team_id = 9259)"
  	end
 
 	def update_email(file, team_id = 9259, do_save = false)
@@ -229,6 +231,20 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
+	def fix_twin_email(team_id = 9259)
+		jjs = Journal.where("group_id = ? and alt_id != '' and (parent_email = '' or parent_email is null)", team_id)
+		puts "found #{jjs.count} journals without parent_email"
+		jjs.each do |j|
+			with_emails = Journal.for_group(team_id).where(:alt_id => j.alt_id) # get twin with same alt_id
+			with_email = with_emails.select {|a| !a.parent_email.blank? }
+			if with_email.any?
+				other_twin = with_email.first
+				puts "found parent_email by other twin: #{other_twin.parent_email}: #{other_twin.title} -> #{j.title} "
+				j.parent_email = other_twin.parent_email
+				j.save
+			end
+		end
+	end
 
 	def add_surveys_and_entries(journal, surveys = [], follow_up = 0, do_save = false)
 		if surveys.any?
