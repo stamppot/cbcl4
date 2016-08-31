@@ -8,7 +8,7 @@
 	<% if @not_answered_entries.to_a.size > 0 %>
 		<h4>Skemaer der skal besvares</h4>
 		<table id="not_answered" class="surveys">
-			<form action="/letters/show_logins/<%= @journal.id %>.pdf<%= '?random=' << rand(100000).to_s %>" id="show_logins" method="get">
+			<form action="/login_letters/show_logins/<%= @journal.id %>.pdf<%= '?random=' << rand(100000).to_s %>" id="show_logins" method="get">
 			<tr>
 				<th>Spørgeskema</th>
 				<th>Noter</th>
