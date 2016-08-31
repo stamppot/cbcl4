@@ -1,12 +1,68 @@
 class Task < ActiveRecord::Base
   belongs_to :export_file
   belongs_to :survey_answer
+  belongs_to :letter
+  belongs_to :journal
 
-  attr_accessible :status, :survey_answer, :param1
+  has_many :task_logs
+  # belongs_to :task_logs
+
+  after_initialize :init
+
+  attr_accessible :status, :survey_answer, :param1, :journal_id, :letter_id 
+
+  scope :with_status, lambda { |state| where("status IN (?)", state) }
+  scope :between, ->(start, stop) { where(:created_at => start...stop) }
+  scope :with_journal, -> { where('journal_id IS NOT NULL') }
 
   # def self.create_csv_survey_answer_task(survey_answer_id)
   #   Task.create(:survey_answer_id => survey_answer_id, :status => "To do")
   # end
+
+  def init  # used by callback
+    self.status = 'To do'
+  end
+
+  def todo?
+    self.status == 'To do'
+  end
+
+  def in_progress?
+    self.status == 'In Progress'
+  end
+  
+  def failed?
+    self.status == 'Failed'
+  end
+
+  def failed!
+    self.status = 'Failed'
+  end
+
+  def completed?
+    self.status == 'Completed'
+  end
+  
+  def completed!
+    self.status = 'Completed'
+  end
+
+  def no_action!
+    self.status = 'No action'
+  end
+
+  def self.states
+    {
+      'To do' => 0,
+      'In Progress' => 2,
+      'Failed'      => -1,
+      'Completed'   => 1
+    }
+  end
+
+  def self.todo_status
+    "To do"
+  end
 
   def self.generate_survey_answers_to_csv
     logger.info "CSV save survey_answers: #{DateTime.now}"

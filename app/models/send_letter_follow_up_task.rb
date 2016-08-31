@@ -17,9 +17,19 @@ class SendLetterFollowUpTask < Task
 		# TODO: send mail with some service
 		# get configuration somewhere (mailfrom, mailserver, etc)
 
-		if succes = true
-			self.status = "Completed"
+		TaskLog.create :name => 'SendLetterFollowUpTask', 
+			:message => 'Test: sent email', 
+			:param1 => self.email,
+			:journal_id => self.journal_id, :task_id => self.task_id
+
+		if true
+			self.status.completed!
 			self.save
 		end
+	end
+
+	def self.run_tasks
+		puts "Running all SendLetterFollowUp sasks"		
+		SendLetterFollowUpTask.where(:status => "#{self.todo_status}").each {|task| task.run }
 	end
 end

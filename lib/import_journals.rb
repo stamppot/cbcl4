@@ -252,9 +252,9 @@ class ImportJournals # AddJournalsFromCsv
 				je_surveys = journal.not_answered_entries.select {|je| je.follow_up == follow_up }.map &:survey
 				add_surveys = surveys - je_surveys
 				puts "surveys: #{add_surveys.map &:inspect}"
-				journal.create_journal_entries(add_surveys, follow_up) if do_save
+				journal.add_journal_entries(add_surveys, follow_up) if do_save
 			elsif !journal.not_answered_entries.any?
-				journal.create_journal_entries(surveys, follow_up) if do_save
+				journal.add_journal_entries(surveys, follow_up) if do_save
 			end
 		end
 		journal.not_answered_entries.with_followup(follow_up).where('survey_id IN (?)', surveys)

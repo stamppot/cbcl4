@@ -185,7 +185,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     if request.post?
       surveys = params[:survey].select { |k,v| v.to_i == 1 }.map &:first
       @surveys = Survey.find(surveys)
-      entries = @group.create_journal_entries(@surveys, params[:journal_entry][:follow_up])
+      entries = @group.add_journal_entries(@surveys, params[:journal_entry][:follow_up])
       valid = entries.any? {|e| e.errors.size > 0 }
       flash[:error] = "Logins blev ikke oprettet!" unless valid
       @group.delta = true

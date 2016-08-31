@@ -282,7 +282,7 @@ class SurveyBuildersController < ApplicationController
         # add properties link
         property_options = "<span class='options'>" +
         "<a class='action' href='javascript:toggleElem(&quot;#{args[:cell] + '_props'}&quot;)'>" +
-                "Egenskaber" + # "<img src='/images/icon_comment.gif' border=0 title='Kommentar' class='comment' />" <<
+                "Egenskaber" + # "<img src='/assets/icon_comment.gif' border=0 title='Kommentar' class='comment' />" <<
         "</a>" + "</span>"
             
         updated_form = question_item_form(questionitem, args) + property_options

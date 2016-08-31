@@ -1,49 +1,38 @@
-<% if @journal_entries.empty? %>
+<% if @tasks.empty? %>
 Der er ikke fundet nogen skemaer.
 <% else %>
 
-<p>Antal: <%= @journal_entries.size %></p>
+<p>Antal: <%= @tasks.size %></p>
 <table id="journal_list" class="sortable list">
 	<tr>
 		<!-- add checkbox -->
 <th class="small select_all_box nosort" title="Vælg"><%= check_box_tag "select_all_box", "all", false %></th>
-<th class="wide sortcol sortdesc" title="Sorter efter navn">Skema</th>
 <th title="Sorter efter Id" class="sortcol">Id</th>
 <th title="Sorter efter Status" class="sortcol" style="text-align: left;">&nbsp;&nbsp;Status&nbsp;&nbsp;</th>
-<th title="Sorter efter opfølgning" class="sortcol" style="text-align: left;">Opfølgning</th>
 <th title="Sorter efter navn" class="sortcol">Navn</th>
 <th class="small sortcol" title="Sorter efter dato">Tilføjet</th>
-<th class="small sortcol" title="Sorter efter besvarelsesdato">Svardato</th>
-<th class="small" title="">Opfølgning</th>
-<th class="small sortcol" title="Kæde">Kæde</th>
+<th class="small sortcol" title="Sorter efter besvarelsesdato">Opdateret</th>
 <th class="small sortcol" title="Sorter">Status</th>
 
 </tr>
 
-<% @journal_entries.each do |entry| %>
-	<% survey = @surveys && @surveys[entry.survey_id] || entry.survey %>
-	<% journal = entry.journal %>
-  <tr>
-		<td class="select"><%= check_box_tag "journal_entries[]", entry.id, false, :id => "journal_entry_#{entry.id}" %>
-		<td style='background-color: #<%= survey.color %>;' class="pj_name">
-			<%= label_tag "journal_#{entry.id}", survey.title %>
-		</td>
+<% @tasks.each do |task| %>
+	<% journal = task.journal %>
+  <tr <%= task.failed? && "style='background:red;'" || "" %> >
+		<td class="select"><%= check_box_tag "tasks[]", task.id, false, :id => "task_#{task.id}" %>
 		<td class="pj small number"><%= journal.code %></td>
-		<td class="pj small number"><a href="/journal_entries/<%= entry.id %>"><%= entry.answer_status %></a></td>
-		<td class="pj small number"><%= entry.get_follow_up %></td>
-	    <td class="pj small"><span class="nobr"><a href="/journals/<%= entry.journal_id %>"><%= journal.title %></a></span></td>
-    	<td class="pj" style="text-align: left;"><%= entry.created_at.strftime "%d-%m-%Y" %></td>
-    	<td class="pj" style="text-align: left;"><%= entry.answered_at && entry.answered_at.strftime("%d-%m-%Y") || "" %></td>
-    	<td class="pj" style="text-align: right;"><%= entry.get_follow_up %></td>
-    	<% if entry.next %>
-    	<td>
-		<%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey}", :alt => "Koblet med #{entry.next_survey}" %>
-					    <% end %></td>
-	    <td class="pj" style="text-align: left;"><%= entry && entry.reminder_state || "" %></td>
-	    <% if entry.journal.parent_email.blank? %>
+		<td class="pj small number"><a href="/tasks/<%= task.id %>"><%= task.status %></a></td>
+	    <td class="pj small"><span class="nobr"><a href="/journals/<%= task.journal_id %>"><%= journal.title %></a></span></td>
+    	<td class="pj" style="text-align: left;"><%= task.created_at.strftime "%d-%m-%Y" %></td>
+    	<td class="pj" style="text-align: left;"><%= task.created_at && task.created_at.strftime("%d-%m-%Y") || "" %></td>
+	    <% if task.journal.parent_email.blank? %>
     	<td>
 		<%= image_tag "email_error.png", :border => 0, :title => "Mangler forælder-email: #{journal.title}", :alt => "Mangler forælder-email: #{journal.title}" %>
-		<% end %></td>
+		<% end %>
+		<% if task.failed? %>
+			<%= task.task_logs.map {|l| [l.message, l.created_at.to_s(:short)] }.join(", ") %>
+		<% end %>
+	</td>
   </tr>
 <% end %>
 </table>
@@ -51,5 +40,5 @@ Der er ikke fundet nogen skemaer.
 
 <% if params[:action] =~ /search/ %>
 	
-	<div style='align: right;'><b><%= @journal_entries.size %></b> resultat<%= 'er' if @journal_entries.size > 1 %></div>
+	<div style='align: right;'><b><%= @tasks.size %></b> resultat<%= 'er' if @tasks.size > 1 %></div>
 <% end %>

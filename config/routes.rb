@@ -81,6 +81,7 @@ Cbcl4::Application.routes.draw do
   resources :journals
   resources :letters
   resources :login_letters
+  resources :mail_task_logs
   resources :follow_up_letters
   resources :login_users
   resources :nationalities
@@ -299,6 +300,7 @@ Cbcl4::Application.routes.draw do
   
   # get 'survey_builder/destroy', :to => 'survey_builder#destroy', :as => 'destroy', :method => 'delete'
 
+  post 'tasks/rerun/(:id)', :to => 'tasks#rerun', :as => 'rerun_task'
 
   # scope path: "/api" do
   get '/api/answer_reports/show/(/:api_key)/(/:token)', :to => 'api/answer_reports#show', :as => 'api_answer_report'
@@ -328,12 +330,13 @@ Cbcl4::Application.routes.draw do
 
   get '/api/login/:api_key/:token', :to => 'api/login#login', :as => "api_login"
   get '/api/start/:api_key/:token', :to => 'api/start#start', :as => "api_survey_start"
-  # get '/api/start/start/:api_key/:token', :to => 'api/start#start', :as => "api_survey_start"
-  # post '/api_login/open/', :to => 'api_login#open'
-  # post '/api_login/index/', :to => 'api_login#index'
 
-  # post '/api_login/show/', :to => 'api_login#show'
-
+  # map api controller to better url paths, same controllers are used
+  post '/api/surveys/create/', :to => 'api_login#create'
+  post '/api/surveys/open/', :to => 'api_login#open'
+  get '/api/surveys/:api_key', :to => 'api_login#index'
+  post '/api/surveys/index/', :to => 'api_login#index'
+  post '/api/surveys/token/', :to => 'api_login#get'
 
 
   get 'main', :to => 'main#index', :as => 'main'

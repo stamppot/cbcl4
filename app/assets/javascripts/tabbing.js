@@ -228,7 +228,7 @@ function tabNext(valid, input) {
 	if(valid) {
 	    var nextelem = $(input.form[getIndex(input)]);
 
-	    if(nextelem.hasClass('comment')) { // jump over commenst
+	    if(nextelem !== 'undefined' && nextelem.hasClass('comment')) { // jump over commenst
 	    	nextelem = $(input.form[getIndex(nextelem)]);
     	}
 

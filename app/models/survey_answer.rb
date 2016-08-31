@@ -139,7 +139,7 @@ class SurveyAnswer < ActiveRecord::Base
     score_rapport = self.generate_score_report(update = true) # generate score report
     score_rapport.save_csv_score_rapport
     # self.save_csv_survey_answer # this is done by cron job
-    csv_task = CsvSurveyAnswerTask.new :status => 'To do', :survey_answer => self
+    csv_task = CsvSurveyAnswerTask.new :survey_answer => self
     CheckIfSendFollowUpLetterTask.create_task(self.journal)
     self.save && csv_task.save
   end

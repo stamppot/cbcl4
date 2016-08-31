@@ -1143,7 +1143,7 @@ class SelectOption < QuestionCell
 	end
 
 	def help_div(cell_id, help_message)
-		"<img src='/images/icon_comment.gif' class='help_icon' alt='Svarmuligheder' title='Vis svarmuligheder' onclick='Element.toggle(\"help_#{cell_id}\");' >" <<
+		"<img src='/assets/icon_comment.gif' class='help_icon' alt='Svarmuligheder' title='Vis svarmuligheder' onclick='Element.toggle(\"help_#{cell_id}\");' >" <<
 		"<div id='help_#{cell_id}' style='display:none;'><div class='help_tip'>#{help_message}</div></div>"
 	end
 
@@ -1428,7 +1428,7 @@ class ListItemComment < QuestionCell
 		c_id     = cell_id(no)
 
 		comment_box = "<a href='#' onclick='return toggleComment(\"#{c_id}\");' >" <<
-		"<img src='/images/icon_comment.gif' border=0 title='Kommentar' alt='kommentar' class='' >" << # removed />
+		"<img src='/assets/icon_comment.gif' border=0 title='Kommentar' alt='kommentar' class='' >" << # removed />
 		"</a>" unless options[:answers]
 		form = form_template(options) << comment_box.to_s
 	end

@@ -130,15 +130,15 @@ a:active.button {
 }
 
 a .go_back {
-	background:url('/images/arrow_undo.png') no-repeat 0px 0px;
+	background:url('/assets/arrow_undo.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .survey_input {
-	background:url('/images/mouse.png') no-repeat 0px 0px;
+	background:url('/assets/mouse.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 a .survey_fast_input {
-	background:url('/images/pencil_go.png') no-repeat 0px 0px;
+	background:url('/assets/pencil_go.png') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 /* submit buttons */
@@ -908,7 +908,7 @@ input.validation-maybe, textarea.validation-maybe {
 	padding: 6px 15px 6px 15px;
 }
 a .send_survey {
-	background:url('/images/spinner.gif') no-repeat 0px 0px;
+	background:url('/assets/spinner.gif') no-repeat 0px 0px;
 	padding-left: 27px;
 }
 

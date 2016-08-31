@@ -43,8 +43,9 @@ class ApiLoginController < ApiController
 		logger.info "Ensure we're logged out"
 	end
 
-# http://0.0.0.0:3000/api_login/create application/json
-# {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},"surveys":["CBCL_6-16", "TRF_6-16"]}
+# http://0.0.0.0:3000/api_login/create   application/json
+# {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},"surveys":["CBCL_6-16", "TRF_6-16"],"follow_up":0}
+	# creates entries for a journal. If no journal exists, it is created
 	def create
 		param = ActiveSupport::JSON.decode(request.raw_post)
 		puts "param: #{param.class} #{param.inspect}"
@@ -61,13 +62,13 @@ class ApiLoginController < ApiController
 
 		journal_params = param["journal"]
 
-		center = Center.find(api_key.center_id || 1) # TODO: fix
+		center = Center.find(api_key.center_id)
+		render :text => "Error: invalid api_key (no center)" if !center
 
-		# journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		follow_up = params["follow_up"] && params["follow_up"].to_i || 0  # works only for follow_up: Diagnose
 		survey_params = param["surveys"].map {|s| s.split("_")}.map {|e| {category: e.first, age: e.last} }
 		surveys = survey_params.map {|s| Survey.where(s).first}
 		service = JournalService.new
-		follow_up = 0
 		journal, tokens = service.create_journal(center, journal_params, surveys, follow_up, true)
 		puts "new journal: #{journal.inspect} tokens: #{tokens.inspect}"
 		tokens

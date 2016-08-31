@@ -1,16 +1,17 @@
 class JournalService
 
+	# gets or creates journal, then adds new entries
 	def create_journal(center, journal_params, surveys, follow_up = 0, save = true)
-		journal = Journal.where(center_id: center.id, title: journal_params["name"], cpr: get_cpr(journal_params["birthdate"])).first
+		title = journal_params["name"]
+		journal = Journal.where(center_id: center.id, title: title, cpr: get_cpr(journal_params["birthdate"])).first
 
 		if !journal
 			puts "create_journal #{journal_params.inspect}"
 			date = DateTime.parse(journal_params["birthdate"])
 			puts "birthdate: #{date.inspect}"
-			name = journal_params["name"]
 			gender = journal_params["gender"]
 
-			journal = Journal.new(title: name, sex: Journal.sexes[gender], birthdate: date, 
+			journal = Journal.new(title: title, sex: Journal.sexes[gender], birthdate: date, 
 				nationality: "Dansk")
 			journal.code = center.next_journal_code
 			journal.set_cpr_nr
@@ -30,9 +31,9 @@ class JournalService
 			end
 		end
 
-		entries = journal.create_journal_entries(surveys, follow_up = 0, save)
+		entries = journal.add_journal_entries(surveys, follow_up = 0, save)
 		logins = entries.inject({}) do |col,e|
-	    	    col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+	    	col[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
 		    col
 		end
 	    
