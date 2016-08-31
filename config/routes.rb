@@ -79,7 +79,7 @@ Cbcl4::Application.routes.draw do
   resources :journal_notes
   resources :journal_stats
   resources :journals
-  # resources :letters
+  resources :letters
   resources :login_letters
   resources :mail_task_logs
   resources :follow_up_letters

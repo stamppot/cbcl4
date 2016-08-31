@@ -35,4 +35,6 @@ class LoginLetter < Letter
     params[:type] = "LoginLetter"
     Letter.filter(params)
   end
+
+  
 end

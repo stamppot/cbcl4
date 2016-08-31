@@ -23,14 +23,14 @@ Der er ikke fundet nogen skemaer.
 		<td class="pj small number"><%= journal.code %></td>
 		<td class="pj small number"><a href="/tasks/<%= task.id %>"><%= task.status %></a></td>
 	    <td class="pj small"><span class="nobr"><a href="/journals/<%= task.journal_id %>"><%= journal.title %></a></span></td>
-    	<td class="pj" style="text-align: left;"><%= task.created_at.strftime "%d-%m-%Y" %></td>
-    	<td class="pj" style="text-align: left;"><%= task.created_at && task.created_at.strftime("%d-%m-%Y") || "" %></td>
+    	<td class="pj" style="text-align: left;"><%= task.created_at.to_s(:long) %></td>
+    	<td class="pj" style="text-align: left;"><%= task.created_at && task.created_at.to_s(:long) || "" %></td>
 	    <% if task.journal.parent_email.blank? %>
     	<td>
 		<%= image_tag "email_error.png", :border => 0, :title => "Mangler forælder-email: #{journal.title}", :alt => "Mangler forælder-email: #{journal.title}" %>
 		<% end %>
 		<% if task.failed? %>
-			<%= task.task_logs.map {|l| [l.message, l.created_at.to_s(:short)] }.join(", ") %>
+			<%= task.task_logs.map {|l| [l.message, l.created_at.to_s(:long)] }.join(", ") %>
 		<% end %>
 	</td>
   </tr>

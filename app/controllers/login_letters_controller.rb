@@ -12,26 +12,26 @@ class LoginLettersController < ApplicationController
     params[:center_id] = current_user.center_id || 1
     params[:group].delete :id if params[:group] && params[:group][:id].blank?
     logger.info "params: #{params.inspect}"
-    @letters = Letter.filter(params)
+    @letters = LoginLetter.filter(params)
     @group = Group.find(params[:group][:id]) if params[:group] && !params[:group][:id].blank?
     @surveys = Survey.find([2,3,4,5])
     @survey = Survey.find_by_surveytype(params[:survey][:surveytype]) if params[:survey]
     @follow_ups = FollowUp.get
     
-    @letters = Letter.where('group_id is null').to_a + @letters if current_user.admin?
-    @letters = Letter.all if params[:all]
+    @letters = LoginLetter.where('group_id is null').to_a + @letters if current_user.admin?
+    @letters = LoginLetter.all if params[:all]
   end
 
   def show
-    @letter = Letter.find(params[:id])
+    @letter = LoginLetter.find(params[:id])
     @page_title = @letter.name
   end
 
   def new
-    @letter = Letter.new
+    @letter = LoginLetter.new
     @role_types = Survey.surveytypes
     @groups = if params[:id]
-      used_roles = Letter.find_all_by_group_id(params[:id])
+      used_roles = LoginLetter.find_all_by_group_id(params[:id])
       @role_types.delete_if {|r| used_roles.include?(r.last) }
       Group.find([params[:id]])
     else
@@ -43,7 +43,7 @@ class LoginLettersController < ApplicationController
   end
 
   def edit
-    @letter = Letter.find(params[:id])
+    @letter = LoginLetter.find(params[:id])
     puts "edit: #{@letter.letter}"
     @role_types = Survey.surveytypes
     @groups = current_user.center_and_teams.map {|g| [g.title, g.id] }
@@ -59,7 +59,7 @@ class LoginLettersController < ApplicationController
 
   def create
     params[:letter][:letter] = params[:letter_contents]
-    @letter = Letter.new(params[:letter])
+    @letter = LoginLetter.new(params[:letter])
     @group = Group.find_by_id params[:letter][:group_id]
     @letter.group = @group
     @letter.center = @group.center
@@ -82,7 +82,7 @@ class LoginLettersController < ApplicationController
   end
 
   def update
-    @letter = Letter.find(params[:id])
+    @letter = LoginLetter.find(params[:id])
     params[:letter][:letter] = params[:letter_contents]
 
     @letter.letter = params[:letter][:letter]
@@ -100,11 +100,11 @@ class LoginLettersController < ApplicationController
   end
   
   def delete
-    @letter = Letter.find(params[:id])
+    @letter = LoginLetter.find(params[:id])
   end
 
   def destroy
-      @letter = Letter.find(params[:id])
+      @letter = LoginLetter.find(params[:id])
       @letter.destroy
       flash[:notice] = "Brevet #{@letter.name} er blevet slettet."
       redirect_to login_letters_path
@@ -114,7 +114,7 @@ class LoginLettersController < ApplicationController
     entry = JournalEntry.find(params[:id], :include => :login_user)
     @login_user = entry.login_user
     # find letter for team, center, system
-    @letter = Letter.find_by_priority(entry)
+    @letter = LoginLetter.find_by_priority(entry)
     if @letter.nil?
       render :text => "Intet brev fundet. Brugernavn: #{entry.login_user.login}<p>Password: #{entry.password}" and return
     end
@@ -135,7 +135,7 @@ class LoginLettersController < ApplicationController
     # find letter for team, center, system
 		entry_letters = []
 		entry_letters = entries.map do |entry|
-      letter = Letter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
+      letter = LoginLetter.find_by_priority(entry).dup # duplicate to fill multiples of the same letter
 			[entry, letter]
 		end
 		@letters = entry_letters.map do |pair|
@@ -148,7 +148,7 @@ class LoginLettersController < ApplicationController
 
   def mail_merge
     # find letter for team, center, system
-    @letter = Letter.find(params[:id])
+    @letter = LoginLetter.find(params[:id])
     @letter.to_mail_merge
     render :layout => 'letters', :template => 'letters/show_login'
   end

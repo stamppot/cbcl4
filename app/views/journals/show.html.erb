@@ -34,7 +34,7 @@
 					 <td style="min-width: 100px;">
 					<% @entry = entry %>
 					<%= entry.login_user.nil? ? "" : link_to(image_tag('icon_edit_mailbox.gif', :border => 0, 
-										:class => 'icon', :title => 'Vis login-info'), login_letter_path(entry) + ".pdf", :popup => ['new_window, height=800,width=700']) %>
+										:class => 'icon', :title => 'Vis login-info'), show_login_letter_path(entry) + ".pdf", :popup => ['new_window, height=800,width=700']) %>
 					<%= link_to image_tag("pencil.png", :border => 0, :alt => "Ret opfølgning", :title => "Ret opfølgning"), edit_journal_entry_path(entry) %>
 					<a href="/journal_entries/edit_notes/<%= entry.id %>" title="Noter">
 						<% image_tag 'tag_blue.png', :alt => "Noter", :title => "Noter", :align => "right" %>

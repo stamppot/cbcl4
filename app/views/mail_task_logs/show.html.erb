@@ -1,7 +1,7 @@
 <h2>Status på brevforsendelser for &quot;<%=h @group.title %>&quot;</h2>
 
 	<h3>Status</h3>
-	<%= form_tag(csv_entry_status_download_path(@group.id, :format => 'csv') +".csv", :id => 'reminders', :class => 'form', :method => :post) do %>
+	<%= form_tag(csv_entry_status_download_path(@group.id, :format => 'csv') +".csv", :id => 'mail_task_logs', :class => 'form', :method => :post) do %>
 	<span id="filter_fields">
 		<p>
 			<select id="follow_up" name="follow_up">
@@ -11,7 +11,7 @@
 
 		&nbsp;&nbsp;
 
-		<a class="button filter_entries" href="/reminders/show/<%= @group.id %>"><span class="button filter">Filtrer</span></a>
+		<a class="button filter_entries" href="/mail_task_logs/show/<%= @group.id %>"><span class="button filter">Filtrer</span></a>
 		&nbsp;&nbsp;
 		
 
@@ -108,9 +108,9 @@ $(document).ready(function() {
 		var state = $('input[name="selected_state"]').val();
 		// alert('click');
 		var follow_up = $('#follow_up').val();
-		var url = "/reminders/filter/<%= @group.id %>/" + state + "/" + follow_up;
+		var url = "/mail_task_logs/filter/<%= @group.id %>/" + state + "/" + follow_up;
 		console.log("url: " + url);
-		var data = $("#reminders").serialize();
+		var data = $("#mail_task_logs").serialize();
 		// console.log(data);
 		$.ajax({
 			url: url,
@@ -139,7 +139,7 @@ function generate_file(id) {
 	var follow_up = $('#follow_up').val();
 
 	$.ajax({
-		url: '/reminders/generate_file/' + id + '?state='+state + '&active=' + export_reminder + '&follow_up=' + follow_up,
+		url: '/mail_task_logs/generate_file/' + id + '?state='+state + '&active=' + export_reminder + '&follow_up=' + follow_up,
 		dataType: 'html',
 		method: 'post',
 		success: function(response) {
