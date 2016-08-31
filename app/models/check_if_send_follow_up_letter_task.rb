@@ -50,10 +50,8 @@ class CheckIfSendFollowUpLetterTask < Task
 		end
 
 		by_journal.each do |journal_id, tasks|
-			puts "group: #{by_journal.inspect}"
-			puts "tasks in group: #{tasks.inspect}"
 			tasks.first.run # run first, set rest to completed
-			tasks.each { |task| task.completed! task.save }
+			tasks.each { |task| task.completed!; task.save }
 		end
 	end
 end
