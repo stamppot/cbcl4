@@ -7,7 +7,7 @@ class CheckIfSendFollowUpLetterTask < Task
 
 	def self.create_task(journal)
 		# only do this for team SAFARI
-		if true || journal.group.title == "SAFARI"
+		if journal.group.title == "SAFARI"
 			self.create :journal_id => journal.id
 		end
 	end

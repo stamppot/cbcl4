@@ -22,7 +22,7 @@ class SendLetterFollowUpTask < Task
 			:param1 => self.email,
 			:journal_id => self.journal_id, :task_id => self.task_id
 
-		if true
+		if false #true
 			self.status.completed!
 			self.save
 		end
