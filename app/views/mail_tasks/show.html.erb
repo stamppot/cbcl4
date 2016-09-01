@@ -41,7 +41,7 @@
 
 
 	<p>
-		<% if @tasks.any? && ['To do'].include? @state  %>
+		<% if @tasks.any? && ['To do'].include?(@state)  %>
 		<span style="padding: 3px;" id='send_form' class="btn-submit">
 			<%= submit_tag "Godkend", :class => 'button accept' %>
 		</span>
