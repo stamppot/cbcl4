@@ -20,7 +20,9 @@ class SendLetterFollowUpTask < Task
 		TaskLog.create :name => 'SendLetterFollowUpTask', 
 			:message => 'Test: sent email', 
 			:param1 => self.email,
-			:journal_id => self.journal_id, :task_id => self.task_id
+			:journal_id => self.journal_id,
+			# :group_id => self.group_id
+			:task_id => self.task_id
 
 		if false #true
 			self.status.completed!
@@ -31,5 +33,10 @@ class SendLetterFollowUpTask < Task
 	def self.run_tasks
 		puts "Running all SendLetterFollowUp sasks"		
 		SendLetterFollowUpTask.where(:status => "#{self.todo_status}").each {|task| task.run }
+	end
+
+
+	def self.count_failed
+		SendLetterFollowUpTask.with_journal.with_status(failed_status).count
 	end
 end

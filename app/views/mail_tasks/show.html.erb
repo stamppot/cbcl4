@@ -1,0 +1,133 @@
+<h2>Status på opfølgningsbreve for &quot;<%=h @group.title %>&quot;</h2>
+
+	<%# form_tag(csv_entry_status_download_path(@group.id, :format => 'csv') +".csv", :id => 'mail_tasks', :class => 'form', :method => :post) do %>
+	<%= form_tag(mail_tasks_update_path(@group.id), :id => 'tasks', :class => 'form', :method => :post) do %>
+
+		<input type="hidden" name="selected_state" class="selected_state" value="<%= @state %>" />
+
+	</span>
+	<br/>
+
+	<div id="export_file" data-no-turbolink></div>
+
+
+	<span id="filter_fields">
+		<%= link_button "#{Task.todo_status}", mail_tasks_status_path(@group.id, [0].join("-")), "status_pending", :class => "answer_state #{'To do' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<%= link_button "Godkendt", mail_tasks_status_path(@group.id, [3]), "button status_approved", :class => "answer_state #{'Approved' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<%= link_button "Udsendt", mail_tasks_status_path(@group.id, [1]), "status_success", :class => "answer_state #{'Completed' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<% if @count_failed > 0 %>
+		<%= link_button "Fejl", mail_tasks_status_path(@group.id, [-1]), "status_failed", :class => "answer_state #{'Failed' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<% end %>
+		<%# link_button "Alle", answer_status_path(@group.id, [1,2,3,4,5,6].join("-")), "button status_all", :class => 'answer_state' %>&nbsp;&nbsp;
+	</span>
+
+
+<div class="tasks" id="tasks">
+	</p>
+	
+	<% if @tasks.empty? %>
+	<%= t('none') %>
+	<% elsif @tasks.nil? %>
+		Skal godkendes. Antal: <%= @tasks_count %>
+	<% else %>
+	<div id="journal_entries">
+		<div id="entries">
+			<%= render :partial => 'entries', :locals => {} %>
+		</div>
+	</div>
+	<%# render :partial => 'shared/ajax_pagination' %>
+	<% end %>
+</div>
+
+
+	<p>
+		<% if ['To do'].include? @state  %>
+		<span style="padding: 3px;" id='send_form' class="btn-submit">
+			<%= submit_tag "Godkend", :class => 'button accept' %>
+		</span>
+		<% end %>
+	</p>
+	<% end %>
+
+<p>
+	<br/>
+</p>
+
+
+
+<div class="commands">
+	<%= back_button team_path(@group) %>
+</div>
+
+
+<script type="text/javascript">
+
+
+$('.tabs').each(function(tab_group){  
+	new Control.Tabs(tab_group);  
+});
+
+
+$(document).ready(function() {
+	$('.answer_state').click(function(element) {
+		var selected_state = $(this).attr('href');
+		console.log("selected_state: " + selected_state)
+		//alert("hello: " + selected_state);
+		 console.log($("input[name='selected_state']"));
+		$("input[name='selected_state']").val(selected_state);
+	});
+	$('#select_all_box').click(function() {
+		var isChecked = select_all_box.checked;
+		$('td input[type="checkbox"]').each(function () {
+			$(this).prop('checked', isChecked);
+		});
+	});
+
+	$("a.filter_entries").click(function(ev) {
+		$('#entries').html("<br/><img src='/assets/spinner.gif' />");
+		var state = $('input[name="selected_state"]').val();
+		// alert('click');
+		var follow_up = $('#follow_up').val();
+		var url = "/mail_tasks/filter/<%= @group.id %>/" + state + "/" + follow_up;
+		console.log("url: " + url);
+		var data = $("#mail_tasks").serialize();
+		// console.log(data);
+		$.ajax({
+			url: url,
+			data: data,
+			dataType: 'html',
+			contentType: 'text/html',
+			method: 'post',
+			success: function(data) {
+				$('#entries').html(data);
+			},
+			error:  function(data) {
+				console.log('error');
+				console.log(data);
+			}
+		});
+		// ev.stopPropagation();
+		return false;
+	});
+
+});
+
+
+function generate_file(id) {
+	var state = $("input[name='selected_state']").val();
+	var export_reminder = $("#export_reminder_status").val();
+	var follow_up = $('#follow_up').val();
+
+	$.ajax({
+		url: '/mail_tasks/generate_file/' + id + '?state='+state + '&active=' + export_reminder + '&follow_up=' + follow_up,
+		dataType: 'html',
+		method: 'post',
+		success: function(response) {
+			// alert(response);
+			// console.log(response);
+			$('#export_file').html(response);
+			$('#export_file').highlight();
+		}
+	});
+}
+// </script>

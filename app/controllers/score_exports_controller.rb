@@ -49,7 +49,7 @@ class ScoreExportsController < ApplicationController
     csv_score_rapports = CsvScoreRapport.with_options(current_user, params).all
     puts "DOWNLOAD csv_score_rapports: #{csv_score_rapports.size}"
     # spawns background task
-    @task = Task.create(:status => "In progress")
+    @task = Task.create(:status => "In progress", :group_id => center.id)
     @task.create_score_rapports_export(params[:survey][:id], csv_score_rapports)
   end
    

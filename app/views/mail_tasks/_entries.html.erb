@@ -1,0 +1,50 @@
+<% if @tasks.empty? %>
+Der er ikke fundet nogen skemaer.
+<% else %>
+
+<p>Antal: <%= @tasks.size %>. Fejl: <%= @count_failed %></p>
+<table id="journal_list" class="sortable list">
+	<tr>
+		<!-- add checkbox -->
+<th class="small select_all_box nosort" title="Vælg"><%= check_box_tag "select_all_box", "all", false %></th>
+<th title="Sorter efter Id" class="sortcol">Id / Projekt</th>
+<th title="Sorter efter navn" class="sortcol">Navn</th>
+<th title="Sorter efter navn" class="sortcol">Brev</th>
+<th title="Sorter efter navn" class="sortcol">Email</th>
+<!-- <th class="small sortcol" title="Sorter efter dato">Tilføjet</th> -->
+<th class="small sortcol" title="Sorter efter besvarelsesdato">Ændret</th>
+<th title="Sorter efter Status" class="sortcol" style="text-align: left;">&nbsp;&nbsp;Status&nbsp;&nbsp;</th>
+</tr>
+
+<% @tasks.each do |task| %>
+	<% journal = task.journal %>
+  <tr <%= task.failed? && "style='background:red;'" || "" %> >
+		<td class="select"><%= check_box_tag "tasks[]", task.id, false, :id => "task_#{task.id}" %>
+		<td class="pj small number"><%= journal.code %> <%= journal.alt_id %></td>
+	    <td class="pj small"><span class="nobr"><a href="/journals/<%= task.journal_id %>"><%= journal.title %></a></span></td>
+		<td class="pj">
+	    	<a onclick="window.open(this.href,'new_window, height=800,width=700','new_window, height=800,width=700');return false;" href="/follow_up_letters/mail_merge/<%= task.letter.id %>"><%= task.letter.name %>
+	    	</a>
+	    </td>
+		<td class="pj small"><%= journal.parent_email %></td>
+<!--     	<td class="pj" style="text-align: left;"><%# task.created_at.to_s(:long) %></td> -->
+    	<td class="pj" style="text-align: left;"><%= task.created_at && task.created_at.to_s(:long) || "" %></td>
+		<td class="pj small"><a href="/tasks/<%= task.id %>"><%= task.status %></a></td>
+
+	    <% if task.journal.parent_email.blank? %>
+    	<td>
+		<%= image_tag "email_error.png", :border => 0, :title => "Mangler forælder-email: #{journal.title}", :alt => "Mangler forælder-email: #{journal.title}" %>
+		<% end %>
+		<% if task.failed? %>
+			<%= task.task_logs.map {|l| [l.message, l.created_at.to_s(:long)] }.join(", ") %>
+		<% end %>
+	</td>
+  </tr>
+<% end %>
+</table>
+<% end %>
+
+<% if params[:action] =~ /search/ %>
+	
+	<div style='align: right;'><b><%= @tasks.size %></b> resultat<%= 'er' if @tasks.size > 1 %></div>
+<% end %>

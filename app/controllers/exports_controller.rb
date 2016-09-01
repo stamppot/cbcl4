@@ -67,7 +67,7 @@ class ExportsController < ApplicationController
 
     csv_survey_answers = CsvSurveyAnswer.with_options(current_user, params).all
 
-    @task = Task.create(:status => "In progress")
+    @task = Task.create(:status => "In progress", :group_id => center.id)
     @task.create_survey_answer_export(params[:survey][:id], csv_survey_answers)
   end
 

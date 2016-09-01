@@ -14,7 +14,7 @@
 		<th class="extra_wide" title="Sorter efter navn">Teams</th>
 		<th width="80px" class="narrow" title="Sorter efter SKS-kode">ID</th>
 		<!-- <th class="narrow" title="Sorter efter antal brugere"><%# t('user.users') %></th> -->
-		<th class="nosort narrow">Journalhandling</th>
+		<th class="nosort">Journalhandling</th>
 		<% if false && current_user.access?(:show_column_actions) %>
 		<th title="">Teamhandling</th>
 		<% end %>
@@ -34,9 +34,17 @@
 				</a>
 			</span>
 			<span class="action">
+				&nbsp;
 				<a href="/reminders/<%= group.id %>">
 					<%= image_tag 'traffic-light_24.png', :title => "Svarstatus", :class => "icon", :alt => "Svarstatus" %>
 				</a>
+				<% if group.id == 9259 %>
+				&nbsp;
+				<a href="/mail_tasks/show/<%= group.id %>/0">
+					<%= image_tag 'mailbox.png', :title => "Opfølgningsbreve", :class => "icon", :alt => "Opfølgningsbreve" %>
+				</a>
+				<% end %>
+				&nbsp;
 				<a title="Eksporter brevfletningsdata" href="/journals/export_mails/<%= group.id %>.csv">
 					<%= image_tag 'documents_email_24.png', :title => "Eksporter brevfletningsdata", :class => "icon", :alt => "Documents_email_24" %>
 				</a>

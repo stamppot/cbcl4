@@ -3,6 +3,7 @@ class Task < ActiveRecord::Base
   belongs_to :survey_answer
   belongs_to :letter
   belongs_to :journal
+  belongs_to :group
 
   has_many :task_logs
   # belongs_to :task_logs
@@ -11,40 +12,47 @@ class Task < ActiveRecord::Base
 
   attr_accessible :status, :survey_answer, :param1, :journal_id, :letter_id 
 
+  scope :for_group, lambda { |g| where(:group_id => g) }
   scope :with_status, lambda { |state| where("status IN (?)", state) }
   scope :between, ->(start, stop) { where(:created_at => start...stop) }
   scope :with_journal, -> { where('journal_id IS NOT NULL') }
+  scope :of_type, lambda { |t| where('`type` = ?', t) }
 
-  # def self.create_csv_survey_answer_task(survey_answer_id)
-  #   Task.create(:survey_answer_id => survey_answer_id, :status => "To do")
-  # end
 
   def init  # used by callback
-    self.status = 'To do'
+    self.status = Task.todo_status
   end
 
   def todo?
-    self.status == 'To do'
+    self.status == Task.todo_status
   end
 
   def in_progress?
-    self.status == 'In Progress'
+    self.status == Task.in_progress_status
   end
   
   def failed?
-    self.status == 'Failed'
+    self.status == Task.failed_status
   end
 
   def failed!
-    self.status = 'Failed'
+    self.status = Task.failed_status
+  end
+
+  def approved?
+    self.status == Task.approved_status
+  end
+  
+  def approved!
+    self.status = Task.approved_status
   end
 
   def completed?
-    self.status == 'Completed'
+    self.status == Task.completed_status
   end
   
   def completed!
-    self.status = 'Completed'
+    self.status = Task.completed_status
   end
 
   def no_action!
@@ -53,16 +61,53 @@ class Task < ActiveRecord::Base
 
   def self.states
     {
-      'To do' => 0,
-      'In Progress' => 2,
-      'Failed'      => -1,
-      'Completed'   => 1
+      0 => 'To do',
+      2 => 'In progress',
+      3 => 'Approved',
+      -1 => 'Failed',
+      1 => 'Completed'
     }
   end
 
   def self.todo_status
-    "To do"
+    self.states[0]
   end
+
+  def self.approved_status
+    self.states[3]
+  end
+
+  def self.completed_status
+    self.states[1]
+  end
+
+  def self.in_progress_status
+    self.states[2]
+  end
+
+  def self.failed_status
+    self.states[-1]
+  end
+
+  def self.todo_state
+    self.states[0]
+  end
+
+  # def self.approved_state
+  #   self.states.revert['Approved']
+  # end
+
+  # def self.completed_state
+  #   self.states.revert['Completed']
+  # end
+
+  # def self.in_progress_state
+  #   self.states.revert['In progress']
+  # end
+
+  # def self.failed_state
+  #   self.states.revert['Failed']
+  # end
 
   def self.generate_survey_answers_to_csv
     logger.info "CSV save survey_answers: #{DateTime.now}"

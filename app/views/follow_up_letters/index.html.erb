@@ -42,7 +42,7 @@
 	    	<a title="Ret brev" href="/follow_up_letters/<%= letter.id %>/edit">
 	    		<%= image_tag 'icon_edit_mailbox.gif', :class => "icon", :alt => "Icon_edit_mailbox" %>
 	    	</a>
-	    	<a onclick="window.open(this.href,'new_window, height=800,width=700','new_window, height=800,width=700');return false;" href="/letters/mail_merge/1">
+	    	<a onclick="window.open(this.href,'new_window, height=800,width=700','new_window, height=800,width=700');return false;" href="/follow_up_letters/mail_merge/<%= letter.id %>">
 	    		<%= image_tag 'letter_forward.png', :title => "Hent brevskabelon", :class => "icon", :alt => "Letter_forward" %>
 	    	</a>
 	    	<%# link_to_icon 'icon_edit_mailbox.gif', edit_letter_url(letter), :title => t('letter.edit') %>

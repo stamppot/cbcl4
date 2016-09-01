@@ -275,8 +275,8 @@ class SurveyAnswersController < ApplicationController
     end
 
     # additional logging of usage
-    SurveyUsageLog.create_log(journal_entry, current_user)
     journal_entry.increment_subscription_count(survey_answer)
+    SurveyUsageLog.create_log(journal_entry, current_user)
 
 		# puts "SURVEYANSWERCONT current_user: #{current_user.inspect} LOGIN_USER: #{current_user.login_user?}"
     # login-users are shown the finish page

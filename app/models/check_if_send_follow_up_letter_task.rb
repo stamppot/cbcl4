@@ -8,7 +8,7 @@ class CheckIfSendFollowUpLetterTask < Task
 	def self.create_task(journal)
 		# only do this for team SAFARI
 		if journal.group.title == "SAFARI"
-			self.create :journal_id => journal.id
+			self.create :journal_id => journal.id, :group_id => journal.group_id
 		end
 	end
 
@@ -28,7 +28,7 @@ class CheckIfSendFollowUpLetterTask < Task
 				return
 			end
 			# TODO: check if email is valid
-			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id
+			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id
 			puts "SendLetterFollowUpTask created: #{task.inspect}"
 			self.completed!
 		else

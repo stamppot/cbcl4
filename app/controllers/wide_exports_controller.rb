@@ -74,7 +74,7 @@ class WideExportsController < ApplicationController
     puts "download #survey_answers #{survey_answers.count}"
     csv = WideAnswersExport.new.wide_table(survey_answers, params[:surveys])
 
-    @task = Task.create(:status => "In progress")
+    @task = Task.create(:status => "In progress", :group_id => center.id)
     @task.create_wide_survey_answer_export(params[:surveys], csv)
   end
 

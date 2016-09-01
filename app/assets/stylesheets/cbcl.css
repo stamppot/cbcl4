@@ -1002,12 +1002,16 @@ a .survey_save_draft {
 	padding-left: 27px;	
 }
 
-a .status_answered {
+a .status_answered, a .status_approved {
   background:url('/assets/status.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
 
-a .status_unanswered {
+a .status_pending {
+  background:url('/assets/status-orange.png') no-repeat 0px 0px;
+	padding-left: 27px;	
+}
+a .status_unanswered, a .status_failed {
   background:url('/assets/status-busy.png') no-repeat 0px 0px;
 	padding-left: 27px;	
 }
@@ -1017,9 +1021,19 @@ a .status_draft {
 	padding-left: 27px;	
 }
 
+a .status_success {
+  background:url('/assets/status-success.png') no-repeat 0px 0px;
+	padding-left: 27px;	
+}
+
 a .status_all {
   background:url('/assets/status-offline.png') no-repeat 0px 0px;
 	padding-left: 27px;	
+}
+
+.button.selected {
+	border-color: #444;
+	text-decoration: underline;
 }
 
 /* link buttons */

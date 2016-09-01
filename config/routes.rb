@@ -81,6 +81,7 @@ Cbcl4::Application.routes.draw do
   resources :journals
   resources :letters
   resources :login_letters
+  resources :mail_tasks
   resources :mail_task_logs
   resources :follow_up_letters
   resources :login_users
@@ -245,6 +246,13 @@ Cbcl4::Application.routes.draw do
   get 'export_files/show/(/:id)', :to => 'export_files#show', :as => 'export_login'
   get 'export_files/download/(/:id).:format', :to => 'export_files#download', :as => 'file_download', :format => 'csv'
   match 'export_logins/download/:id.:format', :to => 'export_logins#download', :as => 'export_logins', :format => 'csv', :via => [:get, :post]
+
+  # mail_tasks
+  match 'mail_tasks/show/:id/(:state)/(:follow_up)(.:format)', :to => 'mail_tasks#show', :as => 'mail_tasks_status', :via => [:get, :post]
+  post 'mail_tasks/update/:id', :to => 'mail_tasks#update', :as => 'mail_tasks_update'
+  match 'mail_tasks/filter/:id/(:state)', :to => 'mail_tasks#filter', :as => 'mail_tasks_filter_status', :via => [:get, :post]
+  match 'mail_tasks/download/(:id).:format', :to => 'mail_tasks#download', :as => 'csv_mail_tasks_status_download', :format => 'csv', :via => [:get, :post]
+  match 'mail_tasks/generate_file/(:id)/(:state)', :to => 'mail_tasks#generate_file', :as => 'mail_tasks_generate_file', :via => [:get, :post]
 
   # get 'faqs/new/(/:id)', :to => 'faqs#new', :as => 'new_faq'
   get 'faqs/answer/(/:id)', :to => 'faqs#answer', :as => 'faq_answer'
