@@ -1,6 +1,7 @@
 class SendLetterFollowUpTask < Task
 
 	belongs_to :letter
+	belongs_to :journal
 
 	attr_accessible :email, :letter, :journal_id
 
@@ -16,6 +17,9 @@ class SendLetterFollowUpTask < Task
 	def run
 		# TODO: send mail with some service
 		# get configuration somewhere (mailfrom, mailserver, etc)
+
+		# letter = FollowUpLetter.where(:group_id => self.journal.group_id, :problematic => self.letter).first
+		letter.insert_text_variables
 
 		TaskLog.create :name => 'SendLetterFollowUpTask', 
 			:message => 'Test: sent email', 

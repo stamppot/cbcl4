@@ -5,17 +5,14 @@ class FollowUpLetter < Letter
 
   attr_accessible :surveytype, :follow_up, :problematic
 
-  def insert_text_variables(journal_entry)
-    self.letter.gsub!('{{login}}', journal_entry.login_user.login)
-    self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
-    self.letter.gsub!('{{password}}', journal_entry.password)
-    self.letter.gsub!('{{kodeord}}', journal_entry.password)
-    self.letter.gsub!('{{name}}', journal_entry.journal.title)
-    self.letter.gsub!('{{navn}}', journal_entry.journal.title)
-    self.letter.gsub!('{{firstname}}', journal_entry.journal.firstname)
-    self.letter.gsub!('{{fornavn}}', journal_entry.journal.firstname)
-    self.letter.gsub!('{{mor_navn}}', journal_entry.journal.parent_name || "")
-    self.letter.gsub!('{{projektnr}}', journal_entry.journal.alt_id || "")
+  def insert_text_variables
+    self.letter.gsub!('{{name}}', self.journal.title)
+    self.letter.gsub!('{{navn}}', self.journal.title)
+    self.letter.gsub!('{{firstname}}', self.journal.firstname)
+    self.letter.gsub!('{{fornavn}}', self.journal.firstname)
+    self.letter.gsub!('{{email}}', self.journal.parent_email)
+    self.letter.gsub!('{{mor_navn}}', self.journal.parent_name || "")
+    self.letter.gsub!('{{projektnr}}', self.journal.alt_id || "")
   end
   
   def to_mail_merge

@@ -23,7 +23,7 @@ Der er ikke fundet nogen skemaer.
 		<td class="pj small number"><%= journal.code %> <%= journal.alt_id %></td>
 	    <td class="pj small"><span class="nobr"><a href="/journals/<%= task.journal_id %>"><%= journal.title %></a></span></td>
 		<td class="pj">
-	    	<a onclick="window.open(this.href,'new_window, height=800,width=700','new_window, height=800,width=700');return false;" href="/follow_up_letters/mail_merge/<%= task.letter.id %>"><%= task.letter.name %>
+	    	<a onclick="window.open(this.href,'new_window, height=800,width=700','new_window, height=800,width=700');return false;" href="/follow_up_letters/mail_merge/<%= task.letter_id %>"><%= task.letter.name %>
 	    	</a>
 	    </td>
 		<td class="pj small"><%= journal.parent_email %></td>
