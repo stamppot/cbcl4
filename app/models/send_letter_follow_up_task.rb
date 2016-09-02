@@ -26,7 +26,7 @@ class SendLetterFollowUpTask < Task
 			:param1 => self.email,
 			:journal_id => self.journal_id,
 			# :group_id => self.group_id
-			:task_id => self.task_id
+			:task_id => self.id
 
 		if false #true
 			self.status.completed!
