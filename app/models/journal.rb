@@ -15,6 +15,8 @@ class Journal < ActiveRecord::Base #< Group
   has_many :score_rapports, :through => :survey_answers
   has_many :journal_click_counters # has one per user  
   
+  has_many :task_logs
+
   has_many :answered_entries_by_personnel, -> { includes(:survey).where('journal_entries.state = 5').order('journal_entries.answered_at') },
            :class_name => 'JournalEntry' #,
            # :include => [:survey],

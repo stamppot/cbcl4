@@ -28,7 +28,7 @@ class SendLetterFollowUpTask < Task
 			:group_id => self.group_id,
 			:task_id => self.id
 
-		if false #true
+		if false #true  # TODO: actually send mail and set this task to 'Completed'
 			self.status.completed!
 			self.save
 		end

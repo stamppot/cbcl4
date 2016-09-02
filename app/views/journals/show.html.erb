@@ -134,6 +134,23 @@
 		<%# end %>
 	<% end %>
 
+	<% if @journal.task_logs.any? %>
+	<div>
+		<table>
+			<th><%= t('task.name') %></th>
+			<th><%= t('task.message') %></th>
+			<th><%= t('task.date') %></th>
+			<% @journal.task_logs.each do |log| %>
+			<tr>
+				<td><%= t(log.name) %></td>
+				<td><%= t(log.message) %></td>
+				<td><%= log.created_at.to_s(:long) %></td>
+			</tr>
+			<% end %>
+		</table>
+	</div>
+	<% end %>
+
 	<div class="commands">
 		<%= link_button t('edit'), edit_journal_path(@journal), 'journal_edit', :title => t('edit') %>
 		<%= back_button journals_path %>
