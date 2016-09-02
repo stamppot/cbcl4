@@ -3,7 +3,7 @@ class SendLetterFollowUpTask < Task
 	belongs_to :letter
 	belongs_to :journal
 
-	attr_accessible :email, :letter, :journal_id
+	attr_accessible :email, :letter, :journal_id, :group_id
 
 
 	def email

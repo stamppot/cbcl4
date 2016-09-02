@@ -2,7 +2,7 @@ class CheckIfSendFollowUpLetterTask < Task
 
 	belongs_to :journal
 
-	attr_accessible :journal_id
+	attr_accessible :journal_id, :group_id
 
 
 	def self.create_task(journal)
