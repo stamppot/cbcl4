@@ -19,7 +19,7 @@ class SendLetterFollowUpTask < Task
 		# get configuration somewhere (mailfrom, mailserver, etc)
 
 		# letter = FollowUpLetter.where(:group_id => self.journal.group_id, :problematic => self.letter).first
-		letter.insert_text_variables
+		self.letter.insert_text_variables(self.journal)
 
 		TaskLog.create :name => 'SendLetterFollowUpTask', 
 			:message => 'Test: sent email', 
