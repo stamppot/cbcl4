@@ -50,13 +50,12 @@ class ImportJournals # AddJournalsFromCsv
 				puts "TWINS: #{journal_name} #{alt_id}"
 			end
 
+			birthdate = b && get_date(b) || journal.birthdate
 
 			if b.blank?
 				puts "ERROR: no birthdate: #{row}"
 				next
 			end
-
-			birthdate = get_date(b)
 
 			raise "DateError: #{birthdate} row: #{row.inspect}" if birthdate.year < 1980
 
