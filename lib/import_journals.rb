@@ -131,7 +131,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			next unless journal
 
-			birthdate = get_date(b)
+			birthdate = b && get_date(b) || journal.birthdate
 
 			raise "DateError: #{birthdate} row: #{row.inspect}" if birthdate.year < 1980
 
