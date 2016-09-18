@@ -32,7 +32,7 @@ class SendLetterFollowUpTask < Task
 			:task_id => self.id,
 			:param2 => self.letter.id
 
-		if false #true  # TODO: actually send mail and set this task to 'Completed'
+		if true #true  # TODO: actually send mail and set this task to 'Completed'
 			self.completed!
 			self.save
 		end
