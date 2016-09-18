@@ -93,7 +93,7 @@ class FollowUpLettersController < ApplicationController
   def update
     @letter = FollowUpLetter.find(params[:id])
     params[:letter][:letter] = params[:letter_contents]
-
+    @letter.update_attributes params[:letter]
     @letter.letter = params[:letter][:letter]
 
     if @letter.save

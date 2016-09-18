@@ -3,7 +3,7 @@ class FollowUpLetter < Letter
   # validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up, :problematic], :message => "Der findes allerede et brev for dette skema, opfølgning, og problem type for gruppen. Har du valgt den rigtige gruppe?"
   validates_uniqueness_of :problematic, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne problemtype... skema, opfølgning, og problem type for gruppen. Har du valgt den rigtige gruppe?"
 
-  attr_accessible :surveytype, :follow_up, :problematic
+  attr_accessible :surveytype, :follow_up, :problematic, :sender
 
   def insert_text_variables(journal)
     self.letter.gsub!('{{name}}', journal.title)

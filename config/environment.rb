@@ -5,6 +5,16 @@ require File.expand_path('../application', __FILE__)
   #   File.directory?(lib = "#{dir}/lib") ? lib : dir
   # end << "#{RAILS_ROOT}/app/sweepers"
 
+ActionMailer::Base.smtp_settings = {
+  :user_name => 'cbcl-sdu',
+  :password => 'Bente1Tina2Niels3',
+  :domain => 'cbcl-sdu.dk',
+  :address => 'smtp.sendgrid.net',
+  :port => 587,
+  :authentication => :plain,
+  :enable_starttls_auto => true
+}
+
 Rails.application.config.filter_parameters += [:password, :password_confirmation]
 Rails.application.config.action_dispatch.cookies_serializer = :hybrid
 

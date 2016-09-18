@@ -175,7 +175,7 @@ def login_prefix
     #                         :with => %r{^[\(w|Æ|Ø|Å|æ|ø|å|,|\w) \$\^\-\.#\*\+&'"]*$},
     #                         :message => 'må ikke indeholde ugyldige tegn.'
     validates_length_of     :title, 
-                            :in => 2..100, :allow_nil => true,
+                            :in => 2..100,
                             :too_long => 'skal have mindre end 100 bogstaver.', 
                             :too_short => 'skal have mere end to bogstaver.',
                             :allow_nil => false,

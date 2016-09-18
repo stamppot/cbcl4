@@ -21,6 +21,10 @@
 		<td class="t_i"><%= @letter.get_follow_up %></td>
 	</tr>
 	<tr>
+		<td class="t_i">Afsender:</td>
+		<td class="t_i"><%= @letter.sender %></td>
+	</tr>
+	<tr>
 		<td class="t_i">Indhold:</td>
 		<td class="preview" style="width: 500px;"><%= @letter.letter.html_safe %></td>
 	</tr>

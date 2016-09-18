@@ -26,6 +26,10 @@
 			<td class="t_i"><%= select :letter, :problematic, [["Ja", 1],["Nej", 0]] %></td>
 		</tr>
 		<tr>
+			<td class="t_i"><label for="letter_sender">Afsender:</label></td>
+			<td class="t_i"><%= text_field :letter, :sender %></td>
+		</tr>
+		<tr>
 		<%# text_area_tag :letter, "letter", :class => "aaatinymce", :rows => 40, :cols => 120 %>
 			<td class="t_i">Indhold:</td>
 			<td class="t"><%= text_area_tag :letter_contents, @letter.letter, :class => "tinymce", :rows => 40, :cols => 120, :value => @letter.letter, :id => 'letter_contents' %>
@@ -55,6 +59,7 @@
 			<li>{{password}} for at vise kodeord</li>
 			<li>{{navn}} for at vise journalens fulde navn</li>
 			<li>{{fornavn}} for at vise journalens fornavn</li>
-			<li>{{parent}} for at vise forælders navn (hvis givet)</li>
+			<li>{{mor_navn}} for at vise forælders navn (hvis givet)</li>
+			<li>{{projektnr}} for at vise projektnr (hvis givet)</li>
 		</ul>
 	</div>

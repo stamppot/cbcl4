@@ -15,27 +15,31 @@ class SendLetterFollowUpTask < Task
 	end
 
 	def run
-		# TODO: send mail with some service
-		# get configuration somewhere (mailfrom, mailserver, etc)
-
-		# letter = FollowUpLetter.where(:group_id => self.journal.group_id, :problematic => self.letter).first
 		self.letter.insert_text_variables(self.journal)
 
+		settings = CenterSetting.find_by_center_id_and_name(self.journal.center_id, "follow_up_mail-from")
+		from = settings && settings.value || "tina.ravn@rsyd.dk"
+
+		puts "Sending letter to #{self.email} from #{from}"
+
+		SendFollowUpMailer.send_follow_up_letter(self.letter.letter, self.email, from).deliver
+
 		TaskLog.create :name => 'SendLetterFollowUpTask', 
-			:message => 'Test: sent email', 
+			:message => "Sent follow_up email #{self.email}", 
 			:param1 => self.email,
 			:journal_id => self.journal_id,
-			:group_id => self.group_id,
-			:task_id => self.id
+			:group_id => self.journal.group_id,
+			:task_id => self.id,
+			:param2 => self.letter.id
 
 		if false #true  # TODO: actually send mail and set this task to 'Completed'
-			self.status.completed!
+			self.completed!
 			self.save
 		end
 	end
 
 	def self.run_tasks
-		puts "Running all SendLetterFollowUp sasks"		
+		puts "Running all SendLetterFollowUp tasks"		
 		SendLetterFollowUpTask.where(:status => "#{self.todo_status}").each {|task| task.run }
 	end
 
