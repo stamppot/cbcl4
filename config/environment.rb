@@ -13,10 +13,10 @@ Cbcl4::Application.initialize!
 
 
 ActionMailer::Base.smtp_settings = {
-  :user_name => Cbcl4::Application.config.secrets.smtp_user,
-  :password => Cbcl4::Application.config.secrets.smtp_password,
-  :domain => Cbcl4::Application.config.secrets.smtp_domain,
-  :address => Cbcl4::Application.config.secrets.smtp_address,
+  :user_name => Cbcl4::Application.config.secrets.production.smtp_user,
+  :password => Cbcl4::Application.config.secrets.production.smtp_password,
+  :domain => Cbcl4::Application.config.secrets.production.smtp_domain,
+  :address => Cbcl4::Application.config.secrets.production.smtp_address,
   :port => 587,
   :authentication => :plain,
   :enable_starttls_auto => true
