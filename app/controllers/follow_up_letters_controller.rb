@@ -164,10 +164,11 @@ class FollowUpLettersController < ApplicationController
     end
   end
 
-  def merge(journal)
+  def merge
     # find FollowUpLetter.for team, center, system
-    @letter = FollowUpLetter.find(params[:id])
-    @letter.insert_text_variables journal
+    task = SendLetterFollowUpTask.find params[:id]
+    @letter = FollowUpLetter.find(task.letter_id)
+    @letter.insert_text_variables task.journal
     render :layout => 'letters', :template => 'login_letters/show_login'
   end
 
