@@ -8,4 +8,12 @@ class SendFollowUpMailer < ActionMailer::Base
 				:body => letter,
 				:content_type => "text/html")
   	end
+
+  	def test(letter = "hello, testing", email = "stamppot@gmail.com", from = "stamppot@gmail.com")
+  		mail( 	:to => email,
+  				:from => from,
+				:subject => "CBCL opfølgningsbrev test",
+				:body => letter,
+				:content_type => "text/html")
+  	end
 end
