@@ -14,7 +14,7 @@ class TestSendgrid < Task
 
 	def self.run_tasks
 		puts "Running all TestSendgrid tasks"		
-		TestSendGrid.new.run
+		TestSendgrid.new.run
 	end
 
 end
