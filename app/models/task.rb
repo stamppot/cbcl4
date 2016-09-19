@@ -54,6 +54,10 @@ class Task < ActiveRecord::Base
   def completed!
     self.status = Task.completed_status
   end
+  
+  def archived!
+    self.status = Task.archived_status
+  end
 
   def no_action!
     self.status = 'No action'
@@ -65,7 +69,8 @@ class Task < ActiveRecord::Base
       2 => 'In progress',
       3 => 'Approved',
       -1 => 'Failed',
-      1 => 'Completed'
+      1 => 'Completed',
+      99 => 'Archived'
     }
   end
 
@@ -91,6 +96,10 @@ class Task < ActiveRecord::Base
 
   def self.todo_state
     self.states[0]
+  end
+  
+  def self.archived_status
+    self.states[99]
   end
 
   # def self.approved_state
