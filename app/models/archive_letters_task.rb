@@ -24,7 +24,9 @@ class ArchiveLettersTask < Task
 
 	def self.run_tasks
 		puts "Running all SendLetterFollowUp tasks"		
-		SendLetterFollowUpTask.where("status = '#{self.completed_status}' AND 'updated_at' < '#{days.days.ago}').each {|task| task.run }
+		SendLetterFollowUpTask.where(:status => self.completed_status)
+							  .where("updated_at < ?", days.days.ago)
+							  .each {|task| task.run }
 	end
 
 end
