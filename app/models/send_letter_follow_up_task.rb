@@ -41,7 +41,7 @@ class SendLetterFollowUpTask < Task
 
 	def self.run_tasks
 		puts "Running all SendLetterFollowUp tasks"		
-		SendLetterFollowUpTask.where(:status => "#{self.todo_status}").each {|task| task.run }
+		SendLetterFollowUpTask.where(:status => "#{self.approved_status}").each {|task| task.run }
 	end
 
 
