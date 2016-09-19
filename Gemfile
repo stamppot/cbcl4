@@ -83,7 +83,8 @@ gem 'newrelic_rpm'
 
 gem 'rack-cors', :require => 'rack/cors'
 
-gem 'rails-secrets'
+# gem 'hash_dot'
+# gem 'rails-secrets'
 # gem 'figaro'
 
 group :doc do

@@ -5,21 +5,22 @@ require File.expand_path('../application', __FILE__)
   #   File.directory?(lib = "#{dir}/lib") ? lib : dir
   # end << "#{RAILS_ROOT}/app/sweepers"
 
-ActionMailer::Base.smtp_settings = {
-  :user_name => ENV["smtp_user"],
-  :password => ENV["smtp_password"],
-  :domain => ENV["smtp_domain"],
-  :address => ENV["smtp_address"],
-  :port => 587,
-  :authentication => :plain,
-  :enable_starttls_auto => true
-}
-
 Rails.application.config.filter_parameters += [:password, :password_confirmation]
 Rails.application.config.action_dispatch.cookies_serializer = :hybrid
 
 # Initialize the Rails application.
 Cbcl4::Application.initialize!
+
+
+ActionMailer::Base.smtp_settings = {
+  :user_name => Cbcl4::Application.config.secrets.smtp_user,
+  :password => Cbcl4::Application.config.secrets.smtp_password,
+  :domain => Cbcl4::Application.config.secrets.smtp_domain,
+  :address => Cbcl4::Application.config.secrets.smtp_address,
+  :port => 587,
+  :authentication => :plain,
+  :enable_starttls_auto => true
+}
 
 module Enumerable
   def to_hash_with_key

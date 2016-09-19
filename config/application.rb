@@ -46,5 +46,8 @@ module Cbcl4
     config.autoload_paths += %W(#{config.root}/lib)
 
     config.middleware.use "PDFKit::Middleware"
+
+
+    config.secrets = YAML::load_file('config/secrets.yml')
   end
 end
