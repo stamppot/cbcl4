@@ -164,6 +164,13 @@ class FollowUpLettersController < ApplicationController
     end
   end
 
+  def merge(journal)
+    # find FollowUpLetter.for team, center, system
+    @letter = FollowUpLetter.find(params[:id])
+    @letter.insert_text_variables journal
+    render :layout => 'letters', :template => 'login_letters/show_login'
+  end
+
   def mail_merge
     # find FollowUpLetter.for team, center, system
     @letter = FollowUpLetter.find(params[:id])
