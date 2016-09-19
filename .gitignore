@@ -2,3 +2,6 @@ Gemfile.lock
 tmp
 log
 public/files
+
+# Ignore application configuration
+/config/application.yml

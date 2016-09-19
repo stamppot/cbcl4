@@ -6,10 +6,10 @@ require File.expand_path('../application', __FILE__)
   # end << "#{RAILS_ROOT}/app/sweepers"
 
 ActionMailer::Base.smtp_settings = {
-  :user_name => 'cbcl-sdu',
-  :password => 'Bente1Tina2Niels3',
-  :domain => 'cbcl-sdu.dk',
-  :address => 'smtp.sendgrid.net',
+  :user_name => ENV["smtp_user"],
+  :password => ENV["smtp_password"],
+  :domain => ENV["smtp_domain"],
+  :address => ENV["smtp_address"],
   :port => 587,
   :authentication => :plain,
   :enable_starttls_auto => true

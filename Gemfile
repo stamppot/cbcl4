@@ -83,6 +83,8 @@ gem 'newrelic_rpm'
 
 gem 'rack-cors', :require => 'rack/cors'
 
+gem 'figaro'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
