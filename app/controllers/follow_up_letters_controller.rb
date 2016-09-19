@@ -168,7 +168,7 @@ class FollowUpLettersController < ApplicationController
     # find FollowUpLetter.for team, center, system
     @letter = FollowUpLetter.find(params[:id])
     @letter.to_mail_merge
-    render :layout => 'letters', :template => 'letters/show_login'
+    render :layout => 'letters', :template => 'login_letters/show_login'
   end
 
   def check_access
