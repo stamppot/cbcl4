@@ -27,7 +27,7 @@ class SendLetterFollowUpTask < Task
 
 		TaskLog.create :name => 'SendLetterFollowUpTask', 
 			:message => "Sent follow_up email #{self.email}", 
-			:param1 => self.email,
+			:param1 => self.journal.parent_email,
 			:journal_id => self.journal_id,
 			:group_id => self.journal.group_id,
 			:task_id => self.id,
