@@ -31,7 +31,7 @@
 		<% end %>
 		<tr>
 			<td class="p_i">Forælder-email:</td>
-			<td class="p"><%=h @journal.parent_email %><% if @journal.group_id == 9259 %>
+			<td class="p"><%=h @journal.parent_email %><% if @journal.group_id == 9259 && @journal.parent_email.blank? %>
 			<%= image_tag "email_error.png", :border => 0, :title => "Mangler forælder-email: #{@journal.title}", :alt => "Mangler forælder-email: #{@journal.title}" %>
 		<% end %>
 			</td>

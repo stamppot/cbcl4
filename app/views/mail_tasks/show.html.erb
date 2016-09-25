@@ -13,8 +13,9 @@
 
 	<span id="filter_fields">
 		<%= link_button "#{Task.todo_status}", mail_tasks_status_path(@group.id, [0].join("-")), "status_pending", :class => "answer_state #{'To do' == @state && 'selected'}" %>&nbsp;&nbsp;
-		<%= link_button "Godkendt", mail_tasks_status_path(@group.id, [3]), "button status_approved", :class => "answer_state #{'Approved' == @state && 'selected'}" %>&nbsp;&nbsp;
-		<%= link_button "Udsendt", mail_tasks_status_path(@group.id, [1]), "status_success", :class => "answer_state #{'Completed' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<%= link_button "Godkendte", mail_tasks_status_path(@group.id, [3]), "button status_approved", :class => "answer_state #{'Approved' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<%= link_button "Udsendte", mail_tasks_status_path(@group.id, [1]), "status_success", :class => "answer_state #{'Completed' == @state && 'selected'}" %>&nbsp;&nbsp;
+		<%= link_button "Arkiverede", mail_tasks_status_path(@group.id, [99]), "status_offline", :class => "answer_state #{'Archived' == @state && 'selected'}" %>&nbsp;&nbsp;
 		<% if @count_failed > 0 %>
 		<%= link_button "Fejl", mail_tasks_status_path(@group.id, [-1]), "status_failed", :class => "answer_state #{'Failed' == @state && 'selected'}" %>&nbsp;&nbsp;
 		<% end %>

@@ -23,7 +23,7 @@ class SendLetterFollowUpTask < Task
 
 		puts "Sending letter to #{self.email} from #{from}"
 
-		SendFollowUpMailer.send_follow_up_letter(self.letter.letter, self.email, from).deliver
+		SendFollowUpMailer.send_follow_up_letter(self.letter.letter, self.journal.parent_email, from).deliver
 
 		TaskLog.create :name => 'SendLetterFollowUpTask', 
 			:message => "Sent follow_up email #{self.email}", 

@@ -22,7 +22,7 @@ class MailTasksController < ApplicationController
     set_params_and_find(params)
     
     @answer_state = params[:state].join('-') ||  "2-4"
-    @states = {'Completed' => 1, 'Failed' => -1, 'In Progress' => "0"} #JournalEntry.states
+    @states = {'Completed' => 1, 'Failed' => -1, 'In Progress' => "0", 'Archived' => 99}
     respond_to do |format|
       format.html { render :partial => 'entries'}
     end
