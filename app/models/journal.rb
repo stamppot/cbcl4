@@ -61,6 +61,7 @@ class Journal < ActiveRecord::Base #< Group
   validates_presence_of :nationality, :message => "Nationalitet skal angives"
 
   validates_length_of :alt_id, :maximum => 22, :allow_nil => true, :message => 'skal have mindre end 22 bogstaver.' 
+  validates_format_of :parent_email, :with => /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i
 
   scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
@@ -313,7 +314,6 @@ class Journal < ActiveRecord::Base #< Group
   end
 
   # protected
-  
   # validates_presence_of   :parent,
   #                         :message => ': overordnet gruppe skal vælges',
   #                         :if => Proc.new { |group| group.class.to_s != "Center" }

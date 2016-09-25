@@ -134,7 +134,12 @@ class ImportJournals # AddJournalsFromCsv
 			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
 
 			next unless journal
-
+			
+			if !parent_mail.blank? && EmailValidator.new.valid?(parent_mail)
+				puts "parent email is not valid: #{parent_mail} #{journal.inspect}"
+				raise "InvalidEmailError: #{parent_mail}"
+			end
+			
 			birthdate = b && get_date(b) || journal.birthdate
 
 			raise "DateError: #{birthdate} row: #{row.inspect}" if birthdate.year < 1980
