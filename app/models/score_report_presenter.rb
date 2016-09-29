@@ -13,7 +13,7 @@ class ScoreReportPresenter
     end
 
     # TODO!!! some entries don't have a survey_answer. Bad data?!  Get survey_answers per journal instead?
-    survey_answers = entries.map { |entry| entry.survey_answer }.sort_by {|sa| sa.survey.position }
+    survey_answers = entries.map { |entry| entry.survey_answer }.sort_by {|sa| sa.survey && sa.survey.position || 1 }
 
     @journal = entries.first.journal # show journal info
     # create survey titles row  # first header is empty, is in corner

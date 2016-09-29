@@ -171,7 +171,12 @@ function auto_save(url, changed_items) {
 	// alert('auto_save: ' + params);
 	// alert('auto_save: changed_items: ' + changed_items.length);
 	$.post(url, params) // params) //'/survey_answers/save_draft/' + id + "?journal_id=" + journal_id, params)
-	.done(function() { $('#surveyform').effect("highlight", {}, 500); });
+	.done(function() { $('#surveyform').effect("highlight", {}, 500); })
+	.fail(function() { 
+		$("#save_draft").html('Fejl: kan ikke gemme svar!');
+		$('#submit_button').effect("blind_up", {}, 1000);
+		$.post(url, params);
+	});
 	// alert('auto_saved');
 };
 

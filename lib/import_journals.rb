@@ -135,8 +135,8 @@ class ImportJournals # AddJournalsFromCsv
 
 			next unless journal
 			
-			if !parent_mail.blank? && EmailValidator.new.valid?(parent_mail)
-				puts "parent email is not valid: #{parent_mail} #{journal.inspect}"
+			if !parent_mail.blank? && !EmailValidator.new.valid?(parent_mail)
+				puts "parent email is not valid: '#{parent_mail}'' #{journal.inspect}"
 				raise "InvalidEmailError: #{parent_mail}"
 			end
 			
