@@ -118,7 +118,7 @@ class LoginLettersController < ApplicationController
     if @letter.nil?
       render :text => "Intet brev fundet. Brugernavn: #{entry.login_user.login}<p>Password: #{entry.password}" and return
     end
-    @letter.insert_text_variables(entry)
+    @letter.insert_text_variables(entry.journal)
     @page_title = @letter.name
     render :layout => 'letters'
   end
