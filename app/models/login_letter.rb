@@ -33,10 +33,10 @@ class LoginLetter < Letter
 
   def self.find_by_priority(entry)
     st = entry.survey.surveytype
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['group_id = ? and follow_up = ?', entry.journal.group_id, entry.follow_up])
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['group_id = ? and follow_up is null', entry.journal.group_id]) unless letter
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['group_id = ? and follow_up = ?', entry.journal.center_id, entry.follow_up]) unless letter
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['group_id = ? and follow_up is null', entry.journal.center_id]) unless letter
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ?', entry.journal.group_id, entry.follow_up])
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null', entry.journal.group_id]) unless letter
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ?', entry.journal.center_id, entry.follow_up]) unless letter
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null', entry.journal.center_id]) unless letter
     letter = LoginLetter.find_default(st) unless letter
     letter
   end
