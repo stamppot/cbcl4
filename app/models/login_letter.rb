@@ -6,8 +6,10 @@ class LoginLetter < Letter
   attr_accessible :surveytype, :follow_up
 
   def insert_text_variables(journal_entry)
-    self.letter.gsub!('{{login}}', journal_entry.login_user.login)
-    self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
+    if journal_entry.login_user
+      self.letter.gsub!('{{login}}', journal_entry.login_user.login)
+      self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
+    end
     self.letter.gsub!('{{password}}', journal_entry.password)
     self.letter.gsub!('{{kodeord}}', journal_entry.password)
     self.letter.gsub!('{{name}}', journal_entry.journal.title)
