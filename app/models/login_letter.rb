@@ -9,6 +9,9 @@ class LoginLetter < Letter
     if journal_entry.login_user
       self.letter.gsub!('{{login}}', journal_entry.login_user.login)
       self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
+    else
+      self.letter.gsub!('{{login}}', "login mangler, kontakt CBCL-SDU")
+      self.letter.gsub!('{{brugernavn}}', "ogin mangler, kontakt CBCL-SDU")
     end
     self.letter.gsub!('{{password}}', journal_entry.password)
     self.letter.gsub!('{{kodeord}}', journal_entry.password)
