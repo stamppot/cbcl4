@@ -5,15 +5,15 @@ class FollowUpLetter < Letter
 
   attr_accessible :surveytype, :follow_up, :problematic, :sender
 
-  def insert_text_variables(journal)
-    self.letter.gsub!('{{name}}', journal.title)
-    self.letter.gsub!('{{navn}}', journal.title)
-    self.letter.gsub!('{{firstname}}', journal.firstname)
-    self.letter.gsub!('{{fornavn}}', journal.firstname)
-    self.letter.gsub!('{{email}}', journal.parent_email)
-    self.letter.gsub!('{{mor_navn}}', journal.parent_name || "")
-    self.letter.gsub!('{{projektnr}}', journal.alt_id || "")
-  end
+  # def insert_text_variables(journal)
+  #   self.letter.gsub!('{{name}}', journal.title)
+  #   self.letter.gsub!('{{navn}}', journal.title)
+  #   self.letter.gsub!('{{firstname}}', journal.firstname)
+  #   self.letter.gsub!('{{fornavn}}', journal.firstname)
+  #   self.letter.gsub!('{{email}}', journal.parent_email)
+  #   self.letter.gsub!('{{mor_navn}}', journal.parent_name || "")
+  #   self.letter.gsub!('{{projektnr}}', journal.alt_id || "")
+  # end
 
   def to_text_variables(journal)
     {
