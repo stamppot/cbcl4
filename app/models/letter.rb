@@ -22,16 +22,16 @@ class Letter < ActiveRecord::Base
   end
 
   def insert_text_variables(variables)
-    self.letter.gsub!('{{login}}', variables[:login])
-    self.letter.gsub!('{{brugernavn}}', variables[:login])
-    self.letter.gsub!('{{password}}', variables[:password])
-    self.letter.gsub!('{{kodeord}}', variables[:password])
-    self.letter.gsub!('{{name}}', variables[:title])
-    self.letter.gsub!('{{navn}}', variables[:title])
-    self.letter.gsub!('{{firstname}}', variables[:firstname])
-    self.letter.gsub!('{{fornavn}}', variables[:firstname])
-    self.letter.gsub!('{{mor_navn}}', variables[:parent_name] || "")
-    self.letter.gsub!('{{projektnr}}', variables[:alt_id] || "")
+    self.letter.gsub!('{{login}}', variables[:login]) if variables[:login]
+    self.letter.gsub!('{{brugernavn}}', variables[:login]) if variables[:login]
+    self.letter.gsub!('{{password}}', variables[:password]) if variables[:password]
+    self.letter.gsub!('{{kodeord}}', variables[:password]) if variables[:password]
+    self.letter.gsub!('{{name}}', variables[:title]) if variables[:title]
+    self.letter.gsub!('{{navn}}', variables[:title]) if variables[:title]
+    self.letter.gsub!('{{firstname}}', variables[:firstname]) if variables[:firstname]
+    self.letter.gsub!('{{fornavn}}', variables[:firstname]) if variables[:firstname]
+    self.letter.gsub!('{{mor_navn}}', variables[:parent_name]) if variables[:parent_name]
+    self.letter.gsub!('{{projektnr}}', variables[:alt_id]) if variables[:alt_id]
   end
   
   def to_mail_merge
