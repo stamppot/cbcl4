@@ -6,7 +6,7 @@ class LoginLetter < Letter
   attr_accessible :surveytype, :follow_up
 
   def to_text_variables(journal_entry)
-    puts "LoginLetter.to_text_variables: #{journal_entry.inspect}"
+    # puts "LoginLetter.to_text_variables: #{journal_entry.inspect}"
     {
       :title => journal_entry.journal.title,
       :firstname => journal_entry.journal.firstname,
