@@ -15,7 +15,7 @@ class SendLetterFollowUpTask < Task
 	end
 
 	def run
-		self.letter.insert_text_variables(self.journal)
+		self.letter.insert_text_variables(self.letter.to_text_variables(self.journal))
 
 		settings = CenterSetting.find_by_center_id_and_name(self.journal.center_id, "follow_up_mail-from")
 		puts "Could not find CenterSetting 'follow_up_mail'. You need to set mail from address" if settings.nil?

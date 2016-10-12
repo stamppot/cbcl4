@@ -115,10 +115,12 @@ class LoginLettersController < ApplicationController
     @login_user = entry.login_user
     # find letter for team, center, system
     @letter = LoginLetter.find_by_priority(entry)
+
     if @letter.nil?
       render :text => "Intet brev fundet. Brugernavn: #{entry.login_user.login}<p>Password: #{entry.password}" and return
     end
-    @letter.insert_text_variables(entry.journal)
+    puts "letter: #{@letter.inspect}"
+    @letter.insert_text_variables(@letter.to_text_variables(entry))
     @page_title = @letter.name
     render :layout => 'letters'
   end
@@ -140,7 +142,7 @@ class LoginLettersController < ApplicationController
 		end
 		@letters = entry_letters.map do |pair|
 			letter = pair.last
-			letter.insert_text_variables(pair.first)
+			letter.insert_text_variables(@letter.to_text_variables(pair.first))
 			letter
 		end
     render :layout => 'letters'

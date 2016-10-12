@@ -14,20 +14,16 @@ class FollowUpLetter < Letter
     self.letter.gsub!('{{mor_navn}}', journal.parent_name || "")
     self.letter.gsub!('{{projektnr}}', journal.alt_id || "")
   end
-  
-  def to_mail_merge
-    self.letter.gsub!('{{login}}', '{ MERGEFIELD login }')
-    self.letter.gsub!('{{brugernavn}}', '{ MERGEFIELD brugernavn }')
-    self.letter.gsub!('{{password}}', '{ MERGEFIELD password }')
-    self.letter.gsub!('{{kodeord}}', '{ MERGEFIELD kodeord }')
-    self.letter.gsub!('{{name}}', '{ MERGEFIELD name }')
-    self.letter.gsub!('{{navn}}', '{ MERGEFIELD navn }')
-    self.letter.gsub!('{{firstname}}', '{ MERGEFIELD firstname }')
-    self.letter.gsub!('{{fornavn}}', '{ MERGEFIELD fornavn }')
-    self.letter.gsub!('{{mor_navn}}', '{ MERGEFIELD mor_navn }')
-    self.letter.gsub!('{{projektnr}}', '{ MERGEFIELD projektnr }')
-  end
 
+  def to_text_variables(journal)
+    {
+      :title => journal.title,
+      :firstname => journal.firstname,
+      :parent_email => journal.parent_email,
+      :parent_name => journal.parent_name || ""
+    }
+  end
+  
   def self.find_by_priority(entry)
     st = entry.survey.surveytype
     letter = FollowUpLetter.find_by_surveytype(st, :conditions => ['group_id = ? and follow_up = ?', entry.journal.group_id, entry.follow_up])

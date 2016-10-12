@@ -5,37 +5,19 @@ class LoginLetter < Letter
 
   attr_accessible :surveytype, :follow_up
 
-  def insert_text_variables(journal_entry)
-    if journal_entry.login_user
-      self.letter.gsub!('{{login}}', journal_entry.login_user.login)
-      self.letter.gsub!('{{brugernavn}}', journal_entry.login_user.login)
-    else
-      self.letter.gsub!('{{login}}', "login mangler, kontakt CBCL-SDU")
-      self.letter.gsub!('{{brugernavn}}', "ogin mangler, kontakt CBCL-SDU")
-    end
-    self.letter.gsub!('{{password}}', journal_entry.password)
-    self.letter.gsub!('{{kodeord}}', journal_entry.password)
-    self.letter.gsub!('{{name}}', journal_entry.journal.title)
-    self.letter.gsub!('{{navn}}', journal_entry.journal.title)
-    self.letter.gsub!('{{firstname}}', journal_entry.journal.firstname)
-    self.letter.gsub!('{{fornavn}}', journal_entry.journal.firstname)
-    self.letter.gsub!('{{mor_navn}}', journal_entry.journal.parent_name || "")
-    self.letter.gsub!('{{projektnr}}', journal_entry.journal.alt_id || "")
+  def to_text_variables(journal_entry)
+    puts "LoginLetter.to_text_variables: #{journal_entry.inspect}"
+    {
+      :title => journal_entry.journal.title,
+      :firstname => journal_entry.journal.firstname,
+      :parent_email => journal_entry.journal.parent_email,
+      :parent_name => journal_entry.journal.parent_name || "",
+      :login => journal_entry.login_user.login,
+      :password => journal_entry.password,
+      :alt_id => journal_entry.journal.alt_id
+    }
   end
   
-  def to_mail_merge
-    self.letter.gsub!('{{login}}', '{ MERGEFIELD login }')
-    self.letter.gsub!('{{brugernavn}}', '{ MERGEFIELD brugernavn }')
-    self.letter.gsub!('{{password}}', '{ MERGEFIELD password }')
-    self.letter.gsub!('{{kodeord}}', '{ MERGEFIELD kodeord }')
-    self.letter.gsub!('{{name}}', '{ MERGEFIELD name }')
-    self.letter.gsub!('{{navn}}', '{ MERGEFIELD navn }')
-    self.letter.gsub!('{{firstname}}', '{ MERGEFIELD firstname }')
-    self.letter.gsub!('{{fornavn}}', '{ MERGEFIELD fornavn }')
-    self.letter.gsub!('{{mor_navn}}', '{ MERGEFIELD mor_navn }')
-    self.letter.gsub!('{{projektnr}}', '{ MERGEFIELD projektnr }')
-  end
-
   def self.find_by_priority(entry)
     st = entry.survey.surveytype
     letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ?', entry.journal.group_id, entry.follow_up])

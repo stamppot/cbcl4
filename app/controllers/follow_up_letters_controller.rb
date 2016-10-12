@@ -119,18 +119,18 @@ class FollowUpLettersController < ApplicationController
       redirect_to follow_up_letters_path
   end
   
-  def show_login
-    entry = JournalEntry.find(params[:id], :include => :login_user)
-    @login_user = entry.login_user
-    # find FollowUpLetter.for team, center, system
-    @letter = FollowUpLetter.find_by_priority(entry)
-    if @letter.nil?
-      render :text => "Intet brev fundet. Brugernavn: #{entry.login_user.login}<p>Password: #{entry.password}" and return
-    end
-    @letter.insert_text_variables(entry)
-    @page_title = @letter.name
-    render :layout => 'letters'
-  end
+  # def show_login
+  #   entry = JournalEntry.find(params[:id], :include => :login_user)
+  #   @login_user = entry.login_user
+  #   # find FollowUpLetter.for team, center, system
+  #   @letter = FollowUpLetter.find_by_priority(entry)
+  #   if @letter.nil?
+  #     render :text => "Intet brev fundet. Brugernavn: #{entry.login_user.login}<p>Password: #{entry.password}" and return
+  #   end
+  #   @letter.insert_text_variables(@letter.to_text_variables(entry.journal))
+  #   @page_title = @letter.name
+  #   render :layout => 'letters'
+  # end
   
  #  def show_logins
  #    journal = Journal.find(params[:id])
@@ -168,7 +168,7 @@ class FollowUpLettersController < ApplicationController
     # find FollowUpLetter.for team, center, system
     task = SendLetterFollowUpTask.find params[:id]
     @letter = FollowUpLetter.find(task.letter_id)
-    @letter.insert_text_variables task.journal
+    @letter.insert_text_variables(@letter.to_text_variables(task.journal)
     render :layout => 'letters', :template => 'login_letters/show_login'
   end
 
