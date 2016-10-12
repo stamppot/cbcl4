@@ -168,7 +168,7 @@ class FollowUpLettersController < ApplicationController
     # find FollowUpLetter.for team, center, system
     task = SendLetterFollowUpTask.find params[:id]
     @letter = FollowUpLetter.find(task.letter_id)
-    @letter.insert_text_variables(@letter.to_text_variables(task.journal)
+    @letter.insert_text_variables(@letter.to_text_variables(task.journal))
     render :layout => 'letters', :template => 'login_letters/show_login'
   end
 
