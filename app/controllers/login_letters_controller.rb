@@ -142,7 +142,7 @@ class LoginLettersController < ApplicationController
 		end
 		@letters = entry_letters.map do |pair|
 			letter = pair.last
-			letter.insert_text_variables(@letter.to_text_variables(pair.first))
+			letter.insert_text_variables(letter.to_text_variables(pair.first))
 			letter
 		end
     render :layout => 'letters'
