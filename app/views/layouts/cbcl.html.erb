@@ -100,7 +100,7 @@
 	channel.subscribe("Search.Journals", function ( data ) {
 		$('#journal_spinner').toggle(data.value.length > 0);
 
-		if(data.value == '')
+		if(data.value == '' || data.value.length < 2)
 			return;
 		
 		$.ajax({url: '/journals/search/' + encodeURIComponent(data.value), 
