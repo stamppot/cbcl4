@@ -63,11 +63,20 @@ class CheckIfSendFollowUpLetterTask < Task
 		# only do this for team SAFARI
 		return unless journal.group.title == "SAFARI"
 
-		if !self.already_checked?(journal) && 
-			journal.survey_answers_answered?(follow_up = 1, surveys = [1,3,9]) && 
-			send_letter
+		need_letter = !self.already_checked?(journal) && 
+			journal.survey_answers_answered?(follow_up = 1, surveys = [1,3,9])
+		
+		if need_letter && send_letter
 			self.create_task(journal)
 		end
+
+		need_letter
+	end
+
+	def self.find_all_need_letter(team_id = 9259)
+		journals = Team.find(9259).journals
+		journals.select { |j| !self.already_checked?(j) && j.survey_answers_answered?(follow_up = 1, surveys = [1,3,9]) }
+
 	end
 
 	def self.check_all(team_id = 9259, send_letter = false)

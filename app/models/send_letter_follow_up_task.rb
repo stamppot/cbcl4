@@ -39,6 +39,10 @@ class SendLetterFollowUpTask < Task
 		end
 	end
 
+	def self.already_got_letter?(journal)
+		SendLetterFollowUpTask.where(:journal_id = journal.id).any?
+	end
+
 	def self.run_tasks
 		puts "Running all SendLetterFollowUp tasks"		
 		SendLetterFollowUpTask.where(:status => "#{self.approved_status}").each {|task| task.run }
