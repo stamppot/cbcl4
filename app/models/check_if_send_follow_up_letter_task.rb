@@ -55,15 +55,15 @@ class CheckIfSendFollowUpLetterTask < Task
 		end
 	end
 
-	def self.already_checked?(journal)
-		CheckIfSendFollowUpLetterTask.where(:journal_id => journal.id).any?
+	def self.already_sent_letter?(journal)
+		SendLetterFollowUpTask.where(:journal_id => journal.id).any?
 	end
 
 	def self.check_if_send_follow_up_letter(journal, send_letter = false)
 		# only do this for team SAFARI
 		return unless journal.group.title == "SAFARI"
 
-		need_letter = !self.already_checked?(journal) && 
+		need_letter = !self.already_sent_letter?(journal) && 
 			journal.survey_answers_answered?(follow_up = 1, surveys = [1,3,9])
 		
 		if need_letter && send_letter
@@ -75,7 +75,7 @@ class CheckIfSendFollowUpLetterTask < Task
 
 	def self.find_all_need_letter(team_id = 9259)
 		journals = Team.find(9259).journals
-		journals.select { |j| !self.already_checked?(j) && j.survey_answers_answered?(follow_up = 1, surveys = [1,3,9]) }
+		journals.select { |j| !self.already_sent_letter?(j) && j.survey_answers_answered?(follow_up = 1, surveys = [1,3,9]) }
 
 	end
 

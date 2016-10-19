@@ -40,7 +40,7 @@ class SendLetterFollowUpTask < Task
 	end
 
 	def self.already_got_letter?(journal)
-		SendLetterFollowUpTask.where(:journal_id = journal.id).any?
+		SendLetterFollowUpTask.where(:journal_id => journal.id).any?
 	end
 
 	def self.run_tasks
