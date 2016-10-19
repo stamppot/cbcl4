@@ -143,6 +143,10 @@ class Group < ActiveRecord::Base
   end
   
   def group_name_abbr
+    words = title.split
+    if words.size == 1 and words.first.size < 9
+      return words.first
+    end
     group_name = title.split.map {|w| w.first }.join.downcase.slice(0,4)
     if group_name.size < 2
       group_name = (group_name.scan /\p{Upper}/).join

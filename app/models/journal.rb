@@ -61,7 +61,7 @@ class Journal < ActiveRecord::Base #< Group
   validates_presence_of :nationality, :message => "Nationalitet skal angives"
 
   validates_length_of :alt_id, :maximum => 22, :allow_nil => true, :message => 'skal have mindre end 22 bogstaver.' 
-#  validates_format_of :parent_email, :with => /@/, :multiline => true
+  validates_format_of :parent_email, :with => /@/, :multiline => true, :if => Proc.new { |journal| journal.group_id == 9259 && !journal.parent_email.blank? } 
 
   scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
