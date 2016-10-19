@@ -273,7 +273,12 @@ class Journal < ActiveRecord::Base #< Group
     end
     # return self
   end
-    
+  
+  def survey_answers_answered?(follow_up = 1, surveys = [1,3,9])
+    answered = self.survey_answers.where(:done => 1, :follow_up => follow_up).map {|sa| sa.survey_id}.uniq.sort
+    answered == surveys.sort
+  end
+
   def header_data
     data = to_csv
     data.inject([[],[]]) do |col, tuple|
