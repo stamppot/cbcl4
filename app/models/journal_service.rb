@@ -56,4 +56,8 @@ class JournalService
     	return "#{day}#{month}#{year.slice(2, 2)}"
 	end
 
+	# shows per journal (with alt_id) which surveys have been answered when
+	def show_answered_surveys(journals, conditions = {:follow_up => 1})
+		journals.map {|j| [j.alt_id, j.title, j.answered_entries.where(conditions).map {|e| [e.survey.short_name, e.updated_at.to_s(:long)] }.sort ]}.sort_by &:first
+	end
 end
