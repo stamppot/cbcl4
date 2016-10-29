@@ -143,8 +143,10 @@ class Survey < ActiveRecord::Base
     s.cell_variables.keys
   end
   
-  def short_name
-    "#{category}_#{age}" 
+  def short_name(follow_up)
+    n = "#{category}_#{age}" 
+    n << "_#{follow_up}" if follow_up
+    n
   end
 
   # export to xml. Recurses through objects

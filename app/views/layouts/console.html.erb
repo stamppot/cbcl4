@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Dev Console</title>
+    <%= stylesheet_link_tag "webcli.css" %>
+    <style>
+    html
+{
+    height: 100%;    
+}
+
+body
+{
+    background: #205983 radial-gradient(#205983, #0A2742);
+    font-family:Verdana; color:#FFF;
+    text-shadow: 1px 1px 8px #000;
+}
+
+h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Dev Console Demo!</h1>
+    
+    <input>
+    
+    <%= javascript_include_tag "webcli.js" %>
+    <script>
+        window.demoCLI = new WebCLI();
+    </script>
+    
+   	<%= yield %>
+
+</body>
+</html>

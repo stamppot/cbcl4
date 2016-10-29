@@ -58,6 +58,9 @@ Cbcl4::Application.routes.draw do
   #     resources :products
   #   end
 
+  get 'console', :to => 'console#index', :as => 'console'
+  post 'console/command', :to => 'console#command', :as => 'command'
+
   get 'subscriptions/all', :to => 'subscriptions#all', :as => 'subscriptions_all'
 
   get '/score_scales/order', :to => 'score_scales#order', :as => 'order'
