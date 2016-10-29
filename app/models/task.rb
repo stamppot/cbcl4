@@ -27,6 +27,10 @@ class Task < ActiveRecord::Base
     self.status == Task.todo_status
   end
 
+  def todo!
+    self.status = Task.todo_status
+  end
+
   def in_progress?
     self.status == Task.in_progress_status
   end

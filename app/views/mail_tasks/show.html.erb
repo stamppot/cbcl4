@@ -42,7 +42,18 @@
 
 
 	<p>
-		<% if @tasks.any? && ['To do'].include?(@state)  %>
+		<% if @tasks.any? %>
+		<select name="change_to_state">
+			<% if [Task.todo_status, Task.archived_status].include?(@state) %>
+			<option value="Approve"><%= t("task.status.Approve") %></option>
+			<% end %>
+			<% if ![Task.todo_status].include?(@state) %>
+			<option value="To do"><%= t("task.status." + Task.todo_status) %></option>
+			<% end %>
+			<% if ![Task.archived_status, Task.approved_status].include?(@state) %>
+			<option value="Archive"><%= t("task.status.Archive") %></option>
+			<% end %>
+		</select>
 		<span style="padding: 3px;" id='send_form' class="btn-submit">
 			<%= submit_tag "Godkend", :class => 'button accept' %>
 		</span>

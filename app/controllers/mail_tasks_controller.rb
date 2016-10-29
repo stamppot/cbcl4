@@ -41,12 +41,18 @@ class MailTasksController < ApplicationController
   # update reminder status for multiple journal_entries
   def update
     group = Group.find params[:id]
-    puts "params: #{params.inspect}"
-
     status = params[:state]
     tasks = SendLetterFollowUpTask.find(params[:tasks])
-    tasks.each do |task| 
-      task.approved!
+
+    tasks.each do |task|
+      case params[:change_to_state]
+      when "Approve"
+        task.approved!
+      when Task.todo_status
+        task.todo!
+      when "Archive"
+        task.archived!
+      end
       task.save
     end
     flash[:notice] = 'Godkendte opfølgningsbreve'

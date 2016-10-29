@@ -27,7 +27,6 @@ class CheckIfSendFollowUpLetterTask < Task
 				self.save
 				return
 			end
-			# TODO: check if email is valid
 			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id
 			puts "SendLetterFollowUpTask created: #{task.inspect}"
 			self.completed!

@@ -273,6 +273,15 @@ da-DK:
       :created: Oprettet
       :updated: Opdateret
       :answered: Besvaret
+    task:
+      :status:
+        :Approve: Godkend
+        :Approved: Godkendt
+        :"To do": "To do"
+        :Completed: "Færdig"
+        :Archive: Arkiver
+        :Archived: Arkiveret
+        :Failed: Fejlet
     lang: 
       English: Engelsk
       French: Fransk
