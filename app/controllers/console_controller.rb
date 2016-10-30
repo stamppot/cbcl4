@@ -3,6 +3,7 @@ class ConsoleController < ApplicationController
 	layout "console"
 
 	def index
+		# @name = @current_user_cached.login
 	end 
 
 	def command
@@ -23,7 +24,7 @@ class ConsoleController < ApplicationController
 		when "COMMANDS"
 			{:output => commands.inspect}
 		when "HELP"
-			{:output => help(args.shift.upcase)}
+			{:output => help((args.shift || "" ).upcase)}
 		when "HELLO"
 			{:output => "WORLD"}
 		when "PING"
