@@ -6,6 +6,10 @@ class ConsoleController < ApplicationController
 		# @name = @current_user_cached.login
 	end 
 
+	def commands 
+		["COMMANDS", "HELP", "HELLO", "PING", "ENABLE_SETTING", "JOURNAL", "LOGINS", "TASKS", "JOURNAL_ID"]
+	end
+
 	def command
 
 		cmd = params[:cmd]
@@ -17,7 +21,6 @@ class ConsoleController < ApplicationController
 
 		response = { :output => "", :isError => false, :isHtml => false }
 
-		commands = ["COMMANDS", "HELP", "HELLO", "PING", "ENABLE_SETTING", "JOURNAL", "LOGINS"]
 
 		output =
 		case cmd
@@ -25,6 +28,8 @@ class ConsoleController < ApplicationController
 			{:output => commands.inspect}
 		when "HELP"
 			{:output => help((args.shift || "" ).upcase)}
+		when "ECHO"
+			{:output => args.join(" ")}
 		when "HELLO"
 			{:output => "WORLD"}
 		when "PING"
@@ -43,6 +48,14 @@ class ConsoleController < ApplicationController
 			journal_id = args.shift
 			logins = show_logins(journal_id)
 			{:output => logins.inspect}
+		when "TASKS"
+			journal_id = args.shift
+			tasks = show_tasks(journal_id)
+			{:output => tasks.to_a.inspect}
+		when "JOURNAL_ID"
+			alt_id = args.shift
+			journal = Journal.find_all_by_alt_id(alt_id)
+			{:output => journal.to_a.inspect}
 		else
 			output = {:isError => true, :output => "SYNTAX ERROR"}
 		end
@@ -68,9 +81,17 @@ class ConsoleController < ApplicationController
 			"Show a journal. Args: journal_id"
 		when "LOGINS"
 			"Show all logins for a journal. Args: journal_id"
+		when "TASKS"
+			"Show all tasks for a journal. Args: journal_id"
+		when "JOURNAL_ID"
+			"Show journal_id for a journal with a given alt_id. Args: alt_id"
 		else
-			"No help needed?"
+			"No help needed?  See #{commands}"
 		end
+	end
+
+	def show_tasks(journal_id)
+		Task.where(:journal_id => journal_id)
 	end
 
 	def show_logins(journal_id)
