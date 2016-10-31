@@ -31,8 +31,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def show
     @page_title = "CBCL - Detaljer om bruger " + (@user && @user.login || "")
     @groups = @user.center_and_teams
-
     group_ids = @groups.map {|g| g.id }.join(',')
+
     query = "select center_id, count(*) as count from journals where center_id IN (#{group_ids}) group by center_id"
     puts query
     @groups_count = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 

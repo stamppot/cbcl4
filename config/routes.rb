@@ -58,6 +58,10 @@ Cbcl4::Application.routes.draw do
   #     resources :products
   #   end
 
+  Cbcl4::Application.routes.draw do
+    mount Browserlog::Engine => '/logs'
+  end
+
   get 'console', :to => 'console#index', :as => 'console'
   post 'console/command', :to => 'console#command', :as => 'command'
 

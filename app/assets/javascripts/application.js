@@ -35,6 +35,9 @@ function get_journal_entry_id() {
   }
 }
 
+function scrollToBottom(elem) {
+   elem.scrollTop = elem.scrollHeight;
+}
 
 // call a method that updates the dynamic parts of a survey 
 function get_dynamic_fragments(url, opt) {
