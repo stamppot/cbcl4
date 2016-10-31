@@ -143,7 +143,7 @@ class Survey < ActiveRecord::Base
     s.cell_variables.keys
   end
   
-  def short_name(follow_up)
+  def short_name(follow_up = nil)
     n = "#{category}_#{age}" 
     n << "_#{follow_up}" if follow_up
     n
