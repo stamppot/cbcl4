@@ -14,7 +14,7 @@ class LoginLetter < Letter
       :parent_name => journal_entry.journal.parent_name || "",
       :login => journal_entry.login_user.login,
       :password => journal_entry.password,
-      :alt_id => journal_entry.journal.alt_id
+      :alt_id => journal_entry.journal.alt_id || ""
     }
   end
   
