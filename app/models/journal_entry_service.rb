@@ -4,6 +4,7 @@ class JournalEntryService
 		couple.each do |k,v|
 			src = entries.select {|e| e.survey_id == k}.first
 			dst = entries.select {|e| e.survey_id == v}.first
+			raise "EntryNotFound: #{entries.to_a.inspect}  couple: #{couple.inspect}" unless dst
 			src.next = dst.id
 			src.save if do_save
 		end

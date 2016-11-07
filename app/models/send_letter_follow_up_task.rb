@@ -23,7 +23,7 @@ class SendLetterFollowUpTask < Task
 
 		puts "Sending letter to #{self.email} from #{from}"
 
-		mailing_enabled = CenterSetting.enabled(self.journal.center_id, "enable_send_mails")
+		mailing_enabled = CenterSetting.enabled?(self.journal.center_id, "enable_send_mails")
 
 		if !mailing_enabled
 			puts "DISABLED: SendLetterFollowUpTask. Check CenterSetting 'enable_send_mails'"

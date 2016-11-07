@@ -256,20 +256,24 @@ class ImportJournals # AddJournalsFromCsv
 	end
 
 	def add_surveys_and_entries(journal, surveys = [], follow_up = 0, do_save = false)
+		puts "when errors, did you want to save the created entries?  do_save: #{do_save}" if !do_save
 		if surveys.any?
-			if journal.journal_entries.any? # add extra surveys
+			entries_with_follow_up = journal.journal_entries.select {|e| e.follow_up == follow_up }
+			if entries_with_follow_up.any? # add extra surveys
 				je_surveys = journal.not_answered_entries.select {|je| je.follow_up == follow_up }.map &:survey
 				add_surveys = surveys - je_surveys
 				puts "surveys: #{add_surveys.map &:inspect}"
 				journal.add_journal_entries(add_surveys, follow_up) if do_save
-			elsif !journal.not_answered_entries.any?
+			elsif !journal.not_answered_entries.select {|e| e.follow_up == follow_up }.any?
+				puts "Add journal entries: #{surveys.inspect} #{follow_up}"
 				journal.add_journal_entries(surveys, follow_up) if do_save
 			end
 		end
 		journal.not_answered_entries.with_followup(follow_up).where('survey_id IN (?)', surveys)
 	end
 
-	def connect_entries(entries, couple, do_save) 
+	def connect_entries(entries, couple, do_save)
+		raise "connect_entries: no entries given" if !entries.any?
 		JournalEntryService.new.connect_entries(entries, couple, do_save)
 		# couple.each do |k,v|
 		# 	src = entries.select {|e| e.survey_id == k}.first
