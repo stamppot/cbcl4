@@ -68,7 +68,7 @@ class SubscriptionsController < ApplicationController
     @subscription_counts_per_center = @centers.inject({}) {|hash, center| hash[center.id] = Subscription.subscriptions_count(center); hash }
     @subscription_summaries_per_center = @centers.inject({}) do |hash, center| 
       sub_service = SubscriptionService.new(center)
-      hash[center.id] = sub_service.subscription_summary(params); hash 
+      hash[center.id] = sub_service.subscription_summary; hash 
     end    
   end
 
