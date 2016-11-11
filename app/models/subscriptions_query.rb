@@ -29,7 +29,7 @@ class SubscriptionsQuery
       clause = ["FROM #{from_columns.join(', ')}"] <<
               "WHERE #{joins.shift.join(' = ')} "
       joins.each {|a,b| clause << "AND #{a} = #{b}"}
-      in_clause.each {|a,b| clause << "AND #{a} IN (#{b})"}
+      in_clause.each {|a,b| clause << "AND #{a} IN (#{b})"} if in_clause
       clause
     else
       ["FROM journal_entries, groups, survey_answers, journals ",
