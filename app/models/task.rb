@@ -166,7 +166,7 @@ class Task < ActiveRecord::Base
         :filename => "eksport_scorerapporter_#{Time.now.to_date.to_s}_#{survey_id}" + ".csv",
         :content_type => "application/vnd.ms-excel")
 
-      self = "Completed"
+      self.status = "Completed"
       self.save
       logger.info "create_survey_answer_export: finished!  survey: #{survey_id} #{survey_answers.size}"
 #    end
