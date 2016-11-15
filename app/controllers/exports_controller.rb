@@ -73,7 +73,7 @@ class ExportsController < ApplicationController
 
   # a periodic updater checks the progress of the export data generation 
   def generating_export
-    @task = Task.find(params[:id]).reload(:lock => true)
+    @task = Task.find(params[:id])
     @completed = @task.completed?
     @file_path = @task.completed? && "/export_files/#{@task.export_file.id}" || ""
     @export_file = @task.export_file
