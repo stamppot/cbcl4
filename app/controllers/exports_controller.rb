@@ -81,7 +81,7 @@ class ExportsController < ApplicationController
     respond_to do |format|
       format.js {
         puts "GENERATING JS. Completed: #{@completed} #{@task.inspect}"
-        redirect_to export_file_path(@task.export_file) and return if @task.completed?
+        # redirect_to export_file_path(@task.export_file) and return if @task.completed?
       }
       format.html do
         puts "GENERATING HTML"
