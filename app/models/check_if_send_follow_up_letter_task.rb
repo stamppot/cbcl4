@@ -8,7 +8,7 @@ class CheckIfSendFollowUpLetterTask < Task
 	def self.create_task(journal)
 		# only do this for team SAFARI
 		if journal.group.title == "SAFARI"
-			CheckIfSendFollowUpLetterTask.create :journal_id => journal.id, :group_id => journal.group_id
+			CheckIfSendFollowUpLetterTask.create :journal_id => journal.id, :group_id => journal.group_id, :status => 'To do'
 		end
 	end
 
@@ -27,7 +27,7 @@ class CheckIfSendFollowUpLetterTask < Task
 				self.save
 				return
 			end
-			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id
+			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id, :status => 'To do'
 			puts "SendLetterFollowUpTask created: #{task.inspect}"
 			self.status = "Completed"
 		else

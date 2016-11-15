@@ -8,7 +8,7 @@ class Task < ActiveRecord::Base
   has_many :task_logs
   # belongs_to :task_logs
 
-  after_initialize :init
+  # after_initialize :init
 
   attr_accessible :status, :survey_answer, :param1, :journal_id, :letter_id, :group_id
 
@@ -19,9 +19,9 @@ class Task < ActiveRecord::Base
   scope :of_type, lambda { |t| where('`type` = ?', t) }
 
 
-  def init  # used by callback
-    self.status = Task.todo_status
-  end
+  # def init  # used by callback
+  #   self.status = Task.todo_status
+  # end
 
   def todo?
     self.status == Task.todo_status
