@@ -27,6 +27,7 @@ class CheckIfSendFollowUpLetterTask < Task
 				self.save
 				return
 			end
+			# create another type of task, set this one to completed
 			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id, :status => 'To do'
 			puts "SendLetterFollowUpTask created: #{task.inspect}"
 			self.status = "Completed"
