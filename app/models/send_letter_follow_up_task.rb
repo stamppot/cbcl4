@@ -41,7 +41,7 @@ class SendLetterFollowUpTask < Task
 			:param2 => self.letter.id
 
 		if true #true  # TODO: actually send mail and set this task to 'Completed'
-			self.completed!
+			self = "Completed"
 			self.save
 		end
 	end

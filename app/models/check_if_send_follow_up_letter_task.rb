@@ -29,7 +29,7 @@ class CheckIfSendFollowUpLetterTask < Task
 			end
 			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id
 			puts "SendLetterFollowUpTask created: #{task.inspect}"
-			self.completed!
+			self = "Completed"
 		else
 			puts "No letter defined for follow up. Center: #{journal.group.id} #{journal.group.title}"
 			# self.no_action!
@@ -50,7 +50,7 @@ class CheckIfSendFollowUpLetterTask < Task
 
 		by_journal.each do |journal_id, tasks|
 			tasks.first.run # run first, set rest to completed
-			tasks.each { |task| task.completed!; task.save }
+			tasks.each { |task| task = "Completed"; task.save }
 		end
 	end
 

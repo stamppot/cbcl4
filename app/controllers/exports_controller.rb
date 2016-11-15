@@ -73,14 +73,15 @@ class ExportsController < ApplicationController
 
   # a periodic updater checks the progress of the export data generation 
   def generating_export
-    @task = Task.find(params[:id])
+    @task = Task.find(params[:id]).reload(:lock => true)
     @completed = @task.completed?
     @file_path = @task.completed? && "/export_files/#{@task.export_file.id}" || ""
     @export_file = @task.export_file
 
     respond_to do |format|
       format.js {
-        puts "GENERATING JS"
+        puts "GENERATING JS. Completed: #{@completed} #{@task.inspect}"
+        redirect_to export_file_path(@task.export_file) and return if @task.completed?
       }
       format.html do
         puts "GENERATING HTML"

@@ -127,7 +127,7 @@ class Task < ActiveRecord::Base
     Task.find_each(:batch_size => 50, :conditions => 'survey_answer_id is not null and status = "To do"') do |task|
       sa = task.survey_answer
       sa.save_csv_survey_answer
-      task.status = "Completed"
+      task = "Completed"
       task.save
       logger.info "CSV saved csv_survey_answer: #{sa.id}"   
     end
@@ -166,7 +166,7 @@ class Task < ActiveRecord::Base
         :filename => "eksport_scorerapporter_#{Time.now.to_date.to_s}_#{survey_id}" + ".csv",
         :content_type => "application/vnd.ms-excel")
 
-      self.status = "Completed"
+      self = "Completed"
       self.save
       logger.info "create_survey_answer_export: finished!  survey: #{survey_id} #{survey_answers.size}"
 #    end
