@@ -10,7 +10,7 @@ class Task < ActiveRecord::Base
 
   after_initialize :init
 
-  attr_accessible :status, :survey_answer, :param1, :journal_id, :letter_id 
+  attr_accessible :status, :survey_answer, :param1, :journal_id, :letter_id, :group_id
 
   scope :for_group, lambda { |g| where(:group_id => g) }
   scope :with_status, lambda { |state| where("status IN (?)", state) }
