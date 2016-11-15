@@ -29,7 +29,7 @@ class CheckIfSendFollowUpLetterTask < Task
 			end
 			task = SendLetterFollowUpTask.create :letter => letter, :email => email, :journal_id => journal.id, :group_id => journal.group_id
 			puts "SendLetterFollowUpTask created: #{task.inspect}"
-			self = "Completed"
+			self.status = "Completed"
 		else
 			puts "No letter defined for follow up. Center: #{journal.group.id} #{journal.group.title}"
 			# self.no_action!
