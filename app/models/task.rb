@@ -127,7 +127,7 @@ class Task < ActiveRecord::Base
     Task.find_each(:batch_size => 50, :conditions => 'survey_answer_id is not null and status = "To do"') do |task|
       sa = task.survey_answer
       sa.save_csv_survey_answer
-      task = "Completed"
+      task.status = "Completed"
       task.save
       logger.info "CSV saved csv_survey_answer: #{sa.id}"   
     end

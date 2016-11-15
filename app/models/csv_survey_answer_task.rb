@@ -17,7 +17,7 @@ class CsvSurveyAnswerTask < Task
     Task.find_each(:batch_size => 50, :conditions => "survey_answer_id is not null and status = '#{Task.todo_status}'") do |task|
       sa = task.survey_answer
       sa.save_csv_survey_answer
-      task = "Completed"
+      task.update_attribute("status", "Completed")
       task.save
       logger.info "CSV saved csv_survey_answer: #{sa.id}"   
       puts "CSV saved csv_survey_answer: #{sa.id}"   
@@ -38,7 +38,7 @@ class CsvSurveyAnswerTask < Task
         :content_type => "application/vnd.ms-excel")
 
       self.param1 = survey_id
-      self.status = "Completed"
+      self.update_attribute("status", "Completed")
       logger.info "EXPORT set status completed"
       self.save
       logger.info "EXPORT saved status"

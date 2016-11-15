@@ -50,7 +50,7 @@ class CheckIfSendFollowUpLetterTask < Task
 
 		by_journal.each do |journal_id, tasks|
 			tasks.first.run # run first, set rest to completed
-			tasks.each { |task| task = "Completed"; task.save }
+			tasks.each { |task| task.status = "Completed"; task.save }
 		end
 	end
 
