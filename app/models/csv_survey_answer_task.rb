@@ -37,6 +37,7 @@ class CsvSurveyAnswerTask < Task
         :filename => "eksport_svar_#{Time.now.to_date.to_s}_#{survey_id}" + ".csv",
         :content_type => "application/vnd.ms-excel")
 
+      self.param1 = survey_id
       self.status = "Completed"
       logger.info "EXPORT set status completed"
       self.save
@@ -57,6 +58,7 @@ class CsvSurveyAnswerTask < Task
         :filename => "eksport_scorerapporter_#{Time.now.to_date.to_s}_#{survey_id}" + ".csv",
         :content_type => "application/vnd.ms-excel")
 
+      self.param1 = survey_id
       self.status = "Completed"
       self.save
       logger.info "create_survey_answer_export: finished!  survey: #{survey_id} #{survey_answers.size}"
@@ -74,6 +76,7 @@ class CsvSurveyAnswerTask < Task
       :filename => "eksport_#{Time.now.to_date.to_s}_#{ids}" + ".csv",
       :content_type => "application/vnd.ms-excel")
 
+    self.param1 = ids
     self.status = "Completed"
     logger.info "W_EXPORT set status completed"
     self.save
@@ -114,13 +117,13 @@ class CsvSurveyAnswerTask < Task
     score_rapport.save_csv_score_rapport
   end
 
-  def completed?
-    self.status == "Completed"
-  end
+  # def completed?
+  #   self.status == "Completed"
+  # end
 
-  def completed!
-    self.status = "Completed"
-    self.save
-  end
+  # def completed!
+  #   self.status = "Completed"
+  #   self.save
+  # end
   
 end
