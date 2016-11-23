@@ -14,7 +14,7 @@ class CsvSurveyAnswerTask < Task
 
   def self.generate_survey_answers_to_csv
     logger.info "CSV save survey_answers: #{DateTime.now}"
-    Task.find_each(:batch_size => 50, :conditions => "survey_answer_id is not null and status = '#{Task.todo_status}'") do |task|
+    Task.find_each(:batch_size => 50, :conditions => "survey_answer_id is not null and (status = '#{Task.todo_status}' or status is null)") do |task|
       sa = task.survey_answer
       sa.save_csv_survey_answer
       task.update_attribute("status", "Completed")
@@ -23,6 +23,16 @@ class CsvSurveyAnswerTask < Task
       puts "CSV saved csv_survey_answer: #{sa.id}"   
     end
   end
+
+  # creates task for survey_answers where the csv_survey_answer is missing
+  # def self.create_missing(team = 9259, follow_up = 1)
+  #   SurveyAnswer.where(:follow_up => follow_up, :done => 1, :team_id => team).each do |sa|
+  #     if sa.csv_survey_answer.nil? 
+  #       csv_task = CsvSurveyAnswerTask.new :survey_answer => sa, :status => 'To do', :param1 => 'missing'
+  #       csv_task.save
+  #     end
+  #   end
+  # end
 
   def create_survey_answer_export(survey_id, survey_answers)
     # Spawnling.new(:method => :fork) do
