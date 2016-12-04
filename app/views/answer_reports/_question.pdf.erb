@@ -35,6 +35,7 @@
 							content_tag('div', roman, :class => 'group')
 						end
 						@cell = cell
+						puts "Encoding: #{@cell.value_text.encoding}" unless @cell.value_text.nil?
 						celltype = cell.class.to_s.downcase
 						output << render(:partial => "answer_reports/#{celltype}", :object => cell)
 					end
