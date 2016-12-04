@@ -24,5 +24,5 @@
 			newform << "</td>"
 		end
 		 %>
-		<%= newform.join.gsub("Ã¸", "ø").gsub("Ã¦", "æ").gsub("Ã…", "Å").html_safe %>
+		<%= newform.join.chars.select(&:valid_encoding?).join.html_safe %>
 <% end %>
