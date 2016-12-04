@@ -1,5 +1,5 @@
 <% if @cell %>
 <td class="answer textbox">
-	<div class='answer_comment span-11 '><%= CGI.unescapeHTML(@cell.value) %></div>
+	<div class='answer_comment span-11 '><%= CGI.unescapeHTML(@cell.value.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)) %></div>
 </td>
 <% end %>
