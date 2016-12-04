@@ -293,7 +293,7 @@ class ApiController < ActionController::Base
   end
 
   def to_danish(str)
-    if !str.nil? && str.respond_to? :gsub
+    if !str.nil? && str.respond_to?(:gsub)
       str.gsub("Ã¸", "ø").gsub("Ã¦", "æ").gsub("Ã…", "Å")
     else
       str
