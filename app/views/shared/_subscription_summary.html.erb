@@ -38,7 +38,7 @@
 	<tr>
 		<% start = URI.encode(summary[:start_on].to_date.to_s) %>
 		<% stop = URI.encode(stopped_on.to_date.to_s) %>
-		<td><a href="/subscriptions/show/<%= @group.id %>/<%= start %>/<%= stop %>">
+		<td><a href="/subscriptions/show/<%= center_id || @group %>/<%= start %>/<%= stop %>">
 			<%= summary[:start_on].to_date.strftime("%e %b %y") %> - <%= stopped_on.strftime("%e %b %y") %>
 			</a>
 		</td>
