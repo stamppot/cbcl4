@@ -1,9 +1,7 @@
 <%= stylesheet_link_tag 'login_user' %>
 <% @letters.each_with_index do |letter, i| 
-	index = i
 	pagebreakstyle = (i+2 < @letters.count) && "page-break-after:always; #{i}" || "" %>
 
-<h2><%= i %></h2>
 <div style="<%= pagebreakstyle %>">
 	<%= letter.letter.html_safe %>
 </div>
