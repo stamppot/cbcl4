@@ -189,6 +189,19 @@ INSERT INTO `question_cells` VALUES (2615,1509,'Questiontext',1,20,NULL,NULL,'qu
 INSERT INTO `question_cells` VALUES (2616,1509,'Checkbox',1,21,NULL,NULL,'checkbox::1::Er barnet tidligere undersøgt/behandlet af fysioterapeut/ergoterapeut (navn og adresse):','--- \n:switch: \n- p\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2617,1509,'TextBox',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse):###textbox::::','--- \n:targets: \n- :target: p\n  :state: onstate\n',1,NULL,NULL,NULL);
 
+INSERT INTO `question_cells` VALUES (2621,1509,'TextBox',1,23,NULL,NULL,'listitem::::Andre:###textbox::::',NULL,1,NULL,NULL,NULL);
+
+
+INSERT INTO `questions` VALUES (1510,10,1,0,1,NULL);
+INSERT INTO `question_cells` VALUES (2630,1510,'Information',1,1,NULL,NULL,'information::::Senere barndom:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2631,1510,'ListItem',1,2,NULL,NULL,'listitem::::Har barnet haft fysiske sygdomme / handicaps?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2632,1510,'Rating',2,2,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- q\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2633,1510,'Questiontext',1,3,NULL,'','questiontext::::Hvis ja, beskriv hvilke','--- \n:targets: \n- :target: q\n  :state: onstate\n',0,NULL,NULL,NULL)
+
+INSERT INTO `question_cells` VALUES (2634,1510,'ListItem',1,4,NULL,NULL,'listitem::::Har barnet nogensinde været indlagt på sygehus?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2635,1510,'Rating',2,4,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- r\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2636,1510,'Questiontext',1,5,NULL,'','questiontext::::Hvis ja, for hvilke sygdomme og hvor (afdeling/hospital)','--- \n:targets: \n- :target: r\n  :state: onstate\n',0,NULL,NULL,NULL)
+
 
 
 
