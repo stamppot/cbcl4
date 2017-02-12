@@ -91,6 +91,40 @@ INSERT INTO `question_cells` VALUES (2487,1507,'ListItem',2,15,NULL,NULL,'listit
 INSERT INTO `question_cells` VALUES (2488,1507,'Placeholder',1,16,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2489,1507,'ListItem',2,16,NULL,NULL,'listitem::::vægt###listitem::::',NULL,1,NULL,NULL,NULL);
 
+INSERT INTO `question_cells` VALUES (2490,1507,'ListItem',1,13,NULL,NULL,'listitem::::Har barnet medfødte sygdomme?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2491,1507,'Rating',2,13,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- i\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2492,1507,'Questiontext',1,14,NULL,'','questiontext::::Hvis ja, beskriv hvilke','--- \n:targets: \n- :target: i\n  :state: onstate\n',0,NULL,NULL,NULL)
+
+
+INSERT INTO `questions` VALUES (1508,10,1,0,1,NULL);
+INSERT INTO `question_cells` VALUES (2500,1508,'Information',1,1,NULL,NULL,'information::::Tidlig barndom:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2501,1508,'ListItem',1,2,NULL,NULL,'listitem::::Var der komplikationer i spædbarnsperioden?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2502,1508,'Rating',2,2,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- j\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2502,1508,'Questiontext',1,3,NULL,'','questiontext::::Hvis ja, beskriv hvilke','--- \n:targets: \n- :target: j\n  :state: onstate\n',0,NULL,NULL,NULL)
+
+INSERT INTO `question_cells` VALUES (2506,1508,'ListItem',1,4,NULL,NULL,'listitem::::Var der kontakt til sundhedsplejerske?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2507,1508,'Rating',2,4,NULL,NULL,'radio::1::Ja###radio::0::Nej',NULL,1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2510,1508,'ListItem',1,5,NULL,NULL,'listitem::::Blev barnet ammet?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2511,1508,'Rating',2,5,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- k\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2512,1508,'Questiontext',1,14,NULL,NULL,'questiontext::::Hvis ja, hvor længe blev barnet ammet','--- \n:targets: \n- :target: k\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2513,1508,'Placeholder',1,15,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2514,1508,'ListItem',2,15,NULL,NULL,'listitem::::udelukkende amning###listitem::::','--- \n:targets: \n- :target: k\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2515,1508,'Placeholder',1,16,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2516,1508,'ListItem',2,16,NULL,NULL,'listitem::::delvis amning###listitem::::','--- \n:targets: \n- :target: k\n  :state: onstate\n',1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2520,1508,'TextBox',1,17,NULL,NULL,'listitem::::Hvordan var kontakten til barnet i spædbarnsperioden (øjenkontakt, smil, pludren, kunne barnet trøstes, brød det sig om kropskontakt m.v.)###textbox::::',NULL,1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2525,1508,'Questiontext',1,18,NULL,NULL,'questiontext::::Hvornår kunne barnet (mdr):',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2526,1508,'Placeholder',1,19,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2527,1508,'ListItem',2,19,NULL,NULL,'listitem::::Sidde',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2528,1508,'Placeholder',1,20,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2529,1508,'ListItem',2,20,NULL,NULL,'listitem::::Kravle',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2530,1508,'Placeholder',1,21,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2531,1508,'ListItem',2,21,NULL,NULL,'listitem::::Gå',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2532,1508,'Placeholder',1,22,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2533,1508,'ListItem',2,22,NULL,NULL,'listitem::::Sige enkelte ord',NULL,1,NULL,NULL,NULL);
+
 
 
 INSERT INTO `question_cells` VALUES (2450,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
