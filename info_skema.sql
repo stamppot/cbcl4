@@ -82,6 +82,15 @@ INSERT INTO `question_cells` VALUES (2478,1507,'ListItem',1,13,NULL,NULL,'listit
 INSERT INTO `question_cells` VALUES (2479,1507,'Rating',2,13,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- h\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2480,1507,'Questiontext',1,14,NULL,'','questiontext::::Hvis ja, ca. hvor meget?','--- \n:targets: \n- :target: h\n  :state: onstate\n',0,NULL,NULL,NULL)
 
+INSERT INTO `question_cells` VALUES (2481,1507,'ListItem',1,15,NULL,NULL,'listitem::::Hvornår er barnet født?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2482,1507,'Rating',2,15,NULL,NULL,'radio::1::Extrem tidligt født (før 28. svangerskabsuge)###radio::2::Meget tidligt født (28. - 32. svangerskabsuge)###radio::3::Moderat tidligt født (33. - 36. svangerskabsuge)###radio::4::Til termin (37. - 42. svangerskabsuge)###radio::5::Overbåren (efter 42. svangerskabsuge)',NULL,1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2485,1507,'Questiontext',1,14,NULL,NULL,'questiontext::::Barnets mål og vægt ved fødslen',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2486,1507,'Placeholder',1,15,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2487,1507,'ListItem',2,15,NULL,NULL,'listitem::::længde###listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2488,1507,'Placeholder',1,16,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2489,1507,'ListItem',2,16,NULL,NULL,'listitem::::vægt###listitem::::',NULL,1,NULL,NULL,NULL);
+
 
 
 INSERT INTO `question_cells` VALUES (2450,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
