@@ -26,7 +26,7 @@ INSERT INTO `question_cells` VALUES (2418,1000,'ListItemComment',2,11,NULL,NULL,
 INSERT INTO `question_cells` VALUES (2419,1000,'ListItem',1,12,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2420,1000,'ListItemComment',2,12,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2424,1000,'Placeholder',1,3,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2424,1000,'Placeholder',1,13,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2425,1000,'Information',1,14,NULL,NULL,'information::::Oplysninger om far:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2427,1000,'ListItem',1,15,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2428,1000,'ListItemComment',2,15,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
