@@ -135,6 +135,34 @@ INSERT INTO `question_cells` VALUES (2540,1508,'ListItem',1,25,NULL,NULL,'listit
 INSERT INTO `question_cells` VALUES (2541,1508,'ListItem',2,25,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
 
+INSERT INTO `questions` VALUES (1509,10,1,0,1,NULL);
+INSERT INTO `question_cells` VALUES (2550,1509,'Information',1,1,NULL,NULL,'information::::Oplysninger vedrørende netværk',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2551,1509,'Questiontext',1,2,NULL,NULL,'questiontext::::Hvem bor i samme husstand som barnet?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2552,1509,'ListItem',2,2,NULL,NULL,'listitem::::Navn:',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2554,1509,'ListItem',3,2,NULL,NULL,'listitem::::Familieforhold til barnet:',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2555,1509,'Placeholder',1,3,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2556,1509,'ListItem',2,3,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2557,1509,'ListItem',3,3,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2558,1509,'Placeholder',1,4,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2559,1509,'ListItem',2,4,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2560,1509,'ListItem',3,4,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2561,1509,'Placeholder',1,5,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2562,1509,'ListItem',2,5,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2563,1509,'ListItem',3,5,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2570,1509,'Information',1,6,NULL,NULL,'information::::Ved skilsmisse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2571,1509,'Questiontext',1,7,NULL,NULL,'questiontext::::Hvem bor i den anden forældres husstand?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2575,1509,'Placeholder',1,8,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2576,1509,'ListItem',2,8,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2577,1509,'ListItem',3,8,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2578,1509,'Placeholder',1,9,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2579,1509,'ListItem',2,9,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2580,1509,'ListItem',3,9,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2581,1509,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2582,1509,'ListItem',2,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2583,1509,'ListItem',3,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+
+
 INSERT INTO `question_cells` VALUES (2450,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2451,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2452,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
