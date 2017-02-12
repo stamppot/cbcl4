@@ -106,11 +106,11 @@ INSERT INTO `question_cells` VALUES (2492,1003,'Rating',2,15,NULL,NULL,'radio::1
 
 INSERT INTO `question_cells` VALUES (2495,1003,'Questiontext',1,16,NULL,NULL,'questiontext::::Barnets mål og vægt ved fødslen',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2496,1003,'Placeholder',1,17,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2497,1003,'ListItem',2,17,NULL,NULL,'listitem::::længde###listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2497,1003,'ListItem',2,17,NULL,NULL,'listitem::::længde',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2498,1003,'ListItem',3,17,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2498,1003,'Placeholder',1,18,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2499,1003,'ListItem',2,18,NULL,NULL,'listitem::::vægt',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2500,1003,'ListItem',3,18,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2499,1003,'Placeholder',1,18,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2500,1003,'ListItem',2,18,NULL,NULL,'listitem::::vægt',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2501,1003,'ListItem',3,18,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2502,1003,'ListItem',1,19,NULL,NULL,'listitem::::Har barnet medfødte sygdomme?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2503,1003,'Rating',2,19,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- i\n',1,NULL,NULL,NULL);
