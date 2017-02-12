@@ -185,7 +185,7 @@ INSERT INTO `question_cells` VALUES (2604,1509,'TextBox',1,19,NULL,NULL,'listite
 INSERT INTO `question_cells` VALUES (2610,1509,'Questiontext',1,20,NULL,NULL,'questiontext::::Socialforvaltning:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2611,1508,'ListItem',1,21,NULL,NULL,'listitem::::Har I / barnet haft kontakt til socialforvaltning',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2612,1508,'Rating',2,21,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- o\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2612,1509,'TextBox',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på sagsbehandler):###textbox::::','--- \n:targets: \n- :target: o\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2613,1509,'TextBox',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på sagsbehandler):###textbox::::','--- \n:targets: \n- :target: o\n  :state: onstate\n',1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2615,1509,'Questiontext',1,20,NULL,NULL,'questiontext::::Fysioterapi/Ergoterapi:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2616,1509,'Checkbox',1,21,NULL,NULL,'checkbox::1::Er barnet tidligere undersøgt/behandlet af fysioterapeut/ergoterapeut (navn og adresse):','--- \n:switch: \n- p\n',1,NULL,NULL,NULL);
