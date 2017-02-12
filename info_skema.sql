@@ -13,44 +13,44 @@ INSERT INTO `question_cells` VALUES (2406,1000,'ListItem',2,4,NULL,NULL,'listite
 INSERT INTO `question_cells` VALUES (2407,1000,'ListItem',1,5,NULL,NULL,'listitem::::Af::::subtext::::(navn, familieforhold til barnet)',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2408,1000,'ListItem',2,5,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2410,1000,'Information',1,1,NULL,NULL,'information::::Oplysninger om mor:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2411,1000,'ListItem',1,2,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2412,1000,'ListItem',2,2,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2413,1000,'ListItem',1,3,NULL,NULL,'listitem::::Alder:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2414,1000,'ListItem',2,3,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2415,1000,'ListItem',1,4,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2416,1000,'ListItem',2,4,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2417,1000,'ListItem',1,5,NULL,NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2418,1000,'ListItem',2,5,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2419,1000,'ListItem',1,6,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2420,1001,'ListItem',2,6,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2410,1000,'Information',1,6,NULL,NULL,'information::::Oplysninger om mor:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2411,1000,'ListItem',1,7,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2412,1000,'ListItem',2,7,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2413,1000,'ListItem',1,8,NULL,NULL,'listitem::::Alder:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2414,1000,'ListItem',2,8,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2415,1000,'ListItem',1,9,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2416,1000,'ListItem',2,9,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2417,1000,'ListItem',1,10,NULL,NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2418,1000,'ListItem',2,10,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2419,1000,'ListItem',1,11,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2420,1001,'ListItem',2,11,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2425,1000,'Information',1,1,NULL,NULL,'information::::Oplysninger om far:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2427,1000,'ListItem',1,2,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2428,1000,'ListItem',2,2,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2429,1000,'ListItem',1,3,NULL,NULL,'listitem::::Alder:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2430,1000,'ListItem',2,3,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2431,1000,'ListItem',1,4,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2432,1000,'ListItem',2,4,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2433,1000,'ListItem',1,5,NULL,NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2434,1000,'ListItem',2,5,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2435,1000,'ListItem',1,6,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2436,1000,'ListItem',2,6,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2425,1000,'Information',1,12,NULL,NULL,'information::::Oplysninger om far:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2427,1000,'ListItem',1,13,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2428,1000,'ListItem',2,13,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2429,1000,'ListItem',1,14,NULL,NULL,'listitem::::Alder:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2430,1000,'ListItem',2,14,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2431,1000,'ListItem',1,15,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2432,1000,'ListItem',2,15,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2433,1000,'ListItem',1,16,NULL,NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2434,1000,'ListItem',2,16,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2435,1000,'ListItem',1,17,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2436,1000,'ListItem',2,17,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2440,1000,'Information',1,1,NULL,NULL,'information::::Oplysninger om evt. stedfar/stedmor:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2441,1000,'ListItem',1,2,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2442,1000,'ListItem',2,2,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2443,1000,'ListItem',1,3,NULL,NULL,'listitem::::Alder:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2444,1000,'ListItem',2,3,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2445,1000,'ListItem',1,4,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2446,1000,'ListItem',2,4,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2447,1000,'ListItem',1,5,NULL,NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2448,1000,'ListItem',2,5,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2449,1000,'ListItem',1,6,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2450,1000,'ListItem',2,6,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2440,1000,'Information',1,18,NULL,NULL,'information::::Oplysninger om evt. stedfar/stedmor:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2441,1000,'ListItem',1,19,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2442,1000,'ListItem',2,19,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2443,1000,'ListItem',1,20,NULL,NULL,'listitem::::Alder:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2444,1000,'ListItem',2,20,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2445,1000,'ListItem',1,21,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2446,1000,'ListItem',2,21,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2447,1000,'ListItem',1,22,NULL,NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2448,1000,'ListItem',2,22,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2449,1000,'ListItem',1,23,NULL,NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2450,1000,'ListItem',2,23,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2451,1000,'ListItem',1,1,NULL,NULL,'listitem::::Evt barnets/den unges eget tlf.nr.:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2452,1000,'ListItem',2,1,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2451,1000,'ListItem',1,24,NULL,NULL,'listitem::::Evt barnets/den unges eget tlf.nr.:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2452,1000,'ListItem',2,24,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
 INSERT INTO `questions` VALUES (1001,10,6,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2453,1001,'Information',1,1,NULL,NULL,'information::::Hvis forældrene er skilte:',NULL,0,NULL,NULL,NULL);
@@ -63,13 +63,16 @@ INSERT INTO `question_cells` VALUES (2459,1001,'TextBox',2,4,NULL,NULL,'textbox:
 
 
 INSERT INTO `questions` VALUES (1002,10,7,0,2,NULL);
-INSERT INTO `question_cells` VALUES (2460,1002,'Checkbox',1,1,NULL,NULL,'checkbox::1::Er barnet allergisk over for noget','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2461,1002,'Questiontext',2,1,NULL,NULL,'questiontext::::Hvis ja, for hvad?','--- \n:targets: \n- :target: a\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2462,1002,'Checkbox',1,2,NULL,NULL,'checkbox::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2463,1002,'Questiontext',2,2,NULL,NULL,'questiontext::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2464,1002,'Checkbox',1,3,NULL,NULL,'checkbox::1::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
-#INSERT INTO `question_cells` VALUES (2465,1002,'Checkbox',1,4,NULL,NULL,'checkbox::0::Er barnet allergisk over for noget','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2466,1002,'TextBox',2,4,NULL,NULL,'textbox::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2460,1002,'ListItem',1,1,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2461,1002,'Rating',2,1,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2462,1002,'Questiontext',2,1,NULL,NULL,'questiontext::::Hvis ja, for hvad?','--- \n:targets: \n- :target: a\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2463,1002,'ListItem',1,2,NULL,NULL,'listitem::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2464,1002,'Rating',2,2,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2465,1002,'Questiontext',2,2,NULL,NULL,'questiontext::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2466,1002,'ListItem',1,3,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2467,1002,'Rating',2,3,NULL,NULL,'radio::1::Ja###radio::0::Nej',NULL,0,NULL,NULL,NULL);
+#INSERT INTO `question_cells` VALUES (2468,1002,'ListItem',1,4,NULL,NULL,'radio::1::###radio::0::Nej',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2469,1002,'TextBox',2,4,NULL,NULL,'textbox::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1003,10,8,0,2,NULL);
