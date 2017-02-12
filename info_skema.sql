@@ -180,7 +180,7 @@ INSERT INTO `question_cells` VALUES (2600,1509,'TextBox',1,16,NULL,NULL,'listite
 INSERT INTO `question_cells` VALUES (2601,1509,'Questiontext',1,17,NULL,NULL,'questiontext::::PPR - Pædagogisk-Psykologisk-Rådgivning:',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2602,1508,'ListItem',1,18,NULL,NULL,'listitem::::Har I / barnet haft kontakt til PPR','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2603,1508,'Rating',2,18,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2602,1509,'TextBox',1,19,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på psykolog:):###textbox::::','--- \n:targets: \n- :target: n\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2604,1509,'TextBox',1,19,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på psykolog:):###textbox::::','--- \n:targets: \n- :target: n\n  :state: onstate\n',1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2610,1509,'Questiontext',1,20,NULL,NULL,'questiontext::::Socialforvaltning:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2611,1508,'ListItem',1,21,NULL,NULL,'listitem::::Har I / barnet haft kontakt til socialforvaltning',NULL,1,NULL,NULL,NULL);
