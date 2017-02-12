@@ -76,8 +76,8 @@ INSERT INTO `question_cells` VALUES (2464,1002,'Rating',2,2,NULL,NULL,'radio::1:
 INSERT INTO `question_cells` VALUES (2465,1002,'TextBox',2,2,NULL,NULL,'textbox::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2466,1002,'ListItem',1,3,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2467,1002,'Rating',2,3,NULL,NULL,'radio::1::Ja###radio::0::Nej',NULL,0,NULL,NULL,NULL);
-#INSERT INTO `question_cells` VALUES (2468,1002,'ListItem',1,4,NULL,NULL,'radio::1::###radio::0::Nej',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2469,1002,'TextBox',2,4,NULL,NULL,'textbox::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2468,1002,'ListItem',1,4,NULL,NULL,'listitem::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2469,1002,'TextBox',2,4,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1003,10,8,0,2,NULL);
