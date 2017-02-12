@@ -49,7 +49,7 @@ INSERT INTO `questions` VALUES (1506,10,1,0,1,NULL);
 INSERT INTO `question_cells` VALUES (2450,1506,'Checkbox',1,1,NULL,NULL,'checkbox::1::Er barnet allergisk over for noget','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2451,1506,'Questiontext',2,1,NULL,NULL,'questiontext::::Hvis ja, for hvad?','--- \n:targets: \n- :target: a\n  :state: onstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2452,1506,'Checkbox',1,2,NULL,NULL,'checkbox::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2453,1506,'Questiontext',2,2,NULL,NULL,'questiontext::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2453,1506,'Questiontext',2,2,NULL,NULL,'questiontext::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: onstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2454,1506,'Checkbox',1,3,NULL,NULL,'checkbox::1::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
 #INSERT INTO `question_cells` VALUES (2450,1506,'Checkbox',1,4,NULL,NULL,'checkbox::0::Er barnet allergisk over for noget','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2456,1506,'TextBox',2,4,NULL,NULL,'textbox::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL);
