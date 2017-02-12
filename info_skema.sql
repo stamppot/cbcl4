@@ -202,6 +202,14 @@ INSERT INTO `question_cells` VALUES (2634,1510,'ListItem',1,4,NULL,NULL,'listite
 INSERT INTO `question_cells` VALUES (2635,1510,'Rating',2,4,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- r\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2636,1510,'Questiontext',1,5,NULL,'','questiontext::::Hvis ja, for hvilke sygdomme og hvor (afdeling/hospital)','--- \n:targets: \n- :target: r\n  :state: onstate\n',0,NULL,NULL,NULL)
 
+INSERT INTO `question_cells` VALUES (2640,1510,'ListItem',1,6,NULL,NULL,'listitem::::Er barnet vaccineret efter det almindelige børnevaccinationsprogram?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2641,1510,'Rating',2,6,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- s\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2642,1510,'Questiontext',1,7,NULL,'','questiontext::::Beskriv eventuelle undtagelser','--- \n:targets: \n- :target: s\n  :state: onstate\n',0,NULL,NULL,NULL)
+
+INSERT INTO `question_cells` VALUES (2645,1510,'ListItem',1,8,NULL,NULL,'listitem::::Får barnet medicin?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2646,1510,'Rating',2,8,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- t\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2647,1510,'ListItem',1,9,NULL,'','listitem::::Hvilken medicin?###listitem::::For hvad?###listitem::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2647,1510,'ListItem',1,9,NULL,'','listitem::::Hvilken medicin?###listitem::::For hvad?###listitem::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: onstate\n',0,NULL,NULL,NULL)
 
 
 
