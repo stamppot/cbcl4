@@ -60,7 +60,7 @@ INSERT INTO `question_cells` VALUES (2451,1000,'ListItemComment',2,28,NULL,NULL,
 INSERT INTO `questions` VALUES (1001,10,6,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2453,1001,'Information',1,1,NULL,NULL,'information::::Hvis forældrene er skilte:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2454,1001,'ListItem',1,2,NULL,NULL,'listitem::::Hvem har forældremyndigheden:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2455,1000,'ListItemComment',2,2,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2455,1001,'ListItemComment',2,2,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2456,1001,'ListItem',1,3,NULL,NULL,'listitem::::Forhold omkring samvær',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2457,1001,'TextBox',2,3,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2458,1001,'Questiontext',1,4,NULL,NULL,'questiontext::::Kort beskrivelse af det forløb der har medført henvisning til børnepsykiatrisk undersøgelse',NULL,0,NULL,NULL,NULL);
