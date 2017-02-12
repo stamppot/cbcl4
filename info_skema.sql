@@ -69,7 +69,7 @@ INSERT INTO `question_cells` VALUES (2459,1001,'TextBox',2,4,NULL,NULL,'textbox:
 
 INSERT INTO `questions` VALUES (1002,10,7,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2460,1002,'ListItem',1,1,NULL,NULL,'listitem::::Er barnet allergisk over for noget?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2461,1002,'Rating',1,1,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2461,1002,'Rating',2,1,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2462,1002,'TextBox',1,2,NULL,NULL,'textbox::::Hvis ja, for hvad?','--- \n:targets: \n- :target: a\n  :state: offstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2463,1002,'ListItem',1,3,NULL,NULL,'listitem::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2464,1002,'Rating',2,3,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
