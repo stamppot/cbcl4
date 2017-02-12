@@ -37,7 +37,34 @@ INSERT INTO `question_cells` VALUES (2440,1504,'Questiontext',1,1,NULL,NULL,'que
 INSERT INTO `questions` VALUES (1505,10,1,0,1,NULL);
 INSERT INTO `question_cells` VALUES (2445,1505,'Information',1,1,NULL,NULL,'information::::Hvis forældrene er skilte:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2446,1505,'Questiontext',1,2,NULL,NULL,'questiontext::::Hvem har forældremyndigheden:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2447,1501,'TextBox',1,3,NULL,NULL,'questiontext::::Forhold omkring samvær',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2447,1505,'Questiontext',1,3,NULL,NULL,'questiontext::::Forhold omkring samvær',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2447,1505,'TextBox',2,3,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2448,1505,'Questiontext',1,4,NULL,NULL,'questiontext::::Kort beskrivelse af det forløb der har medført henvisning til børnepsykiatrisk undersøgelse',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2449,1505,'TextBox',2,4,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
+
+
+INSERT INTO `questions` VALUES (1506,10,1,0,1,NULL);
+INSERT INTO `question_cells` VALUES (2450,1506,'Checkbox',1,1,NULL,NULL,'checkbox::1::Er barnet allergisk over for noget','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2451,1506,'Questiontext',2,1,NULL,'','questiontext::::Hvis ja, for hvad?','--- \n:targets: \n- :target: a\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2452,1506,'Checkbox',1,2,NULL,NULL,'checkbox::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2453,1506,'Questiontext',2,2,NULL,'','questiontext::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2454,1506,'Checkbox',1,3,NULL,NULL,'checkbox::1::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
+#INSERT INTO `question_cells` VALUES (2450,1506,'Checkbox',1,4,NULL,NULL,'checkbox::0::Er barnet allergisk over for noget','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2456,1506,'TextBox',2,4,NULL,'','textbox::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL)
+
+
+INSERT INTO `questions` VALUES (1507,10,1,0,1,NULL);
+INSERT INTO `question_cells` VALUES (2460,1507,'Information',1,1,NULL,NULL,'information::::Syndhedsoplysninger',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2461,1507,'Information',1,2,NULL,NULL,'information::::Graviditet og fødsel:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2462,1507,'Checkbox',1,3,NULL,NULL,'checkbox::1::Var der sygdom hos barnets mor under graviditeten?','--- \n:switch: \n- c\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2463,1507,'Questiontext',1,4,NULL,'','questiontext::::Hvis ja, beskriv hvilken','--- \n:targets: \n- :target: c\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2464,1507,'Checkbox',1,5,NULL,NULL,'checkbox::1::Tog moderen medicin under graviditeten?','--- \n:switch: \n- d\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2465,1507,'Questiontext',1,6,NULL,'','questiontext::::Hvis ja, beskriv hvilken','--- \n:targets: \n- :target: d\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2466,1507,'Checkbox',1,7,NULL,NULL,'checkbox::1::Var der komplikationer i graviditeten?','--- \n:switch: \n- e\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2467,1507,'Questiontext',1,8,NULL,'','questiontext::::Hvis ja, beskriv hvilken','--- \n:targets: \n- :target: e\n  :state: onstate\n',0,NULL,NULL,NULL)
+INSERT INTO `question_cells` VALUES (2468,1507,'Checkbox',1,7,NULL,NULL,'checkbox::1::Var der komplikationer under fødslen?','--- \n:switch: \n- f\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2469,1507,'Questiontext',1,8,NULL,'','questiontext::::Hvis ja, beskriv hvilken','--- \n:targets: \n- :target: f\n  :state: onstate\n',0,NULL,NULL,NULL)
+
 
 
 INSERT INTO `question_cells` VALUES (2450,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
