@@ -162,6 +162,35 @@ INSERT INTO `question_cells` VALUES (2581,1509,'Placeholder',1,10,NULL,NULL,'pla
 INSERT INTO `question_cells` VALUES (2582,1509,'ListItem',2,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2583,1509,'ListItem',3,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
+INSERT INTO `question_cells` VALUES (2590,1509,'Checkbox',1,11,NULL,NULL,'checkbox::1::Daginstitution','--- \n:switch: \n- l\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2591,1509,'ListItem',1,12,NULL,NULL,'listitem::::Vuggestue (navn / adresse / kontaktperson)###listitem::::','--- \n:targets: \n- :target: l\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2592,1509,'ListItem',1,13,NULL,NULL,'listitem::::Dagpleje  (navn / adresse / kontaktperson)###listitem::::','--- \n:targets: \n- :target: l\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2593,1509,'ListItem',1,14,NULL,NULL,'listitem::::Børnehave (navn / adresse / kontaktperson)###listitem::::','--- \n:targets: \n- :target: l\n  :state: onstate\n',1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2595,1509,'Checkbox',1,11,NULL,NULL,'checkbox::1::Skole','--- \n:switch: \n- m\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2596,1509,'ListItem',1,12,NULL,NULL,'listitem::::Barnets skole (navn og adresse)###listitem::::','--- \n:targets: \n- :target: m\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2597,1509,'ListItem',1,13,NULL,NULL,'listitem::::Klasselærer/kontaktperson###listitem::::','--- \n:targets: \n- :target: m\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2598,1509,'ListItem',1,14,NULL,NULL,'listitem::::SFO (navn / adresse / kontaktperson)###listitem::::','--- \n:targets: \n- :target: m\n  :state: onstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2599,1509,'TextBox',1,15,NULL,NULL,'listitem::::Eventuelle tidligere skoler, barnet har gået på (navn samt adresse og evt. årstal)###textbox::::','--- \n:targets: \n- :target: m\n  :state: onstate\n',1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2600,1509,'TextBox',1,16,NULL,NULL,'listitem::::Evt. midlertidig opholdsadresse for barnet (efterskole, døgninstitution o.lign.):###textbox::::',NULL,1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2601,1509,'Questiontext',1,17,NULL,NULL,'questiontext::::PPR - Pædagogisk-Psykologisk-Rådgivning:',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2602,1508,'ListItem',1,18,NULL,NULL,'listitem::::Har I / barnet haft kontakt til PPR','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2603,1508,'Rating',2,18,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2602,1509,'TextBox',1,19,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på psykolog:):###textbox::::','--- \n:targets: \n- :target: n\n  :state: onstate\n',1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2610,1509,'Questiontext',1,20,NULL,NULL,'questiontext::::Socialforvaltning:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2611,1508,'ListItem',1,21,NULL,NULL,'listitem::::Har I / barnet haft kontakt til socialforvaltning',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2612,1508,'Rating',2,21,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- o\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2612,1509,'TextBox',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på sagsbehandler):###textbox::::','--- \n:targets: \n- :target: o\n  :state: onstate\n',1,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2615,1509,'Questiontext',1,20,NULL,NULL,'questiontext::::Fysioterapi/Ergoterapi:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2616,1509,'Checkbox',1,21,NULL,NULL,'checkbox::1::Er barnet tidligere undersøgt/behandlet af fysioterapeut/ergoterapeut (navn og adresse):','--- \n:switch: \n- p\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2617,1509,'TextBox',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse):###textbox::::','--- \n:targets: \n- :target: p\n  :state: onstate\n',1,NULL,NULL,NULL);
+
+
+
 
 INSERT INTO `question_cells` VALUES (2450,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2451,1501,'Questiontext',1,1,NULL,NULL,'questiontext::::Barnets CPR-nr.:',NULL,0,NULL,NULL,NULL);
