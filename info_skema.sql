@@ -211,7 +211,7 @@ INSERT INTO `question_cells` VALUES (2642,1510,'Questiontext',1,7,NULL,NULL,'que
 INSERT INTO `question_cells` VALUES (2645,1510,'ListItem',1,8,NULL,NULL,'listitem::::Får barnet medicin?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2646,1510,'Rating',2,8,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- t\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2647,1510,'ListItem',1,9,NULL,NULL,'listitem::::Hvilken medicin?###listitem::::For hvad?###listitem::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: onstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2647,1510,'ListItem',1,9,NULL,NULL,'listitem::::Hvilken medicin?###listitem::::For hvad?###listitem::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: onstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2648,1510,'ListItem',1,9,NULL,NULL,'listitem::::Hvilken medicin?###listitem::::For hvad?###listitem::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: onstate\n',0,NULL,NULL,NULL);
 
 
 COMMIT;
