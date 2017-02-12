@@ -71,14 +71,13 @@ INSERT INTO `questions` VALUES (1002,10,7,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2460,1002,'ListItem',1,1,NULL,NULL,'listitem::::Er barnet allergisk over for noget?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2461,1002,'Rating',2,1,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2462,1002,'ListItemComment',3,1,NULL,NULL,'listitem::::Hvis ja, for hvad?###textbox::::','--- \n:targets: \n- :target: a\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2464,1002,'ListItem',1,3,NULL,NULL,'listitem::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2465,1002,'Rating',2,3,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2466,1002,'ListItem',1,4,NULL,NULL,'listitem::::Hvis ja, for hvilket?','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2467,1002,'TextBox',2,4,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2468,1002,'ListItem',1,5,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2469,1002,'Rating',2,5,NULL,NULL,'radio::1::Ja###radio::0::Nej',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2470,1002,'ListItem',1,6,NULL,NULL,'listitem::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2471,1002,'TextBox',2,6,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2463,1002,'ListItemComment',1,3,NULL,NULL,'listitem::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug###textbox::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2464,1002,'Rating',2,3,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2465,1002,'ListItemComment',1,4,NULL,NULL,'listitem::::Hvis ja, for hvilket?###textbox::::','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2466,1002,'ListItem',1,5,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2467,1002,'Rating',2,5,NULL,NULL,'radio::1::Ja###radio::0::Nej',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2468,1002,'ListItemComment',1,6,NULL,NULL,'listitem::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?###textbox::::',NULL,0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2469,1002,'TextBox',2,6,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1003,10,8,0,3,NULL);
@@ -87,34 +86,28 @@ INSERT INTO `question_cells` VALUES (2481,1003,'Information',1,2,NULL,NULL,'info
 
 INSERT INTO `question_cells` VALUES (2482,1003,'ListItem',1,3,NULL,NULL,'listitem::::Var der sygdom hos barnets mor under graviditeten?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2483,1003,'Rating',2,3,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- c\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2484,1003,'ListItem',1,4,NULL,NULL,'listitem::::Hvis ja, beskriv hvilken','--- \n:targets: \n- :target: c\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2485,1003,'TextBox',2,4,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: c\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2484,1003,'ListItemComment',3,3,NULL,NULL,'listitem::::Hvis ja, beskriv hvilken###textbox::::','--- \n:targets: \n- :target: c\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 
 INSERT INTO `question_cells` VALUES (2486,1003,'ListItem',1,5,NULL,NULL,'listitem::::Tog moderen medicin under graviditeten?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2487,1003,'Rating',2,5,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- d\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2488,1003,'ListItem',1,6,NULL,NULL,'listitem::::Hvis ja, beskriv hvilken','--- \n:targets: \n- :target: d\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2489,1003,'TextBox',2,6,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: d\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2488,1003,'ListItemComment',3,5,NULL,NULL,'listitem::::Hvis ja, beskriv hvilken###textbox::::','--- \n:targets: \n- :target: d\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2490,1003,'ListItem',1,7,NULL,NULL,'listitem::::Var der komplikationer i graviditeten?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2491,1003,'Rating',2,7,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- e\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2492,1003,'ListItem',1,8,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke','--- \n:targets: \n- :target: e\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2493,1003,'TextBox',2,8,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: e\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2492,1003,'ListItemComment',3,7,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke###textbox::::','--- \n:targets: \n- :target: e\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2494,1003,'ListItem',1,9,NULL,NULL,'listitem::::Var der komplikationer under fødslen?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2495,1003,'Rating',2,9,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- f\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2496,1003,'ListItem',1,10,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke','--- \n:targets: \n- :target: f\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2497,1003,'TextBox',2,10,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: f\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2496,1003,'ListItemComment',4,9,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke###textbox::::','--- \n:targets: \n- :target: f\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2498,1003,'ListItem',1,11,NULL,NULL,'listitem::::Røg moderen tobak under graviditeten?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2499,1003,'Rating',2,11,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- g\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2500,1003,'ListItem',1,12,NULL,NULL,'listitem::::Hvis ja, ca. hvor meget?','--- \n:targets: \n- :target: g\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2501,1003,'TextBox',2,12,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: g\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2500,1003,'ListItemComment',3,11,NULL,NULL,'listitem::::Hvis ja, ca. hvor meget?###textbox::::','--- \n:targets: \n- :target: g\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2502,1003,'ListItem',1,13,NULL,NULL,'listitem::::Drak moderen alkohol under graviditeten?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2503,1003,'Rating',2,13,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- h\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2504,1003,'ListItem',1,14,NULL,NULL,'listitem::::Hvis ja, ca. hvor meget?','--- \n:targets: \n- :target: h\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2505,1003,'TextBox',2,14,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: h\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2504,1003,'ListItemComment',3,13,NULL,NULL,'listitem::::Hvis ja, ca. hvor meget?###textbox::::','--- \n:targets: \n- :target: h\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2506,1003,'ListItem',1,15,NULL,NULL,'listitem::::Hvornår er barnet født?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2507,1003,'Rating',2,15,NULL,NULL,'radio::1::Extrem tidligt født (før 28. svangerskabsuge)###radio::2::Meget tidligt født (28. - 32. svangerskabsuge)###radio::3::Moderat tidligt født (33. - 36. svangerskabsuge)###radio::4::Til termin (37. - 42. svangerskabsuge)###radio::5::Overbåren (efter 42. svangerskabsuge)',NULL,1,NULL,NULL,NULL);
@@ -129,8 +122,7 @@ INSERT INTO `question_cells` VALUES (2514,1003,'ListItemComment',3,18,NULL,NULL,
 
 INSERT INTO `question_cells` VALUES (2515,1003,'ListItem',1,19,NULL,NULL,'listitem::::Har barnet medfødte sygdomme?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2516,1003,'Rating',2,19,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- i\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2517,1003,'ListItem',1,20,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke','--- \n:targets: \n- :target: i\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2518,1003,'TextBox',2,20,NULL,NULL,'textbox::::','--- \n:targets: \n- :target: i\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2517,1003,'ListItemComment',3,19,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke###textbox::::','--- \n:targets: \n- :target: i\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1004,10,8,0,3,NULL);
