@@ -693,11 +693,12 @@ td.description7lab4 {
 }
 
 .sectiontitle {
+  text-align: center;
   font-size: larger;
-  font-style: bold;
+  font-weight: bold;
 }
 .sectionsubtitle {
-  font-style: bold;
+  font-weight: bold;
 }
 
 /* show answer for listitemcomment */

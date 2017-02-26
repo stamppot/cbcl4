@@ -71,12 +71,12 @@ INSERT INTO `questions` VALUES (1002,10,7,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2460,1002,'ListItem',1,1,NULL,NULL,'listitem::::Er barnet allergisk over for noget?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2461,1002,'Rating',2,1,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- a\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2462,1002,'ListItemComment',3,1,NULL,NULL,'listitem::::Hvis ja, for hvad?###textbox::::','--- \n:targets: \n- :target: a\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2463,1002,'ListItemComment',1,3,NULL,NULL,'listitem::1::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug###textbox::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2464,1002,'Rating',2,3,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
--- INSERT INTO `question_cells` VALUES (2465,1002,'ListItemComment',1,4,NULL,NULL,'listitem::::Hvis ja, for hvilket?###textbox::::','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2466,1002,'ListItem',1,5,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2467,1002,'Rating',2,5,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2468,1002,'ListItemComment',1,6,NULL,NULL,'listitem::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?###textbox::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2463,1002,'ListItem',1,2,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har et alkohol eller stofmisbrug',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2464,1002,'Rating',2,2,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- b\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2465,1002,'ListItemComment',3,2,NULL,NULL,'listitem::::Hvis ja, for hvilket?###textbox::::','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2466,1002,'ListItem',1,3,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2467,1002,'Rating',2,3,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2468,1002,'ListItemComment',1,4,NULL,NULL,'listitem::::Er der nogen i familien, der har vanskeligheder, der ligner barnets?###textbox::::',NULL,0,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2469,1002,'TextBox',2,6,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 
 
@@ -129,19 +129,21 @@ INSERT INTO `questions` VALUES (1004,10,9,0,3,NULL);
 INSERT INTO `question_cells` VALUES (2520,1004,'SectionSubtitle',1,1,NULL,NULL,'sectionsubtitle::::Tidlig barndom:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2521,1004,'ListItem',1,2,NULL,NULL,'listitem::::Var der komplikationer i spædbarnsperioden?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2522,1004,'Rating',2,2,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- j\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2523,1004,'ListItem',3,2,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke###textbox::::','--- \n:targets: \n- :target: j\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2523,1004,'ListItemComment',3,2,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke###textbox::::','--- \n:targets: \n- :target: j\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2526,1004,'ListItem',1,4,NULL,NULL,'listitem::::Var der kontakt til sundhedsplejerske?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2527,1004,'Rating',2,4,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2530,1004,'ListItem',1,5,NULL,NULL,'listitem::::Blev barnet ammet?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2531,1004,'Rating',2,5,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- k\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2532,1004,'ListItemComment',3,5,NULL,NULL,'listitem::::Hvis ja, hvor længe blev barnet ammet###textbox::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2534,1004,'Placeholder',1,7,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2535,1004,'ListItemComment',2,7,NULL,NULL,'listitem::::udelukkende amning###listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2536,1004,'Placeholder',1,8,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2537,1004,'ListItem',2,8,NULL,NULL,'listitem::::delvis amning###listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2539,1004,'ListItemComment',1,9,NULL,NULL,'listitem::::Hvordan var kontakten til barnet i spædbarnsperioden (øjenkontakt, smil, pludren, kunne barnet trøstes, brød det sig om kropskontakt m.v.)###textbox::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2528,1004,'ListItem',1,5,NULL,NULL,'listitem::::Blev barnet ammet?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2529,1004,'Rating',2,5,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- k\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2530,1004,'ListItemComment',3,5,NULL,NULL,'listitem::::Hvis ja, hvor længe blev barnet ammet','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2531,1004,'Placeholder',1,7,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2532,1004,'ListItem',2,7,NULL,NULL,'listitem::::udelukkende amning','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2533,1004,'ListItemComment',3,7,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2534,1004,'Placeholder',1,8,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2535,1004,'ListItem',2,8,NULL,NULL,'listitem::::delvis amning','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2536,1004,'ListItemComment',3,8,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2537,1004,'ListItemComment',1,9,NULL,NULL,'listitem::::Hvordan var kontakten til barnet i spædbarnsperioden (øjenkontakt, smil, pludren, kunne barnet trøstes, brød det sig om kropskontakt m.v.)###textbox::::',NULL,1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2541,1004,'Questiontext',1,10,NULL,NULL,'questiontext::::Hvornår kunne barnet (mdr):',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2542,1004,'Placeholder',1,11,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
@@ -181,58 +183,59 @@ INSERT INTO `question_cells` VALUES (2571,1005,'ListItemComment',3,4,NULL,NULL,'
 INSERT INTO `question_cells` VALUES (2572,1005,'Placeholder',1,5,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2573,1005,'ListItemComment',2,5,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2574,1005,'ListItemComment',3,5,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2575,1005,'Placeholder',1,6,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2580,1005,'Information',1,6,NULL,NULL,'information::::Ved skilsmisse:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2581,1005,'Questiontext',1,7,NULL,NULL,'questiontext::::Hvem bor i den anden forældres husstand?',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2585,1005,'Placeholder',1,8,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2586,1005,'ListItemComment',2,8,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2587,1005,'ListItemComment',3,8,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2588,1005,'Placeholder',1,9,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2589,1005,'ListItemComment',2,9,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2590,1005,'ListItemComment',3,9,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2591,1005,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2592,1005,'ListItemComment',2,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2593,1005,'ListItemComment',3,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2580,1005,'Information',1,7,NULL,NULL,'information::::Ved skilsmisse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2581,1005,'Questiontext',1,8,NULL,NULL,'questiontext::::Hvem bor i den anden forældres husstand?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2585,1005,'Placeholder',1,9,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2586,1005,'ListItemComment',2,9,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2587,1005,'ListItemComment',3,9,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2588,1005,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2589,1005,'ListItemComment',2,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2590,1005,'ListItemComment',3,10,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2591,1005,'Placeholder',1,11,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2592,1005,'ListItemComment',2,11,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2593,1005,'ListItemComment',3,11,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2605,1005,'Checkbox',1,11,NULL,NULL,'checkbox::1::Daginstitution','--- \n:switch: \n- l\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2606,1005,'ListItemComment',1,12,NULL,NULL,'listitem::::Vuggestue (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2605,1005,'Checkbox',1,12,NULL,NULL,'checkbox::1::Daginstitution','--- \n:switch: \n- l\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2606,1005,'ListItemComment',1,13,NULL,NULL,'listitem::::Vuggestue (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2607,1005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2608,1005,'ListItemComment',1,13,NULL,NULL,'listitem::::Dagpleje  (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2608,1005,'ListItemComment',1,14,NULL,NULL,'listitem::::Dagpleje  (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2609,1005,'ListItemComment',2,13,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2610,1005,'ListItemComment',1,14,NULL,NULL,'listitem::::Børnehave (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2610,1005,'ListItemComment',1,15,NULL,NULL,'listitem::::Børnehave (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2611,1005,'ListItemComment',2,14,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2612,1005,'Checkbox',1,11,NULL,NULL,'checkbox::1::Skole','--- \n:switch: \n- m\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2613,1005,'ListItemComment',1,12,NULL,NULL,'listitem::::Barnets skole (navn og adresse)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2612,1005,'Checkbox',1,16,NULL,NULL,'checkbox::1::Skole','--- \n:switch: \n- m\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2613,1005,'ListItemComment',1,17,NULL,NULL,'listitem::::Barnets skole (navn og adresse)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2614,1005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2615,1005,'ListItemComment',1,13,NULL,NULL,'listitem::::Klasselærer/kontaktperson###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2615,1005,'ListItemComment',1,18,NULL,NULL,'listitem::::Klasselærer/kontaktperson###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2616,1005,'ListItemComment',2,13,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2617,1005,'ListItemComment',1,14,NULL,NULL,'listitem::::SFO (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2617,1005,'ListItemComment',1,19,NULL,NULL,'listitem::::SFO (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2618,1005,'ListItemComment',2,14,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2619,1005,'ListItemComment',1,10,NULL,NULL,'listitem::::Eventuelle tidligere skoler, barnet har gået på (navn samt adresse og evt. årstal)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2619,1005,'ListItemComment',1,20,NULL,NULL,'listitem::::Eventuelle tidligere skoler, barnet har gået på (navn samt adresse og evt. årstal)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2620,1005,'ListItemComment',1,16,NULL,NULL,'listitem::::Evt. midlertidig opholdsadresse for barnet (efterskole, døgninstitution o.lign.):###textbox::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2620,1005,'ListItemComment',1,21,NULL,NULL,'listitem::::Evt. midlertidig opholdsadresse for barnet (efterskole, døgninstitution o.lign.):###textbox::::',NULL,1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2621,1005,'TextBox',2,16,NULL,NULL,'###textbox::::',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2622,1005,'Questiontext',1,17,NULL,NULL,'questiontext::::PPR - Pædagogisk-Psykologisk-Rådgivning:',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2623,1005,'ListItem',1,18,NULL,NULL,'listitem::::Har I / barnet haft kontakt til PPR','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2624,1005,'Rating',2,18,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2625,1005,'ListItemComment',1,19,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på psykolog:):###textbox::::','--- \n:targets: \n- :target: n\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2621,1005,'Placeholder',1,22,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2622,1005,'SectionSubtitle',1,23,NULL,NULL,'sectionsubtitle::::PPR - Pædagogisk-Psykologisk-Rådgivning:',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2623,1005,'ListItem',1,24,NULL,NULL,'listitem::::Har I / barnet haft kontakt til PPR','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2624,1005,'Rating',2,24,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- n\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2625,1005,'ListItemComment',1,25,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på psykolog:):###textbox::::','--- \n:targets: \n- :target: n\n  :state: offstate\n',1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2630,1005,'Questiontext',1,20,NULL,NULL,'questiontext::::Socialforvaltning:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2631,1005,'ListItem',1,21,NULL,NULL,'listitem::::Har I / barnet haft kontakt til socialforvaltning',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2632,1005,'Rating',2,21,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- o\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2633,1005,'ListItemComment',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på sagsbehandler):###textbox::::','--- \n:targets: \n- :target: o\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2630,1005,'SectionSubtitle',1,26,NULL,NULL,'sectionsubtitle::::Socialforvaltning:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2631,1005,'ListItem',1,27,NULL,NULL,'listitem::::Har I / barnet haft kontakt til socialforvaltning',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2632,1005,'Rating',2,27,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- o\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2633,1005,'ListItemComment',1,28,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse på sagsbehandler):###textbox::::','--- \n:targets: \n- :target: o\n  :state: offstate\n',1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2635,1005,'Questiontext',1,20,NULL,NULL,'questiontext::::Fysioterapi/Ergoterapi:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2636,1005,'Checkbox',1,21,NULL,NULL,'checkbox::1::Er barnet tidligere undersøgt/behandlet af fysioterapeut/ergoterapeut (navn og adresse):','--- \n:switch: \n- p\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2637,1005,'ListItemComment',1,22,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse):###textbox::::','--- \n:targets: \n- :target: p\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2635,1005,'SectionSubtitle',1,29,NULL,NULL,'sectionsubtitle::::Fysioterapi/Ergoterapi:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2636,1005,'Checkbox',1,30,NULL,NULL,'checkbox::1::Er barnet tidligere undersøgt/behandlet af fysioterapeut/ergoterapeut (navn og adresse):','--- \n:switch: \n- p\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2637,1005,'ListItemComment',1,31,NULL,NULL,'listitem::::I hvilken forbindelse (navn og adresse):###textbox::::','--- \n:targets: \n- :target: p\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2649,1005,'ListItemComment',1,32,NULL,NULL,'listitem::::Andre:###textbox::::',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2649,1005,'ListItemComment',1,23,NULL,NULL,'listitem::::Andre:###textbox::::',NULL,1,NULL,NULL,NULL);
 
-
-INSERT INTO `questions` VALUES (1006,10,11,0,3,NULL);
-INSERT INTO `question_cells` VALUES (2660,1006,'Information',1,1,NULL,NULL,'information::::Senere barndom:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `questions` VALUES (1006,10,11,0,4,NULL);
+INSERT INTO `question_cells` VALUES (2660,1006,'SectionSubtitle',1,1,NULL,NULL,'placeholder::::Senere barndom:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2661,1006,'ListItem',1,2,NULL,NULL,'listitem::::Har barnet haft fysiske sygdomme / handicaps?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2662,1006,'Rating',2,2,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- q\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2663,1006,'ListItemComment',3,2,NULL,NULL,'listitem::::Hvis ja, beskriv hvilke###textbox::::','--- \n:targets: \n- :target: q\n  :state: offstate\n',0,NULL,NULL,NULL);
@@ -245,10 +248,31 @@ INSERT INTO `question_cells` VALUES (2670,1006,'ListItem',1,6,NULL,NULL,'listite
 INSERT INTO `question_cells` VALUES (2671,1006,'Rating',2,6,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- s\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2672,1006,'ListItemComment',3,6,NULL,NULL,'listitem::::Beskriv eventuelle undtagelser###textbox::::','--- \n:targets: \n- :target: s\n  :state: offstate\n',0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2675,1006,'ListItem',1,8,NULL,NULL,'listitem::::Får barnet medicin?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2676,1006,'Rating',2,8,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- t\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2677,1006,'ListItemComment',1,9,NULL,NULL,'listitem::::Hvilken medicin?###textbox::::For hvad?###textbox::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2678,1006,'ListItemComment',1,10,NULL,NULL,'listitem::::Hvilken medicin?###textbox::::For hvad?###textbox::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2673,1006,'ListItem',1,8,NULL,NULL,'listitem::::Får barnet medicin?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2674,1006,'Rating',2,8,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- t\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2675,1006,'Placeholder',1,9,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2676,1006,'ListItem',2,9,NULL,NULL,'listitem::::Hvilken medicin?','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2677,1006,'ListItem',3,9,NULL,NULL,'listitem::::For hvad?','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2678,1006,'ListItem',4,9,NULL,NULL,'listitem::::Hvornår?','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2679,1006,'Placeholder',1,10,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2680,1006,'ListItemComment',2,10,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2681,1006,'ListItemComment',3,10,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2682,1006,'ListItemComment',4,10,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2683,1006,'Placeholder',1,11,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2684,1006,'ListItemComment',2,11,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2685,1006,'ListItemComment',3,11,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2686,1006,'ListItemComment',4,11,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2686,1006,'ListItemComment',1,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2687,1006,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2688,1006,'ListItemComment',3,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
 
+-- INSERT INTO `question_cells` VALUES (2679,1006,'Placeholder',1,10,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2680,1006,'ListItemComment',1,10,NULL,NULL,'listitem::::Hvilken medicin###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2681,1006,'ListItemComment',2,10,NULL,NULL,'listitem::::For hvad?###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2682,1006,'ListItemComment',3,10,NULL,NULL,'listitem::::Hvornår?###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2683,1006,'Placeholder',1,11,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2684,1006,'ListItemComment',1,11,NULL,NULL,'listitem::::Hvilken medicin?###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2685,1006,'ListItemComment',2,11,NULL,NULL,'listitem::::For hvad?###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2686,1006,'ListItemComment',3,11,NULL,NULL,'listitem::::Hvornår?###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
 
 COMMIT;
