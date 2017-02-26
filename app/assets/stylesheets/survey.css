@@ -692,6 +692,14 @@ td.description7lab4 {
   width: 220px;
 }
 
+.sectiontitle {
+  font-size: larger;
+  font-style: bold;
+}
+.sectionsubtitle {
+  font-style: bold;
+}
+
 /* show answer for listitemcomment */
 .answer_comment {
 /*  width: 300px;*/

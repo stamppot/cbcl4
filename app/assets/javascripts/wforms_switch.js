@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------------------------
 // Switch Behavior
 // ------------------------------------------------------------------------------------------
-
+// alert('switch? not used?');
 if(wFORMS) {
 
 	// Component properties 
@@ -32,15 +32,18 @@ if(wFORMS) {
 				if(!node.id) node.id = wFORMS.helpers.randomId();
 
 				wFORMS.debug('switch/evaluate: '+ node.className + ' ' + node.tagName);
+				console.log('switch/evaluate: '+ node.className + ' ' + node.tagName);
 
 				// Go through each class (one element can have more than one switch trigger).
 				var switchNames = wFORMS.behaviors['switch'].getSwitchNames(node);
 				for(var i=0; i < switchNames.length; i++) {
 					if(!wFORMS.switchTriggers[switchNames[i]]) 
 					wFORMS.switchTriggers[switchNames[i]] = new Array();
-					if(!wFORMS.switchTriggers[switchNames[i]][node.id])
-					wFORMS.switchTriggers[switchNames[i]].push(node.id);
+					if(!wFORMS.switchTriggers[switchNames[i]][node.id]) {
+						wFORMS.switchTriggers[switchNames[i]].push(node.id);
+					}
 					wFORMS.debug('switch/evaluate: [trigger] '+ switchNames[i] + ' ' + node.id,3);
+					console.log('switch/evaluate: [trigger] '+ switchNames[i] + ' ' + node.id,3);
 				}
 
 				switch(node.tagName.toUpperCase()) {
@@ -106,6 +109,7 @@ if(wFORMS) {
 					if(!wFORMS.switchTargets[switchNames[i]][node.id]) 
 					wFORMS.switchTargets[switchNames[i]].push(node.id);
 					wFORMS.debug('switch/evaluate: [target] '+ switchNames[i],3);
+					console.log('switch/evaluate: [target] '+ switchNames[i],3);
 				}										
 			}
 
@@ -177,11 +181,13 @@ if(wFORMS) {
 								// if element.hasClass(showIsOn)  switch off - put in hide (switches_OFF)
 								// else put in show (switches_ON)
 								switches_ON  = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
+								console.log('radio ischecked: ' + switches_ON);
 								} else {  // unchecked
 									// if element.hasClass(showIsOff)  switch on - put in show (switches_ON)
 									// else put in hide (switches_OFF)
 									wFORMS.debug(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length,1);
 									switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
+									console.log('radio isnotchecked: ' + switches_OFF);
 								}
 							}
 							} else {  // checkbutton. Does not depend of status of checkbutton. Switch states
@@ -226,6 +232,7 @@ if(wFORMS) {
 
 										wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_offState, wFORMS.classNamePrefix_onState);
 										wFORMS.debug('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
+										console.log('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
 									}
 								}
 							}
@@ -270,6 +277,7 @@ if(wFORMS) {
 												element.className = element.className.replace(oldStateClass, newStateClass);
 											}		
 
+											console.log('switchState: ' + element + ", oldstate, newstate: " + oldStateClass + ", " + newStateClass)
 											// wFORMS.className_showIsOn						= "showIsOn";
 											// wFORMS.className_hideIsOn						= "hideIsOn";
 											// wFORMS.className_showIsOff					= "showIsOff";
@@ -319,12 +327,16 @@ if(wFORMS) {
 												// TODO: handle multiple-select
 												if(wFORMS.helpers.hasClass(selectElement.options[selectElement.selectedIndex],
 													wFORMS.classNamePrefix_switch + '-' + triggerName)) {
+													console.log('isTriggerOn: ' + triggerName + ' ' + true);
 														return true;
 													}
 													} else { // maybe should only return On when element is checked
-														if(element.checked )//|| wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) 
-														return true;
+														if(element.checked ) {//|| wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) 
+															console.log('isTriggerOn: ' + triggerName + ' ' + true);
+																return true;
+														}
 													}
+													console.log('isTriggerOn: ' + triggerName + ' ' + false);
 													return false;
 												},
 

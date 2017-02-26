@@ -597,6 +597,52 @@ class Information < QuestionCell
 
 end
 
+class SectionTitle < QuestionCell
+
+	def to_html(options = {})
+		"<div id='td_#{cell_id(options[:number])}' class='#{class_name} sectiontitle span-22 last' >#{question_items.first.text}</div>"
+	end
+
+	def to_answer(options = {})
+		"<span id='td_#{cell_id(options[:number])}' class='#{class_name} sectiontitle span-21 last' >#{question_items.first.text}</span>"
+	end
+
+	def to_fast_input_html(options = {})
+		"<div id='td_#{cell_id(options[:number])}' class='#{class_name} sectiontitle span-22 last' >#{question_items.first.text}</div>"
+	end
+
+	def form_template(options = {})
+		div_item(question_items.first.text, "itemsectiontitle")
+	end
+
+	def fast_input_form(options = {}, value = nil)
+		form_template()
+	end
+end
+
+class SectionSubtitle < QuestionCell
+
+	def to_html(options = {})
+		"<div id='td_#{cell_id(options[:number])}' class='#{class_name} sectionsubtitle span-22 last' >#{question_items.first.text}</div>"
+	end
+
+	def to_answer(options = {})
+		"<span id='td_#{cell_id(options[:number])}' class='#{class_name} sectionsubtitle span-21 last' >#{question_items.first.text}</span>"
+	end
+
+	def to_fast_input_html(options = {})
+		"<div id='td_#{cell_id(options[:number])}' class='#{class_name} sectionsubtitle span-22 last' >#{question_items.first.text}</div>"
+	end
+
+	def form_template(options = {})
+		div_item(question_items.first.text, "itemsectionsubtitle")
+	end
+
+	def fast_input_form(options = {}, value = nil)
+		form_template()
+	end
+end
+
 class Placeholder < QuestionCell
 
  	def outer_span
