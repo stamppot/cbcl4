@@ -106,11 +106,15 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @user = User.find params[:id]
     @roles = current_user.pass_on_roles
     @groups = if current_user.has_role?(:centeradmin)
-	  Group.where(:center_id => current_user.center_id)
-	else
-	  (@user.groups + current_user.center_and_teams).uniq
-	end
+	    Group.where(:center_id => current_user.center_id)
+	  else
+	    (@user.groups + current_user.center_and_teams).uniq
+	  end
     @user.password = ""
+  
+    if current_user.has_role?(:superadmin) # superadmin can create users in all groups
+      @groups = Center.all
+    end
   end
 
   def update
