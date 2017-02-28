@@ -53,11 +53,16 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       @user.groups += @groups
     else
       @groups = if current_user.has_role?(:centeradmin)
-	Group.where(:center_id => current_user.center_id)
-	else	
- 	  current_user.center_and_teams
-	end
+      	Group.where(:center_id => current_user.center_id)
+    	else	
+ 	      current_user.center_and_teams
+	    end
     end
+
+    if current_user.has_role?(:superadmin) # superadmin can create users in all groups
+      @groups = Center.all
+    end
+
   end
 
   def create
