@@ -60,7 +60,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     end
 
     if current_user.has_role?(:superadmin) # superadmin can create users in all groups
-      @groups = Center.all
+      @groups = Center.all.sort_by { |c| c.title  }
     end
 
   end
@@ -113,7 +113,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @user.password = ""
   
     if current_user.has_role?(:superadmin) # superadmin can create users in all groups
-      @groups = Center.all
+      @groups = Center.all.sort_by { |c| c.title  }
     end
   end
 
