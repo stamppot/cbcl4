@@ -945,21 +945,29 @@ class ListItem < QuestionCell
 			item_text = edit ? item.text : item.text
 			field = (i == 0 && (i == question_items.size-1) ? self.svar_item : "")# only show answer_item label in first item for cell with multiple list items
 			has_no_text = item_text.blank?
-			if(has_no_text)     	# listitem without predefined text
-				if(disabled)      	# show answer value
-					field << value
-				else                        # show text field, possibly with value
-		        	case options[:action]
-			    	when /print|show/ then 
-			      	field << (value || "")
-			      	newform << div_item(field, "listitemfield #{span}")
-			    	when /create|edit/ then
-		            	field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' maxlength='2000' rows='1'>#{value}</textarea>"
-        		    	newform << field
-          			end
+			case item.qtype
+			when "itemunit" then
+        		# answer_item_set = true if self.col == 1
+			  	newform <<
+				span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
+					"<input id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='20' value='#{item.value}'>#{self.value}</input> #{item.text}", "unitfield #{span}")
+			else
+				if(has_no_text)     	# listitem without predefined text
+					if(disabled)      	# show answer value
+						field << value
+					else                        # show text field, possibly with value
+			        	case options[:action]
+				    	when /print|show/ then 
+				      	field << (value || "")
+				      	newform << div_item(field, "listitemfield #{span}")
+			    		when /create|edit/ then
+		            		field << "<textarea id='#{c_id}' class='textfield' name='#{question_no}[#{cell_id(no)}]' type='text' maxlength='2000' rows='1'>#{value}</textarea>"
+        		    		newform << field
+	          			end
+					end
+				else  # with predefined text. show text in item (no input field)
+		    	    newform << span_item(field + item_text, "#{in_span} #{options[:answer] && 'answerlistitemtext' || 'listitemtext'}")
 				end
-			else  # with predefined text. show text in item (no input field)
-		        newform << span_item(field + item_text, "#{in_span} #{options[:answer] && 'answerlistitemtext' || 'listitemtext'}")
 			end
 		end
 		span_item(newform.join, "#{class_name} #{span}")
