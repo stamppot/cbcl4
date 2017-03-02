@@ -1516,12 +1516,16 @@ class ListItemComment < QuestionCell
         		# answer_item_set = true if self.col == 1
 			  	newform <<
 				if (listitem_without_predefined_text)
-					puts "answer_item_set: #{answer_item_set} self.col: #{self.col}"
 					span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
 					"<textarea id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='2000' rows='1' value='#{item.value}'>#{self.value}</textarea>", "listitemfield #{span}")
 				else div_item(((answer_item_set || self.col > 2) ? "" : answer_item) + item.text, "listitemtext #{span} #{target}".strip)
 				end
 				answer_item_set = true;
+			when "itemunit" then 
+        		# answer_item_set = true if self.col == 1
+			  	newform <<
+				span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
+					"<input id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='20' value='#{item.value}'>#{self.value}</input> #{item.text}", "unitfield #{span}")
 			end
 		end
 		newform.join
