@@ -2,6 +2,9 @@ START TRANSACTION;
 
 -- INSERT INTO `surveys` VALUES (10,'Oplysningsskema','INFO','Oplysningsskema (Forældreskema)','1.5-16','parent','f23737',99,'info','INFO');
 
+delete from questions where id >= 1000 and id < 1007;
+delete from question_cells where question_id >= 1000 and question_id < 2690;
+
 INSERT INTO `questions` VALUES (1000,10,1,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2400,1000,'SectionTitle',1,1,NULL,NULL,'sectiontitle::::Kære forældre,<p/>Jeres barn er sammen med jer indkaldt til undersøgelse.\nVi vil bede jer om at udfylde oplysningsskemaet forud for jeres første besøg i ambulatoriet.',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2401,1000,'ListItem',1,2,NULL,NULL,'listitem::::Barnets navn:',NULL,0,NULL,NULL,NULL);
