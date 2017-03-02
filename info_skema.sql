@@ -218,7 +218,7 @@ INSERT INTO `question_cells` VALUES (2592,1005,'ListItemComment',2,11,NULL,NULL,
 INSERT INTO `question_cells` VALUES (2593,1005,'ListItemComment',3,11,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2600,1005,'ListItem',1,12,NULL,NULL,'listitem::::Daginstitution',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2601,1005,'Rating',2,12,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- l\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2601,1005,'Rating',2,12,NULL,NULL,'radio::1::Nej###radio::0::Ja','--- \n:switch: \n- l\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2602,1005,'ListItemComment',1,13,NULL,NULL,'listitem::::Vuggestue (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2607,1005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2603,1005,'ListItemComment',1,14,NULL,NULL,'listitem::::Dagpleje  (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
@@ -227,7 +227,7 @@ INSERT INTO `question_cells` VALUES (2604,1005,'ListItemComment',1,15,NULL,NULL,
 -- INSERT INTO `question_cells` VALUES (2611,1005,'ListItemComment',2,14,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2608,1005,'ListItem',1,16,NULL,NULL,'listitem::::Skole',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2609,1005,'Rating',2,16,NULL,NULL,'radio::1::Ja###radio::0::Nej','--- \n:switch: \n- m\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2609,1005,'Rating',2,16,NULL,NULL,'radio::1::Nej###radio::0::Ja','--- \n:switch: \n- m\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2610,1005,'ListItemComment',1,17,NULL,NULL,'listitem::::Barnets skole (navn og adresse)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2614,1005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2611,1005,'ListItemComment',1,18,NULL,NULL,'listitem::::Klasselærer/kontaktperson###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
