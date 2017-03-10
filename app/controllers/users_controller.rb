@@ -60,7 +60,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     end
 
     if current_user.has_role?(:superadmin) # superadmin can create users in all groups
-      @groups = Center.all.sort_by { |c| c.title  }
+      @groups = (Center.all + current_user.center.teams).sort_by { |c| c.title  }
     end
 
   end
