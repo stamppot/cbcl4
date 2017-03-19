@@ -29,12 +29,14 @@ if(wFORMS) {
 			// ------------------------------------------------------------------------------------------				
 			if (wFORMS.helpers.hasClassPrefix(node, wFORMS.classNamePrefix_switch)) {
 
+				console.log("node: " + node.name + " classNamePrefix_switch: " + wFORMS.classNamePrefix_switch);
 				if(!node.id) node.id = wFORMS.helpers.randomId();
 
 				wFORMS.debug('switch/evaluate: '+ node.className + ' ' + node.tagName);
 
 				// Go through each class (one element can have more than one switch trigger).
 				var switchNames = wFORMS.behaviors['switch'].getSwitchNames(node);
+				console.log('switchNames: ' + switchNames.join(' '));
 				for(var i=0; i < switchNames.length; i++) {
 					if(!wFORMS.switchTriggers[switchNames[i]]) 
 					wFORMS.switchTriggers[switchNames[i]] = new Array();
@@ -71,8 +73,10 @@ if(wFORMS) {
 							// prevents conflicts with elements with an id = name of radio group
 							if(radioNode.type.toLowerCase() == 'radio') {
 								// Make sure we have only one event handler for this radio input.
-								if(!radioNode.getAttribute('rel') || radioNode.getAttribute('rel').indexOf('wfHandled')==-1) {								
+								if(!radioNode.getAttribute('rel') || radioNode.getAttribute('rel').indexOf('wfHandled')==-1) {
+									// console.log("add click event: " + wFORMS.behaviors['switch'].run.toString());
 									wFORMS.helpers.addEvent(radioNode, 'click', wFORMS.behaviors['switch'].run);
+									console.log('addEvent: ' + radioNode.id + ", nodename: " + node.name);
 									// flag the node 
 									radioNode.setAttribute('rel', (radioNode.getAttribute('rel')||"") + ' wfHandled');
 								} 
@@ -93,7 +97,7 @@ if(wFORMS) {
 			// (associative array with switchname -> element ids)
 			// ------------------------------------------------------------------------------------------
 			if (wFORMS.helpers.hasClassPrefix(node, wFORMS.classNamePrefix_offState) ||
-			wFORMS.helpers.hasClassPrefix(node, wFORMS.classNamePrefix_onState)) {
+				wFORMS.helpers.hasClassPrefix(node, wFORMS.classNamePrefix_onState)) {
 
 				if(!node.id) node.id = wFORMS.helpers.randomId();
 
@@ -101,11 +105,14 @@ if(wFORMS) {
 				var switchNames = wFORMS.behaviors['switch'].getSwitchNames(node);
 
 				for(var i=0; i < switchNames.length; i++) {
-					if(!wFORMS.switchTargets[switchNames[i]]) 
-					wFORMS.switchTargets[switchNames[i]] = new Array();
-					if(!wFORMS.switchTargets[switchNames[i]][node.id]) 
-					wFORMS.switchTargets[switchNames[i]].push(node.id);
-					wFORMS.debug('switch/evaluate: [target] '+ switchNames[i],3);
+					if(!wFORMS.switchTargets[switchNames[i]]) {
+						wFORMS.switchTargets[switchNames[i]] = new Array();
+					}
+					if(!wFORMS.switchTargets[switchNames[i]][node.id]) {
+						wFORMS.switchTargets[switchNames[i]].push(node.id);
+					}
+					wFORMS.debug('switch/evaluate: [target] '+ switchNames[i] + "  switchNames: " + switchNames.join(','));
+					console.log('switch/evaluate: [target] '+ switchNames[i]);
 				}										
 			}
 
@@ -122,13 +129,17 @@ if(wFORMS) {
 		init: function() {
 			// go through all switch triggers and activate those who are already ON
 			wFORMS.debug('switch/init: '+ (wFORMS.switchTriggers.length));
+			console.log('init: ' + (wFORMS.switchTriggers.length) + " " + wFORMS.switchTriggers);
 			for(var switchName in wFORMS.switchTriggers) {
+				console.log('init switchName: ' + switchName);
 				// go through all triggers for the current switch
 				for(var i=0; i< wFORMS.switchTriggers[switchName].length; i++) {		   
 					var element = document.getElementById(wFORMS.switchTriggers[switchName][i]);
-					wFORMS.debug('switch/init: ' + element + ' ' + switchName , 5);	
+					wFORMS.debug('!switch/init: ' + element + ' ' + switchName , 5);	
+					// console.log('switch/init: ' + element + ' ' + switchName);	
 					if(wFORMS.behaviors['switch'].isTriggerOn(element,switchName)) {
-						//alert("ON: " + wFORMS.behaviors['switch'].isTriggerOn(element,switchName).toString() + " " + element.id + " " + element.className + " swName: " + switchName)
+						console.log('init:: isTriggerOn ' + switchName  + " element: " + wFORMS.switchTriggers[switchName][i]);
+					//alert("ON: " + wFORMS.behaviors['switch'].isTriggerOn(element,switchName).toString() + " " + element.id + " " + element.className + " swName: " + switchName)
 						// if it's a select option, get the select element
 						if(element.tagName.toUpperCase()=='OPTION') {
 							var element = element.parentNode;
@@ -136,235 +147,287 @@ if(wFORMS) {
 								var element = element.parentNode;
 							}
 						}
+						console.log("init run element: " + element.name);
 						// run the trigger
 						wFORMS.behaviors['switch'].run(element);
 					}
 
 					}
 				}
-			},
+		},
 
-			// ------------------------------------------------------------------------------------------
-			// run: executed when the behavior is activated
-			// ------------------------------------------------------------------------------------------	   
-			run: function(e) {
-				var element   = wFORMS.helpers.getSourceElement(e);
-				if(!element) element = e;
-				wFORMS.debug('switch/run: ' + element.id , 5);	
+		// ------------------------------------------------------------------------------------------
+		// run: executed when the behavior is activated
+		// ------------------------------------------------------------------------------------------	   
+		run: function(e) {
+			var element   = wFORMS.helpers.getSourceElement(e);
+			console.log('run element: ' + element.id);
+			if(!element) element = e;
+			wFORMS.debug('run: ' + element.id , 5);	
 
-				var switches_ON  = new Array();
-				var switches_OFF = new Array();
+			var switches_ON  = new Array();
+			var switches_OFF = new Array();
 
-				// Get list of triggered switches (some ON, some OFF)
-				switch(element.tagName.toUpperCase()) {
-					case 'SELECT':
-					for(var i=0;i<element.options.length;i++) {
-						if(i==element.selectedIndex) {	
-							switches_ON  = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(element.options[i]));
-						} else {
-							switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(element.options[i]));
+			// Get list of triggered switches (some ON, some OFF)
+			switch(element.tagName.toUpperCase()) {
+				case 'SELECT':
+				for(var i=0;i<element.options.length;i++) {
+					if(i==element.selectedIndex) {	
+						switches_ON  = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(element.options[i]));
+					} else {
+						switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(element.options[i]));
+					}
+				}
+
+				break;
+				case 'INPUT':
+				if(element.type.toLowerCase() == 'radio') {
+					// Go through the radio group.
+
+					for(var i=0; i<element.form[element.name].length;i++) { 
+						var radioElement = element.form[element.name][i];
+						if(radioElement.checked) {
+						// if element.hasClass(showIsOn)  switch off - put in hide (switches_OFF)
+							// else put in show (switches_ON)
+						switches_ON  = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
+						console.log('switches_ON: ' + switches_ON.join(' '));
+						} else {  // unchecked
+							// if element.hasClass(showIsOff)  switch on - put in show (switches_ON)
+							// else put in hide (switches_OFF)
+							wFORMS.debug(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length,1);
+							console.log("switch: radioElem: " + radioElement.id + " " + radioElement.class + ", switchNames: " + wFORMS.behaviors['switch'].getSwitchNames(radioElement))
+							console.log(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length);
+							switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
+							console.log('switches_OFF: ' + switches_OFF.join(' '));
+							console.log('switches_ON: ' + switches_ON.join(' '));
 						}
 					}
-
-					break;
-					case 'INPUT':
-					if(element.type.toLowerCase() == 'radio') {
-						// Go through the radio group.
-
-						for(var i=0; i<element.form[element.name].length;i++) { 
-							var radioElement = element.form[element.name][i];
-							if(radioElement.checked) {
-								// if element.hasClass(showIsOn)  switch off - put in hide (switches_OFF)
-								// else put in show (switches_ON)
-								switches_ON  = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
-								} else {  // unchecked
-									// if element.hasClass(showIsOff)  switch on - put in show (switches_ON)
-									// else put in hide (switches_OFF)
-									wFORMS.debug(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length,1);
-									switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
-								}
+				} else {  // checkbutton. Does not depend of status of checkbutton. Switch states
+					switchNames = wFORMS.behaviors['switch'].getSwitchNames(element);
+					for(var k=0; k<switchNames.length; k++) {  // when one button, multiple switches and multiple targets, switch for all switches
+						targets = wFORMS.behaviors['switch'].getElementsBySwitchName(switchNames[k]);
+						for(var j=0; j<targets.length; j++) { 
+							if( wFORMS.helpers.hasClassPrefix(targets[j], wFORMS.classNamePrefix_onState)) { // if off, and check, set to ON
+								switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(targets[j]));
 							}
-							} else {  // checkbutton. Does not depend of status of checkbutton. Switch states
-								switchNames = wFORMS.behaviors['switch'].getSwitchNames(element);
-								for(var k=0; k<switchNames.length; k++) {  // when one button, multiple switches and multiple targets, switch for all switches
-									targets = wFORMS.behaviors['switch'].getElementsBySwitchName(switchNames[k]);
-									for(var j=0; j<targets.length; j++) { 
-										if( wFORMS.helpers.hasClassPrefix(targets[j], wFORMS.classNamePrefix_onState)) { // if off, and check, set to ON
-											switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(targets[j]));
-										}
-										if( wFORMS.helpers.hasClassPrefix(targets[j], wFORMS.classNamePrefix_offState)) { // if off, and check, set to ON
-											switches_ON = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(targets[j]));
-										}
-									}
-								}								
+							if( wFORMS.helpers.hasClassPrefix(targets[j], wFORMS.classNamePrefix_offState)) { // if off, and check, set to ON
+								switches_ON = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(targets[j]));
 							}
-							break;
-							default:
-							break;
 						}
+					}
+					console.log('switches_OFF: ' + switches_OFF.join(' '));
+					console.log('switches_ON: ' + switches_ON.join(' '));
+				}
+				break;
+				default:
+				break;
+			}
 
-							// Turn off switches first
-							for(var i=0; i < switches_OFF.length; i++) {
-								// Go through all targets of the switch 
-								var elements = wFORMS.behaviors['switch'].getElementsBySwitchName(switches_OFF[i]);
-								for(var j=0;j<elements.length;j++) {
+			console.log('turn off switches first: ' + switches_OFF.join(", "));
+			// alert('turn off first');
+			// Turn off switches first
+			for(var i=0; i < switches_OFF.length; i++) {
+				// Go through all targets of the switch 
+				var elements = wFORMS.behaviors['switch'].getElementsBySwitchName(switches_OFF[i]);
+				console.log('elements: ' + elements.join(', '));
+				for(var j=0;j<elements.length;j++) {
 
-									if(wFORMS.behaviors['switch'].isWithinSwitchScope(element, elements[j])) {
-										// one of the triggers is still ON. no switch off
-										wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_onState, wFORMS.classNamePrefix_offState);
-										doSwitch = false;
-									}
-								}
-							}
-							// Turn on
-							for(var i=0; i < switches_ON.length; i++) {
-								var elements = wFORMS.behaviors['switch'].getElementsBySwitchName(switches_ON[i]);
-								for(var j=0;j<elements.length;j++) {   // go thru all targets of the switch
-									// An element with the REPEAT behavior limits the scope of switches 
-									// targets outside of the scope of the switch are not affected. 
-									if(wFORMS.behaviors['switch'].isWithinSwitchScope(element, elements[j])) {
+					if(wFORMS.behaviors['switch'].isWithinSwitchScope(element, elements[j])) {
+						console.log('run: isWithinSwitchScope: ' + elements[j].id);
+						// one of the triggers is still ON. no switch off
+						wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_onState, wFORMS.classNamePrefix_offState);
+						doSwitch = false;
+						// alert('doSwitch false');
+					}
+				}
+			}
+			// Turn on
+			for(var i=0; i < switches_ON.length; i++) {
+				var elements = wFORMS.behaviors['switch'].getElementsBySwitchName(switches_ON[i]);
+				for(var j=0;j<elements.length;j++) {   // go thru all targets of the switch
+					// An element with the REPEAT behavior limits the scope of switches 
+					// targets outside of the scope of the switch are not affected. 
+					if(wFORMS.behaviors['switch'].isWithinSwitchScope(element, elements[j])) {
 
-										wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_offState, wFORMS.classNamePrefix_onState);
-										wFORMS.debug('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
-									}
-								}
-							}
-						},
+						// alert('turn on: ' + elements.join(', '));
+						wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_offState, wFORMS.classNamePrefix_onState);
+						wFORMS.debug('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
+						console.log('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
+					}
+				}
+			}
+		},
 
-										// ------------------------------------------------------------------------------------------
-										// clear: executed if the behavior should not be applied anymore
-										// ------------------------------------------------------------------------------------------
-										clear: function(e) {
-											// @TODO: go through wFORMS.switchTriggers to remove events.
-											wFORMS.switchTriggers = {};		
-											wFORMS.switchTargets = {};
+		// ------------------------------------------------------------------------------------------
+		// clear: executed if the behavior should not be applied anymore
+		// ------------------------------------------------------------------------------------------
+		clear: function(e) {
+			// @TODO: go through wFORMS.switchTriggers to remove events.
+			wFORMS.switchTriggers = {};		
+			wFORMS.switchTargets = {};
 
-										},
-
-
-										// ------------------------------------------------------------------------------------------
-										// Get the list of switches 
-										// Note: potential conflict if an element is both a switch and a target.
-										getSwitchNames: function(element) {
-											var switchNames = new Array();
-											var classNames  = element.className.split(' ');
-											for(var i=0; i < classNames.length; i++) {
-												// Note: Might be worth keeping a prefix on switchName to prevent collision with reserved names						
-												if(classNames[i].indexOf(wFORMS.classNamePrefix_switch) == 0) {
-													switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_switch.length+1));
-												}
-												if(classNames[i].indexOf(wFORMS.classNamePrefix_onState) == 0) {
-													switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_onState.length+1));
-												}
-												else if(classNames[i].indexOf(wFORMS.classNamePrefix_offState) == 0) {
-													switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_offState.length+1));
-												}
-											}
-											return switchNames;
-										},
-
-										// ------------------------------------------------------------------------------------------
-										switchState: function(element, oldStateClass, newStateClass) {		
-											if(!element || element.nodeType != 1) return;
-											if(element.className) {  		
-												element.className = element.className.replace(oldStateClass, newStateClass);
-											}		
-
-											// wFORMS.className_showIsOn						= "showIsOn";
-											// wFORMS.className_hideIsOn						= "hideIsOn";
-											// wFORMS.className_showIsOff					= "showIsOff";
-											// wFORMS.className_hideIsOff					= "hideIsOff";
-											if(wFORMS.helpers.hasClass(element, wFORMS.className_showIsOn)) { // set to showIsOff
-												element.className = element.className.replace(wFORMS.className_showIsOn, wFORMS.className_switchIsOff);
-											} else if(wFORMS.helpers.hasClass(element, wFORMS.className_showIsOff)) {
-												element.className = element.className.replace(wFORMS.className_showIsOff, wFORMS.className_showIsOn);
-											}	else if(wFORMS.helpers.hasClass(element, wFORMS.className_hideIsOn)) {
-												element.className = element.className.replace(wFORMS.className_hideIsOn, wFORMS.className_hideIsOff);
-											}	else if(wFORMS.helpers.hasClass(element, wFORMS.className_hideIsOff)) {
-												element.className = element.className.replace(wFORMS.className_hideIsOff, wFORMS.className_hideIsOn);
-											} 
+		},
 
 
-											// For  elements that don't have a native state variable (like checked, or selectedIndex)
-											if(wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOff)) {
-												element.className = element.className.replace(wFORMS.className_switchIsOff, wFORMS.className_switchIsOn);
-											} else if(wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) {
-												element.className = element.className.replace(wFORMS.className_switchIsOn, wFORMS.className_switchIsOff);
-											}
-										},
+		// ------------------------------------------------------------------------------------------
+		// Get the list of switches 
+		// Note: potential conflict if an element is both a switch and a target.
+		getSwitchNames: function(element) {
+			var switchNames = new Array();
+			var classNames  = element.className.split(' ');
+			for(var i=0; i < classNames.length; i++) {
+				// Note: Might be worth keeping a prefix on switchName to prevent collision with reserved names						
+				if(classNames[i].indexOf(wFORMS.classNamePrefix_switch) == 0) {
+					switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_switch.length+1));
+				}
+				if(classNames[i].indexOf(wFORMS.classNamePrefix_onState) == 0) {
+					switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_onState.length+1));
+				}
+				else if(classNames[i].indexOf(wFORMS.classNamePrefix_offState) == 0) {
+					console.log('push switchNames: ' + classNames[i].substr(wFORMS.classNamePrefix_offState.length+1));
+					switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_offState.length+1));
+				}
+			}
+			return switchNames;
+		},
 
-										// ------------------------------------------------------------------------------------------
-										getElementsBySwitchName: function(switchName) {
-											var elements = new Array();
-											if(wFORMS.switchTargets[switchName]) {
-												for (var i=0; i<wFORMS.switchTargets[switchName].length; i++) {
-													var element = document.getElementById(wFORMS.switchTargets[switchName][i]);
-													if(element)
-													elements.push(element);
-												}
-											}
-											return elements;
-										},
+		// ------------------------------------------------------------------------------------------
+		switchState: function(element, oldStateClass, newStateClass) {
+			console.log('switchState: nodeType: ' + element.nodetype + "  elem: " + element.id);	
+			if(!element || element.nodeType != 1) return;
 
-										// ------------------------------------------------------------------------------------------
-										isTriggerOn: function(element, triggerName) {
-											if(!element) return false;
-											if(element.tagName.toUpperCase()=='OPTION') {
-												var selectElement = element.parentNode;
-												while(selectElement && selectElement.tagName.toUpperCase() != 'SELECT') {
-													var selectElement = selectElement.parentNode;
-												}
-												if(!selectElement) return false; // invalid markup					
-												if(selectElement.selectedIndex==-1) return false; // nothing selected
-												// TODO: handle multiple-select
-												if(wFORMS.helpers.hasClass(selectElement.options[selectElement.selectedIndex],
-													wFORMS.classNamePrefix_switch + '-' + triggerName)) {
-														return true;
-													}
-													} else { // maybe should only return On when element is checked
-														if(element.checked )//|| wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) 
-														return true;
-													}
-													return false;
-												},
+			console.log('switchState!!: nodeType: ' + element.className + "  elem: " + element.id);	
+			// debugger
+			if(element.className) {  		
+				console.log('switchState!!!: classname: ' + element.className + " , old: " + oldStateClass + ", new: " + newStateClass);	
+				element.className = element.className.replace(oldStateClass, newStateClass);
+			}
 
-												// isWithinSwitchScope: An element with the REPEAT behavior limits the scope of switches 
-												// targets outside of the scope of the switch are not affected. 
-												// ------------------------------------------------------------------------------------------			
-												isWithinSwitchScope: function(trigger, target) {
+			console.log('switchState2: nodeType: ' + element.nodetype);	
+			
+			// wFORMS.className_showIsOn						= "showIsOn";
+			// wFORMS.className_hideIsOn						= "hideIsOn";
+			// wFORMS.className_showIsOff					= "showIsOff";
+			// wFORMS.className_hideIsOff					= "hideIsOff";
 
-													if(wFORMS.hasBehavior('repeat') && wFORMS.limitSwitchScope == true) { 
-														// check if the trigger is in a repeatable/removeable element
-														var scope = trigger;
+			if(wFORMS.helpers.hasClass(element, wFORMS.className_showIsOn)) { // set to showIsOff
+				console.log('showIsOn: set to showIsOff');
+				element.className = element.className.replace(wFORMS.className_showIsOn, wFORMS.className_switchIsOff);
+			} else if(wFORMS.helpers.hasClass(element, wFORMS.className_showIsOff)) {
+				console.log('showIsOff: set to showIsOn');
+				element.className = element.className.replace(wFORMS.className_showIsOff, wFORMS.className_showIsOn);
+			}	else if(wFORMS.helpers.hasClass(element, wFORMS.className_hideIsOn)) {
+				console.log('hideIsOn: set to hideIsOff');
+				element.className = element.className.replace(wFORMS.className_hideIsOn, wFORMS.className_hideIsOff);
+			}	else if(wFORMS.helpers.hasClass(element, wFORMS.className_hideIsOff)) {
+				console.log('hideIsOff: set to hideIsOn');
+				element.className = element.className.replace(wFORMS.className_hideIsOff, wFORMS.className_hideIsOn);
+			} 
 
-														while(scope && scope.tagName && scope.tagName.toUpperCase() != 'FORM' && 
-														!wFORMS.helpers.hasClass(scope, wFORMS.className_repeat) &&
-														!wFORMS.helpers.hasClass(scope, wFORMS.className_delete) ) {
-															scope = scope.parentNode;
-														}
-														if(wFORMS.helpers.hasClass(scope, wFORMS.className_repeat) || 
-														wFORMS.helpers.hasClass(scope, wFORMS.className_delete)) {
-															// yes, the trigger is nested in a repeat/remove element
+			console.log("element " + element.className + "  switchIsOn: " + wFORMS.className_switchIsOn + "  if? " + wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn));
+			console.log("element " + element.className + "  switchIsOff: " + wFORMS.className_switchIsOff + "  if? " + wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOff));
 
-															// check if the target is in the same element.
-															var scope2 = target;
-															while(scope2 && scope2.tagName && scope2.tagName.toUpperCase() != 'FORM' && 
-															!wFORMS.helpers.hasClass(scope2, wFORMS.className_repeat) &&
-															!wFORMS.helpers.hasClass(scope2, wFORMS.className_delete) ) {
-																scope2 = scope2.parentNode;
-															}
-															if(scope == scope2) {
-																return true;  // target & trigger are in the same repeat/remove element		
-															} else {
-																return false; // target not in the same repeat/remove element,					
-															}
-														} else {
-															return true;	  // trigger is not nested in a repeat/remove element, scope unaffected
-														}
-														} else 
-														return true;
-													}
-													} // END wFORMS.behaviors['switch'] object
+			// For  elements that don't have a native state variable (like checked, or selectedIndex)
+			console.log('switchIsOff: set to switchIsOn: ' + element.className + " hasClass " + wFORMS.className_switchIsOff);
 
+			if(wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOff)) {
+				console.log('switchIsOff: set to switchIsOn: ' + element.className);
+				element.className = element.className.replace(wFORMS.className_switchIsOff, wFORMS.className_switchIsOn);
+			} else if(wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) {
+				console.log('switchIsOn: set to switchIsOff: ' + element.className);
+				element.className = element.className.replace(wFORMS.className_switchIsOn, wFORMS.className_switchIsOff);
+			}
+			// alert('switched state: ' + element.className);
+		},
 
-												}
+		// ------------------------------------------------------------------------------------------
+		getElementsBySwitchName: function(switchName) {
+			var elements = new Array();
+			if(wFORMS.switchTargets[switchName]) {
+				for (var i=0; i<wFORMS.switchTargets[switchName].length; i++) {
+					var element = document.getElementById(wFORMS.switchTargets[switchName][i]);
+					if(element) {
+						elements.push(element);
+						console.log("getElementsBySwitchName: " + element.id);
+					}
+				}
+			}
+			// if(switchName == "ay") {
+
+			// }
+			return elements;
+		},
+
+		// ------------------------------------------------------------------------------------------
+		isTriggerOn: function(element, triggerName) {
+			if(!element) return false;
+			console.log('isTriggerOn: ' + triggerName);
+
+			if(element.tagName.toUpperCase()=='OPTION') {
+				console.log('isTriggerOn OPTION: ' + triggerName);
+				var selectElement = element.parentNode;
+				while(selectElement && selectElement.tagName.toUpperCase() != 'SELECT') {
+					var selectElement = selectElement.parentNode;
+				}
+				if(!selectElement) return false; // invalid markup					
+				console.log('isTriggerOn3: ' + triggerName);
+
+				if(selectElement.selectedIndex==-1) return false; // nothing selected
+				console.log('isTriggerOn4: ' + triggerName);
+
+				// TODO: handle multiple-select
+				if(wFORMS.helpers.hasClass(selectElement.options[selectElement.selectedIndex],
+					wFORMS.classNamePrefix_switch + '-' + triggerName)) {
+						return true;
+				}
+			} else { // maybe should only return On when element is checked
+				if(element.checked ) {//|| wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) 
+					console.log('isTriggerOn5: ischecked ' + triggerName);
+					return true;
+				}
+			}
+				
+			console.log('isTriggerOn (false): ' + triggerName);
+			return false;
+		},
+
+		// isWithinSwitchScope: An element with the REPEAT behavior limits the scope of switches 
+		// targets outside of the scope of the switch are not affected. 
+		// ------------------------------------------------------------------------------------------			
+		isWithinSwitchScope: function(trigger, target) {
+
+			if(wFORMS.hasBehavior('repeat') && wFORMS.limitSwitchScope == true) { 
+				// check if the trigger is in a repeatable/removeable element
+				var scope = trigger;
+
+				while(scope && scope.tagName && scope.tagName.toUpperCase() != 'FORM' && 
+				!wFORMS.helpers.hasClass(scope, wFORMS.className_repeat) &&
+				!wFORMS.helpers.hasClass(scope, wFORMS.className_delete) ) {
+					scope = scope.parentNode;
+				}
+				if(wFORMS.helpers.hasClass(scope, wFORMS.className_repeat) || 
+				wFORMS.helpers.hasClass(scope, wFORMS.className_delete)) {
+					// yes, the trigger is nested in a repeat/remove element
+
+					// check if the target is in the same element.
+					var scope2 = target;
+					while(scope2 && scope2.tagName && scope2.tagName.toUpperCase() != 'FORM' && 
+					!wFORMS.helpers.hasClass(scope2, wFORMS.className_repeat) &&
+					!wFORMS.helpers.hasClass(scope2, wFORMS.className_delete) ) {
+						scope2 = scope2.parentNode;
+					}
+					if(scope == scope2) {
+						return true;  // target & trigger are in the same repeat/remove element		
+					} else {
+						return false; // target not in the same repeat/remove element,					
+					}
+				} else {
+					return true;	  // trigger is not nested in a repeat/remove element, scope unaffected
+				}
+			} else {
+				console.log('isWithinSwitchScope: ' + trigger);
+				return true;
+			}
+		}
+	} // END wFORMS.behaviors['switch'] object
+}
