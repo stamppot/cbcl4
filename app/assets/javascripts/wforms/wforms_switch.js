@@ -29,14 +29,14 @@ if(wFORMS) {
 			// ------------------------------------------------------------------------------------------				
 			if (wFORMS.helpers.hasClassPrefix(node, wFORMS.classNamePrefix_switch)) {
 
-				console.log("node: " + node.name + " classNamePrefix_switch: " + wFORMS.classNamePrefix_switch);
+				//console.log("node: " + node.name + " classNamePrefix_switch: " + wFORMS.classNamePrefix_switch);
 				if(!node.id) node.id = wFORMS.helpers.randomId();
 
 				wFORMS.debug('switch/evaluate: '+ node.className + ' ' + node.tagName);
 
 				// Go through each class (one element can have more than one switch trigger).
 				var switchNames = wFORMS.behaviors['switch'].getSwitchNames(node);
-				console.log('switchNames: ' + switchNames.join(' '));
+				//console.log('switchNames: ' + switchNames.join(' '));
 				for(var i=0; i < switchNames.length; i++) {
 					if(!wFORMS.switchTriggers[switchNames[i]]) 
 					wFORMS.switchTriggers[switchNames[i]] = new Array();
@@ -76,7 +76,7 @@ if(wFORMS) {
 								if(!radioNode.getAttribute('rel') || radioNode.getAttribute('rel').indexOf('wfHandled')==-1) {
 									// console.log("add click event: " + wFORMS.behaviors['switch'].run.toString());
 									wFORMS.helpers.addEvent(radioNode, 'click', wFORMS.behaviors['switch'].run);
-									console.log('addEvent: ' + radioNode.id + ", nodename: " + node.name);
+									//console.log('addEvent: ' + radioNode.id + ", nodename: " + node.name);
 									// flag the node 
 									radioNode.setAttribute('rel', (radioNode.getAttribute('rel')||"") + ' wfHandled');
 								} 
@@ -112,7 +112,7 @@ if(wFORMS) {
 						wFORMS.switchTargets[switchNames[i]].push(node.id);
 					}
 					wFORMS.debug('switch/evaluate: [target] '+ switchNames[i] + "  switchNames: " + switchNames.join(','));
-					console.log('switch/evaluate: [target] '+ switchNames[i]);
+					//console.log('switch/evaluate: [target] '+ switchNames[i]);
 				}										
 			}
 
@@ -129,16 +129,16 @@ if(wFORMS) {
 		init: function() {
 			// go through all switch triggers and activate those who are already ON
 			wFORMS.debug('switch/init: '+ (wFORMS.switchTriggers.length));
-			console.log('init: ' + (wFORMS.switchTriggers.length) + " " + wFORMS.switchTriggers);
+			//console.log('init: ' + (wFORMS.switchTriggers.length) + " " + wFORMS.switchTriggers);
 			for(var switchName in wFORMS.switchTriggers) {
-				console.log('init switchName: ' + switchName);
+				//console.log('init switchName: ' + switchName);
 				// go through all triggers for the current switch
 				for(var i=0; i< wFORMS.switchTriggers[switchName].length; i++) {		   
 					var element = document.getElementById(wFORMS.switchTriggers[switchName][i]);
 					wFORMS.debug('!switch/init: ' + element + ' ' + switchName , 5);	
 					// console.log('switch/init: ' + element + ' ' + switchName);	
 					if(wFORMS.behaviors['switch'].isTriggerOn(element,switchName)) {
-						console.log('init:: isTriggerOn ' + switchName  + " element: " + wFORMS.switchTriggers[switchName][i]);
+						//console.log('init:: isTriggerOn ' + switchName  + " element: " + wFORMS.switchTriggers[switchName][i]);
 					//alert("ON: " + wFORMS.behaviors['switch'].isTriggerOn(element,switchName).toString() + " " + element.id + " " + element.className + " swName: " + switchName)
 						// if it's a select option, get the select element
 						if(element.tagName.toUpperCase()=='OPTION') {
@@ -147,7 +147,7 @@ if(wFORMS) {
 								var element = element.parentNode;
 							}
 						}
-						console.log("init run element: " + element.name);
+						//console.log("init run element: " + element.name);
 						// run the trigger
 						wFORMS.behaviors['switch'].run(element);
 					}
@@ -161,7 +161,7 @@ if(wFORMS) {
 		// ------------------------------------------------------------------------------------------	   
 		run: function(e) {
 			var element   = wFORMS.helpers.getSourceElement(e);
-			console.log('run element: ' + element.id);
+			//console.log('run element: ' + element.id);
 			if(!element) element = e;
 			wFORMS.debug('run: ' + element.id , 5);	
 
@@ -190,16 +190,16 @@ if(wFORMS) {
 						// if element.hasClass(showIsOn)  switch off - put in hide (switches_OFF)
 							// else put in show (switches_ON)
 						switches_ON  = switches_ON.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
-						console.log('switches_ON: ' + switches_ON.join(' '));
+						//console.log('switches_ON: ' + switches_ON.join(' '));
 						} else {  // unchecked
 							// if element.hasClass(showIsOff)  switch on - put in show (switches_ON)
 							// else put in hide (switches_OFF)
 							wFORMS.debug(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length,1);
-							console.log("switch: radioElem: " + radioElement.id + " " + radioElement.class + ", switchNames: " + wFORMS.behaviors['switch'].getSwitchNames(radioElement))
-							console.log(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length);
+							//console.log("switch: radioElem: " + radioElement.id + " " + radioElement.class + ", switchNames: " + wFORMS.behaviors['switch'].getSwitchNames(radioElement))
+							//console.log(wFORMS.behaviors['switch'].getSwitchNames(radioElement).length);
 							switches_OFF = switches_OFF.concat(wFORMS.behaviors['switch'].getSwitchNames(radioElement));
-							console.log('switches_OFF: ' + switches_OFF.join(' '));
-							console.log('switches_ON: ' + switches_ON.join(' '));
+							//console.log('switches_OFF: ' + switches_OFF.join(' '));
+							//console.log('switches_ON: ' + switches_ON.join(' '));
 						}
 					}
 				} else {  // checkbutton. Does not depend of status of checkbutton. Switch states
@@ -215,25 +215,25 @@ if(wFORMS) {
 							}
 						}
 					}
-					console.log('switches_OFF: ' + switches_OFF.join(' '));
-					console.log('switches_ON: ' + switches_ON.join(' '));
+					//console.log('switches_OFF: ' + switches_OFF.join(' '));
+					//console.log('switches_ON: ' + switches_ON.join(' '));
 				}
 				break;
 				default:
 				break;
 			}
 
-			console.log('turn off switches first: ' + switches_OFF.join(", "));
+			//console.log('turn off switches first: ' + switches_OFF.join(", "));
 			// alert('turn off first');
 			// Turn off switches first
 			for(var i=0; i < switches_OFF.length; i++) {
 				// Go through all targets of the switch 
 				var elements = wFORMS.behaviors['switch'].getElementsBySwitchName(switches_OFF[i]);
-				console.log('elements: ' + elements.join(', '));
+				//console.log('elements: ' + elements.join(', '));
 				for(var j=0;j<elements.length;j++) {
 
 					if(wFORMS.behaviors['switch'].isWithinSwitchScope(element, elements[j])) {
-						console.log('run: isWithinSwitchScope: ' + elements[j].id);
+						//console.log('run: isWithinSwitchScope: ' + elements[j].id);
 						// one of the triggers is still ON. no switch off
 						wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_onState, wFORMS.classNamePrefix_offState);
 						doSwitch = false;
@@ -252,7 +252,7 @@ if(wFORMS) {
 						// alert('turn on: ' + elements.join(', '));
 						wFORMS.behaviors['switch'].switchState(elements[j], wFORMS.classNamePrefix_offState, wFORMS.classNamePrefix_onState);
 						wFORMS.debug('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
-						console.log('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
+						//console.log('switch/run: [turn on ' + switches_ON[i] + '] ' + elements[j].id , 3);	
 					}
 				}
 			}
@@ -284,7 +284,7 @@ if(wFORMS) {
 					switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_onState.length+1));
 				}
 				else if(classNames[i].indexOf(wFORMS.classNamePrefix_offState) == 0) {
-					console.log('push switchNames: ' + classNames[i].substr(wFORMS.classNamePrefix_offState.length+1));
+					//console.log('push switchNames: ' + classNames[i].substr(wFORMS.classNamePrefix_offState.length+1));
 					switchNames.push(classNames[i].substr(wFORMS.classNamePrefix_offState.length+1));
 				}
 			}
@@ -293,17 +293,17 @@ if(wFORMS) {
 
 		// ------------------------------------------------------------------------------------------
 		switchState: function(element, oldStateClass, newStateClass) {
-			console.log('switchState: nodeType: ' + element.nodetype + "  elem: " + element.id);	
+			//console.log('switchState: nodeType: ' + element.nodetype + "  elem: " + element.id);	
 			if(!element || element.nodeType != 1) return;
 
-			console.log('switchState!!: nodeType: ' + element.className + "  elem: " + element.id);	
+			//console.log('switchState!!: nodeType: ' + element.className + "  elem: " + element.id);	
 			// debugger
 			if(element.className) {  		
-				console.log('switchState!!!: classname: ' + element.className + " , old: " + oldStateClass + ", new: " + newStateClass);	
+				//console.log('switchState!!!: classname: ' + element.className + " , old: " + oldStateClass + ", new: " + newStateClass);	
 				element.className = element.className.replace(oldStateClass, newStateClass);
 			}
 
-			console.log('switchState2: nodeType: ' + element.nodetype);	
+			//console.log('switchState2: nodeType: ' + element.nodetype);	
 			
 			// wFORMS.className_showIsOn						= "showIsOn";
 			// wFORMS.className_hideIsOn						= "hideIsOn";
@@ -311,30 +311,30 @@ if(wFORMS) {
 			// wFORMS.className_hideIsOff					= "hideIsOff";
 
 			if(wFORMS.helpers.hasClass(element, wFORMS.className_showIsOn)) { // set to showIsOff
-				console.log('showIsOn: set to showIsOff');
+				//console.log('showIsOn: set to showIsOff');
 				element.className = element.className.replace(wFORMS.className_showIsOn, wFORMS.className_switchIsOff);
 			} else if(wFORMS.helpers.hasClass(element, wFORMS.className_showIsOff)) {
-				console.log('showIsOff: set to showIsOn');
+				//console.log('showIsOff: set to showIsOn');
 				element.className = element.className.replace(wFORMS.className_showIsOff, wFORMS.className_showIsOn);
 			}	else if(wFORMS.helpers.hasClass(element, wFORMS.className_hideIsOn)) {
-				console.log('hideIsOn: set to hideIsOff');
+				//console.log('hideIsOn: set to hideIsOff');
 				element.className = element.className.replace(wFORMS.className_hideIsOn, wFORMS.className_hideIsOff);
 			}	else if(wFORMS.helpers.hasClass(element, wFORMS.className_hideIsOff)) {
-				console.log('hideIsOff: set to hideIsOn');
+				//console.log('hideIsOff: set to hideIsOn');
 				element.className = element.className.replace(wFORMS.className_hideIsOff, wFORMS.className_hideIsOn);
 			} 
 
-			console.log("element " + element.className + "  switchIsOn: " + wFORMS.className_switchIsOn + "  if? " + wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn));
-			console.log("element " + element.className + "  switchIsOff: " + wFORMS.className_switchIsOff + "  if? " + wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOff));
+			//console.log("element " + element.className + "  switchIsOn: " + wFORMS.className_switchIsOn + "  if? " + wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn));
+			//console.log("element " + element.className + "  switchIsOff: " + wFORMS.className_switchIsOff + "  if? " + wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOff));
 
 			// For  elements that don't have a native state variable (like checked, or selectedIndex)
-			console.log('switchIsOff: set to switchIsOn: ' + element.className + " hasClass " + wFORMS.className_switchIsOff);
+			//console.log('switchIsOff: set to switchIsOn: ' + element.className + " hasClass " + wFORMS.className_switchIsOff);
 
 			if(wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOff)) {
-				console.log('switchIsOff: set to switchIsOn: ' + element.className);
+				//console.log('switchIsOff: set to switchIsOn: ' + element.className);
 				element.className = element.className.replace(wFORMS.className_switchIsOff, wFORMS.className_switchIsOn);
 			} else if(wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) {
-				console.log('switchIsOn: set to switchIsOff: ' + element.className);
+				//console.log('switchIsOn: set to switchIsOff: ' + element.className);
 				element.className = element.className.replace(wFORMS.className_switchIsOn, wFORMS.className_switchIsOff);
 			}
 			// alert('switched state: ' + element.className);
@@ -348,7 +348,7 @@ if(wFORMS) {
 					var element = document.getElementById(wFORMS.switchTargets[switchName][i]);
 					if(element) {
 						elements.push(element);
-						console.log("getElementsBySwitchName: " + element.id);
+						//console.log("getElementsBySwitchName: " + element.id);
 					}
 				}
 			}
@@ -361,19 +361,19 @@ if(wFORMS) {
 		// ------------------------------------------------------------------------------------------
 		isTriggerOn: function(element, triggerName) {
 			if(!element) return false;
-			console.log('isTriggerOn: ' + triggerName);
+			//console.log('isTriggerOn: ' + triggerName);
 
 			if(element.tagName.toUpperCase()=='OPTION') {
-				console.log('isTriggerOn OPTION: ' + triggerName);
+				//console.log('isTriggerOn OPTION: ' + triggerName);
 				var selectElement = element.parentNode;
 				while(selectElement && selectElement.tagName.toUpperCase() != 'SELECT') {
 					var selectElement = selectElement.parentNode;
 				}
 				if(!selectElement) return false; // invalid markup					
-				console.log('isTriggerOn3: ' + triggerName);
+				//console.log('isTriggerOn3: ' + triggerName);
 
 				if(selectElement.selectedIndex==-1) return false; // nothing selected
-				console.log('isTriggerOn4: ' + triggerName);
+				//console.log('isTriggerOn4: ' + triggerName);
 
 				// TODO: handle multiple-select
 				if(wFORMS.helpers.hasClass(selectElement.options[selectElement.selectedIndex],
@@ -382,12 +382,12 @@ if(wFORMS) {
 				}
 			} else { // maybe should only return On when element is checked
 				if(element.checked ) {//|| wFORMS.helpers.hasClass(element, wFORMS.className_switchIsOn)) 
-					console.log('isTriggerOn5: ischecked ' + triggerName);
+					//console.log('isTriggerOn5: ischecked ' + triggerName);
 					return true;
 				}
 			}
 				
-			console.log('isTriggerOn (false): ' + triggerName);
+			//console.log('isTriggerOn (false): ' + triggerName);
 			return false;
 		},
 
@@ -425,7 +425,7 @@ if(wFORMS) {
 					return true;	  // trigger is not nested in a repeat/remove element, scope unaffected
 				}
 			} else {
-				console.log('isWithinSwitchScope: ' + trigger);
+				//console.log('isWithinSwitchScope: ' + trigger);
 				return true;
 			}
 		}
