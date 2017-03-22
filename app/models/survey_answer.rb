@@ -41,8 +41,8 @@ class SurveyAnswer < ActiveRecord::Base
     return Role.get(self.answered_by)
   end
 
-  def age_when_answered
-     ( (self.created_at.to_datetime - self.journal.birthdate).to_i / 365.25).floor if self.journal
+  def age_when_answered 
+     ( ((self.created_at || DateTime.now).to_datetime - self.journal.birthdate).to_i / 365.25).floor if self.journal
   end
    
   def age_now
