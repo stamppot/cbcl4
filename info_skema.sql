@@ -7,11 +7,11 @@ delete from question_cells where question_id >= 1000 and question_id <= 1009;
 
 INSERT INTO `questions` VALUES (1000,10,1,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2400,1000,'SectionTitle',1,1,NULL,NULL,'sectiontitle::::Kære forældre,<p/>Jeres barn er indkaldt til undersøgelse.\nVi vil bede jer om at udfylde oplysningsskemaet forud for jeres første besøg i ambulatoriet.',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2401,1000,'ListItem',1,2,NULL,NULL,'listitem::::Barnets navn:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2401,1000,'ListItem',1,2,NULL,NULL,'listitem::::Dato:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2402,1000,'ListItemComment',2,2,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2403,1000,'ListItem',1,3,NULL,NULL,'listitem::::Barnets fødselsdag:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2403,1000,'ListItem',1,3,NULL,NULL,'listitem::::Barnets navn:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2404,1000,'ListItemComment',2,3,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2405,1000,'ListItem',1,4,NULL,NULL,'listitem::::Dato:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2405,1000,'ListItem',1,4,NULL,NULL,'listitem::::Barnets fødselsdag:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2406,1000,'ListItemComment',2,4,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2407,1000,'Placeholder',1,5,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
