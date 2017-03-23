@@ -2,7 +2,7 @@ START TRANSACTION;
 
 -- INSERT INTO `surveys` VALUES (10,'Oplysningsskema','INFO','Oplysningsskema (Forældreskema)','1.5-16','parent','f23737',99,'info','INFO');
 
-delete from questions where id >= 1000 and id <= 1008;
+delete from questions where id >= 1000 and id <= 1009;
 delete from question_cells where question_id >= 1000 and question_id <= 1009;
 
 INSERT INTO `questions` VALUES (1000,10,1,0,2,NULL);
