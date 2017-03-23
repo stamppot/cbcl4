@@ -19,7 +19,7 @@ INSERT INTO `question_cells` VALUES (2408,1000,'SectionSubtitle',1,6,NULL,NULL,'
 INSERT INTO `question_cells` VALUES (2409,1000,'ListItem',1,7,NULL,NULL,'listitem::::Navn:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2410,1000,'ListItemComment',2,7,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2411,1000,'ListItem',1,8,NULL,NULL,'listitem::::Alder',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2412,1000,'ListItemComment',2,8,NULL,NULL,'itemunit::::år:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2412,1000,'ListItemComment',2,8,NULL,NULL,'itemunit::::år',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2413,1000,'ListItem',1,9,NULL,NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2414,1000,'ListItemComment',2,9,NULL,NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2415,1000,'ListItem',1,10,NULL,NULL,'listitem::::Postnummer og by:',NULL,0,NULL,NULL,NULL);
