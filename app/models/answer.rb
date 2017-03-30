@@ -156,7 +156,15 @@ class Answer < ActiveRecord::Base
 
       fields[:answer_id] = self.id
       # fields[:answertype] = valid_values[cell_id][:type]  # not necessarily needed
+
+
+      if valid_values[cell_id].nil? || valid_values[cell_id][:type].nil?
+        puts "valid_values cell_id: #{cell_id} : valid_values: #{valid_values.inspect}"
+      end
+
       answertype = valid_values[cell_id][:type]
+
+
 			fields[:cell_type] = valid_values[cell_id] && AnswerCell.answer_types[answertype] || "TextBox"
 			# 09-10-2010
 
