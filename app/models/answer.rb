@@ -160,6 +160,7 @@ class Answer < ActiveRecord::Base
 
       if valid_values[cell_id].nil? || valid_values[cell_id][:type].nil?
         puts "valid_values cell_id: #{cell_id} : valid_values: #{valid_values.inspect}"
+        logger.info "valid_values cell_id: #{cell_id} : valid_values: #{valid_values.inspect}"
       end
 
       answertype = valid_values[cell_id][:type]
