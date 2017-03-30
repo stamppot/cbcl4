@@ -250,7 +250,7 @@ class SurveyAnswer < ActiveRecord::Base
   def answered_percentage
     answer = self.max_answer
     answered = self.no_answered_problem_items
-    answered_percentage = answer && (answered*100) / answer.question.ratings_count || 0
+    answered_percentage = answer && (answered*100) / [answer.question.ratings_count, 1].max || 0  # prevent zero division
   end
 
   def add_missing_cells
@@ -418,6 +418,9 @@ class SurveyAnswer < ActiveRecord::Base
             new_cells[cell] = a_cell  # insert
           end
         end
+      end
+      if the_valid_values[key].nil?
+        puts "INVALID Valid_values: key: #{key}  : \n #{the_valid_values.inspect}"
       end
       insert_cells += an_answer.create_cells_optimized(new_cells, the_valid_values[key])
       new_cells.clear
