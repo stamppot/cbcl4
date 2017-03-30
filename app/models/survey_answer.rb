@@ -90,9 +90,9 @@ class SurveyAnswer < ActiveRecord::Base
 
     query = query.with_followup(options[:follow_up]) if options[:follow_up]
 
-    puts "query: #{query.to_sql.inspect}"
-    puts "options.: #{options.inspect}"
-    puts "options[:team]: #{options[:team].inspect}"
+    # puts "query: #{query.to_sql.inspect}"
+    # puts "options.: #{options.inspect}"
+    # puts "options[:team]: #{options[:team].inspect}"
     # query = query.in_center(options[:center]) if !options[:center].blank?
     # query = query.for_team(options[:team]) if !options[:team].blank?
     query
