@@ -8,6 +8,9 @@ class StartController < ApplicationController
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
+    if prev = @journal_entry.prev_survey
+      @journal_entry = prev unless prev.answered?
+    end
     # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
     @name = @journal_entry.journal.title
     @center = @journal_entry.journal.center
@@ -82,6 +85,7 @@ class StartController < ApplicationController
     time = 9.hours.from_now.to_s(:short)
     logger.info "LOGIN_USER next #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
     # @token = session[:token]
+    @continue_from_infosurvey = @journal_entry.prev_survey.is_infosurvey?
     @api_key = session[:api_key]
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }

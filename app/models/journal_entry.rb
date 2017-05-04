@@ -52,7 +52,14 @@ class JournalEntry < ActiveRecord::Base
   def next_survey
     self.next && (je = JournalEntry.find_by_id(self.next)) && je && je.survey.title || ""
   end
-  
+
+  def prev_survey
+    JournalEntry.where(:next => self.id).first
+  end  
+
+  def is_infosurvey?
+    self.survey.prefix == "info" && self.survey.bundle == "INFO"
+  end
   # def follow_up_validation
   #   is_invalid = journal.has_follow_up?(self)
   #   errors.add(:follow_up, "Journalen har allerede et skema med denne opfølgning: #{get_follow_up}") if is_invalid

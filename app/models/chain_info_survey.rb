@@ -2,29 +2,37 @@ class ChainInfoSurvey
 
 
 	def create_chain?(journal, survey, follow_up)
-
-		return if !journal.center == 1 # BPUH
-		return if !follow_up == 0
-
+		puts "create_chain?  follow_up: #{follow_up},  journal: #{journal.inspect}, survey: #{survey.inspect}  center: #{journal.center_id}"
+		return false unless journal.center_id == 1 # BPUH
+		puts "center is bpuh"
+		return false unless follow_up.to_i == 0
+		puts "follow_up is 0"
 		exists = journal.surveys.any? { |s| s.id == 10 }
-		return if exists
-
-		return if !survey.surveytype == "parent"
-
+		puts "exists: #{exists}"
+		return false if exists
+		puts "surveys doesn't exist already"
+		return false unless survey.surveytype == "parent"
+		puts "surveytype is parent"
 		return true
 	end
 
-	def create_chain(journal, entries, follow_up)
+	def create_chain(journal, surveys, follow_up)
+		puts "create_chain: journal: #{journal.inspect}, surveys: #{surveys.inspect}, follow_up: #{follow_up}"
+		survey = surveys.select {|s| s.surveytype == "parent"}.first
 
-		entry = entries.select {|s| s.survey.surveytype == "parent"}.first
-		if entry && create_chain?(journal, entry.survey, follow_up)
-			surveys = [] << Survey.find(10)
-			entries = journal.add_journal_entries(surveys, couple, true)
+		puts "found parent survey: #{survey.inspect}"
+		is_valid = survey && create_chain?(journal, survey, follow_up)
+		puts "do create_chain #{is_valid.inspect}"
 
-			couple = {surveys.first.id => entry.survey.id}
-
+		if is_valid
+			info_surveys = [] << Survey.find(10)
+			couple = {info_surveys.first.id => survey.id}
+			puts "couple: #{couple.inspect}"
+			entries = journal.add_journal_entries(info_surveys, follow_up, true)
+			puts "entries to couple: #{entries.inspect}"
 			JournalEntryService.new.connect(journal, couple, true)
-			logger.info "Created chain: #{couple}, journal: #{journal.inspect}"
+			# logger.info "Created chain: #{couple}, journal: #{journal.inspect}"
+			puts "Created chain: #{couple}, journal: #{journal.inspect}"
 		end
 	end
 end
