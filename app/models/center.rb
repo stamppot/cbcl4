@@ -98,7 +98,8 @@ class Center < Group
     subscribed_surveys.select do |survey|
       # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
       age_flex = (survey.age =~ /16|17|18/) && 4 || 1
-      survey.prefix != "info" && (survey.age_group === age or survey.age_group === (age+2) or survey.age_group === (age-age_flex))
+      # survey.prefix != "info" && 
+      (survey.age_group === age or survey.age_group === (age+2) or survey.age_group === (age-age_flex))
     end
   end
     

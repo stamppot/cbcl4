@@ -242,7 +242,7 @@ INSERT INTO `question_cells` VALUES (2632,1008,'Placeholder',1,17,NULL,NULL,'pla
 INSERT INTO `question_cells` VALUES (2633,1008,'ListItemComment',2,17,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2634,1008,'ListItemComment',3,17,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2635,1008,'ListItem',1,18,NULL,NULL,'listitem::::Blev barnet passet udenfor hjemmet for skolestart?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2635,1008,'ListItem',1,18,NULL,NULL,'listitem::::Blev barnet passet udenfor hjemmet før skolestart?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2636,1008,'Rating',2,18,NULL,NULL,'radio::1::Nej###radio::0::Ja','--- \n:switch: \n- l\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2637,1008,'ListItemComment',1,19,NULL,NULL,'listitem::::Vuggestue (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2607,8005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
