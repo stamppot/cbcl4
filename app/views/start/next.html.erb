@@ -1,12 +1,19 @@
 <p>
 <span style="font-size: 14pt; line-height: 150%;">
 <% if @continue_from_infosurvey %>
-Du har nu besvaret oplysningsskemaet. 
-Vi beder dig nu gå videre til 2 .del, som omhandler dit barns adfærd (CBCL-spørgeskema)
+Tak fordi du besvarede oplysningsskemaet.
+Du skal nu fortsætte til det andet spørgeskema – spørgeskema om barnets adfærd (forældreskema).
+</span>
+	<div style=' width: 780px; padding: 20px 0px 20px 20px; font-size: 16pt; background-color: #<%= @survey.color %>;' >
+		<span class="survey_title"><%= link_button t('survey.start'), survey_url(@survey), 'survey_start', :format => 'html' %></span>
+		<span style="font-size: 14pt;"><%= @survey.title || @survey.description %></span>
+		<span>&nbsp;&nbsp;&nbsp;&nbsp;
+		<% url = "/survey_#{@survey.id}.pdf" %>
+</span>
+	</div>
 <% else %>
 Du har nu besvaret 1. del af spørgeskemaet om dit barns adfærd (CBCL-spørgeskema). 
 Vi beder dig nu gå videre til 2 .del, som omhandler dit barns følelsesmæssige og sociale kompetencer (ASQ:SE-spørgeskema)
-<% end %>
 </span>
 	<div style=' width: 780px; padding: 20px 0px 20px 20px; font-size: 16pt; background-color: #<%= @survey.color %>;' >
 		<span class="survey_title"><%= link_button t('survey.start'), survey_url(@survey), 'survey_start', :format => 'html' %></span>
@@ -15,5 +22,6 @@ Vi beder dig nu gå videre til 2 .del, som omhandler dit barns følelsesmæssige
 		<% url = "/survey_#{@survey.id}.pdf" %>
 		<%# link_to image_tag("printer-42x.png", :align => "center", :border=>0, :alt => 'Udskriv spørgeskema', :class => "new_window", :title => 'Udskriv spørgeskema' ),
 						url, :onclick => "window.open(\"#{url}\"); return false;", :title => 'Udskriv spørgeskema' %></span>
-	</div>
+	</div><% end %>
+
 </p>
