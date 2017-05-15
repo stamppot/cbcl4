@@ -148,6 +148,9 @@ class Answer < ActiveRecord::Base
     new_cells = []
 		types = AnswerCell.answer_types
 
+    if valid_values.nil?
+      logger.info "ERROR: create_cells_optimized. valid_values is nil. cells: #{cells.inspect}"
+    end
     cells.each do |cell_id, fields|  # hash is {item=>x, value=>y, qtype=>z, col=>a, row=>b}
       # next if valid_values[cell_id].nil?
       # logger.info "cell_id: #{cell_id}"
