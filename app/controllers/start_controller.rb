@@ -71,7 +71,7 @@ class StartController < ApplicationController
     raise ActiveRecord::RecordNotFound if user.nil?    # Check whether a user with these credentials could be found.
     write_user_to_session(user) 
 
-    logger.info "Next: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
+    logger.info "Next: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect} params: #{params.inspect}"
     @name = @journal_entry.journal.title
     @center = @journal_entry.journal.center
     session[:journal_entry] = @journal_entry.id
