@@ -106,7 +106,7 @@ class SurveyAnswer < ActiveRecord::Base
     survey = Survey.and_questions.find(journal_entry.survey_id)
     survey_answer = journal_entry.make_survey_answer
     ok = survey_answer.save_final(params)
-    journal_entry.answered! 
+    # journal_entry.answered! 
   end
 
   def save_draft(params)
@@ -443,6 +443,17 @@ class SurveyAnswer < ActiveRecord::Base
     self.answers.map { |answer| answer.setup_draft_values }.flatten
   end
   
+  def answer_values
+    self.answers.inject({}) do |h,a|
+      h["Q#{a.number}"] ||= {}
+      a.answer_cells.each do |a_cell|
+        h["Q#{a.number}"][a_cell.row] ||= {}
+        h["Q#{a.number}"][a_cell.row][a_cell.col] = (a_cell.value || URI.unescape(URI.decode(a_cell.value_text)))
+      end
+      h
+    end
+  end
+
   def variable_values
     variables = self.survey.variables.map {|v| v.var.to_sym}
     values = self.cell_values

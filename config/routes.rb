@@ -78,6 +78,7 @@ Cbcl4::Application.routes.draw do
   # resources :logins
   resources :answer_charts, :only => [:show]
   resources :answer_reports
+  resources :info_answer_reports
   resources :centers
   resources :code_books
   resources :export_files

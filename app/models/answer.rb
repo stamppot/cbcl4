@@ -157,6 +157,17 @@ class Answer < ActiveRecord::Base
       fields[:answer_id] = self.id
       # fields[:answertype] = valid_values[cell_id][:type]  # not necessarily needed
 
+      if !valid_values.key?(cell_id)
+        logger.info "create_cells_optimized error: missing key cell_id #{cell_id}, valid_values: #{valid_values.inspect}"
+        valid_values[cell_id] = {:type => "TextBoxFix"}
+      elsif !valid_values[cell_id].key?(:type)
+        logger.info "create_cells_optimized error: missing key :type cell_id #{cell_id}, #{valid_values[cell_id].inspect} valid_values: #{valid_values.inspect}"
+        if valid_values[cell_id].is_a?(Hash)
+          valid_values[cell_id][:type] = "TextBoxFix2"
+        else
+          valid_values[cell_id] = {:type => "TextBoxFix3"}
+        end
+      end
       answertype = valid_values[cell_id][:type]
 			fields[:cell_type] = valid_values[cell_id] && AnswerCell.answer_types[answertype] || "TextBox"
 			# 09-10-2010
