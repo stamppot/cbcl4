@@ -411,6 +411,10 @@ class SurveyAnswer < ActiveRecord::Base
           q = "Q#{$1}"
           a_cell = {:answer_id => an_answer.id, :row => $2.to_i, :col => $3.to_i, :value => value, :number => q_number}
           if answer_cell = an_answer.exists?(a_cell[:row], a_cell[:col]) # update
+            if the_valid_values[q].nil?
+              logger.info "valid_values[q] #{q.inspect} not found. cell: #{cell.inspect}"
+              puts "valid_values[q] #{q.inspect} not found. cell: #{cell.inspect}"
+            end
             changed_val = answer_cell.change_value(value, the_valid_values[q][cell])
             # puts "answer_cell exists: @#{answer_cell.inspect}  a_cell: #{a_cell.inspect} changed_val: #{changed_val.inspect}"
             update_cells << [answer_cell.id,  answer_cell.value, answer_cell.value_text] if changed_val
