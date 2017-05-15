@@ -31,12 +31,12 @@ class Survey < ActiveRecord::Base
   
   def valid_values
     # puts "valid values survey: #{self.id}"
-    Rails.cache.fetch("survey/valid_values_#{id}") do
+    # Rails.cache.fetch("survey/valid_values_#{id}") do
       self.questions.inject({}) do |h, question|
         h["Q#{question.number}"] = question.valid_values
         h
       end
-    end
+    # end
   end
   
   def question_with_problem_items
