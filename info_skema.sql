@@ -313,7 +313,8 @@ INSERT INTO `question_cells` VALUES (2686,1009,'ListItemComment',3,9,NULL,NULL,'
 
 INSERT INTO `question_cells` VALUES (2700,1009,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2701,1009,'SectionSubtitle',1,11,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2702,1009,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig pr. telefon??',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::1::Ja###radio::0::Nej',NULL,1, NULL,NULL,NULL);
-
+INSERT INTO `question_cells` VALUES (2702,1009,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig pr. telefon?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2704,1009,'SelectOption',1,13,NULL,NULL,'option::mor::Mors email###option::far::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,NULL,NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 COMMIT;
