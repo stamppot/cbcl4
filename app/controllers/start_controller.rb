@@ -100,7 +100,10 @@ class StartController < ApplicationController
 
   def finish
     @journal_entry = JournalEntry.find_by_id_and_user_id(params[:id], current_user.id)
-    redirect_to survey_next_path(@journal_entry.next) and return if @journal_entry.next
+    if @journal_entry.next
+      session[:journal_entry] = @journal_entry.id
+      redirect_to survey_next_path(@journal_entry.next) and return
+    end
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
     @center = @journal_entry.journal.center

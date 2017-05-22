@@ -1364,13 +1364,17 @@ class ListItemComment < QuestionCell
   	end
   	
   	def answer_span(last = false)
-  		span = question.columns == 3 && "span-4" || "span-11"
+  		current_row_columns = question.question_cells.where(:row => self.row).count
+  		span = question.columns == 3  && "span-4" || "span-12"
+  		if question.columns == 3 && current_row_columns < 3
+  			span = "span-8"
+  		end
   		span << " last" if last
   		span
   	end
 
   	def answer_inner_span
-  		question.columns == 3 && "span-6" || "span-9"
+  		question.columns == 3 && "span-4" || "span-9"
   	end
 
 	def to_answer(options = {})
@@ -1399,10 +1403,11 @@ class ListItemComment < QuestionCell
 			when "textbox" then 
 				tcols = self.value && self.value.length > 200 && 120 || 40
 				trows = self.value && self.value.length / 120
-				box_span = question.columns == 3 && "span-4" || "span-11"
-				
+				current_row_columns = question.question_cells.where(:row => self.row).count
+				box_span = (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
+
 				if (listitem_without_predefined_text)
-					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment'>#{self.value}</div>"
+					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment'>#{CGI.unescape(self.value)}</div>"
 					newform << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
 					newform << span_item(answer_val, "itemtextbox #{box_span} #{target}".rstrip) unless answer_val.blank?
 				else 
@@ -1412,7 +1417,7 @@ class ListItemComment < QuestionCell
         		part = []		
 				if (listitem_without_predefined_text)
 					# part << span_item(answer_item_set && self.col > 2 ? "" : answer_item, "span-1")
-					part << span_item(self.value, "listitemfield #{span}")
+					part << span_item(CGI.unescape(self.value), "listitemfield #{span}")
 				else 
 					part << span_item(answer_item, "span-1") if !(answer_item_set || self.col > 2)
 					part << span_item(item.text, "listitem #{target} #{answer_inner_span}".strip)

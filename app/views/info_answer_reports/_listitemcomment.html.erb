@@ -1,26 +1,25 @@
 <%
-	celltype = cell.class.to_s.downcase
-	puts "cell: #{cell.inspect}"
-	number = cell.question.number
-	row = cell.row
-	col = cell.col
+	celltype = @cell.class.to_s.downcase
+	number = @cell.question.number
+	row = @cell.row
+	col = @cell.col
 %>
-<!-- <div id="td_q<%# number%>_<%# row %>_<%# col %>" class="<%# celltype %> span-6"><span class="listitemfield span-6 "><div id="q1_2_2" name="Q1[q1_2_2]" class="textfield" type="text"><%# CGI.unescape(@cell.value) %></div></span></div> -->
+<!-- <div id="td_q<%= number%>_<%= row %>_<%= col %>" class="<%= celltype %> span-6"><span class="listitemfield span-6 "><div id="q1_2_2" name="Q1[q1_2_2]" class="textfield" type="text"><%= CGI.unescape(@cell.value) %></div></span></div> -->
 
 <%
 	
-  	def answer_span(question, last = false)
+  	def answer_span(last = false)
   		span = question.columns == 3 && "span-4" || "span-11"
   		span << " last" if last
   		span
   	end
 
-  	def answer_inner_span(question)
+  	def answer_inner_span
   		question.columns == 3 && "span-6" || "span-9"
   	end
 
 	def to_answer(cell, options = {})
-		options[:span] = answer_span(cell.question)
+		options[:span] = answer_span
 		disabled   = options[:disabled] ? "disabled" : nil
 		answer     = options[:answers] ? true : false
 		show_all   = options[:show_all].nil? || options[:show_all] # show_all = options[:show_all].nil? ? true : false
@@ -28,15 +27,15 @@
 		edit       = options[:edit] || false
 		no         = options[:number].to_s || cell.question.number.to_s 
 		switch_off = options[:switch_off]
-    	span 	   = cell.span && "span-#{cell.span}" || options[:outer_span] || answer_span(cell.question)
+    	span 	   = cell.span && "span-#{cell.span}" || options[:outer_span] || answer_span
 
-		c_id     = cell.cell_id(no)
+		c_id     = cell_id(no)
 		newform = []
 		question_no = "Q" + no
 		answer_item = cell.svar_item
 		answer_item_set = false
 		# answer_item_set = true if col > 1
-		target = "" #(fast or switch_off) ? "" : switch_target(options)
+		target = (fast or switch_off) ? "" : switch_target(options)
     
 		cell.question_items.each do |item|
 		  listitem_without_predefined_text = item.text.nil? || item.text.empty?
@@ -45,7 +44,7 @@
 			when "textbox" then 
 				tcols = cell.value && cell.value.length > 200 && 120 || 40
 				trows = cell.value && cell.value.length / 120
-				box_span = cell.question.columns == 3 && "span-4" || "span-11"
+				box_span = question.columns == 3 && "span-4" || "span-11"
 				
 				if (listitem_without_predefined_text)
 					answer_val = cell.value.blank? ? "" : "<div id='#{c_id}' class='comment'>#{cell.value}</div>"
@@ -61,11 +60,11 @@
 					part << span_item(cell.value, "listitemfield #{span}")
 				else 
 					part << span_item(answer_item, "span-1") if !(answer_item_set || cell.col > 2)
-					part << span_item(item.text, "listitem #{target} #{answer_inner_span(cell.question)}".strip)
+					part << span_item(item.text, "listitem #{target} #{answer_inner_span}".strip)
 				end
 				answer_item_set = true;
 				answer_item_set = true if cell.col == 1
-				newform << span_item(part.join, answer_span(cell.question))
+				newform << span_item(part.join, answer_span)
 			end
 		end
 		newform.join
@@ -73,7 +72,7 @@
 %>
 
 
-<%= to_answer(cell, cell.options).html_safe %>
+<%= to_answer(cell, cell.options)
 <% if @cell %>
 		<%
 		newform = []

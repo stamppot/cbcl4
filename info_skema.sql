@@ -104,7 +104,7 @@ INSERT INTO `question_cells` VALUES (2487,1005,'Rating',2,6,NULL,NULL,'radio::0:
 INSERT INTO `question_cells` VALUES (2488,1005,'ListItemComment',3,6,NULL,NULL,'listitem::::Hvis ja, hvilket?###textbox::::','--- \n:targets: \n- :target: b\n  :state: offstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2489,1005,'ListItem',1,7,NULL,NULL,'listitem::::Er der nogen i barnets familie, som har begået selvmord?',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2490,1005,'Rating',2,7,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ab\n',0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2491,1004,'ListItemComment',3,7,NULL,NULL,'listitem::::Hvis ja, uddyb###textbox::::','--- \n:targets: \n- :target: ab\n  :state: offstate\n',0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2491,1005,'ListItemComment',3,7,NULL,NULL,'listitem::::Hvis ja, uddyb###textbox::::','--- \n:targets: \n- :target: ab\n  :state: offstate\n',0,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2469,1002,'TextBox',2,6,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 
 
@@ -315,6 +315,6 @@ INSERT INTO `question_cells` VALUES (2700,1009,'Placeholder',1,10,NULL,NULL,'pla
 INSERT INTO `question_cells` VALUES (2701,1009,'SectionSubtitle',1,11,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2702,1009,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig pr. telefon?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2704,1009,'SelectOption',1,13,NULL,NULL,'option::mor::Mors email###option::far::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,NULL,NULL,'radio::mor::Mors email###radio::far::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,NULL,NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 COMMIT;

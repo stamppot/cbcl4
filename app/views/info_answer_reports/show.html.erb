@@ -10,7 +10,7 @@
 <hr>
 
 <% if @answer_values %>
-
+	<%# "infoskema" %>
 	<h3 class="survey_title"><%= @info_survey.get_title %> besvaret <span><%# answer_date.strftime("%d/%m/%Y") %></span></h3>
 	<% @info_survey.questions.each do |question| %>
 		<%= render :partial => "question", :locals => {:question => question, :answers => @answer_values["Q#{question.number}"]} %>
