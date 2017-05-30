@@ -1417,7 +1417,7 @@ class ListItemComment < QuestionCell
         		part = []		
 				if (listitem_without_predefined_text)
 					# part << span_item(answer_item_set && self.col > 2 ? "" : answer_item, "span-1")
-					part << span_item(CGI.unescape(self.value), "listitemfield #{span}")
+					part << span_item(CGI.unescape(self.value.to_s), "listitemfield #{span}")
 				else 
 					part << span_item(answer_item, "span-1") if !(answer_item_set || self.col > 2)
 					part << span_item(item.text, "listitem #{target} #{answer_inner_span}".strip)
