@@ -74,7 +74,7 @@ INSERT INTO `question_cells` VALUES (2457,1002,'ListItemComment',1,4,NULL,NULL,'
 INSERT INTO `questions` VALUES (1003,10,3,0,3,NULL);
 INSERT INTO `question_cells` VALUES (2690,1003,'SectionSubtitle',1,1,NULL,NULL,'sectionsubtitle::::Vedr. henvisningen:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2691,1003,'Questiontext',1,2,NULL,NULL,'questiontext::::På hvis initiativ er henvisningen sket?',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2692,1003,'Rating',2,2,NULL,NULL,'radio::1::Forældre###radio::2::Institution/skole###radio::3::Egen læge###radio::4::Kommune/PPR###radio::5::Andre',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2692,1003,'Rating',2,2,NULL,NULL,'radio::1::Forældre###radio::2::Institution/skole###radio::3::Egen læge###radio::4::Kommune/PPR###radio::5::Andre',NULL,1,15,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2693,1003,'ListItemComment',3,2,NULL,NULL,'listitem::::Hvis andre, hvem?###textbox::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2694,1003,'ListItemComment',1,3,NULL,NULL,'listitem::::Kort beskrivelse af det forløb der har medført henvisning til børnepsykiatrisk undersøgelse###textbox::::',NULL,0,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2695,1003,'TextBox',2,3,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
@@ -320,10 +320,10 @@ INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0
 INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,NULL,NULL,'radio::mor::Mors email###radio::far::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,NULL,NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 
-DELETE from `choices` where `id` = 14; 
-INSERT INTO `choices` (`id`, `name`, `full`, `options`)
-VALUES
-	(14, 'email_mor_far', 'Mors email;;Fars email', 'Mors email;;Fars email');
+DELETE from `choices` where `id` IN (14, 15); 
+INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (14, 'email_mor_far', 'Mors email;;Fars email', 'Mors email;;Fars email');
+INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (15, 'henv_5', 'Forældre;;Institution/skole;;Egen læge;;Kommune/PPR;;Andre', 'Forældre;;Institution/skole;;Egen læge;;Kommune/PPR;;Andre');
+
 
 COMMIT;
 SET FOREIGN_KEY_CHECKS=1;
