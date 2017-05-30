@@ -42,7 +42,7 @@
 					celltype = cell.class.to_s.downcase
 					# output << render(:partial => "info_answer_reports/#{celltype}", :locals => {:cell => cell })
 
-					html = cell.to_answer((@options || {:show_all => true, :disable => true}).merge(:number => no, :last => cell.col == no_cols))
+					html = cell.to_answer((@options || {:show_all => true, :disable => true, :value => cell.value}).merge(:number => no, :last => cell.col == no_cols))
 					output << html if html
 				end
 				output << "</div></td></tr>\n"
