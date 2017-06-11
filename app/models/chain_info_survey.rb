@@ -3,7 +3,7 @@ class ChainInfoSurvey
 
 	def create_chain?(journal, survey, follow_up)
 		puts "create_chain?  follow_up: #{follow_up},  journal: #{journal.inspect}, survey: #{survey.inspect}  center: #{journal.center_id}"
-		return false unless journal.center_id == 1 # BPUH
+		return false unless journal.center_id == 1 || journal.center_id == 9754 || journal.center_id == 9753 || journal.center_id == 9755 || journal.center_id == 8888 # BPUH, Testcenter
 		puts "center is bpuh"
 		return false unless follow_up.to_i == 0
 		puts "follow_up is 0"
