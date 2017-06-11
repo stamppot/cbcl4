@@ -73,11 +73,11 @@ INSERT INTO `question_cells` VALUES (2457,1002,'ListItemComment',1,4,NULL,NULL,'
 
 INSERT INTO `questions` VALUES (1003,10,3,0,3,NULL);
 INSERT INTO `question_cells` VALUES (2690,1003,'SectionSubtitle',1,1,NULL,NULL,'sectionsubtitle::::Vedr. henvisningen:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2691,1003,'Questiontext',1,2,NULL,NULL,'questiontext::::På hvis initiativ er henvisningen sket?',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2691,1003,'ListItem',1,2,NULL,NULL,'listitem::::På hvis initiativ er henvisningen sket?',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2692,1003,'Rating',2,2,NULL,NULL,'radio::1::Forældre###radio::2::Institution/skole###radio::3::Egen læge###radio::4::Kommune/PPR###radio::5::Andre',NULL,1,15,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2693,1003,'ListItemComment',3,2,NULL,NULL,'listitem::::Hvis andre, hvem?###textbox::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2694,1003,'ListItemComment',1,3,NULL,NULL,'listitem::::Kort beskrivelse af det forløb der har medført henvisning til børnepsykiatrisk undersøgelse###textbox::::',NULL,0,NULL,NULL,NULL);
--- INSERT INTO `question_cells` VALUES (2695,1003,'TextBox',2,3,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2694,1003,'ListItem',1,3,NULL,NULL,'listitem::::Kort beskrivelse af det forløb der har medført henvisning til børnepsykiatrisk undersøgelse',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2695,1003,'TextBox',2,3,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1004,10,4,0,2,NULL);
@@ -166,34 +166,36 @@ INSERT INTO `question_cells` VALUES (2547,1007,'Rating',2,3,NULL,NULL,'radio::0:
 
 INSERT INTO `question_cells` VALUES (2548,1007,'ListItem',1,4,NULL,NULL,'listitem::::Blev barnet ammet?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2549,1007,'Rating',2,4,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- k\n',1,11,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2550,1007,'ListItemComment',3,4,NULL,NULL,'listitem::::Udelukkende amning (ca. antal uger)###listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2551,1007,'Placeholder',1,5,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2552,1007,'Placeholder',2,5,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2553,1007,'ListItemComment',4,4,NULL,NULL,'listitem::::Delvis amning (ca. antal uger)###listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2550,1007,'Placeholder',1,5,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2551,1007,'ListItemComment',1,5,NULL,NULL,'listitem::::Udelukkende amning (ca. antal uger)###listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2552,1007,'Placeholder',1,6,NULL,NULL,'placeholder::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2553,1007,'ListItemComment',1,6,NULL,NULL,'listitem::::Delvis amning (ca. antal uger)###listitem::::','--- \n:targets: \n- :target: k\n  :state: offstate\n',1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2561,1007,'ListItemComment',1,9,NULL,NULL,'listitem::::Hvordan var kontakten med barnet i spædbarnsperioden (øjenkontakt, smil, pludren, kunne barnet trøstes, brød det sig om kropskontakt m.v.)###textbox::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2562,1007,'Questiontext',1,10,NULL,NULL,'questiontext::::Hvornår kunne barnet:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2563,1007,'Placeholder',1,11,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2564,1007,'ListItem',2,11,NULL,NULL,'listitem::::Sidde',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2565,1007,'ListItemComment',3,11,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2566,1007,'Placeholder',1,12,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2567,1007,'ListItem',2,12,NULL,NULL,'listitem::::Kravle',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2568,1007,'ListItemComment',3,12,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2569,1007,'Placeholder',1,13,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2570,1007,'ListItem',2,13,NULL,NULL,'listitem::::Gå',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2571,1007,'ListItemComment',3,13,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2572,1007,'Placeholder',1,14,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2573,1007,'ListItem',2,14,NULL,NULL,'listitem::::Sige enkelte ord',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2574,1007,'ListItemComment',3,14,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2561,1007,'ListItem',1,9,NULL,NULL,'listitem::::Hvordan var kontakten med barnet i spædbarnsperioden (øjenkontakt, smil, pludren, kunne barnet trøstes, brød det sig om kropskontakt m.v.)',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2562,1007,'TextBox',2,9,NULL,NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2575,1007,'ListItem',1,15,NULL,NULL,'listitem::::Hvornår var barnet renligt?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2576,1007,'ListItemComment',2,15,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2563,1007,'Questiontext',1,10,NULL,NULL,'questiontext::::Hvornår kunne barnet:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2564,1007,'Placeholder',1,11,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2565,1007,'ListItem',2,11,NULL,NULL,'listitem::::Sidde',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2566,1007,'ListItemComment',3,11,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2567,1007,'Placeholder',1,12,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2568,1007,'ListItem',2,12,NULL,NULL,'listitem::::Kravle',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2569,1007,'ListItemComment',3,12,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2570,1007,'Placeholder',1,13,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2571,1007,'ListItem',2,13,NULL,NULL,'listitem::::Gå',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2572,1007,'ListItemComment',3,13,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2573,1007,'Placeholder',1,14,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2574,1007,'ListItem',2,14,NULL,NULL,'listitem::::Sige enkelte ord',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2575,1007,'ListItemComment',3,14,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2577,1007,'ListItem',1,24,NULL,NULL,'listitem::::Er barnet vådligger?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2578,1007,'Rating',2,24,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,1,11,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2576,1007,'ListItem',1,15,NULL,NULL,'listitem::::Hvornår var barnet renligt?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2577,1007,'ListItemComment',2,15,NULL,NULL,'itemunit::::mdr',NULL,1,NULL,NULL,NULL);
 
-INSERT INTO `question_cells` VALUES (2579,1007,'ListItem',1,25,NULL,NULL,'listitem::::Er der "uheld" om dagen?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2580,1007,'Rating',2,25,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,1,11,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2578,1007,'ListItem',1,24,NULL,NULL,'listitem::::Er barnet vådligger?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2579,1007,'Rating',2,24,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,1,11,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2580,1007,'ListItem',1,25,NULL,NULL,'listitem::::Er der "uheld" om dagen?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2581,1007,'Rating',2,25,NULL,NULL,'radio::0::Nej###radio::1::Ja',NULL,1,11,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1008,10,8,0,3,NULL);
@@ -202,20 +204,20 @@ INSERT INTO `question_cells` VALUES (2591,1008,'Questiontext',1,2,NULL,NULL,'que
 INSERT INTO `question_cells` VALUES (2592,1008,'ListItem',2,2,NULL,NULL,'listitem::::Fornavn:',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2593,1008,'ListItem',3,2,NULL,NULL,'listitem::::Familieforhold til barnet:\n(ex: mor, far søskende, bonusmor, bonusfar, bonussøskende)',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2594,1008,'Placeholder',1,3,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2595,1008,'ListItemComment',2,3,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2596,1008,'ListItemComment',3,3,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2595,1008,'ListItemComment',2,3,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2596,1008,'ListItemComment',3,3,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2597,1008,'Placeholder',1,4,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2598,1008,'ListItemComment',2,4,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2599,1008,'ListItemComment',3,4,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2598,1008,'ListItemComment',2,4,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2599,1008,'ListItemComment',3,4,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2600,1008,'Placeholder',1,5,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2601,1008,'ListItemComment',2,5,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2602,1008,'ListItemComment',3,5,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2601,1008,'ListItemComment',2,5,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2602,1008,'ListItemComment',3,5,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2603,1008,'Placeholder',1,6,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2604,1008,'ListItemComment',2,6,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2605,1008,'ListItemComment',3,6,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2604,1008,'ListItemComment',2,6,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2605,1008,'ListItemComment',3,6,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2606,1008,'Placeholder',1,7,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2607,1008,'ListItemComment',2,7,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2608,1008,'ListItemComment',3,7,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2607,1008,'ListItemComment',2,7,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2608,1008,'ListItemComment',3,7,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2609,1008,'Placeholder',1,8,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2610,1008,'Information',1,9,NULL,NULL,'information::::Ved skilsmisse:',NULL,0,NULL,NULL,NULL);
@@ -223,26 +225,26 @@ INSERT INTO `question_cells` VALUES (2611,1008,'Questiontext',1,10,NULL,NULL,'qu
 INSERT INTO `question_cells` VALUES (2612,1008,'ListItem',2,10,NULL,NULL,'listitem::::Fornavn:',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2613,1008,'ListItem',3,10,NULL,NULL,'listitem::::Familieforhold til barnet:\n(ex: mor, far søskende, bonusmor, bonusfar, bonussøskende)',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2614,1008,'Placeholder',1,11,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2615,1008,'ListItemComment',2,11,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2616,1008,'ListItemComment',3,11,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2615,1008,'ListItemComment',2,11,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2616,1008,'ListItemComment',3,11,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2617,1008,'Placeholder',1,12,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2618,1008,'ListItemComment',2,12,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2619,1008,'ListItemComment',3,12,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2618,1008,'ListItemComment',2,12,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2619,1008,'ListItemComment',3,12,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2620,1008,'Placeholder',1,13,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2621,1008,'ListItemComment',2,13,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2622,1008,'ListItemComment',3,13,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2621,1008,'ListItemComment',2,13,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2622,1008,'ListItemComment',3,13,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2623,1008,'Placeholder',1,14,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2624,1008,'ListItemComment',2,14,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2625,1008,'ListItemComment',3,14,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2624,1008,'ListItemComment',2,14,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2625,1008,'ListItemComment',3,14,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2626,1008,'Placeholder',1,15,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2627,1008,'ListItemComment',2,15,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2628,1008,'ListItemComment',3,15,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2627,1008,'ListItemComment',2,15,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2628,1008,'ListItemComment',3,15,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2629,1008,'Placeholder',1,16,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2630,1008,'ListItemComment',2,16,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2631,1008,'ListItemComment',3,16,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2630,1008,'ListItemComment',2,16,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2631,1008,'ListItemComment',3,16,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2632,1008,'Placeholder',1,17,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2633,1008,'ListItemComment',2,17,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2634,1008,'ListItemComment',3,17,NULL,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2633,1008,'ListItemComment',2,17,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2634,1008,'ListItemComment',3,17,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2635,1008,'ListItem',1,18,NULL,NULL,'listitem::::Blev barnet passet udenfor hjemmet før skolestart?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2636,1008,'Rating',2,18,NULL,NULL,'radio::1::Nej###radio::0::Ja','--- \n:switch: \n- l\n',1,11,NULL,NULL);
@@ -286,7 +288,7 @@ INSERT INTO `question_cells` VALUES (2661,1008,'Rating',2,38,NULL,NULL,'radio::0
 INSERT INTO `question_cells` VALUES (2662,1008,'ListItemComment',3,38,NULL,NULL,'listitem::::I hvilken forbindelse:###textbox::::','--- \n:targets: \n- :target: z\n  :state: offstate\n',1,NULL,NULL,NULL);
 
 
-INSERT INTO `questions` VALUES (1009,10,9,0,4,NULL);
+INSERT INTO `questions` VALUES (1009,10,9,0,3,NULL);
 INSERT INTO `question_cells` VALUES (2663,1009,'SectionSubtitle',1,1,NULL,NULL,'placeholder::::Øvrige sundhedsoplysninger:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2664,1009,'ListItem',1,2,NULL,NULL,'listitem::::Har barnet haft fysiske sygdomme / handicaps?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2665,1009,'Rating',2,2,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- q\n',1,11,NULL,NULL);

@@ -661,6 +661,17 @@ class Placeholder < QuestionCell
 	def fast_input_form(options = {}, value = nil)
 		form_template()
 	end
+
+	def to_answer(options = {})
+		sp = if question.columns == 3
+				"span-8"
+			elsif question.columns == 2
+				"span-11"
+			else
+				"span-7"
+			end
+		span_item("&nbsp;", "#{sp}")
+	end
 end
 
 # view like ListItem, answer is shown differently
@@ -890,6 +901,8 @@ class ListItem < QuestionCell
 	def outer_span(last = false)
 	  span = if col == 2 and self.question.columns == 2
 	    "span-9"
+		# elsif self.question.columns == 3
+		# "span-7"
 	  else
 	    "span-6"
 	  end
@@ -919,7 +932,11 @@ class ListItem < QuestionCell
 		return "span-#{span}" if self.span
     	span = if col == 2 and self.question.columns == 2
     		"span-11"
-    		else
+    	elsif self.question.columns == 3
+    		"span-7"
+    	# elsif self.question.columns == 4
+    	# 	"span-6"
+    	else
     		"span-12"
     	end
  	end
@@ -1365,7 +1382,7 @@ class ListItemComment < QuestionCell
   	
   	def answer_span(last = false)
   		current_row_columns = question.question_cells.where(:row => self.row).count
-  		span = question.columns == 3  && "span-4" || "span-12"
+  		span = self.span && "span-#{span}" || question.columns == 3 && "span-4" || "span-12"
   		if question.columns == 3 && current_row_columns < 3
   			span = "span-8"
   		end
@@ -1374,7 +1391,7 @@ class ListItemComment < QuestionCell
   	end
 
   	def answer_inner_span
-  		question.columns == 3 && "span-4" || "span-9"
+  		question.columns == 3 && "span-8" || "span-9"
   	end
 
 	def to_answer(options = {})
@@ -1395,6 +1412,8 @@ class ListItemComment < QuestionCell
 		answer_item_set = false
 		# answer_item_set = true if col > 1
 		target = (fast or switch_off) ? "" : switch_target(options)
+
+   		part = []
     
 		self.question_items.each do |item|
 		  listitem_without_predefined_text = item.text.nil? || item.text.empty?
@@ -1408,13 +1427,12 @@ class ListItemComment < QuestionCell
 
 				if (listitem_without_predefined_text)
 					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment'>#{CGI.unescape(self.value)}</div>"
-					newform << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
-					newform << span_item(answer_val, "itemtextbox #{box_span} #{target}".rstrip) unless answer_val.blank?
+					part << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
+					part << span_item(answer_val, "itemtextbox #{box_span} #{target}".rstrip) unless answer_val.blank?
 				else 
-					newform << span_item(answer_item_set ? "" : answer_item, "span-1") + span_item(item.text, "listitemtext #{box_span} #{target}".rstrip)
+					part << span_item(answer_item_set ? "" : answer_item, "span-1") + span_item(item.text, "listitemtext #{box_span} #{target}".rstrip)
 				end
 			when "listitem" then 
-        		part = []		
 				if (listitem_without_predefined_text)
 					# part << span_item(answer_item_set && self.col > 2 ? "" : answer_item, "span-1")
 					part << span_item(CGI.unescape(self.value.to_s), "listitemfield #{span}")
@@ -1424,9 +1442,9 @@ class ListItemComment < QuestionCell
 				end
 				answer_item_set = true;
 				answer_item_set = true if self.col == 1
-				newform << span_item(part.join, answer_span)
 			end
 		end
+		newform << span_item(part.join, answer_span)
 		newform.join
   	end
 
@@ -1951,7 +1969,7 @@ class TextBox < QuestionCell
   	def to_answer(options = {})
 		no       = options[:number].to_s || self.question.number.to_s 
 		c_id     = cell_id(no)
-  		self.value.blank? ? "" : "<span id='#{c_id}' class='#{answer_span}'>#{self.value}</span>"
+  		self.value.blank? ? "" : "<span id='#{c_id}' class='#{answer_span}'>#{CGI.unescape(self.value)}</span>"
   	end
 
 	def form_template(options = {}) # value = nil, show_all = true, disabled = false)
