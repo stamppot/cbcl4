@@ -1,6 +1,7 @@
 <% no = question.number %>
 <% id = question.id.to_s %>
 
+<%# @answers.inspect %>
 <div id='question_number<%= no %>'>
 
 	<!-- this should be put in _question_edit -->
@@ -12,39 +13,46 @@
 
 		<table class="question" id="question<%= id %>"> 
 			<tbody>
-				<%- 
-
-				rows = question.rows_of_cols(cells)
-				output = []
-
-				index = 0
-				rows.sort.each do |row, cols|
-					if !cols.values.any? {|cell| cell.value != nil && cell.value != "" }
-						next
+			<%- 
+			rows = question.rows_of_cols
+			output = ["<input id='Q#{@no}_id_#{id}' name='Q#{no}[id]' type='hidden' value='#{id}' >"]
+			
+			index = 0
+			rows.sort.each do |row, cols|
+				color = index % 2 == 0 && "even" || "odd"
+				output << "<tr><td><div id='row#{id}_#{row}' class='row'>\n"
+				output << 
+					if row == 1
+						"\t<div class='group span-1'>#{no > 0 && (no.to_roman + ". ") || '&nbsp;'}</div>\n"
+					else
+						"\t<div class='span-1'>&nbsp;</div>\n"
 					end
-					
-					color = index % 2 == 0 && "even" || "odd"
-					output << "<tr class='first last span-20' id='row#{id}_#{row}'>" 
 
-					no_cols = cols.size
-
-					cols.values.each_with_index do |cell, i|
-						output <<
-						if i == 1
-						  roman = no > 0 && (no.to_roman + ". ") || '&nbsp;'
-							content_tag('div', roman, :class => 'group')
-						end
-						@cell = cell
-						# puts "Encoding: #{@cell.value_text.encoding}" if @cell.class.method_defined?(:value_text) && !@cell.value_text.nil?
-						celltype = cell.class.to_s.downcase
-						output << render(:partial => "answer_reports/#{celltype}", :object => cell)
+				no_cols = cols.size
+				cols.each do |col, cell|
+				
+					q_idx = "Q#{question.number}"
+					if answers && answers[row] && answers[row].key?(cell.col)
+						cell.value = answers[row][cell.col]
 					end
-					output << "</tr>"
+
+					options = {:show_all => true, :disable => true, :number => no, :last => cell.col == no_cols, :value => cell.value}
+					cell.options = options
+					cell.question = question
+					celltype = cell.class.to_s.downcase
+					# output << render(:partial => "info_answer_reports/#{celltype}", :locals => {:cell => cell })
+
+					html = cell.to_answer((@options || {:show_all => true, :disable => true}).merge(:number => no, :last => cell.col == no_cols))
+					output << html if html
 				end
+				output << "</div></td></tr>\n"
+			end
 				%>
-				<%= output.join.html_safe %>
+		<%= output.join.html_safe %>
 			</tbody>
 		</table>
+
+
 
 	</div>
 

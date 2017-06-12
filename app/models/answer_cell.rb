@@ -29,11 +29,11 @@ class AnswerCell < ActiveRecord::Base
         self.value = new_value
       end
     elsif valid_values[:type].to_s == "Checkbox"
-      self.value = new_value.to_i
+      self.value = new_value.to_i if new_value.length < 5 # db field is int(5) (32767 max)
       self.value_text = CGI.escape(new_value[0..2000]) if new_value != self.value_text
       # puts "changed checkbox: #{self.value}"
     else  # other types
-      self.value = new_value.to_i if new_value.to_i > 0
+      self.value = new_value.to_i if new_value.length < 5 && new_value.to_i > 0
       self.value_text = CGI.escape(new_value[0..2000]) if new_value != self.value_text  # TODO: escape value
     end
     changed?
