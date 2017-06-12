@@ -1581,7 +1581,7 @@ class Rating < QuestionCell
 	def to_answer(options = {})
 		value ||= options[:value]
 		if choice
-			text = choice.get_options[value.to_s]
+			text = choice.get_options[value_text || value.to_s]
 			if question.columns == 2 && datatype == :numeric
 				span_item(text, "span-9")
 			elsif question.columns == 3 && datatype == :numeric

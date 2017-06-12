@@ -324,7 +324,7 @@ INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,NULL,NULL,'listit
 
 DELETE from `choices` where `id` IN (14, 15); 
 INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (14, 'email_mor_far', 'Mors email;;Fars email', 'Mors email;;Fars email');
-INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (15, 'henv_5', 'Forældre;;Institution/skole;;Egen læge;;Kommune/PPR;;Andre', 'Forældre;;Institution/skole;;Egen læge;;Kommune/PPR;;Andre');
+INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (15, 'henv_5', '1::Forældre;;2::Institution/skole;;3::Egen læge;;4::Kommune/PPR;;5::Andre', 'Forældre;;Institution/skole;;Egen læge;;Kommune/PPR;;Andre');
 
 
 COMMIT;
