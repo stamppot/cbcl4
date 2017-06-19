@@ -1474,7 +1474,7 @@ class ListItemComment < QuestionCell
 				box_span = (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
 
 				if (listitem_without_predefined_text)
-					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'>#{CGI.unescape(self.value)}</div>"
+					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'><span>#{CGI.unescape(self.value)}</span></div>"
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
 					part << span_item(answer_val, "itemtextbox #{box_span} #{target}".rstrip) unless answer_val.blank?
 				else 
@@ -1483,7 +1483,7 @@ class ListItemComment < QuestionCell
 			when "listitem" then 
 				if (listitem_without_predefined_text)
 					# part << span_item(answer_item_set && self.col > 2 ? "" : answer_item, "span-1")
-					part << span_item(CGI.unescape(self.value.to_s), "listitemfield answer_value #{span}")
+					part << span_item("<span>" + CGI.unescape(self.value.to_s) + "</span>", "listitemfield answer_value #{span}")
 				else 
 					part << span_item(answer_item, "span-1")  #if !(self.col > 2)
 					part << span_item(item.text, "listitem #{target} #{answer_inner_span}".strip)
@@ -2022,7 +2022,7 @@ class TextBox < QuestionCell
   	def to_answer(options = {})
 		no       = options[:number].to_s || self.question.number.to_s 
 		c_id     = cell_id(no)
-  		self.value.blank? ? "" : "<span id='#{c_id}' class='#{answer_span} answer_value'>#{CGI.unescape(self.value)}</span>"
+  		self.value.blank? ? "" : "<span id='#{c_id}' class='#{answer_span} answer_value'><span>#{CGI.unescape(self.value)}</span></span>"
   	end
 
 	def form_template(options = {}) # value = nil, show_all = true, disabled = false)
