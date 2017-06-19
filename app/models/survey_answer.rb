@@ -228,7 +228,7 @@ class SurveyAnswer < ActiveRecord::Base
       inner join answers a on a.id = ac.answer_id
       inner join questions q on q.id = a.question_id
       inner join question_cells qc on qc.question_id = q.id
-      where answer_id = #{answer_id} and qc.problem_item = 1 and ac.value != 9
+      where answer_id = #{answer_id} and qc.problem_item = 1 and ac.value != 9 and follow_up = #{self.follow_up}
       order by qc.id"
 
     answered_problem_items = ActiveRecord::Base.connection.execute(query).each(:as => :hash).first
