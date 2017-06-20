@@ -19,7 +19,7 @@ class Answer < ActiveRecord::Base
   def update_ratings_count
 		answer_ratings_count = self.ratings.count # subtract values of 9
 		answer_ratings_count -= self.ratings.select { |ac| ac.value == 9}.size
-    self.ratings_count = max(self.question.ratings_count - answer_ratings_count, 0) if self.question
+    self.ratings_count = [self.question.ratings_count - answer_ratings_count, 0].max if self.question
   end
 
   def answer_cell_exists?(col, row)
