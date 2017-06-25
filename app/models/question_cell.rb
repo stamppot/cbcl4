@@ -1647,7 +1647,7 @@ class Rating < QuestionCell
 			elsif self.span
 				span_item(text, "span-#{span} answer_value")
 			else
-				span_item("#{text} no text?", "tralala")
+				span_item("#{text}", "answer_value")
 			end
 		else
 			span_item(value, "rating-tralala")
