@@ -1632,26 +1632,25 @@ class Rating < QuestionCell
 	end
 
 	def to_answer(options = {})
-		value ||= options[:value]
 		if choice
-			text = choice.get_options[value.to_s]
+			text = choice.get_options[self.value.to_s]
 			if question.columns == 2 && datatype == :numeric
 				span_item(text, "span-9 answer_value")
-			elsif question.columns == 3 && datatype == :numeric
+			elsif text && question.columns == 3 && datatype == :numeric
 				in_span = "span-7 answer_value"
 				in_span = case text.length
 				when 1..3 then "span-1 answer_value"
 				when 3..6 then "span-2 answer_value"
 				else "span-7"
-				end if text
+				end #if text
 				span_item(text, in_span)
 			elsif self.span
 				span_item(text, "span-#{span} answer_value")
 			else
-				text
+				span_item("#{text} no text?", "tralala")
 			end
 		else
-			value
+			span_item(value, "rating-tralala")
 		end
 	end
 
