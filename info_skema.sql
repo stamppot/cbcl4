@@ -64,7 +64,7 @@ INSERT INTO `question_cells` VALUES (2449,1000,'ListItemComment',2,30,NULL,NULL,
 
 INSERT INTO `questions` VALUES (1002,10,2,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2452,1002,'ListItem',1,1,NULL,NULL,'listitem::::Lever biologiske forældre sammen?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2453,1002,'Rating',2,1,NULL,NULL,'radio::0::Ja###radio::1::Nej','--- \n:switch: \n- ay\n',1, 11,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2453,1002,'Rating',2,1,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ay\n',1, 11,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2454,1002,'Questiontext',1,2,NULL,NULL,'questiontext::::Hvis forældrene er skilte:','--- \n:targets: \n- :target: ay\n  :state: offstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2455,1002,'ListItem',1,3,NULL,NULL,'listitem::::Hvem har forældremyndigheden:','--- \n:targets: \n- :target: ay\n  :state: offstate\n',0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2456,1002,'ListItemComment',2,3,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: ay\n  :state: offstate\n',0,NULL,NULL,NULL);
@@ -140,7 +140,7 @@ INSERT INTO `question_cells` VALUES (2519,1006,'Rating',2,13,NULL,NULL,'radio::0
 INSERT INTO `question_cells` VALUES (2520,1006,'ListItemComment',3,13,NULL,NULL,'listitem::::Hvis ja, ca. hvor meget?###textbox::::','--- \n:targets: \n- :target: h\n  :state: offstate\n',0,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2521,1006,'ListItem',1,15,NULL,NULL,'listitem::::Hvornår er barnet født?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2522,1006,'SelectOption',2,15,NULL,NULL,'option::1::Ektremt tidligt født (før 28. svangerskabsuge)###option::2::Meget tidligt født (28. - 32. svangerskabsuge)###radio::3::Moderat tidligt født (33. - 36. svangerskabsuge)###option::4::Til termin (37. - 42. svangerskabsuge)###option::5::Overbåren (efter 42. svangerskabsuge)',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2522,1006,'SelectOption',2,15,NULL,NULL,'option::1::Ektremt tidligt født (før 28. svangerskabsuge)###option::2::Meget tidligt født (28. - 32. svangerskabsuge)###radio::3::Moderat tidligt født (33. - 36. svangerskabsuge)###option::4::Til termin (37. - 42. svangerskabsuge)###option::5::Overbåren (efter 42. svangerskabsuge)',NULL,1,16,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2523,1006,'Questiontext',1,16,NULL,NULL,'questiontext::::Barnets mål og vægt ved fødslen',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2524,1006,'Placeholder',1,17,NULL,NULL,'placeholder::::',NULL,1,NULL,NULL,NULL);
@@ -247,7 +247,7 @@ INSERT INTO `question_cells` VALUES (2633,1008,'ListItemComment',2,17,7,NULL,'li
 INSERT INTO `question_cells` VALUES (2634,1008,'ListItemComment',3,17,7,NULL,'listitem::::',NULL,1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2635,1008,'ListItem',1,18,NULL,NULL,'listitem::::Blev barnet passet udenfor hjemmet før skolestart?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2636,1008,'Rating',2,18,NULL,NULL,'radio::1::Nej###radio::0::Ja','--- \n:switch: \n- l\n',1,11,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2636,1008,'Rating',2,18,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- l\n',1,11,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2637,1008,'ListItemComment',1,19,NULL,NULL,'listitem::::Vuggestue (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2607,8005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2638,1008,'ListItemComment',1,20,NULL,NULL,'listitem::::Dagpleje  (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
@@ -256,7 +256,7 @@ INSERT INTO `question_cells` VALUES (2639,1008,'ListItemComment',1,21,NULL,NULL,
 -- INSERT INTO `question_cells` VALUES (2611,8005,'ListItemComment',2,14,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: l\n  :state: offstate\n',1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2640,1008,'ListItem',1,22,NULL,NULL,'listitem::::Går barnet i skole?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2641,1008,'Rating',2,22,NULL,NULL,'radio::1::Nej###radio::0::Ja','--- \n:switch: \n- m\n',1,11,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2641,1008,'Rating',2,22,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- m\n',1,11,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2642,1008,'ListItemComment',1,23,NULL,NULL,'listitem::::Barnets skole (navn og adresse)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUES (2614,8005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2643,1008,'ListItemComment',1,24,NULL,NULL,'listitem::::Klasselærer/kontaktperson###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
@@ -322,10 +322,10 @@ INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0
 INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,NULL,NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,15,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,NULL,NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 
-DELETE from `choices` where `id` IN (14, 15); 
+DELETE from `choices` where `id` IN (14, 15, 16); 
 INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (14, 'email_mor_far', '1::Mors email;;2::Fars email', '1::Mors email;;2::Fars email');
 INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (15, 'henv_5', '1::Forældre;;2::Institution/skole;;3::Egen læge;;4::Kommune/PPR;;5::Andre', 'Forældre;;Institution/skole;;Egen læge;;Kommune/PPR;;Andre');
-
+INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (16, 'foedt_5', '1::Ekstremt tidligt født (før 28. svangerskabsuge);;2::Meget tidligt født (28. - 32. svangerskabsuge);;3::Moderat tidligt født (33. - 36. svangerskabsuge);;4::Til termin (37. - 42. svangerskabsuge);;5::Overbåren (efter 42. svangerskabsuge)', 'Ektremt tidligt født (før 28. svangerskabsuge);;Meget tidligt født (28. - 32. svangerskabsuge);;Moderat tidligt født (33. - 36. svangerskabsuge);;Til termin (37. - 42. svangerskabsuge);;Overbåren (efter 42. svangerskabsuge)');
 
 COMMIT;
 SET FOREIGN_KEY_CHECKS=1;

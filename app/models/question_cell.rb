@@ -1015,7 +1015,7 @@ class ListItem < QuestionCell
         		# answer_item_set = true if self.col == 1
 			  	newform <<
 				span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
-					"<input id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='20' value='#{item.value}'>#{self.value}</input> #{item.text}", "unitfield #{span}")
+					"<input id='#{c_id}' name='#{question_no}[#{c_id}]' class='textfield' type='text' maxlength='20' value='#{item.value}'>#{self.value}</input> #{item.text}", "unitfield answer_value #{span}")
 			else
 				if(has_no_text)     	# listitem without predefined text
 					if(disabled)      	# show answer value
@@ -1166,7 +1166,7 @@ class SelectOption < QuestionCell
 
 		# puts "Indent: #{indent}  row: #{row} col: #{col} q: #{question_id}  span: #{self.span} outer: #{outer_span}"
 		if indent
-	    	newform << span_item("&nbsp;", "span-#{indent}")
+	    	newform << span_item("&nbsp;", "answer_value span-#{indent}")
 	    	# in_span.succ!
 	    	puts newform.join + " 	INDENT"
     	end	
@@ -1177,10 +1177,16 @@ class SelectOption < QuestionCell
 			label = qitems.shift
 			newform << span_item(label.last, in_span)
 		end 
-		sel_options = ["<option value=''>Vælg et svar</option>"]
+		# sel_options = ["<option value=''>Vælg et svar</option>"]
 		selected = qitems.select { |option| !value.nil? && option[1] == value }.first
 
-		newform << "<span class='answer_value #{in_span}'>#{selected && selected.last}</span>"
+		text_value = if self.choice 
+			text = self.choice.get_options[self.value.to_s]
+		else
+			self.value
+		end
+	
+		newform << "<span class='answer_value #{in_span}'>#{text_value} #{selected && selected.last}</span>"
 		span_item(newform.join, "#{c_id} span-#{outer_span} selectanswer #{target}".rstrip)
 	end
 
@@ -1494,7 +1500,7 @@ class ListItemComment < QuestionCell
         		# answer_item_set = true if self.col == 1
 			  	newform <<
 				span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
-					"#{self.value} #{item.text}", "unitfield #{span} #{target}")
+					"#{self.value} #{item.text}", "unitfield answer_value #{span} #{target}")
 			end
 		end
 		newform << span_item(part.join, answer_span)
