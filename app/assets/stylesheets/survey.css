@@ -886,6 +886,7 @@ input.validation-maybe, textarea.validation-maybe {
 .answer_value {
   font-family: 'letter gothic', courier, 'inconsolata';
 }
+
 /* charcount */
 .charcount-safe {
   font-size: 9px;

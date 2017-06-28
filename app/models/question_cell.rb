@@ -931,7 +931,7 @@ class ListItem < QuestionCell
 					span_item(item_text, "span-#{self.span-2}")
 				else
 					sp = span && span || 9
-					span_item(item_text, "span-#{sp}")
+					span_item(item_text, "#{sp}")
 				end
 			end
 		end
@@ -1440,6 +1440,7 @@ class ListItemComment < QuestionCell
   		if question.columns == 3 && current_row_columns < 3
   			span = "span-8"
   		end
+
   		span << " last" if last
   		span
   	end
@@ -1649,7 +1650,7 @@ class Rating < QuestionCell
 				when 3..6 then "span-2 answer_value"
 				else "span-7"
 				end #if text
-				span_item(text, in_span)
+				span_item(text, "#{in_span} answer_value")
 			elsif self.span
 				span_item(text, "span-#{span} answer_value")
 			else
