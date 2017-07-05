@@ -295,8 +295,8 @@ class SurveyAnswersController < ApplicationController
         remove_user_from_session!
         redirect_to return_to and return
       else
-        if journal_entry.next
-          redirect_to survey_next_path(journal_entry.next) and return
+        if journal_entry.next_survey || journal_entry.prev_survey  # infoskema or other chain
+          redirect_to survey_next_path(journal_entry.next || journal_entry.prev_survey) and return
         else
           redirect_to survey_finish_path(journal_entry) and return
         end
