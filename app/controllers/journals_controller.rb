@@ -189,7 +189,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
       entries = @group.add_journal_entries(@surveys, params[:journal_entry][:follow_up])
       valid = entries.any? {|e| e.errors.size > 0 }
       flash[:error] = "Logins blev ikke oprettet!" unless valid
-      ChainInfoSurvey.new.create_chain(@group, @surveys, follow_up, current_user) # info-skema for BPUH
+#      ChainInfoSurvey.new.create_chain(@group, @surveys, follow_up, current_user) # info-skema for BPUH
       @group.delta = true
       flash[:notice] = (@surveys.size > 1 && "Spørgeskemaer " || "Spørgeskemaet ") + "er oprettet." if @group.save && valid
       redirect_to @group
