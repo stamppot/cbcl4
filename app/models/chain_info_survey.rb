@@ -16,12 +16,12 @@ class ChainInfoSurvey
 		return true
 	end
 
-	def create_chain(journal, surveys, follow_up)
+	def create_chain(journal, surveys, follow_up, current_user)
 		puts "create_chain: journal: #{journal.inspect}, surveys: #{surveys.inspect}, follow_up: #{follow_up}"
 		survey = surveys.select {|s| s.surveytype == "parent"}.first
 
 		puts "found parent survey: #{survey.inspect}"
-		is_valid = survey && create_chain?(journal, survey, follow_up)
+		is_valid = survey && create_chain?(journal, survey, follow_up, current_user)
 		puts "do create_chain #{is_valid.inspect}"
 
 		if is_valid
