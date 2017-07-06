@@ -21,6 +21,10 @@ class StartController < ApplicationController
     j = @journal_entry.journal
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
+    if session[:journal_entry].to_i != je.id  # MUST be the same entry, or a wrong survey will be opened
+      logger.info "WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
+      raise RunTimeError "Bad entry in session: WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
+    end
     logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
     @token = session[:token] || params[:token]
     @api_key = session[:api_key] || params[:api_key]

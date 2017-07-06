@@ -66,7 +66,8 @@ class LoginController < ApplicationController
       # journal_entry = JournalEntry.find_by_user_id(user.id)
       if user.login_user
         journal_entry = JournalEntry.find_by(:user_id => user)
-        session[:journal_entry] = journal_entry.id
+        # set session correctly when chained with next or previous entry. If next, then next. If prev_survey, then prev_survey. Else current entry
+        session[:journal_entry] = if journal_entry.next then journal_entry.next elsif journal_entry.prev_survey then journal_entry.next else journal_entry.id end
         session[:journal_id] = journal_entry.journal_id
       end
 
