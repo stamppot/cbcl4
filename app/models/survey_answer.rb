@@ -415,7 +415,7 @@ class SurveyAnswer < ActiveRecord::Base
               logger.info "valid_values[q] #{q.inspect} not found. cell: #{cell.inspect}"
               puts "valid_values[q] #{q.inspect} not found. cell: #{cell.inspect}"
             elsif the_valid_values[q][cell].nil?
-              logger.info "valid_values[q][cell] #{q.inspect} not found. cell: #{cell.inspect}. a_cell: #{a_cell.inspect}  vv: #{valid_values[q].inspect}"
+              logger.info "valid_values[q][cell] #{q.inspect} not found. cell: #{cell.inspect}. a_cell: #{a_cell.inspect}  vv: #{q.inspect}"
               puts "valid_values[q] #{q.inspect} not found. cell: #{cell.inspect}"
             end
             changed_val = answer_cell.change_value(value, the_valid_values[q][cell])
