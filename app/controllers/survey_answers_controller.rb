@@ -254,7 +254,7 @@ class SurveyAnswersController < ApplicationController
     center = journal_entry.journal.center
     subscription = center.subscriptions.detect { |sub| sub.survey_id == journal_entry.survey_id }
 
-    if subscription.nil? || subscription.inactive?
+    if !current_user.access?(:superadmin) && subscription.nil? || subscription.inactive?
       flash[:error] = subscription && t('subscription.expired') || ('subscription.none_for_this_survey')
       logger.info "Subscription inactive, will logout if login_user"
       redirect_to journal_entry.journal and return
