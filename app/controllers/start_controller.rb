@@ -25,7 +25,7 @@ class StartController < ApplicationController
       logger.info "WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
       raise RunTimeError "Bad entry in session: WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
     end
-    logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
+    logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: #{je.survey_id} luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
     @token = session[:token] || params[:token]
     @api_key = session[:api_key] || params[:api_key]
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
@@ -75,7 +75,7 @@ class StartController < ApplicationController
     raise ActiveRecord::RecordNotFound if user.nil?    # Check whether a user with these credentials could be found.
     write_user_to_session(user) 
 
-    logger.info "Next: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect} params: #{params.inspect}"
+    logger.info "Next: journal_entry: #{@journal_entry.inspect} params: #{params.inspect}"
     @name = @journal_entry.journal.title
     @center = @journal_entry.journal.center
     session[:journal_entry] = @journal_entry.id
@@ -87,9 +87,13 @@ class StartController < ApplicationController
     j = @journal_entry.journal
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
-    logger.info "LOGIN_USER next #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: je.survey_id luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
+    logger.info "LOGIN_USER next #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: #{je.survey_id} luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
+    if session[:journal_entry].to_i != je.id  # MUST be the same entry, or a wrong survey will be opened
+      logger.info "WRONG next entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
+      raise RunTimeError "Bad next entry in session: WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
+    end
     # @token = session[:token]
-    @continue_from_infosurvey = @journal_entry.prev_survey.is_infosurvey?
+    @continue_from_infosurvey = je.prev_survey && je.prev_survey.is_infosurvey?
     @api_key = session[:api_key]
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
