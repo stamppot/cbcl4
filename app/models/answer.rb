@@ -162,7 +162,7 @@ class Answer < ActiveRecord::Base
 
       if !valid_values.key?(cell_id)
         logger.info "create_cells_optimized error: missing key cell_id #{cell_id}, valid_values: #{valid_values.inspect}"
-        valid_values[cell_id] = {:type => "TextBoxFix"}
+        valid_values[cell_id] = {:type => "ListItemComment"}
       elsif !valid_values[cell_id].key?(:type)
         logger.info "create_cells_optimized error: missing key :type cell_id #{cell_id}, #{valid_values[cell_id].inspect} valid_values: #{valid_values.inspect}"
         if valid_values[cell_id].is_a?(Hash)
