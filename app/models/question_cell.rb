@@ -663,7 +663,9 @@ class Placeholder < QuestionCell
 	end
 
 	def to_answer(options = {})
-		sp = if question.columns == 3
+		sp = if self.span
+				"span-#{span}" 
+			elsif question.columns == 3
 				"span-8"
 			elsif question.columns == 2
 				"span-11"
@@ -829,7 +831,7 @@ class QuestionComment < QuestionCell
        		    	newform << span_item(value + " ", "span-#{span_width}") if !value.blank?
 				end
 			else  # with predefined text. show text in item (no input field)
-				puts "field: #{field}, value: #{value}, item_text: #{item_text}"
+				# puts "field: #{field}, value: #{value}, item_text: #{item_text}"
 				newform << span_item(field, "span-1") if !field.blank? && i == 0
 				newform << span_item(item_text, "span-10")
 			end
@@ -1499,9 +1501,7 @@ class ListItemComment < QuestionCell
 				answer_item_set = true if self.col == 1
 			when "itemunit" then 
         		# answer_item_set = true if self.col == 1
-			  	newform <<
-				span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + 
-					"#{self.value} #{item.text}", "unitfield answer_value #{span} #{target}")
+			  	newform << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + "#{self.value} #{item.text}", "unitfield answer_value #{span} #{target}")
 			end
 		end
 		newform << span_item(part.join, answer_span)
