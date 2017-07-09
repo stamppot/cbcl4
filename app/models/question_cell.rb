@@ -930,14 +930,14 @@ class ListItem < QuestionCell
   		    	# newform << span_item(self.value + " ", " answer_value") if !self.value.blank?
 				newform <<
 				if self.span
-					span_item(item_text, "span-#{self.span-2}")
+					span_item(item_text, "span-#{self.span}")
 				else
 					sp = span && span || 9
 					span_item(item_text, "#{sp}")
 				end
 			end
 		end
-		puts "class_name: #{class_name} span: #{span}"
+		# puts "class_name: #{class_name} span: #{span}"
 		span_item(newform.join, "#{class_name} #{span}")
 	end
 
@@ -1160,7 +1160,7 @@ class SelectOption < QuestionCell
 		switch_off    = options[:switch_off]
 		c_id          = cell_id(no) + "_#{self.question_id}"
 		q_no          = "Q#{no}"
-		indent 		  = preferences && preferences[:indent] || 0
+		indent 		  = preferences && preferences[:indent]
 		outer_span    = self.span && self.span || options[:outer_span] || answer_span
 		in_span       = p && p[:indent] && "span-#{p[:in]}" || options[:inner_span] || answer_inner_span
 		newform = []
@@ -1174,22 +1174,23 @@ class SelectOption < QuestionCell
     	end	
 
     	# create options array
-		qitems = self.question_items.collect { |item| [item.qtype, item.value, item.text] }
-		if qitems.first[0] == "listitem"
-			label = qitems.shift
-			newform << span_item(label.last, in_span)
-		end 
+		# qitems = self.question_items.collect { |item| [item.qtype, item.value, item.text] }
+		# if qitems.first[0] == "listitem"
+		# 	label = qitems.shift
+		# 	newform << span_item(label.last, in_span)
+		# end 
 		# sel_options = ["<option value=''>Vælg et svar</option>"]
-		selected = qitems.select { |option| !value.nil? && option[1] == value }.first
+		# selected = qitems.select { |option| !value.nil? && option[1] == value }.first
 
-		text_value = if self.choice 
+		text_value = if self.choice
 			text = self.choice.get_options[self.value.to_s]
+			text
 		else
 			self.value
 		end
 	
-		newform << "<span class='answer_value #{in_span}'>#{text_value} #{selected && selected.last}</span>"
-		span_item(newform.join, "#{c_id} span-#{outer_span} selectanswer #{target}".rstrip)
+		newform << "<span class='answer_value'>#{text_value}</span>"
+		span_item(newform.join, "#{outer_span}".rstrip)
 	end
 
 	def to_fast_input_html(options = {})
@@ -1448,7 +1449,13 @@ class ListItemComment < QuestionCell
   	end
 
   	def answer_inner_span
-  		question.columns == 3 && "span-8" || "span-9"
+  		if question.columns == 4
+  			"span-6"
+  		elsif question.columns == 3 
+  			"span-8"
+  		else 
+  			"span-9"
+  		end
   	end
 
 	def to_answer(options = {})
@@ -1480,12 +1487,13 @@ class ListItemComment < QuestionCell
 				tcols = self.value && self.value.length > 200 && 120 || 40
 				trows = self.value && self.value.length / 120
 				current_row_columns = question.question_cells.where(:row => self.row).count
-				box_span = (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
+				box_span =  (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
 
 				if (listitem_without_predefined_text)
 					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'><span>#{CGI.unescape(self.value)}</span></div>"
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
-					part << span_item(answer_val, "itemtextbox #{box_span} #{target}".rstrip) unless answer_val.blank?
+					answer_span = self.span && "span-#{self.span}" || box_span
+					part << span_item(answer_val, "itemtextbox #{answer_span} #{target}".rstrip) unless answer_val.blank?
 				else 
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") + span_item(item.text, "listitemtext #{box_span} #{target}".rstrip)
 				end
@@ -1495,7 +1503,8 @@ class ListItemComment < QuestionCell
 					part << span_item("<span>" + CGI.unescape(self.value.to_s) + "</span>", "listitemfield answer_value #{span}")
 				else 
 					part << span_item(answer_item, "span-1")  #if !(self.col > 2)
-					part << span_item(item.text, "listitem #{target} #{answer_inner_span}".strip)
+					q_inner_span = self.span && "span-#{self.span/2}" && answer_inner_span
+					part << span_item(item.text, "listitem #{target} #{q_inner_span}".strip)
 				end
 				answer_item_set = true;
 				answer_item_set = true if self.col == 1
@@ -1641,7 +1650,9 @@ class Rating < QuestionCell
 	def to_answer(options = {})
 		if choice
 			text = choice.get_options[self.value.to_s]
-			if question.columns == 2 && datatype == :numeric
+			if self.span && datatype == :numeric
+				span_item(text, "span-#{self.span} answer_value")
+			elsif question.columns == 2 && datatype == :numeric
 				span_item(text, "span-9 answer_value")
 			elsif text && question.columns == 3 && datatype == :numeric
 				in_span = "span-7 answer_value"

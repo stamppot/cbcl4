@@ -129,11 +129,11 @@ class LoginLettersController < ApplicationController
     journal = Journal.find(params[:id])
     logger.info("params: #{params.inspect}")
     if params[:letters].all? {|k,v| v.to_i == 0}
-	params[:letters] = params[:letters].inject({}) {|h,e| h[e.first] = 1; h }
+    	params[:letters] = params[:letters].inject({}) {|h,e| h[e.first] = 1; h }
     end 
     selected = params[:letters].select {|k,v| v.to_i == 1 }.inject([]) { |col,v| col << v.first.to_i; col }
     logger.info("selected: #{selected.inspect}")
-		entries = journal.not_answered_entries.select {|e| selected.include?(e.id)}
+		entries = journal.not_answered_entries.select {|e| selected.include?(e.id) && e.survey_id != 10} # exclude info_skema
     # find letter for team, center, system
 		entry_letters = []
 		entry_letters = entries.map do |entry|
