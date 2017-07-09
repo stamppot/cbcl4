@@ -133,7 +133,10 @@ class LoginLettersController < ApplicationController
     end 
     selected = params[:letters].select {|k,v| v.to_i == 1 }.inject([]) { |col,v| col << v.first.to_i; col }
     logger.info("selected: #{selected.inspect}")
-		entries = journal.not_answered_entries.select {|e| selected.include?(e.id) && e.survey_id != 10} # exclude info_skema
+		entries = journal.not_answered_entries.select {|e| selected.include?(e.id) }
+
+    entries.sort_by {|e| e.survey_id }.uniq {|e| e.survey.surveytype} # exclude multiple logins for same people (parents) (to not send login for infoskema)
+     # exclude info_skema
     # find letter for team, center, system
 		entry_letters = []
 		entry_letters = entries.map do |entry|
