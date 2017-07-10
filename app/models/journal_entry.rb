@@ -49,13 +49,17 @@ class JournalEntry < ActiveRecord::Base
     FollowUp.get[follow_up].first
   end
 
-  def next_survey
-    self.next && (je = JournalEntry.find_by_id(self.next)) && je && je.survey.title || ""
+  def next_survey_title
+    (je = chained_survey_entry) && je && je.survey.title || ""
   end
 
   def prev_survey
     JournalEntry.where(:next => self.id).first
   end  
+
+  def chained_survey_entry
+    JournalEntry.where(:next => journal_entry.next).first || journal_entry.prev_survey
+  end
 
   def is_infosurvey?
     self.survey.prefix == "info" && self.survey.bundle == "INFO"

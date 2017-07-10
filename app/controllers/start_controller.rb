@@ -8,8 +8,8 @@ class StartController < ApplicationController
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
-    if prev = @journal_entry.prev_survey
-      @journal_entry = prev unless prev.answered?
+    if chained = @journal_entry.chained_survey_entry
+      @journal_entry = chained unless chained.answered?
     end
     # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
     @name = @journal_entry.journal.title
@@ -93,7 +93,7 @@ class StartController < ApplicationController
       raise RunTimeError "Bad next entry in session: WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
     end
     # @token = session[:token]
-    @continue_from_infosurvey = je.prev_survey && je.prev_survey.is_infosurvey?
+    @continue_from_infosurvey = je.chained_survey_entry && je.chained_survey_entry.is_infosurvey?
     @api_key = session[:api_key]
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
@@ -108,9 +108,9 @@ class StartController < ApplicationController
 
   def finish
     @journal_entry = JournalEntry.find_by_id_and_user_id(params[:id], current_user.id)
-    if !@journal_entry.answered? && @journal_entry.next_survey || @journal_entry.prev_survey
+    if !@journal_entry.answered? && @journal_entry.chained_survey_entry
       session[:journal_entry] = @journal_entry.id
-      redirect_to survey_next_path(@journal_entry.next || @journal_entry.prev_survey) and return
+      redirect_to survey_next_path(@journal_entry.chained_survey_entry) and return
     end
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
