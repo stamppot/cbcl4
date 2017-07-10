@@ -58,7 +58,7 @@ class JournalEntry < ActiveRecord::Base
   end  
 
   def chained_survey_entry
-    JournalEntry.where(:next => journal_entry.next).first || journal_entry.prev_survey
+    JournalEntry.where(:next => self.next).first || self.prev_survey
   end
 
   def is_infosurvey?
