@@ -26,7 +26,7 @@
         	</td>
             <td style="max-width: 200px;"><%= entry.notes %> 
             	<% if entry.next %>
-            		<%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey}",  :alt => "Koblet med #{entry.next_survey}" %>
+            		<%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey_title}",  :alt => "Koblet med #{entry.next_survey_title}" %>
             	<% end %>
             </td>
 					 <td><%= entry.created_at.strftime "%d-%m-%Y" %>
@@ -97,7 +97,7 @@
 					 </td>
 					 <td style="max-width: 200px;"><%= entry.notes %>
 					    <% if entry.next %>
-					       <%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey}", :alt => "Koblet med #{entry.next_survey}" %>
+					       <%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey_title}", :alt => "Koblet med #{entry.next_survey_title}" %>
 					    <% end %>
 					 </td>
 					 <td><%= entry.status %></td>
