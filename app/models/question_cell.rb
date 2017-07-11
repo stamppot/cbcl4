@@ -1507,10 +1507,11 @@ class ListItemComment < QuestionCell
 			when "listitem" then 
 				if (listitem_without_predefined_text)
 					# part << span_item(answer_item_set && self.col > 2 ? "" : answer_item, "span-1")
-					part << span_item("<span>" + CGI.unescape(self.value.to_s) + "</span>", "listitemfield answer_value #{span}")
+					itemspan = qispans[i] && "span-#{qispans[i]}" || answer_inner_span
+					part << span_item("<span>" + CGI.unescape(self.value.to_s) + "</span>", "listitemfield answer_value #{itemspan}")
 				else 
 					part << span_item(answer_item, "span-1")  #if !(self.col > 2)
-					q_inner_span = qispans[i] && "span-#{qispans[i]}" && answer_inner_span
+					q_inner_span = qispans[i] && "span-#{qispans[i]}" || answer_inner_span
 					part << span_item(item.text, "listitem #{target} #{q_inner_span}".strip)
 				end
 				answer_item_set = true;
@@ -1518,7 +1519,8 @@ class ListItemComment < QuestionCell
 			when "itemunit" then 
         		# answer_item_set = true if self.col == 1
         		val = "#{self.value} " << (self.value.blank? && "&nbsp;" || item.text)
-			  	part << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + val, "unitfield answer_value #{qispans[i]} #{target}")
+				itemspan = "span-#{qispans[i]}"
+			  	part << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + val, "unitfield answer_value #{itemspan} #{target}")
 			end
 		end
 		newform << span_item(part.join, answer_span)
