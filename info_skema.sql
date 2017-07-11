@@ -319,7 +319,7 @@ INSERT INTO `question_cells` VALUES (2700,1009,'Placeholder',1,10,NULL,NULL,'pla
 INSERT INTO `question_cells` VALUES (2701,1009,'SectionSubtitle',1,11,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2702,1009,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig pr. telefon?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, 11,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,NULL,NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,15,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,NULL,NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,14,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,NULL,NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 
 DELETE from `choices` where `id` IN (14, 15, 16, 17); 
