@@ -938,7 +938,7 @@ class ListItem < QuestionCell
 			end
 		end
 		# puts "class_name: #{class_name} span: #{span}"
-		span_item(newform.join, "#{class_name} #{span}")
+		span_item(newform.join, "#{class_name}")
 	end
 
 	def to_fast_input_html(options = {})
@@ -1510,7 +1510,8 @@ class ListItemComment < QuestionCell
 				answer_item_set = true if self.col == 1
 			when "itemunit" then 
         		# answer_item_set = true if self.col == 1
-			  	newform << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + "#{self.value} #{item.text}", "unitfield answer_value #{span} #{target}")
+        		val = "#{self.value} " << (self.value.blank? && "&nbsp;" || item.text)
+			  	part << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + val, "unitfield answer_value #{span} #{target}")
 			end
 		end
 		newform << span_item(part.join, answer_span)
