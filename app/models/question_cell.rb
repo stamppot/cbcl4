@@ -917,6 +917,8 @@ class ListItem < QuestionCell
     		puts "INDENT: #{p[:indent]}"
     	end
 
+    	qispans = self.spans || []
+
 		self.question_items.each_with_index do |item, i|
 			item_text = edit ? item.text : item.text
 			field = (i == 0 && (i == question_items.size-1) ? self.svar_item : "")# only show answer_item label in first item for cell with multiple list items
@@ -935,7 +937,8 @@ class ListItem < QuestionCell
   		    	# newform << span_item(self.value + " ", " answer_value") if !self.value.blank?
 				newform <<
 				if self.span
-					span_item(item_text, "span-#{self.span}")
+					my_span = qispans[i] || self.span
+					span_item(item_text, "span-#{my_span}")
 				else
 					sp = span && span || 9
 					span_item(item_text, "#{sp}")
