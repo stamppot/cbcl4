@@ -1484,7 +1484,7 @@ class ListItemComment < QuestionCell
 
    		part = []
     
-    	qispans = self.spans
+    	qispans = self.spans || []
 
 		self.question_items.each_with_index do |item, i|
 		  listitem_without_predefined_text = item.text.nil? || item.text.empty?
@@ -1499,7 +1499,7 @@ class ListItemComment < QuestionCell
 				if (listitem_without_predefined_text)
 					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'><span>#{CGI.unescape(self.value)}</span></div>"
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
-					answer_span = self.span && "span-#{qispans[i]}" || box_span
+					answer_span = qispans[i] && "span-#{qispans[i]}" || box_span
 					part << span_item(answer_val, "itemtextbox #{answer_span} #{target}".rstrip) unless answer_val.blank?
 				else 
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") + span_item(item.text, "listitemtext #{box_span} #{target}".rstrip)
@@ -1510,7 +1510,7 @@ class ListItemComment < QuestionCell
 					part << span_item("<span>" + CGI.unescape(self.value.to_s) + "</span>", "listitemfield answer_value #{span}")
 				else 
 					part << span_item(answer_item, "span-1")  #if !(self.col > 2)
-					q_inner_span = self.span && "span-#{qispans[i]}" && answer_inner_span
+					q_inner_span = qispans[i] && "span-#{qispans[i]}" && answer_inner_span
 					part << span_item(item.text, "listitem #{target} #{q_inner_span}".strip)
 				end
 				answer_item_set = true;
