@@ -117,6 +117,11 @@ class QuestionCell < ActiveRecord::Base
 		add_q_items(new_q_items)
 	end
 
+	def spans
+		return nil if self.span.blank?
+		self.span.split(";")
+	end
+
 	def add_switch_source(source)
 		self.preferences ||= Hash.new
 		if self.preferences[:switch].nil?
@@ -1479,7 +1484,9 @@ class ListItemComment < QuestionCell
 
    		part = []
     
-		self.question_items.each do |item|
+    	qispans = self.spans
+
+		self.question_items.each_with_index do |item, i|
 		  listitem_without_predefined_text = item.text.nil? || item.text.empty?
 		  case item.qtype
 				# enable/disable button
@@ -1487,12 +1494,12 @@ class ListItemComment < QuestionCell
 				tcols = self.value && self.value.length > 200 && 120 || 40
 				trows = self.value && self.value.length / 120
 				current_row_columns = question.question_cells.where(:row => self.row).count
-				box_span =  (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
+				box_span = qispans[i] && qispans[i] || (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
 
 				if (listitem_without_predefined_text)
 					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'><span>#{CGI.unescape(self.value)}</span></div>"
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
-					answer_span = self.span && "span-#{self.span}" || box_span
+					answer_span = self.span && "span-#{qispans[i]}" || box_span
 					part << span_item(answer_val, "itemtextbox #{answer_span} #{target}".rstrip) unless answer_val.blank?
 				else 
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") + span_item(item.text, "listitemtext #{box_span} #{target}".rstrip)
@@ -1503,7 +1510,7 @@ class ListItemComment < QuestionCell
 					part << span_item("<span>" + CGI.unescape(self.value.to_s) + "</span>", "listitemfield answer_value #{span}")
 				else 
 					part << span_item(answer_item, "span-1")  #if !(self.col > 2)
-					q_inner_span = self.span && "span-#{self.span/2}" && answer_inner_span
+					q_inner_span = self.span && "span-#{qispans[i]}" && answer_inner_span
 					part << span_item(item.text, "listitem #{target} #{q_inner_span}".strip)
 				end
 				answer_item_set = true;
@@ -1511,7 +1518,7 @@ class ListItemComment < QuestionCell
 			when "itemunit" then 
         		# answer_item_set = true if self.col == 1
         		val = "#{self.value} " << (self.value.blank? && "&nbsp;" || item.text)
-			  	part << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + val, "unitfield answer_value #{span} #{target}")
+			  	part << span_item(((answer_item_set && self.col > 2) ? "" : answer_item) + val, "unitfield answer_value #{qispans[i]} #{target}")
 			end
 		end
 		newform << span_item(part.join, answer_span)
