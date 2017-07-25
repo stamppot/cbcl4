@@ -126,6 +126,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   def update
     @journal = Journal.find(params[:id], :include => :journal_entries)
     @journal.update_attributes(params[:journal])
+    @journal.set_cpr_nr if params[:journal][:birthdate]
     @journal.delta = 1
 
     # if projektnr changed, update in survey answers too
