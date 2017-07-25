@@ -128,7 +128,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @journal.update_attributes(params[:journal])
     if @journal.cpr.nil?
       @journal.set_cpr_nr
-      @journal.person_info.set_cpr_nr
+      # @journal.person_info.set_cpr_nr
     end
     @journal.delta = 1
 
