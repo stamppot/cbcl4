@@ -126,8 +126,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   def update
     @journal = Journal.find(params[:id], :include => :journal_entries)
     @journal.update_attributes(params[:journal])
-    if params[:journal][:birthdate]
-      logger.info "updating birthdate"
+    if @journal.cpr.nil?
       @journal.set_cpr_nr
       @journal.person_info.set_cpr_nr
     end
