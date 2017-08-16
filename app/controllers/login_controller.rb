@@ -67,9 +67,9 @@ class LoginController < ApplicationController
       if user.login_user
         journal_entry = JournalEntry.find_by(:user_id => user)
         # set session correctly when chained with next or previous entry. If next, then next. If prev_survey, then prev_survey. Else current entry
-        goto_entry = if journal_entry.next then journal_entry.next elsif journal_entry.prev_survey then journal_entry.next end
+        goto_entry = journal_entry.chained_survey_entry
          
-        session[:journal_entry] = if journal_entry.next then journal_entry.next elsif journal_entry.prev_survey then journal_entry.next else journal_entry.id end
+        session[:journal_entry] = goto_entry.id
         session[:journal_id] = journal_entry.journal_id
       end
 

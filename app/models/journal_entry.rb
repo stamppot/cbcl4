@@ -57,8 +57,13 @@ class JournalEntry < ActiveRecord::Base
     JournalEntry.where(:next => self.id).first
   end  
 
+  # if this is not answered, return this. Otherwise, return the chained survey entry
   def chained_survey_entry
-    JournalEntry.where(:next => self.next).first || self.prev_survey
+    chained = if self.next then JournalEntry.where(:id => self.next).first elsif prev_survey then prev_survey else nil end
+  end
+
+  def get_chained_survey_entry
+    self.answered? && chained_survey_entry || self
   end
 
   def is_infosurvey?

@@ -1,6 +1,8 @@
 class StartController < ApplicationController
 
   def start
+    session.delete :journal_entry  # clean up from login with chained surveys
+
     token = params[:token]
     if token
 
@@ -8,9 +10,9 @@ class StartController < ApplicationController
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
-    if chained = @journal_entry.chained_survey_entry
-      @journal_entry = chained unless chained.answered?
-    end
+    # if chained = @journal_entry.chained_survey_entry
+    #   @journal_entry = chained unless chained.answered?
+    # end
     # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
     @name = @journal_entry.journal.title
     @center = @journal_entry.journal.center
@@ -31,18 +33,13 @@ class StartController < ApplicationController
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
 
-    # if @journal_entry.draft? && @api_key && @token
-    #   logger.info "300 api_survey_continue_path"
-    #   redirect_to api_survey_continue_path(@api_key, @token) and return
-    # end
-
-    # if @journal_entry.answered? && @api_key && @token
-    #   logger.info "300 api_survey_finish_path"
-    #   redirect_to api_survey_finish_path(@api_key, @token) and return
-    # end
-
     redirect_to survey_continue_path(@api_key, @token) if @journal_entry.draft?
-    redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
+
+    if @journal_entry.answered?
+      # if chained, 
+      redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
+    end
+
     @survey = @journal_entry.survey
     cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
   end
@@ -108,9 +105,11 @@ class StartController < ApplicationController
 
   def finish
     @journal_entry = JournalEntry.find_by_id_and_user_id(params[:id], current_user.id)
-    if !@journal_entry.answered? && @journal_entry.chained_survey_entry
-      session[:journal_entry] = @journal_entry.id
-      redirect_to survey_next_path(@journal_entry.chained_survey_entry) and return
+    if @journal_entry.answered? && (chained = @journal_entry.chained_survey_entry)
+      if chained && !chained.answered?
+        session[:journal_entry] = chained.id
+        redirect_to survey_next_path(chained) and return
+      end
     end
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
@@ -129,6 +128,8 @@ class StartController < ApplicationController
     weeks_to_answer = CenterSetting.get(@center, "edit_answer_in_weeks", 2)
     @update_date = survey_answer && (survey_answer.created_at.end_of_day + weeks_to_answer.weeks) || Date.today
     @can_update_answer = @update_date >= Date.today
+
+    @edit_chained = @journal_entry.chained_survey_entry
     logger.info "Editable until: #{@update_date.inspect}"
   end
 
