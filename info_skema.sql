@@ -9,9 +9,9 @@ delete from question_cells where question_id >= 1000 and question_id <= 1009;
 
 INSERT INTO `questions` VALUES (1000,10,1,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2400,1000,'SectionTitle',1,1,NULL,NULL,'sectiontitle::::Kære forældre,<p/>Jeres barn er indkaldt til undersøgelse.\nVi vil bede jer om at udfylde oplysningsskemaet forud for jeres første besøg i ambulatoriet.',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2401,1000,'ListItem',1,2,"8",NULL,'listitem::::Dato:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2401,1000,'ListItem',1,2,"8",NULL,'listitem::::Dags dato:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2402,1000,'ListItemComment',2,2,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2403,1000,'ListItem',1,3,"8",NULL,'listitem::::Barnets navn:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2403,1000,'ListItem',1,3,"8",NULL,'listitem::::Barnets fulde navn:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2404,1000,'ListItemComment',2,3,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2405,1000,'ListItem',1,4,"8",NULL,'listitem::::Barnets fødselsdag:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2406,1000,'ListItemComment',2,4,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
@@ -54,13 +54,16 @@ INSERT INTO `question_cells` VALUES (2439,1000,'ListItem',1,25,"8",NULL,'listite
 INSERT INTO `question_cells` VALUES (2440,1000,'ListItemComment',2,25,"8",NULL,'itemunit::::år',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2441,1000,'ListItem',1,26,"8",NULL,'listitem::::Adresse:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2442,1000,'ListItemComment',2,26,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2443,1000,'ListItem',1,27,"8",NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2443,1000,'ListItem',1,27,"8",NULL,'listitem::::Postnummer og by:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2444,1000,'ListItemComment',2,27,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2445,1000,'ListItem',1,28,"8",NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
+
+INSERT INTO `question_cells` VALUES (2445,1000,'ListItem',1,28,"8",NULL,'listitem::::Telefonnr./mobilnr:',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2446,1000,'ListItemComment',2,28,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2447,1000,'Placeholder',1,29,"8",NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2448,1000,'ListItem',1,30,"8",NULL,'listitem::::Evt barnets/den unges eget tlf.nr.:',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2449,1000,'ListItemComment',2,30,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2447,1000,'ListItem',1,29,"8",NULL,'listitem::::Nuværende beskæftigelse:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2448,1000,'ListItemComment',2,29,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2449,1000,'Placeholder',1,30,"8",NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2450,1000,'ListItem',1,31,"8",NULL,'listitem::::Evt barnets/den unges eget tlf.nr.:',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2451,1000,'ListItemComment',2,31,"8",NULL,'listitem::::',NULL,0,NULL,NULL,NULL);
 
 INSERT INTO `questions` VALUES (1002,10,2,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2452,1002,'ListItem',1,1,"8",NULL,'listitem::::Lever biologiske forældre sammen?',NULL,1,NULL,NULL,NULL);
