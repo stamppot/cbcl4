@@ -69,7 +69,7 @@ class LoginController < ApplicationController
         # set session correctly when chained with next or previous entry. If next, then next. If prev_survey, then prev_survey. Else current entry
         goto_entry = journal_entry.chained_survey_entry
          
-        session[:journal_entry] = goto_entry.id
+        session[:journal_entry] = goto_entry && goto_entry.id || journal_entry.id
         session[:journal_id] = journal_entry.journal_id
       end
 
