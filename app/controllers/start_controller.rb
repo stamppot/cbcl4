@@ -10,7 +10,7 @@ class StartController < ApplicationController
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
-    # if chained = @journal_entry.chained_survey_entry
+    @is_first_of_chained_survey = true if chained = @journal_entry.chained_survey_entry
     #   @journal_entry = chained unless chained.answered?
     # end
     # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
@@ -90,7 +90,7 @@ class StartController < ApplicationController
       raise RunTimeError "Bad next entry in session: WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
     end
     # @token = session[:token]
-    @continue_from_infosurvey = je.chained_survey_entry && je.chained_survey_entry.is_infosurvey?
+    @continue_from_infosurvey = je.chained_survey_entry && je.is_infosurvey?
     @api_key = session[:api_key]
     cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
     cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
@@ -123,6 +123,7 @@ class StartController < ApplicationController
     # session.clear
     cookies.delete :journal_entry
     cookies.delete :journal_id
+    session.delete :journal_entry
     puts "token: #{@token}"
     survey_answer = @journal_entry.survey_answer
     weeks_to_answer = CenterSetting.get(@center, "edit_answer_in_weeks", 2)

@@ -1,8 +1,11 @@
 <p>
 <span style="font-size: 14pt; line-height: 150%;">
 <% if @continue_from_infosurvey %>
-Tak fordi du besvarede oplysningsskemaet.
-Du skal nu fortsætte til det andet spørgeskema – spørgeskema om barnets adfærd (forældreskema).
+Tak fordi du besvarede spørgeskema om barnets adfærd (forældreskema).
+<br/>
+<br/>
+Du skal nu fortsætte til det andet spørgeskema – oplysningsskemaet.
+<br/>
 </span>
 	<div style=' width: 780px; padding: 20px 0px 20px 20px; font-size: 16pt; background-color: #<%= @survey.color %>;' >
 		<span class="survey_title"><%= link_button t('survey.start'), survey_url(@survey), 'survey_start', :format => 'html' %></span>

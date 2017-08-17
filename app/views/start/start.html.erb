@@ -1,6 +1,15 @@
 <h2>Velkommen til CBCL</h2>
 <p>
-Du skal besvare nedenstående spørgeskema. Du begynder ved at trykke på start. Undervejs gemmes din besvarelse som en kladde, så du kan genoptage besvarelsen senere.
+
+<% if @is_first_of_chained_survey %>
+	Velkommen til  besvarelse af spørgeskemaer i CBCL-database.
+	Du skal besvare 2 spørgeskemaer. Det 1. spørgeskema omhandler barnets adfærd (forældreskema).
+<% else %>
+Du skal besvare nedenstående spørgeskema.
+<% end %>
+<p/>
+ Du begynder ved at trykke på start. Undervejs gemmes din besvarelse som en kladde, så du kan genoptage besvarelsen senere.
+
 <br/>Når du er færdig skal du trykke på 'Send svar'-knappen nederst på siden.
 </p>
 

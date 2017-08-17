@@ -26,7 +26,7 @@ class ChainInfoSurvey
 
 		if is_valid
 			info_surveys = [] << Survey.find(10)
-			couple = {info_surveys.first.id => survey.id}
+			couple = {survey.id => info_surveys.first.id}
 			puts "couple: #{couple.inspect}"
 			entries = journal.add_journal_entries(info_surveys, follow_up, true)
 			puts "entries to couple: #{entries.inspect}"

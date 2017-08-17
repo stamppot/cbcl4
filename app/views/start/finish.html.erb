@@ -37,16 +37,6 @@
 		<h2>Besvaret skema</h2>
 	</p>
 <% end %>
-<div class="was_survey_title" style=' border: 1px solid #<%= @survey.color %>; width: 750px; padding: 20px 0px 6px 20px; font-size: 14pt; background-color: #<%= @survey.color %>;' >
-	<span class="survey_title"></span>
-	<span style="font-size: 14pt;"><%= @survey.description %></span>
-	<p style="font-size: 12pt; padding-top: 20px; padding-bottom: 0px">
-		<%= link_button t('survey.print'), (survey_answer_path(@journal_entry) + ".pdf"), 'survey_print', :title => 'Udskriv besvarelse' %>&nbsp;&nbsp;
-		<% if @can_update_answer %>
-			<%= link_button t('survey.change_answer'), journal_entry_path(@journal_entry), 'survey_edit' %>
-		<% end %>
-	</p>
-</div>
 
 <% if @edit_chained %>
 &nbsp;
@@ -61,6 +51,17 @@
 	</p>
 </div>
 <% end %>
+<p/>
+<div class="was_survey_title" style=' border: 1px solid #<%= @survey.color %>; width: 750px; padding: 20px 0px 6px 20px; font-size: 14pt; background-color: #<%= @survey.color %>;' >
+	<span class="survey_title"></span>
+	<span style="font-size: 14pt;"><%= @survey.description %></span>
+	<p style="font-size: 12pt; padding-top: 20px; padding-bottom: 0px">
+		<%= link_button t('survey.print'), (survey_answer_path(@journal_entry) + ".pdf"), 'survey_print', :title => 'Udskriv besvarelse' %>&nbsp;&nbsp;
+		<% if @can_update_answer %>
+			<%= link_button t('survey.change_answer'), journal_entry_path(@journal_entry), 'survey_edit' %>
+		<% end %>
+	</p>
+</div>
 
 <p>Du kan nu logge af.<p/>
 <br>
