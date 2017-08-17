@@ -136,6 +136,11 @@ class SurveyAnswersController < ApplicationController
   
   def json_dynamic_data
     journal_id = params[:journal_id]
+    if journal_id.nil? || journal_id == "null"
+      Rails.logger("json_dynamic_data, journal_id is bad: #{params.inspect}")
+      entry = JournalEntry.find params[:id]
+      journal_id = entry.journal_id
+    end
     @journal_entry = JournalEntry.where('id = ? AND journal_id = ?', params[:id], journal_id).includes(:journal).first
    
     save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
