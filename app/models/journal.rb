@@ -171,7 +171,11 @@ class Journal < ActiveRecord::Base #< Group
 	end
 
   def follow_up_count
-    journal_entries.map {|e| e.survey_id}.group_by {|c| c}.map {|c| c.second.size}.max
+    if CenterSetting.enabled?(self.center, "enable_followup", false)
+      journal_entries.map {|e| e.survey_id}.group_by {|c| c}.map {|c| c.second.size}.max
+    else
+      0
+    end
   end
 
   def expire
