@@ -9,8 +9,8 @@ class ChainInfoSurvey
 		puts "follow_up is 0"
 		exists = journal.surveys.any? { |s| s.id == 10 }
 		puts "exists: #{exists}"
-		return false if exists
-		puts "surveys doesn't exist already"
+		#return false if exists
+		#puts "surveys doesn't exist already"
 		return false unless survey.surveytype == "parent"
 		puts "surveytype is parent"
 		return true
