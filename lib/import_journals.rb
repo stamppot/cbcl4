@@ -105,7 +105,8 @@ class ImportJournals # AddJournalsFromCsv
  	def list
     	puts "update(file, [survey_ids], team_id, follow_up, {couple}, do_save)"
     	puts "update_followup(file, do_save = false, survey_ids = [1,3,9], team_id = 9259, follow_up = 1, couple = {1 => 9}"
- 		puts "update_email(file, team_id, do_save = false)"
+ 		puts "update_email(file, team_id, do_save = false)  update info"
+ 		puts "update_emails(file, team_id, do_save = false) update only emails"
  		puts "check_next(file = 'aug_2010.csv', team_id = 9259)"
  		puts "update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)"
  		puts "update_connect(file, team_id, couple = {}, do_save = false)"
@@ -162,6 +163,55 @@ class ImportJournals # AddJournalsFromCsv
 		end
 	end
 
+	def update_emails(file, team_id = 9259, do_save = false)
+		group = Group.find(team_id)
+		center = group.center
+
+		i = 1
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			puts "Row: #{i} #{row}"
+			next if row.blank?
+
+			alt_id = row["alt_id"] || row["Graviditetsid"]
+			b = row["birthdate"]
+			journal_name = row["journalnavn"] || row["Bnavn"]
+			parent_name = row["Mnavn"]
+			parent_mail = row["Email"]
+			sex = row["gender"] || row["Gender"]
+			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
+
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}  email: #{parent_mail}    mor: #{parent_name}"
+
+			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
+
+			next unless journal
+			
+			if parent_mail.blank?
+				puts "parent email is blank: #{parent_mail}"
+			end
+
+			if !parent_mail.blank? && !EmailValidator.new.valid?(parent_mail)
+				puts "parent email is not valid: '#{parent_mail}'' #{journal.inspect}"
+				raise "InvalidEmailError: #{parent_mail}"
+			end
+			
+			# birthdate = b && get_date(b) || journal.birthdate
+
+			# raise "DateError: #{birthdate} row: #{row.inspect}" if birthdate.year < 1980
+
+			# puts "birthdate: #{birthdate}"
+			# args = {
+			# 	:title => journal_name, :group_id => group.id, :center_id => group.center_id,
+			# 	:birthdate => birthdate, :parent_email => parent_mail,
+			# 	:parent_name => parent_name, :alt_id => alt_id, :nationality => "Dansk", :sex => sex
+			# }
+			journal.parent_email = parent_mail
+			puts "valid?  #{journal.valid?}"
+			journal.save if do_save
+			
+			i = i + 1
+		end
+	end
 	def update_connect(file, team_id = 9259, follow_up = 1, couple = {1 => 9}, do_save = false)
 		group = Group.find(team_id)
 		center = group.center
