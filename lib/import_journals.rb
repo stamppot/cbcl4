@@ -155,6 +155,7 @@ class ImportJournals # AddJournalsFromCsv
 				:parent_name => parent_name, :alt_id => alt_id, :nationality => "Dansk", :sex => sex
 			}
 			journal.parent_email = parent_mail
+			puts "valid?  #{journal.valid?}"
 			journal.save if do_save
 			
 			i = i + 1
