@@ -174,7 +174,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			alt_id = row["alt_id"] || row["Graviditetsid"]
 			b = row["birthdate"]
-			journal_name = row["journalnavn"] || row["Bnavn"]
+			journal_name = row["journalnavn"] || row["Bnavn"] || row["Navn"]
 			parent_name = row["Mnavn"]
 			parent_mail = row["Email"]
 			sex = row["gender"] || row["Gender"]
