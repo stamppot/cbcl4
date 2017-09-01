@@ -184,6 +184,7 @@ class ImportJournals # AddJournalsFromCsv
 
 			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
 
+			puts "found journal: #{journal.inspect}"
 			next unless journal
 			
 			if parent_mail.blank?
