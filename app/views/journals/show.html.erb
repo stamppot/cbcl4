@@ -67,11 +67,7 @@
 		<hr/>
 		<h4><%= t('survey.answered') %></h4>
 
-		<% if true || current_user.access?(:superadmin) %>
-				<form action="/info_answer_reports/<%= @journal.id %>.pdf<%= '?random=' << rand(10000000).to_s %>" id="show_score_rapports" method="get">
-		<% else %>
-				<form action="/answer_reports/<%= @journal.id %>.pdf<%= '?random=' << rand(10000000).to_s %>" id="show_score_rapports" method="get">
-		<% end %>
+		<form action="/info_answer_reports/<%= @journal.id %>.pdf<%= '?random=' << rand(10000000).to_s %>" id="show_score_rapports" method="get">
 			<%= hidden_field_tag 'journal_id', @journal.id %>
 			<%= hidden_field_tag 'random_for_ie', rand(1000000) %>
 		<div id="answered_surveys">
