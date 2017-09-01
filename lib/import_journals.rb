@@ -129,7 +129,7 @@ class ImportJournals # AddJournalsFromCsv
 			sex = row["gender"] || row["Gender"]
 			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
 
-			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
+			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}  email: #{parent_mail}    mor: #{parent_name}"
 
 			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
 
@@ -138,7 +138,7 @@ class ImportJournals # AddJournalsFromCsv
 			if parent_mail.blank?
 				puts "parent email is blank: #{parent_mail}"
 			end
-			
+
 			if !parent_mail.blank? && !EmailValidator.new.valid?(parent_mail)
 				puts "parent email is not valid: '#{parent_mail}'' #{journal.inspect}"
 				raise "InvalidEmailError: #{parent_mail}"
