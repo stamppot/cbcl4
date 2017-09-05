@@ -1494,8 +1494,8 @@ class ListItemComment < QuestionCell
 		  case item.qtype
 				# enable/disable button
 			when "textbox" then 
-				tcols = !self.value.nil? && self.value.to_i > 0 && self.value.length > 200 && 120 || 40
-				trows = !self.value.nil? && self.value.to_i > 0 && self.value.length / 120
+				tcols = !self.value.nil? && self.value.to_s.length > 200 && 120 || 40
+				trows = !self.value.nil? && self.value.to_s.length / 120
 				current_row_columns = question.question_cells.where(:row => self.row).count
 				box_span = qispans[i] && qispans[i] || (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
 
