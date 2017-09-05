@@ -18,7 +18,7 @@ Der er ikke oprettet journaler.
 		<td class="pj_name"><a href="<%= url_for(g) %>"><%= g.get_name %></a></td>
 		<td class="pj small number"><%= g.code %></td>
 		<td class="pj small"><span class="nobr"><%= g.birth_short %></span></td>
-		<td class="pj small"><span class="nobr"><%= g.created_at.to_date.strftime("%d-%m-%Y") %></span></td>
+		<td class="pj small"><span class="nobr"><%= g.created_at && g.created_at.to_date.strftime("%d-%m-%Y") || "" %></span></td>
 		<% unless @hide_team %>
 		<td class="pj" style="text-align: left;"><%= @hide_team %> <%= g.group && g.group.get_name || "" %></td>
 		<% end %>

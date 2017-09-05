@@ -133,6 +133,9 @@ class ImportJournals # AddJournalsFromCsv
 			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}  email: #{parent_mail}    mor: #{parent_name}"
 
 			journal = Journal.find_by_alt_id_and_title_and_group_id(alt_id, journal_name, team_id)
+			raise "Couldn't find journal Error: #{parent_mail}" unless journal
+
+			puts "found journal: #{journal.inspect}"
 
 			next unless journal
 			
