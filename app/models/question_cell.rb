@@ -1500,7 +1500,7 @@ class ListItemComment < QuestionCell
 				box_span = qispans[i] && qispans[i] || (question.columns == 3 && current_row_columns >= 3) && "span-4" || "span-11"
 
 				if (listitem_without_predefined_text)
-					answer_val = self.value.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'><span>#{CGI.unescape(self.value)}</span></div>"
+					answer_val = self.value.to_s.blank? ? "" : "<div id='#{c_id}' class='comment answer_value'><span>#{CGI.unescape(self.value)}</span></div>"
 					part << span_item(answer_item_set ? "" : answer_item, "span-1") if !answer_item_set || !answer_item.blank?
 					answer_span = qispans[i] && "span-#{qispans[i]}" || box_span
 					part << span_item(answer_val, "itemtextbox #{answer_span} #{target}".rstrip) unless answer_val.blank?
