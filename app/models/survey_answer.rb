@@ -186,6 +186,7 @@ class SurveyAnswer < ActiveRecord::Base
     c["pkoen"] = j.sex
     c["palder"] = self.age_when_answered if self.age_when_answered  # alder på besvarelsesdatoen
     c["pnation"] = j.nationality
+    self.created_at ||= DateTime.now
     c["besvarelsesdato"] = self.created_at.strftime("%d-%m-%Y")
     c["pfoedt"] = j.birthdate.strftime("%d-%m-%Y")  # TODO: translate month to danish
     c
