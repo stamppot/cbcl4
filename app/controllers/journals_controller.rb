@@ -62,6 +62,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   def show
     @journal = Journal.find(params[:id]) # cache_fetch("j_#{params[:id]}") {  }
+    @journal.created_at ||= DateTime.now
     alt_ids = [] # @group.center.center_settings.find(:conditions => ["name = 'alt_id_name'"])
     alt_id = alt_ids.any? && alt_ids.first || ""
     @alt_id_name = "Projektnr" # alt_id && alt_id.value || "Projektnr"
