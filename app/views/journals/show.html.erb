@@ -29,6 +29,8 @@
             		<%= image_tag "link.png", :border => 0, :title => "Kobling: #{entry.next_survey_title}",  :alt => "Koblet med #{entry.next_survey_title}" %>
             	<% end %>
             </td>
+            
+            <% entry.created_at ||= DateTime.now %>
 					 <td><%= entry.created_at.strftime "%d-%m-%Y" %>
 					 <td><%= entry.status %></td>
 					 <td style="min-width: 100px;">
