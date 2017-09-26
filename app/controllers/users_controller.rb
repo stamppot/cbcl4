@@ -113,7 +113,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     @user.password = ""
   
     if current_user.has_role?(:superadmin) # superadmin can create users in all groups
-      @groups = (current_user.center_and_teams + @user.center + @user.groups + @user.center.teams).sort_by { |c| c.title  }.uniq
+      @groups = (current_user.center_and_teams + [@user.center] + @user.groups + @user.center.teams).sort_by { |c| c.title  }.uniq
     end
   end
 
