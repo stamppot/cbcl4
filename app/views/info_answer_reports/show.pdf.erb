@@ -77,7 +77,7 @@
 				@survey	   = hash[:survey]
 				answer_date = hash[:answer_date]	%>
 			
-			<h3 class="survey_title"><%= @survey.get_title %> besvaret <span><%= (answer_date || Date.Now).strftime("%d/%m/%Y") %></span></h3>
+			<h3 class="survey_title"><%= @survey.get_title %> besvaret <span><%= (answer_date || DateTime.Now).strftime("%d/%m/%Y") %></span></h3>
 				<% @questions.each do |question, cells| %>
 					<% if cells.any? %>
 						<%= render :partial => "answer_reports/question", :locals => {:question => question, :cells => cells} %>
