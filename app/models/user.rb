@@ -315,7 +315,7 @@ class User < ActiveRecord::Base
         col
       end
     else
-      groups = self.groups
+      groups = ([self.center] + self.groups).uniq
     end
   end
     
