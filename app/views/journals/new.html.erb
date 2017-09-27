@@ -69,7 +69,7 @@
 <% end %>
 <!--[eoform:user]-->
 
-	<%= submit_tag t('create'), :name => 'submit[create]', :class => 'button journal_add', :onclick => "alert('clicked!'); $('#journal_add_btn').attr('disabled', true);" %>
+	<%= submit_tag t('create'), :name => 'submit[create]', :class => 'button journal_add', :onclick => "$('#journal_add_btn').attr('disabled', true);" %>
 <% end %>
 
 <%= back_button journals_path %>
