@@ -4,6 +4,16 @@
 <style>
 body { font-size: 100%; }
 
+@media print {
+	#info_report {
+		page-break-after: always;
+	}
+}
+
+#info_report {
+	page-break-after: always;
+}
+
 .answer_value span, .answer_value {
 	padding: 3px 0 3px 8px;
   font-family: 'letter gothic', courier, 'inconsolata';
@@ -26,12 +36,14 @@ body { font-size: 100%; }
 <hr>
 
 <% if @answer_values %>
-	<%# "infoskema" %>
-	<h3 class="survey_title"><%= @info_survey.get_title %> besvaret <span><%# answer_date.strftime("%d/%m/%Y") %></span></h3>
-	<% @info_survey.questions.each do |question| %>
-		<%= render :partial => "question", :locals => {:question => question, :answers => @answer_values["Q#{question.number}"]} %>
-	<% end %>
-	<br/><p/>
+	<div id="info_report">
+		<%# "infoskema" %>
+		<h3 class="survey_title"><%= @info_survey.get_title %> besvaret <span><%# answer_date.strftime("%d/%m/%Y") %></span></h3>
+		<% @info_survey.questions.each do |question| %>
+			<%= render :partial => "question", :locals => {:question => question, :answers => @answer_values["Q#{question.number}"]} %>
+		<% end %>
+		<br/><p/>
+	</div>
 <% end %>
 
 <table id="score_report" class="outer">
