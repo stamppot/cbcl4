@@ -11,6 +11,9 @@ class ChooseLetterRule
 	end
 
 	def is_problematic_score?(survey_answer)
+		if survey_answer.score_rapport.nil?
+			survey_answer.score_rapport
+		end
 		survey_answer.score_rapport.has_98th_percentile_scores.any?
 	end
 
