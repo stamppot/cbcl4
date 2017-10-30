@@ -11,10 +11,12 @@ class ChooseLetterRule
 	end
 
 	def is_problematic_score?(survey_answer)
-		if survey_answer.score_rapport.nil?
-			survey_answer.generate_score_report(true)
+		score_rapport = survey_answer.score_rapport
+		if score_rapport.nil?
+			puts "Will generate score_rapport for #{survey_answer.inspect}"
+			score_rapport = survey_answer.generate_score_report(true)
 		end
-		survey_answer.score_rapport.has_98th_percentile_scores.any?
+		score_rapport.has_98th_percentile_scores.any?
 	end
 
 	def is_problematic_letter?(survey_answers, follow_up = 1)
