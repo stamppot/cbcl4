@@ -7,12 +7,17 @@ body { font-size: 95%; }
 @media print {
 	#info_report {
 		page-break-after: always;
+		font-size: 1.05em;
 	}
 }
 
 #info_report {
 	page-break-after: always;
 }
+
+.score_title, .score_entry { 	font-size: 1.15em; }
+.result, .percentile { font-size: 1.15em; }
+.score_ref_description td { font-size: 1.15em; }
 
 .answer_value {
 	padding: 3px 0 3px 8px;
@@ -28,15 +33,14 @@ body { font-size: 95%; }
 
 </style>
 
-<h1 class="score_report">CBCL-Rapport</h1>
-<hr>
-
 <%= render :partial => "shared/center_info", :object => @journal %>
 
 <br/>
 <hr>
 
 <% if @answer_values %>
+<h1 class="score_report">Oplysningsskema</h1>
+<hr>
 	<div id="info_report">
 		<%# "infoskema" %>
 		<h3 class="survey_title"><%= @info_survey.get_title %> besvaret <span><%# answer_date.strftime("%d/%m/%Y") %></span></h3>
@@ -47,12 +51,17 @@ body { font-size: 95%; }
 	</div>
 <% end %>
 
+
+<% if @groups.any? %>
+<h1 class="score_report">CBCL-Rapport</h1>
+<hr>
+<% end %>
 <table id="score_report" class="outer">
 	<%- @groups.each_with_index do |group, i| %>
    		<% # survey titles in top line only
 		@titles.each_with_index do |title, j|
 	 		fst_col = (j == 0) %>
-			<th class='col<%= j %> score_entry' colspan='<%= fst_col ? 1 : 2 %>'><%= ((i == 0) ? title : "&nbsp;").html_safe %></th>
+			<th class='col<%= j %> score_entry' colspan='<%= fst_col ? 1 : 2 %>'><%= ((i == 0) ? title : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").html_safe %></th>
 		<% end %>
 		<% if (1..group.size + 1) === i && !group.empty? %>
    			<tr class='scale_title'>
