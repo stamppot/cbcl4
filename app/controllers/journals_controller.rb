@@ -68,7 +68,8 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @alt_id_name = "Projektnr" # alt_id && alt_id.value || "Projektnr"
     entries = @journal.journal_entries.includes(:survey_answer)
 		@answered_entries, @not_answered_entries = entries.partition {|e| e.survey_answer && e.survey_answer.done }
-		# @not_answered_entries = @journal.not_answered_entries
+		@answered_entries = @answered_entries.sort_by {|e| e.follow_up }
+    # @not_answered_entries = @journal.not_answered_entries
     puts "Journal/show #{@journal.inspect} #{@journal.get_name}"
   end
 

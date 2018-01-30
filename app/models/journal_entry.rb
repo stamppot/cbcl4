@@ -44,6 +44,19 @@ class JournalEntry < ActiveRecord::Base
     end
   end
 
+
+  def reincarnate_login_user
+    return if self.login_user
+
+    self.login_user = make_login_user(self.password) 
+    unless self.login_user.valid?
+      logger.error "login_user errors: #{login_user.errors.inspect}"
+      puts "login_user errors: #{login_user.errors.inspect}"
+    end
+    self.login_user.save && self.save
+    login_user
+  end
+
   def get_follow_up
     self.follow_up ||= 0
     FollowUp.get[follow_up].first
@@ -316,8 +329,8 @@ class JournalEntry < ActiveRecord::Base
     login_user = LoginUser.new(params)
     # set protected fields explicitly
     login_user.center_id = journal.center_id
-    login_user.roles << Role.get(:login_bruger)
-    login_user.groups << journal.group
+    # login_user.roles << Role.get(:login_bruger)
+    # login_user.groups << journal.group
     login_user.password, login_user.password_confirmation = pw.values
     login_user.password_hash_type = "md5"
     login_user.last_logged_in_at = 10.years.ago
