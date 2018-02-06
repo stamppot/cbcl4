@@ -397,7 +397,7 @@ class User < ActiveRecord::Base
       else 
         Journal.all_groups(group_ids).for_group(team).order_by(column,order).paginate(options)
       end
-    elsif self.has_access?(:login_user)
+    elsif self.login_user?
       entry = JournalEntry.find_by_user_id(self.id)
       [entry.journal]
     elsif self.has_access?(:journal_show_none)

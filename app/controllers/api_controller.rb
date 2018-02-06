@@ -246,7 +246,7 @@ class ApiController < ActionController::Base
     #end
     # check controller
     if !params[:id].blank? && params[:controller] =~ /score|faq/
-      if current_user && (current_user.access?(:all_users) || current_user.access?(:login_user))
+      if current_user && (current_user.access?(:all_users) || current_user.login_user?
         if session[:journal_entry]
           logger.info "REQUEST #{params[:controller]}/#{params[:action]} #{'/' + (params[:id] || "")} cookie: '#{session[:journal_entry]}' user: '#{current_user.id}' @ #{9.hours.from_now.to_s(:short)}"
         end
