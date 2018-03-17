@@ -31,4 +31,5 @@ Cbcl4::Application.configure do
   config.assets.compile = true  
   config.assets.precompile = ['*.js', '*.css', '*.css.erb'] + %w(*.png *.jpg *.jpeg *.gif)
 
+  config.tinymce.install = :copy
 end
