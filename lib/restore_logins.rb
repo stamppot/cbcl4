@@ -91,6 +91,7 @@ class RestoreLogins
 		i = 0
 		users = []
 		not_created = []
+		errors = []
 
 		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
 			i += 1
@@ -145,13 +146,23 @@ class RestoreLogins
 				next
 			end
 
-			u.save
+			success = u.save
 			users << u
-			puts "#{u.id} #{u.login} created"
-
+			if success
+				puts "#{u.id} #{u.login} created"
+			else
+				l_exists = User.find_by_login(u.login)
+				errors << "could not create user: #{u.errors.inspect}   existing: #{l_exists.inspect}"
+				puts errors.last
+				
+				u.login << "x"
+				u.save
+				# return
+			end
 
 		end
 
+		puts "Errors: #{errors.size}   #{errors.inspect}"
 		puts "Processed #{i} rows"
 		puts "Restored #{users.size} users"
 		puts "Not restored: #{not_created.size}:  #{not_created.inspect} "

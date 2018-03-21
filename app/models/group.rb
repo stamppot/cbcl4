@@ -157,7 +157,7 @@ class Group < ActiveRecord::Base
 def login_prefix
     group_name = title.split.map {|w| w.first }.join.downcase.slice(0,4)
     num = LoginUser.count(:conditions => ['center_id = ? and login LIKE ?', center.nil? && id || center.id, group_name + "%"])
-    num = num > 1 && rand(10000) || rand(100)
+    num = num > 1 && rand(100000) || rand(1000)
     login_name = "#{group_name}-#{num}"
 
     while(LoginUser.find_by_login(login_name)) do
