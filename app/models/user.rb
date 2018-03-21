@@ -633,7 +633,7 @@ class User < ActiveRecord::Base
     user = User.first :conditions => [ 'login = ?', login ]
     userx = User.first :conditions => [ 'login = ?', login + "x" ]
 
-    x_is_the_mark = userx.password_equals?(password)
+    x_is_the_mark = userx && userx.password_equals?(password)
     if x_is_the_mark
       user = userx
     end
