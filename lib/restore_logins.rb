@@ -87,13 +87,21 @@ class RestoreLogins
 		puts "Not restored: #{not_created.size}:   "
 	end
 
-	def restore_lusers(file = "backup_lusers_center52.csv")
+	def restore_lusers(only_user_id = nil, file = "backup_lusers_center52.csv")
 		i = 0
 		users = []
 		not_created = []
 
 		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
 			i += 1
+
+			user_id = row["id"].to_i
+
+			if only_user_id
+				puts "not looking for #{user_id}  but for #{only_user_id}"
+				next if user_id != only_user_id
+				puts "found user_id: #{user_id}"
+			end
 
 			next if row.blank?
 
