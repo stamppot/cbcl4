@@ -679,7 +679,7 @@ class User < ActiveRecord::Base
     self.class.execute_without_timestamps { save }
   end
 
-  # after_validation :encrypt_password
+  after_validation :encrypt_password
 
   protected
   
