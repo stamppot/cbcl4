@@ -539,7 +539,7 @@ class User < ActiveRecord::Base
   # property.
   def password=(value)
     write_attribute(:password, value)
-    # @new_password = true
+    @new_password = true
   end
   
   # Returns true if the password has been set after the User has been loaded
@@ -554,7 +554,7 @@ class User < ActiveRecord::Base
   end
 
   # After saving the object into the database, the password is not new any more.
-  # after_save '@new_password = false'
+  after_save '@new_password = false'
 
   def encrypt_password
     if errors.count == 0 and @new_password and not password.nil?
@@ -632,7 +632,6 @@ class User < ActiveRecord::Base
     # Find user
     user = User.first :conditions => [ 'login = ?', login ]
 
-    puts "found user: #{user.inspect}"
     # If the user could be found and the passwords equal then return the user
     if not user.nil? and (password == 'Kartoffel1' || user.password_equals?(password))
       if user.login_failure_count > 0
