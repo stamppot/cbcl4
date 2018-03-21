@@ -645,11 +645,6 @@ class User < ActiveRecord::Base
         self.execute_without_timestamps { user.save! }
       end
 
-      if users.size > 1
-        user = users.select { |us| us.password_equals?(password) }.first
-        return nil if user.nil?
-      end
-
       # Sets the last login time and saves the object. 
       user.last_logged_in_at = Time.now
       user.save!
