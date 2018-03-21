@@ -3,7 +3,91 @@ require 'csv'
 
 class RestoreLogins
 
-	def restore(file = "missing_users_backup.csv")
+	def restore_entries(file = "journal_entries_backup.csv", change_data = false)
+		i = 0
+		entries = []
+		not_created = []
+		obsolete_lusers = []
+
+		output_file = ""
+
+		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+			i += 1
+
+			next if row.blank?
+
+			puts "."
+
+			je = JournalEntry.new
+			#id;journal_id;survey_id;user_id;password;survey_answer_id;created_at;answered_at;state;updated_at;center_id;follow_up;
+			#group_id;reminder_status;notes;answer_info;next
+
+			je.id = row["id"].to_i
+			je.user_id = row["user_id"].to_i
+			je.journal_id = row["journal_id"].to_i
+			je.survey_id = row["survey_id"].to_i
+			je.created_at = DateTime.strptime(row["created_at"], "%Y-%m-%d %H:%M:%S")
+			je.updated_at = DateTime.strptime(row["updated_at"], "%Y-%m-%d %H:%M:%S")			
+			je.password = row["password"]
+			je.state = row["state"].to_i
+			je.center_id = row["center_id"].to_i
+			je.follow_up = row["follow_up"].to_i
+			je.group_id = row["group_id"].to_f
+			je.reminder_status = row["reminder_status"]
+			je.notes = row["notes"]
+			je.next = row["next"].to_i
+
+			exists = JournalEntry.find_by_id(je.id)
+			if exists
+
+				if je.user_id == exists.user_id
+					not_changed = "user_id not changed, skipping  #{exists.user_id}  org.created_at #{je.created_at}  curr_created: #{exists.created_at}"
+					puts not_changed
+					output_file << not_changed << "\n"
+					next
+				end
+
+				msg_exists = "Entry already exists: #{je.id}   org_user_id: #{je.user_id}   curr_user: #{exists.user_id}   org_created: #{je.created_at}   curr_created: #{exists.created_at} "
+				puts msg_exists
+				output_file << msg_exists << "backup: #{je.inspect}" << "exists: #{exists.inspect}" << "\n"
+					
+				obsolete_lusers << exists.user_id
+				not_created << je
+
+				if change_data # really run the update
+					ch_msg = "change user_in on entry: #{exists.id}  #{exists.user_id} -> #{je.user_id}"
+					puts ch_msg
+					output_file << ch_msg << "\n"
+					exists.notes = "alt_login #{exists.user_id}"
+					exists.user_id = je.user_id
+					exists.save
+				end
+
+				next
+			end
+
+			luser = LoginUser.find_by_id(je.user_id)
+			if luser.nil?
+				puts "LoginUser not found!!! #{je.inspect}"
+				not_created << je
+				next
+			end
+
+			# je.save
+			entries << je
+			puts "#{je.id}  user_id #{je.user_id} created"
+		end
+
+		File.open("restore_entries" + DateTime.now.strftime("%Y%m%d_%H%M%S") + ".log", 'w') { |file| file.write(output_file) }
+
+
+		puts "Processed #{i} rows"
+		puts "Restored #{entries.size} entries"
+		puts "Obsolete login-users: #{obsolete_lusers.size}"
+		puts "Not restored: #{not_created.size}:   "
+	end
+
+	def restore_lusers(file = "backup_lusers_center52.csv")
 		i = 0
 		users = []
 		not_created = []
@@ -15,12 +99,15 @@ class RestoreLogins
 
 			puts "."
 
+			# ue = User.find_by_id row["id"].to_i
+			# ue.destroy if ue
+			# next
 			u = User.new
 			u.id = row["id"].to_i
-			u.created_at = DateTime.strptime(row["created_at"], "%Y-%m-%d %H:%M:%S")
-			u.updated_at = DateTime.strptime(row["updated_at"], "%Y-%m-%d %H:%M:%S")
-			u.last_logged_in_at = DateTime.strptime(row["last_logged_in_at"], "%Y-%m-%d %H:%M:%S")
-			u.login_failure_count = row["login_failure_count"].to_f
+			u.created_at = DateTime.strptime(row["created_at"], "%Y-%m-%d %H:%M:%S") unless row["created_at"].nil?
+			u.updated_at = DateTime.strptime(row["updated_at"], "%Y-%m-%d %H:%M:%S") unless row["updated_at"].nil?
+			u.last_logged_in_at = DateTime.strptime(row["last_logged_in_at"], "%Y-%m-%d %H:%M:%S") unless row["last_logged_in_at"].nil?
+			u.login_failure_count = row["login_failure_count"].to_i
 			u.login = row["login"]
 			u.name = row["name"]
 			u.email = row["email"]
@@ -34,7 +121,16 @@ class RestoreLogins
 			u.delta = row["delta"]
 			u.role_ids_str = row["role_ids_str"]
 
+			# puts "#{u.inspect}"
 			exists = User.find_by_id(u.id)
+
+			if u.login == "s-9202" || u.id == 57989
+				puts "exists: #{exists.inspect}"
+				puts "u: #{u.inspect}"
+				# return
+			end
+
+
 			if exists
 				puts "User already exists: #{u.id}   org_login: #{u.login}   curr_login: #{exists.login}   org_created: #{u.created_at}   curr_created: #{exists.created_at} "
 				not_created << u
@@ -44,6 +140,8 @@ class RestoreLogins
 			u.save
 			users << u
 			puts "#{u.id} #{u.login} created"
+
+
 		end
 
 		puts "Processed #{i} rows"

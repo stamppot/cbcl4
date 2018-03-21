@@ -186,6 +186,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def add_survey
+    render :text => "Funktionen er slået fra pt. Prøv igen om en halv time." and return
     @group = Journal.find(params[:id])
     if request.post?
       surveys = params[:survey].select { |k,v| v.to_i == 1 }.map &:first
