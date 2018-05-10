@@ -1,5 +1,18 @@
 <%= error_messages_for 'user' %>
 
+<script type="text/javascript">
+function confirm_deactivate(state, user_name) {
+
+	var is_on = parseInt($('#user_locked').val());
+	var action = state == 3 ? "aktivere" : "deaktivere";
+	if(confirm("Er du sikker på at du vil " + action + " brugeren " + user_name + "?\n\nDet betyder at brugeren ikke kan logge ind.")) {
+		$('#user_locked').val(state == 3 ? 2 : 3); // deactivated state
+		return true;
+	}
+	return false;
+}
+</script>
+
 <!--[form:user]-->
 			<% if flash[:error] -%>
 				<div id="errorExplanation"><%= flash[:error] %></div>
@@ -28,10 +41,6 @@
 	<br/>
 	<%= render :partial => 'password' %>
 
-	<dt><label for="user_state"><%= t('state') %></label></dt>
-	<dd><%# select 'user', 'state', User.stateToStatus(User.states.reject { |key, value| !@user.state_transition_allowed?(@user.state, value) }) %></dd>
-
-	
 
 	<dt><label><%= t('roles.Roles') %></label></dt>
 	<dd>
@@ -45,6 +54,13 @@
 			<br>
 		<% end %>
 	</dd>
+
+	<% if current_user.has_access? :superadmin %>
+	<dt>&nbsp;</dt>
+	<dd>&nbsp;</dd>
+	<dt><label for="user_state">Deaktiveret <%# t('state') %></label></dt>
+	<dd><input id="user_locked" type="checkbox" name="user[state]" value=<%= @user.state %> onchange="confirm_deactivate(<%= @user.state %>, '<%= @user.name %>');" %> <%# select 'user', 'state', User.stateToStatus(User.states.reject { |key, value| !@user.state_transition_allowed?(@user.state, value) }) %></dd>
+	<% end %>
 
 </dl>
 </td>
@@ -70,5 +86,6 @@
 <tr></tr>
 </tbody>
 </table>
+
 
 <!--[eoform:user]-->

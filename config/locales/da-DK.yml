@@ -55,7 +55,6 @@ da-DK:
       - tor
       - fre
       - lør
-    
       :day_names: 
       - "søndag"
       - mandag
@@ -68,6 +67,48 @@ da-DK:
       - :day
       - :month
       - :year
+    datetime:
+      distance_in_words:
+        about_x_hours:
+          one: Ca. en time
+          other: Ca. %{count} timer
+        about_x_months:
+          one: ca. en måned
+          other: ca. %{count} måneder
+        about_x_years:
+          one: ca. et år
+          other: ca. %{count} år
+        half_a_minute: et halvt minut
+        almost_x_years:
+          zero: næsten et år
+          one: næsten et år
+          other: næsten %{count} år
+        less_than_x_minutes:
+          zero: mindre end et minut
+          one: mindre end et minut
+          other: mindre end %{count} minutter
+        less_than_x_seconds:
+          zero: mindre end et sekund
+          one: mindre end et sekund
+          other: mindre end %{count} sekunder
+        over_x_years:
+          one: mere end et år
+          other: mere end %{count} år
+        x_days:
+          one: 1 dag
+          other: "%{count} dage"
+        x_minutes:
+          one: 1 minut
+          other: "%{count} minutter"
+        x_months:
+          one: 1 måned
+          other: "%{count} måneder"
+        x_years:
+          one: et år
+          other: "%{count} år"
+        x_seconds:
+          one: 1 sekund
+          other: "%{count} sekunder"
     code: Kode
     go_back_to_list: Tilbage til liste
     boy: "Dreng"
@@ -287,39 +328,48 @@ da-DK:
       French: Fransk
       Dutch: Hollandsk
       German: Tysk
-    datetime: 
-      :distance_in_words: 
-        :about_x_hours: 
-          :other: ongeveer {{count}} uur
-          :one: ongeveer 1 uur
-        :less_than_x_seconds: 
-          :other: mindre end {{count}} sekunder
-          :one: mindre end 1 sekund
-        :x_days: 
-          :other: "{{count}} dage"
-          :one: 1 dag
-        :about_x_months: 
-          :other: "ca. {{count}} måneder"
-          :one: "ca. 1 måned"
-        :x_seconds: 
-          :other: "{{count}} sekunder"
-          :one: 1 sekund
-        :x_months: 
-          :other: "{{count}} måneder"
-          :one: 1 maand
-        :less_than_x_minutes: 
-          :other: mindre end {{count}} minutter
-          :one: mindre end 1 minut
-        :about_x_years: 
-          :other: "ca. {{count}} år"
-          :one: "ca. 1 år"
-        :x_minutes: 
-          :other: "{{count}} minutter"
-          :one: 1 minut
-        :over_x_years: 
-          :other: "længere end {{count}} år"
-          :one: "længere end 1 år"
-        :half_a_minute: halvt minut
+    datetime:
+      distance_in_words:
+        about_x_hours:
+          one: Ca. en time
+          other: Ca. %{count} timer
+        about_x_months:
+          one: ca. en måned
+          other: ca. %{count} måneder
+        about_x_years:
+          one: ca. et år
+          other: ca. %{count} år
+        half_a_minute: et halvt minut
+        almost_x_years:
+          zero: næsten et år
+          one: næsten et år
+          other: næsten %{count} år
+        less_than_x_minutes:
+          zero: mindre end et minut
+          one: mindre end et minut
+          other: mindre end %{count} minutter
+        less_than_x_seconds:
+          zero: mindre end et sekund
+          one: mindre end et sekund
+          other: mindre end %{count} sekunder
+        over_x_years:
+          one: mere end et år
+          other: mere end %{count} år
+        x_days:
+          one: 1 dag
+          other: "%{count} dage"
+        x_minutes:
+          one: 1 minut
+          other: "%{count} minutter"
+        x_months:
+          one: 1 måned
+          other: "%{count} måneder"
+        x_years:
+          one: et år
+          other: "%{count} år"
+        x_seconds:
+          one: 1 sekund
+          other: "%{count} sekunder"
     country: Danmark
     no_roles: Ingen Roller
     delete: Slet

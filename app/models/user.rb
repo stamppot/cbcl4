@@ -645,6 +645,11 @@ class User < ActiveRecord::Base
         self.execute_without_timestamps { user.save! }
       end
 
+      if user.state == 3 # locked
+        # flash[:error] = flash[:notice] = "Brugeren er deaktiveret"
+        return nil
+      end
+
       # Sets the last login time and saves the object. 
       user.last_logged_in_at = Time.now
       user.save!

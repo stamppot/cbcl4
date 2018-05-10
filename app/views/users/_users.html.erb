@@ -3,10 +3,16 @@
 	var order = '<%= @order %>'; 	
 </script>
 
+<% show_last_login = current_user.has_access?(:superadmin) %>
+
 <table id="user_list" class="sortable list" class="users">
 	<tr>
 	<th class="wide sortcol <%= "active sort" + @order if(@sort == "users.name") %>" data-sort="users.name" title=<%= t('sort.name') %>><%= t('name') %></th>
 	<th class="sortcol <%= "active sort" + @order if(@sort == "roles.title") %>" data-sort="roles.title" title="<%= t('sort.role') %>"><%= t('role') %></th>
+	<% if show_last_login %>
+	<th class="sortcol" title="Seneste login">Login</th>
+	<% end %>
+
 	<th class="sortcol <%= "active sort" + @order if(@sort == "groups.title") %>" data-sort="groups.title" title="<%= t('sort.group') %>"><%= t('groups') %></th>
 	<% if current_user.access? :user_edit_delete %>
 	<th class="nosort" style="width: 75px;"><%= t('action') %></th>
@@ -17,6 +23,10 @@
 	<tr>
 		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => (user.state != 2) && 'unconfirmed' || '' %></td>
 		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
+	<% if show_last_login %>
+		<td title="<%= user.last_logged_in_at %>"><%= t(time_ago_in_words(user.last_logged_in_at), count: user.last_logged_in_at) %></td>
+	<% end %>
+
 		<% user.set_perms
 			if user.access?(:user_show_all)
 				groups = "Alle"

@@ -34,7 +34,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     group_ids = @groups.map {|g| g.id }.join(',')
 
     query = "select center_id, count(*) as count from journals where center_id IN (#{group_ids}) group by center_id"
-    puts query
+    # puts query
     @groups_count = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,j| 
       col[j['center_id']] = j['count']; col
     end
@@ -94,8 +94,8 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       flash[:notice] = 'Brugeren blev oprettet.'
       redirect_to user_url(@user) and return
     else
-      puts "user.groups: #{@user.groups.inspect}"
-      puts "ERRORS: #{@user.errors.inspect}"
+      # puts "user.groups: #{@user.groups.inspect}"
+      # puts "ERRORS: #{@user.errors.inspect}"
       @roles = current_user.pass_on_roles || []
       @groups = Group.this_or_parent(params[:id])
       render :new
@@ -119,6 +119,11 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
 
   def update
     @user = User.find(params[:id])
+
+    state = params[:user].delete :state
+    if current_user.has_access? :superadmin 
+      @user.state = state
+    end
 
     logger.info "users ctrl update"
     if current_user.update_user(@user, params[:user])
