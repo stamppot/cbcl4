@@ -180,7 +180,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     else
       User.search(@phrase, :with => { :center_id => current_user.centers.map(&:id) })
     end
-		@users.delete_if { |user| user.login_user }
+    @users.delete_if { |user| user && user.login_user? }
 		
     respond_to do |wants|
       wants.html  { render(:layout => false )}
