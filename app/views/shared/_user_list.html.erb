@@ -4,10 +4,10 @@
 	<tr>
 	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
 	<th class="sortcol" title="<%= t('sort.role') %>"><%= t('role') %></th>
-	<th class="sortcol" title="<%= t('sort.group') %>"><%= t('groups') %></th>
 	<% if show_last_login %>
 	<th class="sortcol" title="Seneste login">Login</th>
 	<% end %>
+        <th class="sortcol" title="<%= t('sort.group') %>"><%= t('groups') %></th>
 	<% if can_edit_delete %>
 	<th class="nosort" style="width: 92px;"><%= t('action') %><span style="width: 100px;">&nbsp;</span></th>
 	</tr>
