@@ -303,7 +303,7 @@ class SurveyAnswersController < ApplicationController
         if journal_entry.chained_survey_entry && !journal_entry.chained_survey_entry.answered?  # infoskema or other chain
 	  next_entry = journal_entry.chained_survey_entry
 	  next_luser = next_entry.login_user
-	  session[:pw_hash] = Digest::MD5.hexdigest(next_luser.password + next_luser.password_salt)
+	  session[:pw_hash] = Digest::MD5.hexdigest(next_entry.password + next_luser.password_salt)
 	  logger.info "Redirecting to next survey: #{next_entry.id}  #{session[:pw_hash]}"
           redirect_to survey_next_path(journal_entry.chained_survey_entry) and return
         else
