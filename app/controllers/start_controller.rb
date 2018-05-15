@@ -177,6 +177,11 @@ class StartController < ApplicationController
       session[:journal_id] = entry.journal_id
     end
 
+    if !current_user
+	logger.info "Startcontroller: User not logged in. Params #{params.inspect}"
+	return false
+    end
+	    
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
     redirect_to login_path and return if @journal_entry.nil? 
   end
