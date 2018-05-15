@@ -77,7 +77,7 @@ class StartController < ApplicationController
 	  
     pw_hash = session[:pw_hash]
     if pw_hash
-        if login_user.hash_string(@journal_entry.password) == pw_hash
+        if Digest::MD5.hexdigest(@journal_entry.password + login_user.password_salt) == pw_hash
 		logger.info "Next: pw_hash matches!"
 	end
     else
