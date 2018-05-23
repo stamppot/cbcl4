@@ -95,12 +95,21 @@ class Center < Group
   end
   
   def subscribed_surveys_in_age_group(age) # TODO: include periods
-    subscribed_surveys.select do |survey|
+    surveys = subscribed_surveys.select do |survey|
       # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
       age_flex = (survey.age =~ /16|17|18/) && 4 || 1
       # survey.prefix != "info" && 
       (survey.age_group === age or survey.age_group === (age+2) or survey.age_group === (age-age_flex))
     end
+
+    if self.id == 1 && age == 18
+      # do nothing, info-skema is included
+    else
+      # puts "remove INFO"
+      surveys = surveys.select {|s| s.id < 10}    
+    end
+
+    surveys
   end
     
   # increment subscription count - move to journal_entry, higher abstraction

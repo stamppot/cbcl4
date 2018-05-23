@@ -27,7 +27,8 @@
 				groups = user.center ? user.center.title : (user.centers.compact.empty? ? "" : user.centers.first.title)
  		 	end -%>
 	<% if show_last_login %>
-		<td><%= time_ago_in_words(user.last_logged_in_at) %></td>
+		<td title="<%= user.last_logged_in_at %>"><%= t(time_ago_in_words(user.last_logged_in_at), count: user.last_logged_in_at) %>
+		</td>
 	<% end %>
 
 		<td><%= groups %>&nbsp;</td>

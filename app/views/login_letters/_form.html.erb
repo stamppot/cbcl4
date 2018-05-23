@@ -7,7 +7,7 @@
 		</tr>
 		<tr>
 			<td class="t_i"><label for="letter_surveytype">Brev til:</label></td>
-			<td class="t_i"><%= select :letter, :surveytype, @role_types.map {|role| [t("roles.#{role}"), role]} %></td>
+			<td class="t_i"><%= select :letter, :surveytype, @role_types.map {|role| [t("roles.#{role}"), role]} + ["info"] %></td>
 		</tr>
 		<tr>
 			<td class="t_i"><label for="letter_group">Gruppe:</label></td>

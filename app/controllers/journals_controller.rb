@@ -202,7 +202,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     else       # can only add surveys in age group of person
       @follow_ups = FollowUp.get
       @follow_up = @group.follow_up_count
-      @surveys = @group.center.subscribed_surveys_in_age_group(@group.age).select {|s| s.id < 10}
+      @surveys = @group.center.subscribed_surveys_in_age_group(@group.age)
       puts " found #{@surveys.size} #{@surveys.map &:title}"
       @page_title = "Journal #{@group.title}: Tilføj spørgeskemaer"      
     end
