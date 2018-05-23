@@ -66,8 +66,29 @@ class StartController < ApplicationController
   end
 
   def next
+    logger.info "Next 0: params: #{params.inspect}"
     @journal_entry = JournalEntry.find(params[:id])
+    if @journal_entry.next    # has next, but should be this one
+	logger.info "Next problem: entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}"
+	jenext = JournalEntry.find @journal_entry.next
+	jenextpw = jenext.password
+    end
     login_user = @journal_entry.login_user
+	  
+    pw_hash = session[:pw_hash]
+    if pw_hash
+        if Digest::MD5.hexdigest(@journal_entry.password + login_user.password_salt) == pw_hash
+		logger.info "Next: pw_hash matches!"
+	end
+    else
+        logger.info "Next: No pw_hash, params: #{params.inspect}"
+    end
+	  
+    if @journal_entry.next    # has next, but should be this one
+        logger.info "Next problem: entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}. Changing login_user to the one in next"
+	@journal_entry = JournalEntry.find @journal_entry.next
+	login_user = @journal_entry.login_user
+    end
     user = User.find_with_credentials(login_user.login, @journal_entry.password)    # Try to log the user in.
     raise ActiveRecord::RecordNotFound if user.nil?    # Check whether a user with these credentials could be found.
     write_user_to_session(user) 
@@ -177,6 +198,11 @@ class StartController < ApplicationController
       session[:journal_id] = entry.journal_id
     end
 
+    if !current_user
+	logger.info "Startcontroller: User not logged in. Params #{params.inspect}"
+	return false
+    end
+	    
     @journal_entry = JournalEntry.find_by_user_id(current_user.id)
     redirect_to login_path and return if @journal_entry.nil? 
   end

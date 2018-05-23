@@ -301,6 +301,10 @@ class SurveyAnswersController < ApplicationController
         redirect_to return_to and return
       else
         if journal_entry.chained_survey_entry && !journal_entry.chained_survey_entry.answered?  # infoskema or other chain
+	  next_entry = journal_entry.chained_survey_entry
+	  next_luser = next_entry.login_user
+	  session[:pw_hash] = Digest::MD5.hexdigest(next_entry.password + next_luser.password_salt)
+	  logger.info "Redirecting to next survey: #{next_entry.id}  #{session[:pw_hash]}"
           redirect_to survey_next_path(journal_entry.chained_survey_entry) and return
         else
           redirect_to survey_finish_path(journal_entry) and return
@@ -378,6 +382,12 @@ class SurveyAnswersController < ApplicationController
   
   before_filter :check_access, :except => [:save_draft, :dynamic_data]
   
+  def hash_string(salt, value)
+      return case password_hash_type
+             when 'md5' then Digest::MD5.hexdigest(value + salt)
+             end
+   end
+	
   def check_access
     redirect_to login_path and return unless current_user
 		return true if current_user.admin?

@@ -102,11 +102,10 @@ class Center < Group
       (survey.age_group === age or survey.age_group === (age+2) or survey.age_group === (age-age_flex))
     end
 
-    if self.id == 1 && age == 18
+    if self.id == 1 && age >= 18
       # do nothing, info-skema is included
     else
-      # puts "remove INFO"
-      surveys = surveys.select {|s| s.id < 10}    
+    	surveys = surveys.select {|s| s.id < 10}  # don't show Oplysningsskema for other centers (and below 18 years of age)
     end
 
     surveys
