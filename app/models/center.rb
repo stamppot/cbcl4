@@ -102,7 +102,7 @@ class Center < Group
       (survey.age_group === age or survey.age_group === (age+2) or survey.age_group === (age-age_flex))
     end
 	  
-    if self.center_id == 1 && age >= 18
+    if self.id == 1 && age >= 18
 	  
     else
 	surveys = surveys.select {|s| s.id < 10}  # don't show Oplysningsskema for other centers (and below 18 years of age)
