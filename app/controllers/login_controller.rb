@@ -23,10 +23,10 @@ class LoginController < ApplicationController
     # redirect_to login_path and return if request.get?
     
     if request.post?
-      if params[:username] != 'jens'
-        flash[:notice] = "Maintenance mode"
-        render :maintenance and return
-      end
+      #if params[:username] != 'jens'
+      #  flash[:notice] = "Maintenance mode"
+      #  render :maintenance and return
+      #end
 
       if params[:username].to_i > 0
         journal_entry = JournalEntry.find(params[:username])
