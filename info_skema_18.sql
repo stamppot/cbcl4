@@ -83,8 +83,8 @@ INSERT INTO `question_cells` VALUES (2780,1101,'Placeholder',1,4,NULL,NULL,'plac
 INSERT INTO `question_cells` VALUES (2781,1101,'SectionSubtitle',1,4,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2782,1101,'ListItem',1,5,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2783,1101,'Rating',2,5,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, 11,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2784,1101,'Rating',1,6,"6",NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,14,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2785,1101,'ListItem',2,6,"3;8",NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2784,1101,'Rating',1,6,"6",NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,14,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2785,1101,'ListItem',2,6,"3;8",NULL,'listitem::::Din egen email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 
 -- Note 1 - TODO: make kind of block
 INSERT INTO `question_cells` VALUES (2790,1101,'Placeholder',1,7,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
