@@ -4,8 +4,8 @@ START TRANSACTION;
 
 -- INSERT INTO `surveys` VALUES (10,'Oplysningsskema','INFO','Oplysningsskema (Forældreskema)','1.5-16','parent','f23737',99,'info','INFO');
 
-delete from questions where id >= 1000 and id <= 1009;
-delete from question_cells where question_id >= 1000 and question_id <= 1009;
+delete from questions where id >= 1000 and id <= 1010;
+delete from question_cells where question_id >= 1000 and question_id <= 1010;
 
 INSERT INTO `questions` VALUES (1000,10,1,0,2,NULL);
 INSERT INTO `question_cells` VALUES (2400,1000,'SectionTitle',1,1,NULL,NULL,'sectiontitle::::Kære forældre,<p/>Jeres barn er indkaldt til undersøgelse.\nVi vil bede jer om at udfylde oplysningsskemaet forud for jeres første besøg i ambulatoriet.',NULL,0,NULL,NULL,NULL);
@@ -81,6 +81,18 @@ INSERT INTO `question_cells` VALUES (2692,1003,'Rating',2,2,"5",NULL,'radio::1::
 INSERT INTO `question_cells` VALUES (2693,1003,'ListItemComment',3,2,"4;8",NULL,'listitem::::Hvis andre, hvem?###textbox::::',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2694,1003,'ListItem',1,3,"8",NULL,'listitem::::Kort beskrivelse af det forløb der har medført henvisning til børnepsykiatrisk undersøgelse',NULL,0,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2695,1003,'TextBox',2,3,"10",NULL,'textbox::::',NULL,0,NULL,NULL,NULL);
+
+
+INSERT INTO `question_cells` VALUES (2700,1003,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2701,1003,'SectionSubtitle',1,11,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2702,1003,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig?',NULL,1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2703,1003,'Rating',2,12,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, 11,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2704,1003,'Rating',1,13,"6",NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,14,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2705,1003,'ListItemComment',2,13,"3;8",NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
+
+
+INSERT INTO `questions` VALUES (1010,10,5,0,2,NULL);
+INSERT INTO `question_cells` VALUES (2469,1010,'SectionTitle',1,1,NULL,NULL,'sectiontitle::::Har barnet, indenfor de sidste 6 mdr., været henvist og dermed udfyldt nedenstående spørgsmål, bedes I se bort fra udfyldelse af resten af skemaet.<p/>Hvis der er tilkommet ændringer i oplysningerne bedes disse tilføjet,',NULL,0,NULL,NULL,NULL);
 
 
 INSERT INTO `questions` VALUES (1004,10,4,0,2,NULL);
@@ -318,12 +330,12 @@ INSERT INTO `question_cells` VALUES (2685,1009,'ListItemComment',2,9,NULL,NULL,'
 INSERT INTO `question_cells` VALUES (2686,1009,'ListItemComment',3,9,NULL,NULL,'listitem::::Hvornår?###textbox::::','--- \n:targets: \n- :target: t\n  :state: offstate\n',1,NULL,NULL,NULL);
 
 
-INSERT INTO `question_cells` VALUES (2700,1009,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2701,1009,'SectionSubtitle',1,11,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2702,1009,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig?',NULL,1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, 11,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,"6",NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,14,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,"3;8",NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2700,1009,'Placeholder',1,10,NULL,NULL,'placeholder::::',NULL,0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2701,1009,'SectionSubtitle',1,11,NULL,NULL,'sectionsubtitle::::Kontakt til forskningsenheden',NULL,0,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2702,1009,'ListItem',1,12,NULL,NULL,'listitem::::Må forskningsenheden kontakte dig?',NULL,1,NULL,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2703,1009,'Rating',2,12,NULL,NULL,'radio::0::Nej###radio::1::Ja','--- \n:switch: \n- ac\n',1, 11,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2704,1009,'Rating',1,13,"6",NULL,'radio::1::Mors email###radio::2::Fars email###','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1,14,NULL,NULL);
+-- INSERT INTO `question_cells` VALUES (2705,1009,'ListItem',2,13,"3;8",NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 
 DELETE from `choices` where `id` IN (14, 15, 16, 17); 
 INSERT INTO `choices` (`id`, `name`, `full`, `options`) VALUES (14, 'email_mor_far', '1::Mors email;;2::Fars email', '1::Mors email;;2::Fars email');

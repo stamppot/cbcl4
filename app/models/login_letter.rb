@@ -1,9 +1,9 @@
 class LoginLetter < Letter
 
   validates_presence_of :surveytype
-  validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up], :message => "Der findes allerede et brev for denne skematype og opfølgning for gruppen. Har du valgt den rigtige gruppe?"
+  validates_uniqueness_of :surveytype, :scope => [:group_id, :follow_up, :bundle], :message => "Der findes allerede et brev for denne skematype og opfølgning for gruppen. Har du valgt den rigtige gruppe?"
 
-  attr_accessible :surveytype, :follow_up
+  attr_accessible :surveytype, :follow_up, :bundle
 
   def to_text_variables(journal_entry)
     # puts "LoginLetter.to_text_variables: #{journal_entry.inspect}"
@@ -20,10 +20,10 @@ class LoginLetter < Letter
   
   def self.find_by_priority(entry)
     st = get_letter_type(entry)
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ?', entry.journal.group_id, entry.follow_up])
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null', entry.journal.group_id]) unless letter
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ?', entry.journal.center_id, entry.follow_up]) unless letter
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null', entry.journal.center_id]) unless letter
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ? and bundle = ?', entry.journal.group_id, entry.follow_up, entry.survey.bundle])
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null and bundle = ?', entry.journal.group_id, entry.survey.bundle]) unless letter
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ? and bundle = ?', entry.journal.center_id, entry.follow_up, entry.survey.bundle]) unless letter
+    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null and bundle = ?', entry.journal.center_id, entry.survey.bundle]) unless letter
     letter = LoginLetter.find_default(st) unless letter
     letter
   end
@@ -34,7 +34,8 @@ class LoginLetter < Letter
   end
 
   def self.get_letter_type(entry)
-    st = entry.survey.category == "INFO" && "info" || entry.survey.surveytype
+    # st = (entry.survey.category == "INFO" &&  ) && "info" ||
+     entry.survey.surveytype
   end
   
 end

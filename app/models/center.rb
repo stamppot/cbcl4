@@ -104,6 +104,7 @@ class Center < Group
 
     if self.id == 1 && age >= 18
       # do nothing, info-skema is included
+      surveys = surveys.select {|s| s.id != 10} 
     else
     	surveys = surveys.select {|s| s.id < 10}  # don't show Oplysningsskema for other centers (and below 18 years of age)
     end
