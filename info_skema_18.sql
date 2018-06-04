@@ -268,13 +268,8 @@ INSERT INTO `questions` VALUES (1106,11,6,0,3,NULL);
 
 INSERT INTO `question_cells` VALUES (2890,1106,'ListItem',1,22,"8",NULL,'listitem::::Går du i skole eller andet?',NULL,1,NULL,NULL,NULL);
 INSERT INTO `question_cells` VALUES (2891,1106,'Rating',2,22,NULL,NULL,'radio::0::Nej###radio::1::Ja###radio::2::Andet','--- \n:switch: \n- m\n',1,11,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2892,1106,'ListItemComment',1,23,NULL,NULL,'listitem::::Din skole (navn og adresse)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
+INSERT INTO `question_cells` VALUES (2892,1106,'ListItemComment',1,23,NULL,NULL,'listitem::::Andet###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUE289261106005,'ListItemComment',2,12,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2893,1106,'ListItemComment',1,24,NULL,NULL,'listitem::::Klasselærer/kontaktperson###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
--- INSERT INTO `question_cells` VALUE289261106005,'ListItemComment',2,13,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2894,1106,'ListItemComment',1,25,NULL,NULL,'listitem::::SFO (navn / adresse / kontaktperson)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
--- INSERT INTO `question_cells` VALUE289261106005,'ListItemComment',2,14,NULL,NULL,'listitem::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
-INSERT INTO `question_cells` VALUES (2895,1106,'ListItemComment',1,26,NULL,NULL,'listitem::::Eventuelle tidligere skoler, du har gået på (navn samt adresse og evt. årstal)###textbox::::','--- \n:targets: \n- :target: m\n  :state: offstate\n',1,NULL,NULL,NULL);
 
 INSERT INTO `question_cells` VALUES (2896,1106,'ListItemComment',1,27,NULL,NULL,'listitem::::Evt. midlertidig opholdsadresse (døgninstitution o.lign.):###textbox::::',NULL,1,NULL,NULL,NULL);
 -- INSERT INTO `question_cells` VALUE289261106005,'TextBox',2,16,NULL,NULL,'###textbox::::',NULL,1,NULL,NULL,NULL);
