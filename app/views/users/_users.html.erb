@@ -21,7 +21,7 @@
 
 	<% @users.each do |user| %>
 	<tr>
-		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => show_user_status(user) %></td>
+		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => (t('user.show')+" ("+t("user.states.#{user.state})"), :class => show_user_status(user) %></td>
 		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
 	<% if show_last_login %>
 		<td title="<%= user.last_logged_in_at %>"><%= t(time_ago_in_words(user.last_logged_in_at), count: user.last_logged_in_at) %></td>
