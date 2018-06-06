@@ -90,8 +90,13 @@ class Center < Group
   end
   
   # returns subscribed surveys
-  def subscribed_surveys # TODO: include periods
-    subscriptions.where(:state => 1).map { |sub| sub.survey }.sort_by { |s| s.position }
+  def subscribed_surveys # when multiple versions of a survey, return the highest version
+    subs = subscriptions.where(:state => 1).map { |sub| sub.survey }.sort_by { |s| s.position }
+    grouped = ss.group_by {|s| s.category+s.surveytype+s.age+s.bundle}
+    if grouped.values.any? { |g| g.count > 1 }
+      subs = grouped.values.map {|g| g.count == 1 && g.first || g.max_by {|v| v.version}}
+    end
+    subs
   end
   
   def subscribed_surveys_in_age_group(age) # TODO: include periods
