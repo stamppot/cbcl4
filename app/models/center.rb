@@ -92,7 +92,7 @@ class Center < Group
   # returns subscribed surveys
   def subscribed_surveys # when multiple versions of a survey, return the highest version
     subs = subscriptions.where(:state => 1).map { |sub| sub.survey }.sort_by { |s| s.position }
-    grouped = subs.group_by {|s| s.category+s.surveytype+s.age+s.bundle}
+    grouped = subs.compact.group_by {|s| s.category+s.surveytype+s.age+s.bundle}
     if grouped.values.any? { |g| g.count > 1 }
       subs = grouped.values.map {|g| g.count == 1 && g.first || g.max_by {|v| v.version}}
     end
