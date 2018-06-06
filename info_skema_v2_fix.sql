@@ -94,7 +94,7 @@ INSERT INTO `question_cells` VALUES (12704,11003,'Rating',1,13,"6",NULL,'radio::
 INSERT INTO `question_cells` VALUES (12705,11003,'ListItemComment',2,13,"3;8",NULL,'listitem::::Email###listitem::::','--- \n:targets: \n- :target: ac\n  :state: offstate\n',1, NULL,NULL,NULL);
 
 
-INSERT INTO `questions` VALUES (11010,210,5,0,2,NULL);
+INSERT INTO `questions` VALUES (11010,210,4,0,2,NULL);
 INSERT INTO `question_cells` VALUES (12469,11010,'SectionTitle',1,1,NULL,NULL,'sectiontitle::::Har barnet, indenfor de sidste 6 mdr., været henvist og dermed udfyldt nedenstående spørgsmål, bedes I se bort fra udfyldelse af resten af skemaet.<p/>Hvis der er tilkommet ændringer i oplysningerne bedes disse tilføjet,',NULL,0,NULL,NULL,NULL);
 
 
