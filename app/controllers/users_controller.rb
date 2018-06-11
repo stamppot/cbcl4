@@ -120,19 +120,14 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
   def update
     @user = User.find(params[:id])
 
-    state = params[:user].delete :state
-    if current_user.has_access? :superadmin 
-      @user.state = state
-    end
-
     logger.info "users ctrl update"
     if current_user.update_user(@user, params[:user])
       save = @user.save
-      logger.info "saved: #{save}, #{@user.inspect}"
+      # logger.info "saved: #{save}, #{@user.inspect}"
       flash[:notice] = 'Brugeren er ændret.'
       redirect_to user_url(@user)
     else
-      puts "update user failed: #{@user.inspect}"
+      logger.info "update user failed: #{@user.inspect}  \n#{params.inspect} \n #{@user.errors.inspect}"
       @user.password = ""
       @roles  = current_user.pass_on_roles || []  # logged-in user can give his own roles to new user
       @groups = current_user.center_and_teams

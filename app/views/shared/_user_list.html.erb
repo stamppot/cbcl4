@@ -1,5 +1,6 @@
 <% can_edit_delete = current_user.access? :user_edit_delete %>
 <% show_last_login = current_user.has_access?(:superadmin) %>
+ 
 <table id="user_list" class="sortable list" class="users">
 	<tr>
 	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
@@ -15,7 +16,7 @@
 
 	<% @users.each do |user| %>
 	<tr>
-		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => (user.state != 2) && 'unconfirmed' || '' %></td>
+		<td><%= link_to user.name.blank? && user.login || user.name, user_path(user), :title => t('user.show'), :class => show_user_status(user) %></td>
 		<td><%= (roles = user.roles).any? && t("roles.#{roles.first.title}").capitalize || " " -%></td>
 
 		<% 	user.set_perms

@@ -128,7 +128,11 @@ da-DK:
       :id: ID
       :State: Status
       :show: Vis Bruger
-      :states: 
+      :states:
+        "unconfirmed" : "ubekræftet"
+        "locked" : "deaktiveret"
+        "deleted" : "slettet"
+        "retrieved_password" : "password ?"
         "1": "ubekræftet"
         "2": "bekræftet"
         "3": "låst"

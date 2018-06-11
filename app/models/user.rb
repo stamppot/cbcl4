@@ -162,6 +162,10 @@ class User < ActiveRecord::Base
     role_ids  = params.delete(:roles) || []
     group_ids = params.delete(:groups) || []
 
+    # puts "params: #{params.inspect}\n"
+    state = (params[:state] ||= params[:state] || user.state)
+    user.state = state if self.has_access? :superadmin 
+    
     # TODO: needed? check user/edit
     if self.access?(:superadmin) ||self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
       user.update_roles_and_groups(role_ids, group_ids)
@@ -175,8 +179,7 @@ class User < ActiveRecord::Base
     pw = params.delete :password
     pw_conf = params.delete :password_confirmation
     unless pw.blank?
-      user.password = pw
-      user.password_confirmation = pw_conf
+      user.update_password(pw)
     end
     user.update_attributes(params)
   end
@@ -243,16 +246,16 @@ class User < ActiveRecord::Base
     return Access.instance.roles(right.to_sym)
   end
           
-  def status
-  	rolename = case self.title
-    when "parent" then   "forælder"
-    when "youth" then   "barn"
-	  when "teacher" then   "lærer"
-	  when "pedagogue" then "pædagog"
-	  when "other" then   "andet"
-	  else self.title
-	  end
-  end
+  # def status
+  # 	rolename = case self.title
+  #   when "parent" then   "forælder"
+  #   when "youth" then   "barn"
+	 #  when "teacher" then   "lærer"
+	 #  when "pedagogue" then "pædagog"
+	 #  when "other" then   "andet"
+	 #  else self.title
+	 #  end
+  # end
   
   def member_of?(group)
     group.users.include? self
@@ -549,8 +552,13 @@ class User < ActiveRecord::Base
   end
 
   def update_password(pass)
+    puts "update_password: #{pass}"
     self.password_confirmation = pass
     self.password = pass
+    puts "new password?  #{@new_password}"
+    is_valid = self.valid?
+    puts "is_valid: #{is_valid}"
+    is_valid
   end
 
   # After saving the object into the database, the password is not new any more.
@@ -560,9 +568,12 @@ class User < ActiveRecord::Base
     if errors.count == 0 and @new_password and not password.nil?
       # generate a new 10-char long hash only Base64 encoded so things are compatible
       self.password_salt = [Array.new(10){rand(256).chr}.join].pack("m")[0..9]; 
-
+      puts "salt: #{self.password_salt}"
       # write encrypted password to object property
-      write_attribute(:password, hash_string(password))
+
+      hh = hash_string(password)
+      puts "pw hash: #{hh}"
+      write_attribute(:password, hh)
 
       # mark password as "not new" any more
       @new_password = false

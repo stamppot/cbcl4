@@ -6,11 +6,10 @@ class ChainInfoSurvey
 		return false unless journal.center_id == 1 || journal.center_id == 52 || journal.center_id == 9754 || journal.center_id == 9753 || journal.center_id == 9755 || journal.center_id == 8888 # BPUH, Testcenter
 		puts "center is bpuh"
 		return false unless follow_up.to_i == 0
-
-		return false if survey.id == 10 && journal.age >= 18 && journal.center_id == 1
-
+		return false if (survey.id == 10 || survey.id == 210) && journal.age >= 18 && journal.center_id == 1
+		
 		puts "follow_up is 0"
-		exists = journal.surveys.any? { |s| s.id == 10 }
+		exists = journal.surveys.any? { |s| s.id == 10 || s.id == 210 }
 		puts "exists: #{exists}"
 		#return false if exists
 		#puts "surveys doesn't exist already"
@@ -28,7 +27,7 @@ class ChainInfoSurvey
 		puts "do create_chain #{is_valid.inspect}"
 
 		if is_valid
-			info_surveys = [] << Survey.find(10)
+			info_surveys = [] << Survey.find(210)
 			couple = {survey.id => info_surveys.first.id}
 			puts "couple: #{couple.inspect}"
 			entries = journal.add_journal_entries(info_surveys, follow_up, true)

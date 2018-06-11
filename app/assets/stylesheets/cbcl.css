@@ -386,9 +386,21 @@ th {
 	border-left: 1px solid #def;
 }
 
-.unconfirmed {
+.locked {
 	border: 1px solid red;
 	background: #f99;
+}
+.deleted {
+	border: 1px solid #f33;
+	background: #f33;
+}
+.unconfirmed {
+	border: 1px solid #aaa;
+	background: #aaa;
+}
+.retrieved_password {
+	border: 1px solid #6f6;
+	background: #6f6;
 }
 
 .list td { border-color: #def; }
