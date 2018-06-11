@@ -175,9 +175,7 @@ class User < ActiveRecord::Base
     pw = params.delete :password
     pw_conf = params.delete :password_confirmation
     unless pw.blank?
-      user.password = pw
-      user.password_confirmation = pw_conf
-      user.save # save to encrypt password correctly	    
+      user.update_password(pw)
     end
     user.update_attributes(params)
   end
@@ -552,6 +550,7 @@ class User < ActiveRecord::Base
   def update_password(pass)
     self.password_confirmation = pass
     self.password = pass
+    self.encrypt_password
   end
 
   # After saving the object into the database, the password is not new any more.
