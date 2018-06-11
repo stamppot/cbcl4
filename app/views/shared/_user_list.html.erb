@@ -1,6 +1,6 @@
 <% can_edit_delete = current_user.access? :user_edit_delete %>
 <% show_last_login = current_user.has_access?(:superadmin) %>
-<% 
+ 
 <table id="user_list" class="sortable list" class="users">
 	<tr>
 	<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
