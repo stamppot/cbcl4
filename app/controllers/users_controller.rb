@@ -132,7 +132,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
       flash[:notice] = 'Brugeren er ændret.'
       redirect_to user_url(@user)
     else
-      puts "update user failed: #{@user.inspect}"
+      logger.info "update user failed: #{@user.inspect}  #{params.inspect}"
       @user.password = ""
       @roles  = current_user.pass_on_roles || []  # logged-in user can give his own roles to new user
       @groups = current_user.center_and_teams
