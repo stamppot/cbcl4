@@ -550,7 +550,7 @@ class User < ActiveRecord::Base
   def update_password(pass)
     self.password_confirmation = pass
     self.password = pass
-    self.encrypt_password
+    self.valid?
   end
 
   # After saving the object into the database, the password is not new any more.
