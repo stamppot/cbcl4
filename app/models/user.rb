@@ -177,6 +177,7 @@ class User < ActiveRecord::Base
     unless pw.blank?
       user.password = pw
       user.password_confirmation = pw_conf
+      user.save # save to encrypt password correctly	    
     end
     user.update_attributes(params)
   end
