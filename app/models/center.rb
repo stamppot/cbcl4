@@ -105,7 +105,7 @@ class Center < Group
       age_range = (survey.age =~ /16|17|18/) && Range.new(-4,4) || Range.new(-1,2)
       age_range = Range.new(-(age-18),1) if survey.age =~ /18/ && age > 18  # allow persons above 18
       # survey.prefix != "info" && 
-      (survey.age_group === age or survey.age_group === (age+age_range.last) or survey.age_group === (age-age_range.first))
+      (survey.age_group === age or survey.age_group === (age+age_range.last) or survey.age_group === (age+age_range.first))
     end
 
     if (self.id == 1 || self.id == 52) && age >= 18
