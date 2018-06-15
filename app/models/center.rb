@@ -107,7 +107,7 @@ class Center < Group
       (survey.age_group === age or survey.age_group === (age+2) or survey.age_group === (age-age_flex))
     end
 
-    if ([1, 52].contains(self.id) && age >= 18
+    if ([1, 52].include?(self.id) && age >= 18
       # do nothing, info-skema is included
       surveys = surveys.select {|s| s.id != 10} 
     else
