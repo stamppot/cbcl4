@@ -103,7 +103,7 @@ class Center < Group
     surveys = subscribed_surveys.select do |survey|
       # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
       age_range = (survey.age =~ /16|17|18/) && Range.new(-4,4) || Range.new(-1,2)
-      age_range = Range.new(-1,9) if survey.age =~ /18/
+      age_range = Range.new(-(age-18),1) if survey.age =~ /18/ && age > 18  # allow persons above 18
       # survey.prefix != "info" && 
       (survey.age_group === age or survey.age_group === (age+age_range.last) or survey.age_group === (age-age_range.first))
     end
