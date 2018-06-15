@@ -13,7 +13,7 @@
   <dd><%= select 'journal', 'sex', Journal.sexes.to_a %></dd>
 
   <dt><label for="journal_birthdate"><%= t('birthdate') %></label></dt>
-  <dd><%= date_select 'journal', 'birthdate', {:start_year => Date.today.year-28, :end_year => Date.today.year, :order => [:day, :month, :year] } %></dd>
+  <dd><%= date_select 'journal', 'birthdate', {:start_year => Date.today.year-30, :end_year => Date.today.year, :order => [:day, :month, :year] } %></dd>
 
   <dt><label for="journal_nationality"><%= t('nationality') %></label></dt>
   <dd><%= collection_select('journal', 'nationality', @nationalities, :country, :country) %></dd>
