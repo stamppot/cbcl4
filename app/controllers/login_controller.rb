@@ -7,6 +7,7 @@ class LoginController < ApplicationController
   layout 'login'
     
   def index
+	  render :maintenance and return
     redirect_to survey_start_path and return if current_user && current_user.login_user
     redirect_to main_path and return if current_user
   end
