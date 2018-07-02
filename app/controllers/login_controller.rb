@@ -28,7 +28,7 @@ class LoginController < ApplicationController
    #   if params[:username] != 'jens'
    #     flash[:notice] = "Maintenance mode"
    #     render :maintenance and return
-      end
+    #  end
 
       if params[:username].to_i > 0
         journal_entry = JournalEntry.find(params[:username])
