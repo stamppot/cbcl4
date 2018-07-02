@@ -7,7 +7,7 @@ class LoginController < ApplicationController
   layout 'login'
     
   def index
-	  render :maintenance and return
+# 	  render :maintenance and return
     redirect_to survey_start_path and return if current_user && current_user.login_user
     redirect_to main_path and return if current_user
   end
@@ -23,12 +23,11 @@ class LoginController < ApplicationController
     cookies.delete :journal_entry
     # redirect_to login_path and return if request.get?
     
-    render :maintenance and return
       
     if request.post?
-      if params[:username] != 'jens'
-        flash[:notice] = "Maintenance mode"
-        render :maintenance and return
+   #   if params[:username] != 'jens'
+   #     flash[:notice] = "Maintenance mode"
+   #     render :maintenance and return
       end
 
       if params[:username].to_i > 0
