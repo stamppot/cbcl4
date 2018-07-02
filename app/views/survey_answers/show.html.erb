@@ -44,7 +44,7 @@
 <script type="text/javascript">
 
 function initMakeItCount() {
- 	var comments = $$('textarea.comment');
+ 	var comments = $$('textarea'); // was textarea.comment
   comments.each(function(comment) {
     makeItCount(comment.id, 1900);
   });	
