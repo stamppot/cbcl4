@@ -249,7 +249,9 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     # phrase = phrase.split("-").reverse.join if phrase.to_i > 0
     logger.info "phrase: #{phrase}"
 
-    @journals = Journal.search_journals(current_user, phrase)
+    # @journals = Journal.search_journals(current_user, phrase)
+
+    @journals = Journal.where("title LIKE %?% or cpr = '?'", raw_phrase)
 
     respond_to do |wants|
       wants.html  { render(:template => "journals/searchresults", :layout => false )}
