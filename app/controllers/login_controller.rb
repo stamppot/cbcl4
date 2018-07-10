@@ -7,7 +7,7 @@ class LoginController < ApplicationController
   layout 'login'
     
   def index
-# 	  render :maintenance and return
+#  render :maintenance and return
     redirect_to survey_start_path and return if current_user && current_user.login_user
     redirect_to main_path and return if current_user
   end
@@ -28,7 +28,7 @@ class LoginController < ApplicationController
    #   if params[:username] != 'jens'
    #     flash[:notice] = "Maintenance mode"
    #     render :maintenance and return
-    #  end
+   #  end
 
       if params[:username].to_i > 0
         journal_entry = JournalEntry.find(params[:username])
