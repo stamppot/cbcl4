@@ -250,9 +250,9 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     logger.info "phrase: #{phrase}"
 
     return if phrase.size < 5
-    # @journals = Journal.search_journals(current_user, phrase)
+    @journals = Journal.search_journals(current_user, phrase)
 
-    @journals = Journal.where("title LIKE '%#{raw_phrase}%' or cpr = '#{raw_phrase}'")
+    # @journals = Journal.where("title LIKE '%#{raw_phrase}%' or cpr = '#{raw_phrase}'")
 
     respond_to do |wants|
       wants.html  { render(:template => "journals/searchresults", :layout => false )}
