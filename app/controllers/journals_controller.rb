@@ -249,7 +249,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     # phrase = phrase.split("-").reverse.join if phrase.to_i > 0
     logger.info "phrase: #{phrase}"
 
-    return if phrase.size < 5
+    # return if phrase.size < 5
     @journals = Journal.search_journals(current_user, phrase)
 
     # @journals = Journal.where("title LIKE '%#{raw_phrase}%' or cpr = '#{raw_phrase}'")
