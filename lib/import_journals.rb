@@ -36,7 +36,7 @@ class ImportJournals # AddJournalsFromCsv
 			b = row["birthdate"]
 			journal_name = row["journalnavn"] || row["Bnavn"] || row["Navn"]
 			parent_name = row["Mnavn"]
-			parent_mail = row["Email"]
+			parent_mail = row["Email"] || row["E-mail"]
 			sex = row["gender"] || row["Gender"]
 			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
 
