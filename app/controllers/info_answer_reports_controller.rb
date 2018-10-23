@@ -10,7 +10,7 @@ class InfoAnswerReportsController < ApplicationController
     info_answers = params[:answers].select do |id| 
     	entry = JournalEntry.find(id)
     	puts "is info? #{entry.survey_id}"
-    	entry.survey_id == 10 || entry.survey_id == 210
+    	entry.survey_id == 10 || entry.survey_id == 11 || entry.survey_id == 210
     end
     @answer_values = nil
     if info_answers.any?
