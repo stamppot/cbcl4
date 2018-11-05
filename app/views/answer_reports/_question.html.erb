@@ -31,7 +31,7 @@
 					cols.values.each_with_index do |cell, i|
 						output <<
 						if i == 1
-						  roman = no > 0 && (no.to_roman + ". ") || '&nbsp;'
+						  roman = no > 0 && (no.to_roman + ". ") || ' '
 							content_tag('div', roman, :class => 'group')
 						end
 						@cell = cell
