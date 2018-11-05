@@ -18,6 +18,7 @@ class LoginLettersController < ApplicationController
     @survey = Survey.find_by_surveytype(params[:survey][:surveytype]) if params[:survey]
     @follow_ups = FollowUp.get
     
+    puts "@letters: #{@letters.inspect}"
     @letters = LoginLetter.where('group_id is null').to_a + @letters if current_user.admin?
     @letters = LoginLetter.all if params[:all]
   end

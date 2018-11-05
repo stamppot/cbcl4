@@ -9,7 +9,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   #        :only         => [ :remove, :remove_answer, :destroy_login ]
 
   def show
-    journal_entry = JournalEntry.find(params[:id], :include => :journal)
+    journal_entry = JournalEntry.includes(:journal).find(params[:id])
     session[:journal_entry] = journal_entry.id
     session[:journal_id] = journal_entry.journal_id
     cookies[:journal_entry] = journal_entry.id
@@ -25,7 +25,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
 
   def show_answer
     # puts "Show Answer JournalEntriesController #{params.inspect}"
-    journal_entry = JournalEntry.find(params[:id], :include => :journal)
+    journal_entry = JournalEntry.includes(:journal).find(params[:id])
     session[:journal_entry] = params[:id]
     session[:journal_id] = journal_entry.journal_id
     redirect_to survey_answer_path(journal_entry.survey_id)

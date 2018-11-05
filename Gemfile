@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.1'
-# gem 'rails', '4.1.0'
+gem 'rails', '4.2.3'
+# gem 'rails', '4.0.1'
 
 gem 'browserlog', '~> 0.0.2'
 
@@ -14,32 +14,33 @@ gem 'activerecord-import'
 
 gem 'innertube'
 
-gem 'i18n', '~> 0.6.7'
+gem 'i18n' #, '~> 0.6.7'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails' #, '~> 4.2.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails', '~> 4.2.0'
 
 gem 'tinymce-rails'
 # gem 'wysiwyg-rails'
 # gem 'jhtmlarea'
 
 gem 'cacheable_flash'
-gem 'will_paginate', '~> 3.0.5'
+gem 'will_paginate', '~> 3.1.5'
 
 gem 'acts_as_tree_rails3'
 gem 'acts_as_list'
 
 gem 'protected_attributes'
 
-gem 'thinking-sphinx', '2.1.0'
-# gem 'thinking-sphinx', '3.1.0'
+# gem 'thinking-sphinx', '2.1.0'
+gem 'thinking-sphinx', '3.1.4'
+gem 'joiner', '~> 0.3.4'
 
-gem 'rake', '11.1.2'
+gem 'rake' #, '11.1.2'
 gem 'dynamic_form'
 
 gem 'rails-observers'
@@ -47,13 +48,11 @@ gem 'actionpack-action_caching'
 gem 'actionpack-page_caching'
 
 gem 'dalli'
-# gem 'memcache-client'
 
-# gem 'rails-observers'
 gem 'wkhtmltopdf-binary'
 gem 'pdfkit'
 
-gem 'writeexcel'
+# gem 'writeexcel'
 
 gem  'awesome_print'
 
@@ -69,15 +68,19 @@ gem 'therubyracer', platforms: :ruby
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# gem 'fastercsv'
+gem 'fastercsv'
+# gem 'csv'
 
 gem 'iconv'
+
+# gem 'paper_trail', "~> 10", :git => "https://github.com/paper-trail-gem/paper_trail.git"
+gem "audited", "~> 4.7"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+# gem 'jbuilder', '~> 1.2'
 
 gem 'newrelic_rpm'
 

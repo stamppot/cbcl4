@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Subscription < ActiveRecord::Base
+  audited
   belongs_to :center
   belongs_to :survey
   has_many :periods #, :dependent => :delete_all

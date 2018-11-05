@@ -3,6 +3,7 @@
 #require 'rake'
 # require 'hashery'
 class Journal < ActiveRecord::Base #< Group
+  audited
   belongs_to :center
   belongs_to :group
 
@@ -65,9 +66,9 @@ class Journal < ActiveRecord::Base #< Group
 
   scope :and_entries, -> { includes(:journal_entries) }
   # scope :and_login_users, :include => { :journal_entries => :login_user }
-  scope :for_group, lambda { |group| group && where(:group_id => (group.is_a?(Group) ? group.id : group)) || scoped }
-  scope :in_center, lambda { |group| group && where(:center_id => (group.is_a?(Center) ? group.id : group)) || scoped }
-  scope :in_team, lambda { |group| group && where(:group_id => (group.is_a?(Team) ? group.id : group)) || scoped }
+  scope :for_group, lambda { |group| group && where(:group_id => (group.is_a?(Group) ? group.id : group)) || Journal.all.all }
+  scope :in_center, lambda { |group| group && where(:center_id => (group.is_a?(Center) ? group.id : group)) || Journal.all.all }
+  scope :in_team, lambda { |group| group && where(:group_id => (group.is_a?(Team) ? group.id : group)) || Journal.all.all }
   scope :by_code, -> { order('code ASC') }
   scope :order_by, lambda { |column, order|
     # puts "column, order: #{column} #{order}"
@@ -87,18 +88,18 @@ class Journal < ActiveRecord::Base #< Group
   scope :for_surveys, lambda { |surveys| where('survey_id IN (?)', surveys) }
   scope :with_follow_up, lambda { |follow_up| where('follow_up = 1', follow_up) }
 
-  define_index do
-     # fields
-     indexes :title, :sortable => true
-     indexes :code, :sortable => true
-     indexes :cpr, :sortable => true
-     indexes :alt_id, :sortable => true
-		 # indexes center_id
-     # attributes
-     # has group_id, center_id, created_at, updated_at
-     has group_id, center_id, created_at, updated_at
-     set_property :delta => true
-   end
+  # define_index do
+  #    # fields
+  #    indexes :title, :sortable => true
+  #    indexes :code, :sortable => true
+  #    indexes :cpr, :sortable => true
+  #    indexes :alt_id, :sortable => true
+		#  # indexes center_id
+  #    # attributes
+  #    # has group_id, center_id, created_at, updated_at
+  #    has group_id, center_id, created_at, updated_at
+  #    set_property :delta => true
+  #  end
 
   def self.per_page 
     20

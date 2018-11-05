@@ -11,18 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130626202801) do
+ActiveRecord::Schema.define(version: 20181016131658) do
 
   create_table "answer_cells", force: true do |t|
     t.integer "answer_id",                default: 0, null: false
-    t.integer "col",                      default: 0, null: false
-    t.integer "row",                      default: 0, null: false
+    t.integer "col",         limit: 2
+    t.integer "row",         limit: 2
     t.string  "item",        limit: 5
     t.boolean "rating"
-    t.string  "value_text",  limit: 2200
+    t.string  "value_text",  limit: 2500
     t.boolean "text"
-    t.integer "cell_type"
-    t.integer "value"
+    t.integer "cell_type",   limit: 2
+    t.integer "value",       limit: 2
     t.integer "question_id"
   end
 
@@ -38,6 +38,39 @@ ActiveRecord::Schema.define(version: 20130626202801) do
   add_index "answers", ["question_id"], name: "fk_answers_questions", using: :btree
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
   add_index "answers", ["survey_answer_id"], name: "index_answers_on_survey_answer_id", using: :btree
+
+  create_table "api_keys", force: true do |t|
+    t.integer  "center_id"
+    t.string   "name"
+    t.string   "api_key"
+    t.string   "salt",                   default: "4204533349928434450"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "return_to",  limit: 200
+  end
+
+  create_table "audits", force: true do |t|
+    t.integer  "auditable_id"
+    t.string   "auditable_type"
+    t.integer  "associated_id"
+    t.string   "associated_type"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "username"
+    t.string   "action"
+    t.text     "audited_changes"
+    t.integer  "version",         default: 0
+    t.string   "comment"
+    t.string   "remote_address"
+    t.string   "request_uuid"
+    t.datetime "created_at"
+  end
+
+  add_index "audits", ["associated_type", "associated_id"], name: "associated_index", using: :btree
+  add_index "audits", ["auditable_type", "auditable_id", "version"], name: "auditable_index", using: :btree
+  add_index "audits", ["created_at"], name: "index_audits_on_created_at", using: :btree
+  add_index "audits", ["request_uuid"], name: "index_audits_on_request_uuid", using: :btree
+  add_index "audits", ["user_id", "user_type"], name: "user_index", using: :btree
 
   create_table "center_infos", force: true do |t|
     t.integer "center_id"
@@ -58,6 +91,12 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.string   "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "choices", force: true do |t|
+    t.string "name"
+    t.string "full"
+    t.string "options"
   end
 
   create_table "copies", force: true do |t|
@@ -82,6 +121,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.text     "variables"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "answer_percentage", limit: 1
   end
 
   add_index "csv_score_rapports", ["age"], name: "index_csv_score_rapports_on_age", using: :btree
@@ -99,10 +139,17 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer  "age"
     t.integer  "sex"
     t.text     "answer"
-    t.text     "variables"
+    t.string   "journal_info"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "answer_count",     default: 0
+    t.integer  "follow_up",        default: 0
   end
+
+  add_index "csv_survey_answers", ["age"], name: "index_csv_survey_answers_on_age", using: :btree
+  add_index "csv_survey_answers", ["center_id"], name: "index_csv_survey_answers_on_center_id", using: :btree
+  add_index "csv_survey_answers", ["survey_answer_id"], name: "index_csv_survey_answers_on_survey_answer_id", unique: true, using: :btree
+  add_index "csv_survey_answers", ["team_id"], name: "index_csv_survey_answers_on_team_id", using: :btree
 
   create_table "engine_schema_info", id: false, force: true do |t|
     t.string  "engine_name"
@@ -140,7 +187,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
   create_table "groups", force: true do |t|
     t.timestamp "created_at",                            null: false
     t.timestamp "updated_at",                            null: false
-    t.string    "title",      limit: 200
+    t.string    "title",      limit: 200, default: "",   null: false
     t.integer   "code"
     t.string    "type",       limit: 16,  default: "",   null: false
     t.integer   "parent_id"
@@ -183,20 +230,22 @@ ActiveRecord::Schema.define(version: 20130626202801) do
   end
 
   create_table "journal_entries", force: true do |t|
-    t.integer  "journal_id",       default: 0, null: false
-    t.integer  "survey_id",        default: 0, null: false
+    t.integer  "journal_id",                   default: 0, null: false
+    t.integer  "survey_id",                    default: 0, null: false
     t.integer  "user_id"
     t.string   "password"
     t.integer  "survey_answer_id"
     t.datetime "created_at"
     t.datetime "answered_at"
-    t.integer  "state",            default: 0, null: false
+    t.integer  "state",                        default: 0, null: false
     t.datetime "updated_at"
     t.integer  "center_id"
     t.integer  "follow_up"
     t.integer  "group_id"
     t.integer  "reminder_status"
     t.string   "notes"
+    t.string   "answer_info",      limit: 200
+    t.integer  "next"
   end
 
   add_index "journal_entries", ["center_id"], name: "index_journal_entries_on_center_id", using: :btree
@@ -229,15 +278,25 @@ ActiveRecord::Schema.define(version: 20130626202801) do
 
   create_table "journals", force: true do |t|
     t.string   "title"
-    t.string   "code"
-    t.integer  "team_id"
+    t.integer  "code",         limit: 8
+    t.integer  "group_id"
     t.integer  "center_id"
     t.integer  "delta"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sex"
+    t.date     "birthdate"
+    t.string   "nationality"
+    t.string   "cpr",          limit: 6
+    t.string   "parent_email", limit: 50
+    t.string   "parent_name",  limit: 60
+    t.string   "alt_id",       limit: 30
+    t.integer  "codenew",      limit: 8
+    t.string   "notes",        limit: 1023
   end
 
   create_table "letters", force: true do |t|
+    t.string   "type",        limit: 25, default: "LoginLetter", null: false
     t.integer  "group_id"
     t.string   "name"
     t.text     "letter"
@@ -246,6 +305,9 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.datetime "updated_at"
     t.integer  "follow_up"
     t.integer  "center_id"
+    t.integer  "problematic"
+    t.string   "sender",      limit: 50
+    t.string   "bundle",      limit: 15
   end
 
   add_index "letters", ["group_id"], name: "index_letters_on_group_id", using: :btree
@@ -259,10 +321,13 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer  "subscription_id", default: 0,     null: false
     t.integer  "used",            default: 0,     null: false
     t.boolean  "paid",            default: false
-    t.date     "paid_on"
-    t.date     "created_on"
+    t.datetime "paid_on"
+    t.datetime "created_on"
     t.datetime "updated_on"
     t.boolean  "active",          default: false, null: false
+    t.integer  "center_id",                       null: false
+    t.integer  "survey_id",                       null: false
+    t.datetime "start",                           null: false
   end
 
   add_index "periods", ["active"], name: "index_periods_on_active", using: :btree
@@ -300,14 +365,18 @@ ActiveRecord::Schema.define(version: 20130626202801) do
   end
 
   create_table "question_cells", force: true do |t|
-    t.integer "question_id",                        null: false
-    t.string  "type",        limit: 20
+    t.integer "question_id",                         null: false
+    t.string  "type",         limit: 20
     t.integer "col"
     t.integer "row"
-    t.string  "answer_item", limit: 5
+    t.string  "span",         limit: 7
+    t.string  "answer_item",  limit: 5
     t.text    "items"
     t.string  "preferences"
-    t.integer "prop_mask",              default: 0
+    t.integer "prop_mask",               default: 0
+    t.integer "choice_id"
+    t.integer "problem_item", limit: 1
+    t.integer "prespan",      limit: 1
   end
 
   add_index "question_cells", ["question_id"], name: "index_question_cells_on_question_id", using: :btree
@@ -317,6 +386,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer "number",                    null: false
     t.integer "ratings_count"
     t.integer "columns",       default: 3
+    t.string  "preferences"
   end
 
   add_index "questions", ["survey_id"], name: "fk_questions_surveys", using: :btree
@@ -378,10 +448,12 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "unanswered"
-    t.integer  "gender",                     null: false
-    t.string   "age_group",        limit: 5, null: false
+    t.integer  "gender",                      null: false
+    t.string   "age_group",         limit: 9
     t.integer  "age"
     t.integer  "center_id"
+    t.integer  "follow_up"
+    t.integer  "answer_percentage", limit: 2
   end
 
   create_table "score_refs", force: true do |t|
@@ -474,7 +546,8 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer  "total_used"
     t.integer  "total_paid"
     t.integer  "active_used"
-    t.date     "most_recent_payment"
+    t.datetime "most_recent_payment"
+    t.datetime "start"
   end
 
   add_index "subscriptions", ["center_id"], name: "index_subscriptions_on_center_id", using: :btree
@@ -495,6 +568,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer  "center_id"
     t.integer  "team_id"
     t.string   "alt_id"
+    t.integer  "follow_up",                   default: 0
   end
 
   add_index "survey_answers", ["age"], name: "index_survey_answers_on_age", using: :btree
@@ -503,6 +577,15 @@ ActiveRecord::Schema.define(version: 20130626202801) do
   add_index "survey_answers", ["journal_entry_id"], name: "index_survey_answers_on_journal_entry_id", using: :btree
   add_index "survey_answers", ["journal_id"], name: "index_survey_answers_on_journal_id", using: :btree
   add_index "survey_answers", ["survey_id"], name: "index_survey_answers_on_survey_id", using: :btree
+
+  create_table "survey_usage_logs", force: true do |t|
+    t.integer   "survey_id",        null: false
+    t.integer   "user_id",          null: false
+    t.integer   "group_id",         null: false
+    t.integer   "center_id",        null: false
+    t.timestamp "created_at",       null: false
+    t.integer   "survey_answer_id", null: false
+  end
 
   create_table "surveys", force: true do |t|
     t.string  "title",       limit: 40
@@ -513,13 +596,31 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.string  "color",       limit: 7
     t.integer "position",               default: 99
     t.string  "prefix"
+    t.string  "bundle",      limit: 10
+  end
+
+  create_table "task_logs", force: true do |t|
+    t.string    "name",       limit: 31, default: "", null: false
+    t.string    "message",               default: "", null: false
+    t.integer   "group_id",                           null: false
+    t.integer   "journal_id"
+    t.string    "param1",     limit: 50
+    t.string    "param2",     limit: 50
+    t.timestamp "created_at",                         null: false
+    t.integer   "task_id"
   end
 
   create_table "tasks", force: true do |t|
+    t.string   "type",             limit: 31
     t.string   "status"
     t.integer  "export_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "survey_answer_id"
+    t.integer  "group_id"
+    t.integer  "journal_id"
+    t.integer  "letter_id"
+    t.string   "param1"
   end
 
   create_table "user_registrations", force: true do |t|
@@ -547,7 +648,7 @@ ActiveRecord::Schema.define(version: 20130626202801) do
     t.integer   "center_id"
     t.boolean   "login_user",                      default: false
     t.integer   "delta"
-    t.string    "role_ids"
+    t.string    "role_ids_str"
   end
 
   add_index "users", ["center_id"], name: "users_center_id_index", using: :btree

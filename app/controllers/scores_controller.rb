@@ -4,11 +4,11 @@ class ScoresController < ApplicationController
   
   def index
     page = params[:page] || 1
-    @scores = Score.with_survey_and_scale.paginate(:page => page, :per_page => per_page, :order => 'survey_id, scale ASC')
+    @scores = Score.with_survey_and_scale.paginate(:page => page, :per_page => per_page).order('survey_id, scale ASC')
   end
 
   def show
-    @score = Score.find(params[:id], :include => :survey)
+    @score = Score.includes(:survey).find(params[:id])
     @page_title = @score.title + " " + @score.short_name
     @score_items_header = %w(Spg Range Kvalifikator Items)
     @score_refs_header = %w(Køn Alder Mean 95% 98%)
@@ -39,7 +39,7 @@ class ScoresController < ApplicationController
       flash[:notice] = 'Score er oprettet. Tilføj beregninger.'
       redirect_to edit_score_path(@score) #:action => :edit, :id => @score
     else
-      @surveys = Survey.all(:order => :position)
+      @surveys = Survey.all.order(:position)
       @score.action = "new"
       render new_score_path
     end
@@ -137,7 +137,7 @@ class ScoresController < ApplicationController
       redirect_to :action => :edit, :id => @score
     else
       # render_text "score: #{@score.attributes.inspect}"
-      @surveys = Survey.find(:all, :order => :position)
+      @surveys = Survey.find(:all).order(:position)
       @page_title = "Score-beregning #{@score.title}: Vælg spørgeskema: #{@score.inspect} -- #{params.inspect}"
       # render 'score/add_survey'
     end

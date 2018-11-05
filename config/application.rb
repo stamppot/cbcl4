@@ -39,7 +39,7 @@ module Cbcl4
 
     config.i18n.default_locale = :'da-DK'
     # config.i18n.default_locale = :'en'
-    I18n.locale = config.i18n.locale = config.i18n.default_locale
+    # I18n.locale = config.i18n.locale = config.i18n.default_locale
 
     config.exceptions_app = self.routes
 

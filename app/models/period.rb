@@ -1,4 +1,5 @@
 class Period < ActiveRecord::Base
+  audited
   belongs_to :subscription
   belongs_to :center
 

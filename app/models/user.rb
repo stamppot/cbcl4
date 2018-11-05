@@ -3,7 +3,8 @@
 
 class User < ActiveRecord::Base
   # include ActiveRbacMixins::UserMixins::Core
-
+  audited
+  
 	after_create  :index_search
   after_save    :expire_cache # delete cached roles, # groups
   after_destroy :expire_cache
@@ -59,14 +60,14 @@ class User < ActiveRecord::Base
   
   attr_accessor :perms
 
-	define_index do
-		# fields
-		indexes :name, :sortable => true
-		indexes center.title, :as => :center_title
-		indexes center.code, :as => :center_code
-		# attributes
-		has center_id, created_at #, login_user
-	end
+	# define_index do
+	# 	# fields
+	# 	indexes :name, :sortable => true
+	# 	indexes center.title, :as => :center_title
+	# 	indexes center.code, :as => :center_code
+	# 	# attributes
+	# 	has center_id, created_at #, login_user
+	# end
 
   # def roles
   #   @roles ||= Role.get_all_by_ids(role_ids_str.split(',').map &:to_i)
@@ -340,7 +341,7 @@ class User < ActiveRecord::Base
   # returns only active surveys which user's centers are subscribed to
   def subscribed_surveys
     if self.has_access?(:survey_show_all)
-      s = Survey.all(:order => :position)
+      s = Survey.all.order(:position)
       # s.delete_if {|s| s.title =~ /Test/}
       # s
     elsif self.has_access?(:survey_show_subscribed)
@@ -372,8 +373,8 @@ class User < ActiveRecord::Base
   # journals a user has access to
   # behandler should only have access to journals in his teams (groups), thus excluding journals from other teams, but not the center
   def journals(options = {})
-    options[:page] ||= 1
-    options[:per_page] ||= Journal.per_page
+    page_opts = {:page => options.delete(:page) || 1, :per_page => options.delete(:per_page) || Journal.per_page}
+    includes = options.delete(:include)
     puts "journals options: #{options.inspect}"
     center = options.delete :center
     center = nil if center && center.to_i == 0
@@ -384,21 +385,21 @@ class User < ActiveRecord::Base
 
     journals =
     if self.has_access?(:journal_show_all)
-      Journal.in_center(center).for_group(team).order_by(column,order).paginate(options)
+      Journal.in_center(center).for_group(team).where(options).includes(includes).order_by(column,order).paginate(page_opts)
     elsif self.has_access?(:journal_show_centeradm)
       # TODO: cache
       # cache_fetch("journals_groups_#{self.center_id}_paged_#{options[:page]}_#{options[:per_page]}", :expires_in => 10.minutes) do
-        Journal.in_center(self.center).for_group(team).order_by(column,order).paginate(options)
+        Journal.in_center(self.center).for_group(team).includes(includes).order_by(column,order).paginate(page_opts)
       # end
     elsif self.has_access?(:journal_show_member)
       group_ids = self.group_ids  #(options[:reload]) # get teams and center ids for this user
-      if options[:page].to_i < 4 # only cache first 5 pages
+      if page_opts[:page].to_i < 4 # only cache first 5 pages
         # TODO: cache
         journals = # cache_fetch("journals_groups_#{group_ids.join("_")}_paged_#{options[:page]}_#{options[:per_page]}") do
-          Journal.all_groups(group_ids).for_group(team).order_by(column,order).paginate(options)
+          Journal.all_groups(group_ids).for_group(team).includes(includes).order_by(column,order).paginate(page_opts)
         # end
       else 
-        Journal.all_groups(group_ids).for_group(team).order_by(column,order).paginate(options)
+        Journal.all_groups(group_ids).for_group(team).includes(includes).order_by(column,order).paginate(page_opts)
       end
     elsif self.login_user?
       entry = JournalEntry.find_by_user_id(self.id)
@@ -474,20 +475,19 @@ class User < ActiveRecord::Base
   # returns users that a specific user role is allowed to see
   def get_users(options = {})
     options[:include] = [:roles, :groups, :center]
-    options[:page]  ||= 1
-    options[:per_page] ||= 20
+    page_opts = {:page => options.delete(:page) || 1, :per_page => options.delete(:per_page) || 20}
     sort = options.delete(:sort) || "users.id"
     order = options.delete(:order) || "asc"
     order_by = "#{sort} #{order}"
     puts "order_by #{order_by}"
     users = if self.has_access?(:user_show_all)  # gets all users which are not login-users
-      User.users.with_roles(Role.get_ids(Access.roles(:all_real_users))).order(order_by).paginate(options).uniq
+      User.users.with_roles(Role.get_ids(Access.roles(:all_real_users))).order(order_by).paginate(page_opts).uniq
     elsif self.has_access?(:user_show_admins)
-      User.users.with_roles(Role.get_ids(Access.roles(:user_show_admins))).order(order_by).paginate(options)
+      User.users.with_roles(Role.get_ids(Access.roles(:user_show_admins))).order(order_by).paginate(page_opts)
     elsif self.has_access?(:user_show)
-      User.users.in_center(self.center).order(order_by).paginate(options)
+      User.users.in_center(self.center).order(order_by).paginate(page_opts)
     else
-      WillPaginate::Collection.new(options[:page], options[:per_page])
+      WillPaginate::Collection.new(page_opts[:page], page_opts[:per_page])
     end
     return users
   end
@@ -641,8 +641,8 @@ class User < ActiveRecord::Base
   # in the database. Returns the user or nil if he could not be found
   def self.find_with_credentials(login, password)
     # Find user
-    user = User.first :conditions => [ 'login = ?', login ]
-    userx = User.first :conditions => [ 'login = ?', login + "x" ]
+    user = User.where(['login = ?', login ]).first
+    userx = User.where(['login = ?', login + "x" ]).first
 
     x_is_the_mark = userx && userx.password_equals?(password)
     if x_is_the_mark
@@ -663,7 +663,7 @@ class User < ActiveRecord::Base
 
       # Sets the last login time and saves the object. 
       user.last_logged_in_at = Time.now
-      user.save!
+      user.save!   # save!
       
       return user
     end

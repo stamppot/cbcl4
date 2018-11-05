@@ -1,4 +1,5 @@
 class Letter < ActiveRecord::Base
+  audited
   belongs_to :group
   belongs_to :center
 
@@ -10,9 +11,9 @@ class Letter < ActiveRecord::Base
   # attr_accessible :name, :surveytype, :group_id, :follow_up, :letter
   attr_accessible :name, :group_id, :letter
 
-  scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
+  scope :in_center, -> (center) { where(:center_id => (center.is_a?(Center) ? center.id : center)) }
   # scope :in_center, -> { where('center_id = ?', ), lambda { |group| { :conditions => ['center_id = ?', group.is_a?(Center) ? group.id : group] } }
-  scope :with_cond, lambda { |cond| cond }
+  scope :with_cond, -> (cond) { where(cond[:conditions]) }
 
 
   def get_follow_up
@@ -96,7 +97,7 @@ class Letter < ActiveRecord::Base
     puts "conditions: #{cond.inspect}"
     @letters = 
     if !cond[:conditions].first.blank?
-      Letter.in_center(options[:center_id]).with_cond(cond)
+      Letter.with_cond(cond).in_center(options[:center_id])
     else
       Letter.in_center(options[:center_id])
     end

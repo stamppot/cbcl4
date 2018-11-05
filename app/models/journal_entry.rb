@@ -1,4 +1,5 @@
 class JournalEntry < ActiveRecord::Base
+  audited
   belongs_to :journal #, :touch => true
   belongs_to :survey
   belongs_to :survey_answer, :touch => true #, :dependent => :destroy #, :touch => true
@@ -26,7 +27,7 @@ class JournalEntry < ActiveRecord::Base
   scope :between, lambda { |start, stop| where('journal_entries.created_at' => start..stop) } 
   scope :answered_between, lambda { |start, stop| where('journal_entries.answered_at' => start..stop) } 
   scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
-  scope :last_answered, lambda { { :conditions => ['answered_at is not null'], :order => 'journal_entries.answered_at desc', :limit => 1}}
+  scope :last_answered, -> { where('answered_at is not null').order('journal_entries.answered_at desc').limit(1) }
   scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }
   scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
 

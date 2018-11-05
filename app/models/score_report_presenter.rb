@@ -7,7 +7,7 @@ class ScoreReportPresenter
     answers = []
     answers_hash.each { |key, val| answers << key if val.to_i == 1 } # use only checked survey answers
 
-    entries = JournalEntry.find(answers, :include => [ :journal, {:survey => {:scores => [:score_items, :score_refs]}} ] )
+    entries = JournalEntry.includes([:journal, {:survey => {:scores => [:score_items, :score_refs]}} ]).find(answers)
     if entries.empty? # if no entries are chosen, show the first three
       entries = Journal.find(journal_id).answered_entries.reverse.slice(0,3)
     end
@@ -80,7 +80,7 @@ class ScoreReportPresenter
 
     # holds scores in groups of standard, latent, cross-informant
     @groups = []
-    @scales = ScoreScale.find(:all, :order => :position)
+    @scales = ScoreScale.all.order(:position)
 
     @scales.each do |scale|
       cols = []           # holds columns of results

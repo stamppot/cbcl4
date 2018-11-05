@@ -77,7 +77,7 @@ class MailTasksController < ApplicationController
 
     tasks_relation = SendLetterFollowUpTask.with_journal.with_status(@state).between(@start_date, @stop_date)
     @task_count = tasks_relation.count
-    tasks = tasks_relation.all(:order => 'created_at asc', :include => [:journal]).inject({}) do |c, t|
+    tasks = tasks_relation.all.order('created_at asc').includes([:journal]).inject({}) do |c, t|
       c[t.journal_id] ||= []
       c[t.journal_id] << t
       c

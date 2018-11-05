@@ -67,7 +67,7 @@ class ScoreScalesController < ApplicationController
   
   # order scales
   def order
-    @scales = ScoreScale.all(:order => :position)
+    @scales = ScoreScale.all.order(:position)
     @action = 'order'
   end
 

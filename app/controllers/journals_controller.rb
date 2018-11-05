@@ -265,7 +265,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @teams = current_user.center_and_teams
     puts "@teams: #{@teams.inspect}"
     @page_title = "CBCL - Center " + @group.title
-    @groups = @group.journals.paginate(:page => params[:page], :per_page => journals_per_page*2, :order => 'title') || []
+    @groups = @group.journals.order(['title asc']).paginate(:page => params[:page], :per_page => journals_per_page*2) || []
     @journal_count = @group.journals.count
 
     # render :view => :select_journals

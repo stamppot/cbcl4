@@ -137,11 +137,12 @@ class RemindersController < ApplicationController
     @follow_up = params[:follow_up].to_i
     puts "@state: #{@state}"
     entries_relation = JournalEntry.for_parent_with_state(@group, @state).between(@start_date, @stop_date)
+    puts "relation: #{entries_relation.inspect}"
     if @follow_up > -1
       entries_relation = entries_relation.where(follow_up: @follow_up)
     end
     @journal_entries_count = entries_relation.count
-    @journal_entries = entries_relation.all(:order => 'journals.title asc', :include => :journal) unless @state.empty?
+    @journal_entries = entries_relation.includes(:journal).order('journals.title asc').all unless @state.empty?
     @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
   end
 

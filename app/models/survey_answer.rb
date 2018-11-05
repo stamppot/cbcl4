@@ -7,6 +7,7 @@ require 'hashery'
 
 
 class SurveyAnswer < ActiveRecord::Base
+  audited
   belongs_to :survey
   belongs_to :journal
   belongs_to :center
@@ -21,20 +22,20 @@ class SurveyAnswer < ActiveRecord::Base
   attr_accessible :survey_id, :age, :sex, :journal, :surveytype, :nationality, :journal_entry, :center_id, :survey, :journal_entry_id, :journal_id, :follow_up
   
   scope :finished, -> { where('done = ?', true) }
-  scope :in_center, lambda { |center_id| { :conditions => ['center_id = ?', center_id] } }
+  scope :in_center, -> (center_id) { where(['center_id = ?', center_id]) }
 
-  scope :order_by, lambda { |column| { :order => column } }
+  scope :order_by, -> (column) { order(column) }
   scope :and_answer_cells, -> { includes ({ answers: :answer_cells }) }
   scope :and_questions, -> { includes( { survey: :questions }) }
-  scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
-  scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
-  scope :from_date, lambda { |start| { :conditions => { :created_at  => start..(Date.now) } } }
-  scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)..stop } } }
-  scope :for_surveys, lambda { |survey_ids| { :conditions => { :survey_id => survey_ids } } }
-  scope :for_survey, lambda { |survey_id| { :conditions => ["survey_answers.survey_id = ?", survey_id] } }
+  scope :between, -> (start, stop) { where(:created_at  => start..stop) }
+  scope :aged_between, -> (start, stop) { where(:age  => start..stop) }
+  scope :from_date, -> (start) { where(:created_at  => (start..(Date.now))) }
+  scope :to_date, -> (stop) { where(:created_at  => ((Date.now)..stop)) }
+  scope :for_surveys, -> (survey_ids) { where(:survey_id => survey_ids) }
+  scope :for_survey, -> (survey_id) { where(["survey_answers.survey_id = ?", survey_id]) }
   scope :with_journals, -> { joins("INNER JOIN `journal_entries` ON `journal_entries`.journal_id = `journal_entries`.survey_answer_id").includes({:journal_entry => :journal}) }
-  scope :for_entries, lambda { |entry_ids| where({ :journal_entry_id => entry_ids }) } # ["survey_answers.journal_entry_id IN (?)", 
-  scope :for_team, ->(team_id) { where(["survey_answers.team_id = ?", team_id]) }
+  scope :for_entries, -> (entry_ids) { where( :journal_entry_id => entry_ids) } # ["survey_answers.journal_entry_id IN (?)", 
+  scope :for_team, -> (team_id) { where(["survey_answers.team_id = ?", team_id]) }
   scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
 
   def answered_by_role
