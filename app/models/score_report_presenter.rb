@@ -8,10 +8,13 @@ class ScoreReportPresenter
     answers_hash.each { |key, val| answers << key if val.to_i == 1 } # use only checked survey answers
 
     entries = JournalEntry.includes([:journal, {:survey => {:scores => [:score_items, :score_refs]}} ]).find(answers)
+
+    puts "answers: #{answers.inspect}"
     if entries.empty? # if no entries are chosen, show the first three
       entries = Journal.find(journal_id).answered_entries.reverse.slice(0,3)
     end
 
+    puts "entries; #{entries.inspect}"
     # TODO!!! some entries don't have a survey_answer. Bad data?!  Get survey_answers per journal instead?
     survey_answers = entries.map { |entry| entry.survey_answer }.sort_by {|sa| sa.survey && sa.survey.position || 1 }
 
@@ -21,6 +24,8 @@ class ScoreReportPresenter
       entry = entries.select { |e| e.survey_answer_id == sa.id }.first
       "#{sa.survey.category} #{sa.survey.age}" # <div class='survey_info'>#{entry.get_follow_up}<br/>#{sa.created_at.strftime('%-d-%-m-%Y')}</div>"
     end
+
+    puts "sas: #{survey_answers.inspect}"
 
     # find or create score_rapport
     score_rapports = survey_answers.map { |sa| sa.score_rapport ||= sa.generate_score_report }

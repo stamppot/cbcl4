@@ -11,8 +11,8 @@ class Subscription < ActiveRecord::Base
 
   attr_accessible :total_used, :total_paid, :active_used, :center, :survey_id, :state, :start, :created_at
 
-  scope :in_center, lambda { |center| { :conditions => ['center_id = ?', center.is_a?(Center) ? center.id : center] } }
-  scope :by_survey, lambda { |center_id, survey| { :conditions => ['center_id = ? and survey_id = ?', center_id, (survey.is_a?(Survey) ? survey.id : survey)] } }
+  scope :in_center, -> (center) { where(['center_id = ?', center.is_a?(Center) ? center.id : center]) }
+  scope :by_survey, -> (center_id, survey) { where(['center_id = ? and survey_id = ?', center_id, (survey.is_a?(Survey) ? survey.id : survey)]) }
   # scope :for_cbcl, -> { joins(:survey).where('surveys.bundle = ?', 'CBCL') }
   
   scope :active, -> { where('state = ?', 1) }

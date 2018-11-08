@@ -326,7 +326,7 @@ class User < ActiveRecord::Base
   def surveys
     surveys = []
     if self.has_access?(:survey_show_all)
-      surveys = Survey.all(:order => :position).to_a
+      surveys = Survey.all.order(:position).to_a
     elsif self.has_access?(:survey_show_subscribed)
       surveys = self.center.surveys.to_a
     elsif self.has_access?(:survey_show_login)

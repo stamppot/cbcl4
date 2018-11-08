@@ -12,24 +12,23 @@ class JournalEntry < ActiveRecord::Base
   # validate :follow_up_validation
   attr_accessible :survey, :state, :journal, :follow_up #, :group_id
 
-  scope :by_id_and_journal, lambda { |id, journal_id| where('id = ? AND journal_id = ?', id, journal_id) }
+  scope :by_id_and_journal, -> (id, journal_id) { where('id = ? AND journal_id = ?', id, journal_id) }
   scope :and_login_user, -> { includes(:login_user) }
   scope :and_survey_answer, -> { includes([:survey, :survey_answer]) }
-	scope :in_center, lambda { |center_id| { :joins => :journal, :conditions => ["journal_entries.center_id = ?", center_id] } }
-  scope :with_surveys, lambda { |survey_ids| { :joins => :survey_answer,
-   :conditions => ["survey_answers.survey_id IN (?)", survey_ids] } }
-  scope :for_surveys, lambda { |survey_ids| where("survey_id IN (?)", survey_ids) }
+	scope :in_center, -> (center_id) { joins(:journal).where(:conditions => ["journal_entries.center_id = ?", center_id]) }
+  scope :with_surveys, -> (survey_ids) { where(["survey_answers.survey_id IN (?)", survey_ids]).joins(:survey_answer) }
+  scope :for_surveys, -> (survey_ids) { where("survey_id IN (?)", survey_ids) }
   scope :unanswered, -> { where('state < 5') }
   scope :answered, -> { where('state = 5') }
   scope :answered_by_login_user, -> { where('state = 6') }
-  scope :for_states, lambda { |states| where("journal_entries.state IN (?)", states) }
-  scope :with_cond, lambda { |cond| cond }
-  scope :between, lambda { |start, stop| where('journal_entries.created_at' => start..stop) } 
-  scope :answered_between, lambda { |start, stop| where('journal_entries.answered_at' => start..stop) } 
+  scope :for_states, -> (states) { where("journal_entries.state IN (?)", states) }
+  scope :with_cond, -> (cond) { where(cond[:conditions]) }
+  scope :between, -> (start, stop) { where('journal_entries.created_at' => (start..stop)) } 
+  scope :answered_between, -> (start, stop) { where('journal_entries.answered_at' => (start..stop)) } 
   scope :first_answered, -> { where('answered_at is not null').order('journal_entries.answered_at asc').limit(1) }
   scope :last_answered, -> { where('answered_at is not null').order('journal_entries.answered_at desc').limit(1) }
-  scope :active_state, lambda { |state| where("#{self.get_status_query(state)}", state) }
-  scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
+  scope :active_state, -> (state) { where("#{self.get_status_query(state)}", state) }
+  scope :with_followup, -> (follow_up) { follow_up && where(:follow_up => follow_up) }
 
   # scope :done, -> { includes(:survey_answer).where('survey_answers.done = 1') }
 

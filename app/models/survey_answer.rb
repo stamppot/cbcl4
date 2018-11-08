@@ -36,7 +36,7 @@ class SurveyAnswer < ActiveRecord::Base
   scope :with_journals, -> { joins("INNER JOIN `journal_entries` ON `journal_entries`.journal_id = `journal_entries`.survey_answer_id").includes({:journal_entry => :journal}) }
   scope :for_entries, -> (entry_ids) { where( :journal_entry_id => entry_ids) } # ["survey_answers.journal_entry_id IN (?)", 
   scope :for_team, -> (team_id) { where(["survey_answers.team_id = ?", team_id]) }
-  scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
+  scope :with_followup, -> (follow_up) { follow_up && where(:follow_up => follow_up) }
 
   def answered_by_role
     return Role.get(self.answered_by)
@@ -295,7 +295,7 @@ class SurveyAnswer < ActiveRecord::Base
   end
 
   def generate_score_report(update = false)
-    rapport = ScoreRapport.find_by_survey_answer_id(self.id, :include => {:survey_answer => :journal})
+    rapport = ScoreRapport.includes({:survey_answer => :journal}).find_by_survey_answer_id(self.id)
     args = { :survey_name => self.survey.get_title,
                   :survey => self.survey,
               :unanswered => self.no_unanswered,

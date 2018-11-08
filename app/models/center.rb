@@ -7,13 +7,11 @@ class Center < Group
   has_many :periods 
   has_many :surveys, -> { order('position').uniq }, :through => :subscriptions
   has_one  :center_info
-  has_many :users,
-           -> { where login_user: 0 }, class_name: 'User', dependent: :destroy
+  has_many :users, -> { where login_user: 0 }, class_name: 'User', dependent: :destroy
            # :class_name => 'User',
            # :conditions => 'users.login_user = 0',
            # :dependent => :destroy
-  has_many :login_users,
-           -> { where login_user: 1 }, class_name: 'User', dependent: :destroy
+  has_many :login_users, -> { where login_user: 1 }, class_name: 'User', dependent: :destroy
            # :class_name => 'User',
            # :conditions => 'users.login_user = 1',
            # :dependent => :destroy
@@ -27,7 +25,7 @@ class Center < Group
 
   attr_accessible :center_info
   
-  scope :search_title_or_code, lambda { |phrase| { :conditions => ["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase] } }
+  scope :search_title_or_code, -> (phrase) { where(:conditions => ["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase]) }
 
   scope :order_by, lambda { |column, order|
     puts "column, order: #{column} #{order}"
