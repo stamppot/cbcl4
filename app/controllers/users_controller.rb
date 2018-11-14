@@ -171,7 +171,7 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     if @phrase.empty?
       []
     elsif current_user.has_role?(:superadmin)
-      User.search(@phrase, :order => "created_at DESC") # , :conditions => ['login_user = ?', false]
+      User.search(@phrase, :order => "created_at DESC") 
     else
       User.search(@phrase, :with => { :center_id => current_user.centers.map(&:id) })
     end

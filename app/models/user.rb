@@ -95,15 +95,15 @@ class User < ActiveRecord::Base
     login_user
   end
 
-  scope :in_center, lambda { |center| where(:center_id => (center.is_a?(Center) ? center.id : center)) }
+  scope :in_center, -> (center) { where(:center_id => (center.is_a?(Center) ? center.id : center)) }
   scope :users, -> { where(:login_user => false) } #.order("users.created_at") }
   scope :login_users, -> { where(:login_user => true) }
 
-  scope :with_roles, lambda { |role_ids| joins(:roles).where('role_id IN (?)', role_ids) } 
+  scope :with_roles, -> (role_ids) { joins(:roles).where('role_id IN (?)', role_ids) } 
   # scope :with_roles, lambda { |role_ids| where("FIND_IN_SET('#{role_ids.join(',')}', #{role_ids_str})") }
    # { :select => "users.*", :joins => "INNER JOIN roles_users ON roles_users.user_id = users.id",
     # :conditions => ["roles_users.role_id IN (?)", role_ids] } }
-  scope :in_journals, lambda { |journal_ids| joins(:journal_entries).where('journal_entry_id IN(?)', journal_ids) } 
+  scope :in_journals, -> (journal_ids) { joins(:journal_entries).where('journal_entry_id IN(?)', journal_ids) }
     # :conditions => ["journal_entries.journal_id IN (?)", journal_ids] } }
 
   # scope :with_roles, lambda { |role_ids| { :select => "users.*", :joins => "INNER JOIN roles_users ON roles_users.user_id = users.id",

@@ -5,7 +5,7 @@ class VariablesController < ApplicationController
   # GET /variables
   # GET /variables.xml
   def index
-    @variables = Variable.and_survey.and_question.find(:all, :order => 'survey_id, question_id, row, col, item')
+    @variables = Variable.and_survey.and_question.all.order('survey_id, question_id, row, col, item')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -26,13 +26,13 @@ class VariablesController < ApplicationController
 
   def show_question
     q = Question.find params[:id]
-    @variables = Variable.and_survey.and_question.find(:all, :conditions => ['question_id = ?', q.id], :order => 'question_id, row, col, item')
+    @variables = Variable.where(['question_id = ?', q.id]).and_survey.and_question.all.order('question_id, row, col, item')
     render :index
   end
 
   def show_survey
     s = Survey.find params[:id]
-    @variables = Variable.and_survey.and_question.find(:all, :conditions => ['survey_id = ?', s.id], :order => 'question_id, row, col, item')
+    @variables = Variable.where(['survey_id = ?', s.id]).and_survey.and_question.all.order('question_id, row, col, item')
     render :index
   end
 
@@ -124,7 +124,7 @@ class VariablesController < ApplicationController
   def update_questions
     # @questions = Survey.and_q.find(params[:survey_id]).questions
     # @survey = Survey.and_q.find(params[:survey_id])
-    @question = Question.find_by_survey_id(params[:survey_id], :conditions => ['number = ?', 1])
+    @question = Question.where(['number = ?', 1]).find_by_survey_id(params[:survey_id])
     @options = {:show_all => true, :onclick => "onclick='updateRowCol(this.id);'", :switch_off => true}
     
     render :update do |page|

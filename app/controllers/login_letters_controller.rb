@@ -112,7 +112,7 @@ class LoginLettersController < ApplicationController
   end
   
   def show_login
-    entry = JournalEntry.find(params[:id], :include => :login_user)
+    entry = JournalEntry.includes(:login_user).find(params[:id])
     @login_user = entry.login_user
     # find letter for team, center, system
     @letter = LoginLetter.find_by_priority(entry)
@@ -155,7 +155,7 @@ class LoginLettersController < ApplicationController
     # find letter for team, center, system
     @letter = LoginLetter.find(params[:id])
     @letter.to_mail_merge
-    render :layout => 'letters', :template => 'letters/show_login'
+    render :layout => 'letters', :template => 'login_letters/show_login'
   end
 
   def check_access

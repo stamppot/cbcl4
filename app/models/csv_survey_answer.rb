@@ -10,19 +10,19 @@ class CsvSurveyAnswer < ActiveRecord::Base
   
   validates_uniqueness_of :survey_answer_id
   
-  scope :by_survey_answer, lambda { |id| { :conditions => ['survey_answer_id = ?', id], :limit => 1 } }
-  scope :by_journal_and_survey, lambda { |j_id, survey_id| { :conditions => ['journal_id = ? and survey_id = ?', j_id, survey_id], :limit => survey_ids.size, :order => 'survey_id' } }
-  scope :by_survey_answer_and_surveys, lambda { |sa_id, survey_ids| { :conditions => ['survey_answer_id = ? and survey_id IN (?)', sa_id, survey_ids], :limit => survey_ids.size, :order => 'survey_id' } }  
+  scope :by_survey_answer, -> (id) { where(['survey_answer_id = ?', id], :limit => 1) }
+  scope :by_journal_and_survey, -> (j_id, survey_id) { where(['journal_id = ? and survey_id = ?', j_id, survey_id]).limit(survey_ids.size).order('survey_id') }
+  scope :by_survey_answer_and_surveys, -> (sa_id, survey_ids) { where(['survey_answer_id = ? and survey_id IN (?)', sa_id, survey_ids]).limit(survey_ids.size).order('survey_id') }  
 
-  scope :between, ->(start, stop) { where(:created_at => start...stop) }
-  scope :aged_between, ->(start, stop) { where(:age => start...stop) }
-  scope :from_date, ->(start = DateTime.new(2005)) { where(:created_at => start...(Date.now)) }
-  scope :to_date, ->(stop = DateTime.now) { where(:created_at  => (Date.now)...stop) }
+  scope :between, -> (start, stop) { where(:created_at => start...stop) }
+  scope :aged_between, -> (start, stop) { where(:age => start...stop) }
+  scope :from_date, -> (start = DateTime.new(2005)) { where(:created_at => start...(Date.now)) }
+  scope :to_date, -> (stop = DateTime.now) { where(:created_at  => (Date.now)...stop) }
   # scope :for_survey, lambda { |survey_id| { :conditions => { :survey_id => survey_id } } }
-  scope :for_survey, ->(survey_id) { where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
-  scope :in_center, ->(center_id) { where(["csv_survey_answers.center_id = ?", center_id]) }
-  scope :for_team, ->(team_id) { where(["csv_survey_answers.team_id = ?", team_id]) }
-  scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
+  scope :for_survey, -> (survey_id) { where(:survey_id => survey_id) }   # "csv_survey_answers.survey_id = ?", survey_id] } }
+  scope :in_center, -> (center_id) { where(["csv_survey_answers.center_id = ?", center_id]) }
+  scope :for_team, -> (team_id) { where(["csv_survey_answers.team_id = ?", team_id]) }
+  # scope :with_followup, lambda { |follow_up| follow_up && where(:follow_up => follow_up) }
 
   # scope :in_group, lambda { |options| { (!options[:center].blank? && {:conditions => ["csv_survey_answers.center_id = ?", team_id]}) || (!options[:team].blank? && {:conditions => ["csv_survey_answers.team_id = ?", team_id]}) } }
 

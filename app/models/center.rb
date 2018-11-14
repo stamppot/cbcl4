@@ -25,7 +25,7 @@ class Center < Group
 
   attr_accessible :center_info
   
-  scope :search_title_or_code, -> (phrase) { where(:conditions => ["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase]) }
+  scope :search_title_or_code, -> (phrase) { where(["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase]) }
 
   scope :order_by, lambda { |column, order|
     puts "column, order: #{column} #{order}"

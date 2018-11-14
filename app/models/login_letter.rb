@@ -20,10 +20,10 @@ class LoginLetter < Letter
   
   def self.find_by_priority(entry)
     st = get_letter_type(entry)
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ? and bundle = ?', entry.journal.group_id, entry.follow_up, entry.survey.bundle])
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null and bundle = ?', entry.journal.group_id, entry.survey.bundle]) unless letter
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up = ? and bundle = ?', entry.journal.center_id, entry.follow_up, entry.survey.bundle]) unless letter
-    letter = LoginLetter.find_by_surveytype(st, :conditions => ['`type` = "LoginLetter" and group_id = ? and follow_up is null and bundle = ?', entry.journal.center_id, entry.survey.bundle]) unless letter
+    letter = LoginLetter.where(['`type` = "LoginLetter" and group_id = ? and follow_up = ? and bundle = ?', entry.journal.group_id, entry.follow_up, entry.survey.bundle]).find_by_surveytype(st)
+    letter = LoginLetter.where(['`type` = "LoginLetter" and group_id = ? and follow_up is null and bundle = ?', entry.journal.group_id, entry.survey.bundle]).find_by_surveytype(st) unless letter
+    letter = LoginLetter.where(['`type` = "LoginLetter" and group_id = ? and follow_up = ? and bundle = ?', entry.journal.center_id, entry.follow_up, entry.survey.bundle]).find_by_surveytype(st) unless letter
+    letter = LoginLetter.where(['`type` = "LoginLetter" and group_id = ? and follow_up is null and bundle = ?', entry.journal.center_id, entry.survey.bundle]).find_by_surveytype(st) unless letter
     letter = LoginLetter.find_default(st) unless letter
     letter
   end

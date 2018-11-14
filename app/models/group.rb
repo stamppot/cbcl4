@@ -25,7 +25,7 @@ class Group < ActiveRecord::Base
 
   # scope :all_parents, lambda { |parent| where(parent.is_a?(Array) ? ["group_id IN (?)", parent] : ["group_id = ?", parent]) }
   scope :center_and_teams, -> { where('type != ?', "Journal") }
-  scope :in_center, lambda { |center| where('center_id = ?', center.is_a?(Center) ? center.id : center) }
+  scope :in_center, -> (center) { where('center_id = ?', center.is_a?(Center) ? center.id : center) }
   scope :and_parent, -> { includes(:parent) }
   scope :children, -> { where(:center_id => id) }
   scope :teams, -> { where(:center_id => id) }

@@ -58,7 +58,7 @@ class LoginUsersController < ApplicationController # < ActiveRbac::ComponentCont
   # the database and displays an edit form with the user.
   def edit
     @user = User.find(params[:id])
-    @login_role = Role.find(:first, :conditions => ['title = ? ', :loginbruger] )
+    @login_role = Role.where(['title = ? ', :loginbruger]).find(:first)
     @roles = @user.roles
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'You sent an invalid request.'
@@ -117,7 +117,7 @@ class LoginUsersController < ApplicationController # < ActiveRbac::ComponentCont
     @user = User.find(params[:id])
     if not params[:yes].nil?
       # remove user from journalentry
-      @entry = JournalEntry.find(:first, :conditions => [ 'user_id = ?', @user.id ])
+      @entry = JournalEntry.where([ 'user_id = ?', @user.id ]).find(:first)
       @entry.remove_login_user!   # remove user and reset state unless answered
       @journal = @entry.journal
       @user.destroy

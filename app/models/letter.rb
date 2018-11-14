@@ -49,7 +49,7 @@ class Letter < ActiveRecord::Base
   end
 
   def self.find_default(surveytype)
-    Letter.find_by_surveytype(surveytype, :conditions => ['group_id IS NULL or group_id = ?', 0] )
+    Letter.where(['group_id IS NULL or group_id = ?', 0]).find_by_surveytype(surveytype)
   end
   
   def self.default_letters_exist?

@@ -8,10 +8,10 @@ class ScoreRapport < ActiveRecord::Base
   has_many :has_98th_percentile_scores, -> { where('score_results.percentile_98 = 1') },
            :class_name => 'ScoreResult'
 
-  scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }
-  scope :from_date, lambda { |start| { :conditions => { :created_at  => start..(Date.now) } } }
-  scope :to_date, lambda { |stop| { :conditions => { :created_at  => (Date.now)..stop } } }
-  scope :for_surveys, lambda { |survey_ids| { :conditions => { :survey_id => survey_ids } } } #["survey_answers.survey_id IN (?)", survey_ids] } }
+  scope :aged_between, -> (start, stop) { where(:age => (start..stop)) }
+  scope :from_date, -> (start) { where(:created_at  => (start..(Date.now)) }
+  scope :to_date, -> (stop) { where(:created_at => ((Date.now)..stop)) }
+  scope :for_surveys, -> (survey_ids) { where(:survey_id => survey_ids) } #["survey_answers.survey_id IN (?)", survey_ids] } }
   # scope :for_survey, lambda { |survey_id| { :conditions => ["survey_id = ?", survey_id] } }
   # scope :between, lambda { |start, stop| { :conditions => { :created_at  => start..stop } } }
   # scope :aged_between, lambda { |start, stop| { :conditions => { :age  => start..stop } } }

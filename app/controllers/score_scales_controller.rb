@@ -89,7 +89,7 @@ class ScoreScalesController < ApplicationController
   # shows surveys for which this score applies to (or surveys for which this score has been created)
   def show_scale_surveys
     @score = Score.find(params[:id])
-    @surveys = Score.find_all_by_title(@score.title, :conditions => ['score_scale_id = ?', @score.score_scale_id]).map { |score| score.survey }
+    @surveys = Score.where(['score_scale_id = ?', @score.score_scale_id]).find_all_by_title(@score.title).map { |score| score.survey }
     render :update do |page|
       page.replace_html 'right', :partial => 'show_scale_surveys', :object => @surveys
     end

@@ -12,11 +12,11 @@ class Task < ActiveRecord::Base
 
   attr_accessible :status, :survey_answer, :param1, :journal_id, :letter_id, :group_id
 
-  scope :for_group, lambda { |g| where(:group_id => g) }
-  scope :with_status, lambda { |state| where("status IN (?)", state) }
-  scope :between, ->(start, stop) { where(:created_at => start...stop) }
+  scope :for_group, -> (g) { where(:group_id => g) }
+  scope :with_status, -> (state) { where("status IN (?)", state) }
+  scope :between, -> (start, stop) { where(:created_at => start...stop) }
   scope :with_journal, -> { where('journal_id IS NOT NULL') }
-  scope :of_type, lambda { |t| where('`type` = ?', t) }
+  scope :of_type, -> (t) { where('`type` = ?', t) }
 
 
   # def init  # used by callback

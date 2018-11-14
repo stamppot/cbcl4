@@ -11,8 +11,8 @@ class Variable < ActiveRecord::Base
   
   scope :and_survey, -> { includes(:survey) }
   scope :and_question, -> { includes(:question) }
-  scope :for_survey, lambda { |survey_id| { :conditions => ["survey_id = ?", survey_id] } }
-  scope :for_cell, lambda { |cell| { :conditions => ['question_id = ? and row = ? and col = ?', cell.question_id, cell.row, cell.col] } }
+  scope :for_survey, -> (survey_id) { where(["survey_id = ?", survey_id]) }
+  scope :for_cell, -> (cell) { where(['question_id = ? and row = ? and col = ?', cell.question_id, cell.row, cell.col]) }
 
   attr_accessor :short, :value
 

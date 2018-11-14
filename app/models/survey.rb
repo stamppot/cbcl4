@@ -11,7 +11,7 @@ class Survey < ActiveRecord::Base
 
   scope :and_questions, -> { includes({:questions => :question_cells}) }
   scope :and_q, -> { includes(:questions) }
-  scope :selected, lambda { |ids| { :conditions => (ids ? ['id IN (?)', ids] : []) } }
+  scope :selected, -> (ids) { where(ids ? ['id IN (?)', ids] : []) }
   # scope :by_question_id, lambda {|question| { :conditions => ['id = ?', question.is_a?(Question) ? question.id : question] } }
 
   attr_accessible :title, :category, :description, :age, :surveytype, :prefix

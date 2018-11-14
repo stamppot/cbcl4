@@ -37,7 +37,7 @@ class TeamsController < ApplicationController # < ActiveRbac::ComponentControlle
       #   render :json => @teams
       # }
       format.js {
-        @teams = Team.where(:conditions => ['group_id = ?', params[:id]]).order("title")
+        @teams = Team.where(['group_id = ?', params[:id]]).order("title")
         render :update do |page|
           if @teams.any?
             page.visual_effect :highlight, 'teams'
