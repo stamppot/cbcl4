@@ -1,4 +1,4 @@
-INSERT INTO `variables` (`id`, `var`, `item`, `row`, `col`, `survey_id`, `question_id`, `created_bt`, `updated_bt`, `datatype`)
+INSERT INTO `variables` (`id`, `var`, `item`, `row`, `col`, `survey_id`, `question_id`, `created_at`, `updated_at`, `datatype`)
 VALUES
 	(1000, 'asq_1_a', NULL, 2, 2, 9, 284, '2018-11-16 16:04:00', '2018-11-16 16:04:00', 'numeric'),
 	(1001, 'asq_1_b', NULL, 2, 3, 9, 284, '2018-11-16 16:04:00', '2018-11-16 16:04:00', 'numeric'),
