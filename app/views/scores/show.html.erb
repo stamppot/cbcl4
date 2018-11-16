@@ -25,7 +25,7 @@
 
 <p>
 
-	<% if @score.score_refs.size > 0 %>
+	<% if @score && @score.score_refs.size > 0 %>
 		<table class="sortable">
 			<% @score_refs_header.each do |h| %>
 				<th><%= h %></th>
@@ -40,7 +40,7 @@
 <br>
 	
 
-	<% if @score.score_items.size > 0 %>
+	<% if @score && @score.score_items.size > 0 %>
 	<table class="sortable">
 		<% @score_items_header.each do |h| %>
 			<th><%= h %></th>
