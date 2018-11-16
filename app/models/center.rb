@@ -115,6 +115,7 @@ class Center < Group
     	surveys = surveys.select {|s| s.id < 10}  # don't show Oplysningsskema for other centers (and below 18 years of age)
     end
 
+    surveys.reject! {|s| s.prefix == "info" } if age >= 18  # when person is 18, they must answer oplysningsskema themselves (info18)
     surveys
   end
     

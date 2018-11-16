@@ -10,7 +10,7 @@ class InfoAnswerReportsController < ApplicationController
     info_answers = params[:answers].select do |id| 
     	entry = JournalEntry.find(id)
     	puts "is info? #{entry.survey_id}"
-    	entry.survey_id == 10 || entry.survey_id == 210
+    	entry.survey_id == 10 || entry.survey_id == 11 || entry.survey_id == 210
     end
     @answer_values = nil
     if info_answers.any?
@@ -29,7 +29,7 @@ class InfoAnswerReportsController < ApplicationController
     @group_titles = score_report.group_titles
 
     @answer_texts = []
-    params[:answers].keys.each do |journal_id|
+    params[:answers].select {|key,val| val.to_i == 1}.keys.each do |journal_id|
       journal_entry = JournalEntry.and_survey_answer.find(journal_id)
       survey_answer = SurveyAnswer.and_answer_cells.find(journal_entry.survey_answer_id)
       survey = Survey.and_questions.find(survey_answer.survey_id)
