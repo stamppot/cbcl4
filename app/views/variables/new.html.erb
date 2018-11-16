@@ -5,7 +5,7 @@
 
 <div id="right" style="float:right; width:75%; padding-left: 1%;">
 	<div id='question_view'>
-		<%= render :partial => "surveys/question" %>
+		<%= render :partial => "question" %>
 	</div>
 </div>
 
@@ -13,7 +13,7 @@
 
 	<h1>Opret variabel</h1>
 
-<% form_remote_for(@variable) do |f| %>
+<% form_for(@variable) do |f| %>
 <%= f.error_messages %>
 
 <div id="status"></div>

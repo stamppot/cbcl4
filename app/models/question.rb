@@ -1,4 +1,4 @@
-# require 'hashery/dictionary'
+require 'hashery/dictionary'
 # require 'lib/dictionary'
 
 class Question < ActiveRecord::Base

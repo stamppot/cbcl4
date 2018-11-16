@@ -51,7 +51,7 @@ class Variable < ActiveRecord::Base
       return @@survey_hash if @@survey_hash
     end
     
-    vars = self.all(:order => "#{by_id}, row")    
+    vars = self.all.order("#{by_id}, row")    
 
     if by_id == 'question_id'
       vars.inject({}) do |h, elem|
