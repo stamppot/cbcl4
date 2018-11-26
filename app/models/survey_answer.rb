@@ -252,6 +252,7 @@ class SurveyAnswer < ActiveRecord::Base
     answer = self.max_answer
     answered = self.no_answered_problem_items
     answered_percentage = answer && (answered*100) / [answer.question.ratings_count, 1].max || 0  # prevent zero division
+	  answered_percentage = 100 if answered_percentage > 100
   end
 
   def add_missing_cells
