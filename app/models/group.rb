@@ -151,7 +151,7 @@ class Group < ActiveRecord::Base
     if group_name.size < 2
       group_name = (group_name.scan /\p{Upper}/).join
     end
-    group_name
+    group_name.gsub("--", "-")
   end
   
 def login_prefix
@@ -164,7 +164,7 @@ def login_prefix
       num += rand(10000)
       login_name = "#{group_name}-#{num}"
     end
-    login_name.gsub("Ø", "o").gsub("Æ", "ae").gsub("Å", "a")
+    login_name.gsub("Ø", "o").gsub("Æ", "ae").gsub("Å", "a").gsub("--", "-")
   end
 
   protected
