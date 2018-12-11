@@ -9,7 +9,7 @@ class ScoreRapport < ActiveRecord::Base
            :class_name => 'ScoreResult'
 
   scope :aged_between, -> (start, stop) { where(:age => (start..stop)) }
-  scope :from_date, -> (start) { where(:created_at  => (start..(Date.now)) }
+  scope :from_date, -> (start) { where(:created_at  => (start..(Date.now))) }
   scope :to_date, -> (stop) { where(:created_at => ((Date.now)..stop)) }
   scope :for_surveys, -> (survey_ids) { where(:survey_id => survey_ids) } #["survey_answers.survey_id IN (?)", survey_ids] } }
   # scope :for_survey, lambda { |survey_id| { :conditions => ["survey_id = ?", survey_id] } }
