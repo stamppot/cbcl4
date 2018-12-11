@@ -3,7 +3,7 @@ ThinkingSphinx::Index.define :user, :with => :active_record do
   indexes center.title, :as => :center_title
   indexes center.code, :as => :center_code
 
-  has group_id, center_id, created_at
+  has center_id, center_id, created_at
 end
 
 
