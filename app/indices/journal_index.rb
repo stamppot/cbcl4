@@ -1,4 +1,4 @@
-ThinkingSphinx::Index.define :journal, :with => :active_record do
+ThinkingSphinx::Index.define :journal, :with => :active_record, :delta => true do
   indexes title, :sortable => true
   indexes code, :sortable => true
   indexes cpr, :sortable => true

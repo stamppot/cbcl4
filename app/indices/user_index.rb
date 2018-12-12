@@ -1,4 +1,4 @@
-ThinkingSphinx::Index.define :user, :with => :active_record do
+ThinkingSphinx::Index.define :user, :with => :active_record, :delta => true do
   indexes name, :sortable => true
   indexes center.title, :as => :center_title
   indexes center.code, :as => :center_code
