@@ -52,7 +52,7 @@ gem 'dalli'
 gem 'wkhtmltopdf-binary'
 gem 'pdfkit'
 
-# gem 'writeexcel'
+gem 'writeexcel'
 
 gem  'awesome_print'
 
