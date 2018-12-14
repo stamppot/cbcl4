@@ -91,7 +91,7 @@ class RemindersController < ApplicationController
       entries_relation = entries_relation.where(follow_up: @follow_up)
     end
 
-    @journal_entries = entries_relation.all(:order => 'journal_entries.created_at desc', :include => [:journal, :login_user]) unless @state.empty?
+    @journal_entries = entries_relation.order('journal_entries.created_at desc').includes([:journal, :login_user]) unless @state.empty?
 
     export_csv_helper = ExportCsvHelper.new
     rows = export_csv_helper.get_entries_status(@journal_entries)
