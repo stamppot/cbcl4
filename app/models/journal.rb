@@ -88,18 +88,6 @@ class Journal < ActiveRecord::Base #< Group
   scope :for_surveys, lambda { |surveys| where('survey_id IN (?)', surveys) }
   scope :with_follow_up, lambda { |follow_up| where('follow_up = 1', follow_up) }
 
-  # define_index do
-  #    # fields
-  #    indexes :title, :sortable => true
-  #    indexes :code, :sortable => true
-  #    indexes :cpr, :sortable => true
-  #    indexes :alt_id, :sortable => true
-		#  # indexes center_id
-  #    # attributes
-  #    # has group_id, center_id, created_at, updated_at
-  #    has group_id, center_id, created_at, updated_at
-  #    set_property :delta => true
-  #  end
 
   def self.per_page 
     20
@@ -134,9 +122,6 @@ class Journal < ActiveRecord::Base #< Group
     #Rake::Task[task_name].invoke
   end
 
-  # def parent=(group)
-
-  # end
 
   def children 
     []

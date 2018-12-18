@@ -4,6 +4,7 @@ ThinkingSphinx::Index.define :user, :with => :active_record, :delta => true do
   indexes center.code, :as => :center_code
 
   has center_id, created_at
+  set_property :delta => true
 end
 
 

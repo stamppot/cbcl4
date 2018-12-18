@@ -146,7 +146,8 @@ class User < ActiveRecord::Base
     pwconf = params.delete(:password_confirmation)
     user = User.new(params)
     user.state = 2
-
+    user.delta = true
+    
     if self.access_to_roles?(role_ids) && self.access_to_groups?(group_ids)
       logger.info "access_to_roles: #{role_ids.inspect}"
       user.update_roles_and_groups(role_ids, group_ids)
