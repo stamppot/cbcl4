@@ -4,3 +4,9 @@
 require File.expand_path('../config/application', __FILE__)
 
 Cbcl4::Application.load_tasks
+
+namespace :thinking_sphinx do
+	task :configure do   	# alias for ts:configure
+	  	Rake::Task["ts:configure"].invoke
+	end
+end
