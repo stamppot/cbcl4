@@ -89,9 +89,10 @@ class StartController < ApplicationController
 	  
     if @journal_entry.next    # has next, but should be this one
       logger.info "Next problem: (luser) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}."
-	    @journal_entry = JournalEntry.find @journal_entry.next
+	    jenext = JournalEntry.find @journal_entry.next
       if !jenext.answered?
         logger.info "Next not answered: #{jenext.id} Changing login_user to the one in next"
+        @journal_entry = jenext
         login_user = @journal_entry.login_user
       end
     end
