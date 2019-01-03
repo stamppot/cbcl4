@@ -88,14 +88,19 @@ class StartController < ApplicationController
     end
 	  
     if @journal_entry.next    # has next, but should be this one
-      logger.info "Next problem: (luser) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}. Changing login_user to the one in next"
+      logger.info "Next problem: (luser) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}."
 	    @journal_entry = JournalEntry.find @journal_entry.next
       if !jenext.answered?
+        logger.info "Next not answered: #{jenext.id} Changing login_user to the one in next"
         login_user = @journal_entry.login_user
       end
     end
     user = User.find_with_credentials(login_user.login, @journal_entry.password)    # Try to log the user in.
-    raise ActiveRecord::RecordNotFound if user.nil?    # Check whether a user with these credentials could be found.
+
+    if user.nil?
+      logger.info "Couldn't find user: #{login_user.login} #{@journal_entry.password}"
+      raise ActiveRecord::RecordNotFound    # Check whether a user with these credentials could be found.
+    end
     write_user_to_session(user) 
 
     logger.info "Next: journal_entry: #{@journal_entry.inspect} params: #{params.inspect}"
