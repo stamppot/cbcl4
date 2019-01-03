@@ -301,10 +301,10 @@ class SurveyAnswersController < ApplicationController
         redirect_to return_to and return
       else
         if journal_entry.chained_survey_entry && !journal_entry.chained_survey_entry.answered?  # infoskema or other chain
-	  next_entry = journal_entry.chained_survey_entry
-	  next_luser = next_entry.login_user
-	  session[:pw_hash] = Digest::MD5.hexdigest(next_entry.password + next_luser.password_salt)
-	  logger.info "Redirecting to next survey: #{next_entry.id}  #{session[:pw_hash]}"
+          next_entry = journal_entry.chained_survey_entry
+          next_luser = next_entry.login_user
+          session[:pw_hash] = Digest::MD5.hexdigest(next_entry.password + next_luser.password_salt)
+          logger.info "Redirecting to next survey: #{next_entry.id}  #{session[:pw_hash]}"
           redirect_to survey_next_path(journal_entry.chained_survey_entry) and return
         else
           redirect_to survey_finish_path(journal_entry) and return

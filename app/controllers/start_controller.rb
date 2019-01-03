@@ -69,25 +69,30 @@ class StartController < ApplicationController
     logger.info "Next 0: params: #{params.inspect}"
     @journal_entry = JournalEntry.find(params[:id])
     if @journal_entry.next    # has next, but should be this one
-	logger.info "Next problem: entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}"
-	jenext = JournalEntry.find @journal_entry.next
-	jenextpw = jenext.password
+	    logger.info "Next problem: (pw) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}"
+	    jenext = JournalEntry.find @journal_entry.next
+      logger.info "Next #{jenext.id} already answered: #{jenext.survey_answer_id} #{jenext.answered_at}" if jenext.answered?
+      if !jenext.answered?
+        jenextpw = jenext.password
+      end
     end
     login_user = @journal_entry.login_user
 	  
     pw_hash = session[:pw_hash]
     if pw_hash
-        if Digest::MD5.hexdigest(@journal_entry.password + login_user.password_salt) == pw_hash
-		logger.info "Next: pw_hash matches!"
-	end
+      if Digest::MD5.hexdigest(@journal_entry.password + login_user.password_salt) == pw_hash
+		    logger.info "Next: pw_hash matches!"
+	    end
     else
-        logger.info "Next: No pw_hash, params: #{params.inspect}"
+      logger.info "Next: No pw_hash, params: #{params.inspect}"
     end
 	  
     if @journal_entry.next    # has next, but should be this one
-        logger.info "Next problem: entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}. Changing login_user to the one in next"
-	@journal_entry = JournalEntry.find @journal_entry.next
-	login_user = @journal_entry.login_user
+      logger.info "Next problem: (luser) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}. Changing login_user to the one in next"
+	    @journal_entry = JournalEntry.find @journal_entry.next
+      if !jenext.answered?
+        login_user = @journal_entry.login_user
+      end
     end
     user = User.find_with_credentials(login_user.login, @journal_entry.password)    # Try to log the user in.
     raise ActiveRecord::RecordNotFound if user.nil?    # Check whether a user with these credentials could be found.
