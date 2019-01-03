@@ -30,6 +30,6 @@ production:
   address: 127.0.0.1
   charset_type: utf-8
   indices_location: "/tmp"
-  # charset_table: "0..9, a..z, _, A..Z->a..z, U+C6->U+E6, U+E6, U+C5->U+E5, U+E5, U+C4->U+E4, U+E4, U+D6->U+F6, U+F6
+  charset_table: "0..9, a..z, _, A..Z->a..z, U+C6->U+E6, U+E6, U+C5->U+E5, U+E5, U+C4->U+E4, U+E4, U+D6->U+F6, U+F6
 test:
   enable_star: 0
