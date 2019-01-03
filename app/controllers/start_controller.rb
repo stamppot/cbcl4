@@ -70,17 +70,18 @@ class StartController < ApplicationController
     @journal_entry = JournalEntry.find(params[:id])
     if @journal_entry.next    # has next, but should be this one
 	    logger.info "Next problem: (pw) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}"
-	    jenext = JournalEntry.find @journal_entry.next
-      logger.info "Next #{jenext.id} already answered: #{jenext.survey_answer_id} #{jenext.answered_at}" if jenext.answered?
-      if !jenext.answered?
-        jenextpw = jenext.password
-      end
+	    # jenext = JournalEntry.find @journal_entry.next
+      # logger.info "Next #{jenext.id} already answered: #{jenext.survey_answer_id} #{jenext.answered_at}" if jenext.answered?
+      # if !jenext.answered?
+        # jenextpw = jenext.password
+      # end
     end
-    login_user = @journal_entry.login_user
+    
+    # login_user = @journal_entry.login_user
 	  
     pw_hash = session[:pw_hash]
     if pw_hash
-      if Digest::MD5.hexdigest(@journal_entry.password + login_user.password_salt) == pw_hash
+      if Digest::MD5.hexdigest(@journal_entry.password + @journal_entry.login_user.password_salt) == pw_hash
 		    logger.info "Next: pw_hash matches!"
 	    end
     else
@@ -93,13 +94,13 @@ class StartController < ApplicationController
       if !jenext.answered?
         logger.info "Next not answered: #{jenext.id} Changing login_user to the one in next"
         @journal_entry = jenext
-        login_user = @journal_entry.login_user
+        # login_user = @journal_entry.login_user
       end
     end
-    user = User.find_with_credentials(login_user.login, @journal_entry.password)    # Try to log the user in.
+    user = User.find_with_credentials(@journal_entry.login_user.login, @journal_entry.password)    # Try to log the user in.
 
     if user.nil?
-      logger.info "Couldn't find user: #{login_user.login} #{@journal_entry.password}"
+      logger.info "Couldn't find user: #{@journal_entry.login_user.login} #{@journal_entry.password}"
       raise ActiveRecord::RecordNotFound    # Check whether a user with these credentials could be found.
     end
     write_user_to_session(user) 
