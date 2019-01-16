@@ -104,7 +104,7 @@ class Group < ActiveRecord::Base
   end
 
   def self.this_or_parent(id)
-    Group.where(['id = ? OR parent_id = ?', id, id]).delete_if { |group| group.instance_of? Journal } # find(:all, :conditions => [ 'id = ? OR group_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
+    Group.where(['id = ? OR parent_id = ?', id, id]).to_a.delete_if { |group| group.instance_of? Journal } # find(:all, :conditions => [ 'id = ? OR group_id = ?', id, id]).delete_if { |group| group.instance_of? Journal }
   end
 
   # returns Team or Center for id, or if not exists, all teams and centers of user
