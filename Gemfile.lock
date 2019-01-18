@@ -206,12 +206,13 @@ DEPENDENCIES
   jquery-rails
   mysql2 (~> 0.3.18)
   newrelic_rpm
+  nokogiri (= 1.8.5)
   pdfkit
   protected_attributes
   rack-cors
   rails (= 4.2.3)
   rails-observers
-  rake
+  rake (= 12.3.1)
   sass-rails
   sdoc
   sqlite3
