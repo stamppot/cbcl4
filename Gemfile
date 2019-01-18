@@ -41,7 +41,7 @@ gem 'protected_attributes'
 gem 'thinking-sphinx', '3.1.4'
 gem 'joiner', '~> 0.3.4'
 
-gem 'rake', '12.3.1'
+gem 'rake' #, '12.3.1'
 gem 'dynamic_form'
 
 gem 'rails-observers'
