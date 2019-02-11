@@ -26,7 +26,7 @@
 	<% can_center_delete = current_user.access? :center_delete %>
 	<% @groups.each do |group| %>
 	<tr>
-		<td><%= link_to( group.title, group.is_a?(Team) && team_path(group) || center_path(group),	:title => "Vis #{group.class.to_s}" ) %></td>
+		<td><%= link_to( group.title, group.is_a?(Team) && team_path(group) || center_path(group),	:title => "Vis #{group.class.to_s}", :class => (group.deactivated == 1 && 'locked' || '') ) %></td>
 		<td><%= group.code %></td>
 		<!-- <td style="text-align: right;"><%# group.users.size %></td> -->
 		<% unless @hide_team %>

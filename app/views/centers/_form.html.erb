@@ -67,6 +67,10 @@
 		<td class="t_i"><%= c.label(:street, "EAN-nr:") %></td>
 		<td class="t"><%= c.text_field :ean, { :class => "validate-number" }  %></td>
 	</tr>
+	<tr>
+		<td class="t_i"><%= label(:group, :deactivated, "Passiv:") %></td>
+		<td class="t"><%= check_box :group, :deactivated %></td>
+	</tr>
 	<% end %>
 </table>
 

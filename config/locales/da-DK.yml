@@ -167,6 +167,7 @@ da-DK:
       :edit: Rediger Center
       :contactperson: Kontaktperson
       :companynumber: EAN-nr
+      :deactivated: Aktiv
       :email: Email
       :address: Adresse
       :code: Centerkode

@@ -23,7 +23,7 @@ class Center < Group
   validates_uniqueness_of :code #, :message => "skal være unik"
   # validates_uniqueness_of :title
 
-  attr_accessible :center_info
+  attr_accessible :center_info, :deactivated
   
   scope :search_title_or_code, -> (phrase) { where(["groups.title LIKE ? OR groups.code LIKE ?", phrase = "%" + phrase.sub(/\=$/, "") + "%", phrase]) }
 

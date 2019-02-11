@@ -88,8 +88,8 @@ class CentersController < ApplicationController
   def edit
     @group = Center.find_by_id(params[:id])
     @group.build_center_info unless @group.center_info
-    @surveys = Survey.find(:all)
-    @subscribed = Subscription.active.in_center(@group).find(:all)
+    @surveys = Survey.all
+    @subscribed = Subscription.active.in_center(@group).all
     @page_title = "Redigering af Center"
   end
 
