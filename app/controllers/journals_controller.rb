@@ -116,7 +116,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
     @page_title = "Rediger journal"
     @journal = Journal.find(params[:id])
     @nationalities = Nationality.all
-    alt_id = @journal.center.center_settings.first(:conditions => ["name = 'alt_id_name'"])
+    alt_id = @journal.center.center_settings.where(:name => 'alt_id_name').first
     @alt_id_name = alt_id && alt_id.value || "Projektnr"
     @any_answered_entries = @journal.answered_entries.any?
 
