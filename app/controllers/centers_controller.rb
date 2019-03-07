@@ -57,8 +57,8 @@ class CentersController < ApplicationController
     @group = Center.find_by_id(params[:id]) || Center.new #(params[:group])
     @group.build_center_info unless @group.center_info
     
-    @surveys = Survey.find(:all)
-    @subscribed = Subscription.active.in_center(@group).find(:all)
+    @surveys = Survey.all
+    @subscribed = Subscription.active.in_center(@group).all
 
     @page_title = params[:id].nil? && "Nyt Center" || "Redigering af Center"
   end
