@@ -126,7 +126,7 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
   end
 
   def update
-    @journal = Journal.find(params[:id], :include => :journal_entries)
+    @journal = Journal.includes(:journal_entries).find(params[:id])
     @journal.update_attributes(params[:journal])
     if @journal.cpr.nil? # or when updated
       @journal.set_cpr_nr
@@ -212,11 +212,11 @@ class JournalsController < ApplicationController # < ActiveRbac::ComponentContro
 
   # removing is a bit different than adding. This should remove the entries, the entry ids should be given in the form  # removes login-users too
   def remove_survey
-    @group = Journal.find(params[:id], :include => :journal_entries)  # 
+    @group = Journal.includes(:journal_entries).find(params[:id])  # 
     
     if request.post?
       entries = params[:entry].select { |k,v| v.to_i == 1 }.map &:first
-      entries = JournalEntry.find(entries, :include => [:login_user, :survey_answer])
+      entries = JournalEntry.includes([:login_user, :survey_answer]).find(entries)
       entries.each { |entry| entry.clear_association_cache; entry.destroy } # deletes user and survey_answer too
       @group.delta = 1
 
