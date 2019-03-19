@@ -547,13 +547,13 @@ class SurveyAnswer < ActiveRecord::Base
     page       = options[:page] ||= 1
     per_page   = options[:per_page] ||= 100000
     o = self.filter_params(user, options)
-    params = options[:center] && {:conditions => ['center_id = ?', o[:center].id]} || {}
+    params = options[:center] && {:center_id = o[:center].id} || {}
     SurveyAnswer.for_surveys(o[:surveys]).finished.between(o[:start_date], o[:stop_date]).aged_between(o[:start_age], o[:stop_age]).paginate(params.merge(:page => page, :per_page => per_page))
   end
 
   def self.filter_finished_count(user, options = {})  # params are not safe, should only allow page/per_page
     o = self.filter_params(user, options)
-    params = options[:center] && {:conditions => ['center_id = ?', o[:center].is_a?(Center) ? o[:center].id : o[:center]]} || {}
+    params = options[:center] && {:center_id = (o[:center].is_a?(Center) ? o[:center].id : o[:center])} || {}
     SurveyAnswer.for_surveys(o[:surveys]).finished.between(o[:start_date], o[:stop_date]).aged_between(o[:start_age], o[:stop_age]).count(params)
   end
 
