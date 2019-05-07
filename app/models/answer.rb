@@ -23,7 +23,7 @@ class Answer < ActiveRecord::Base
   end
 
   def answer_cell_exists?(col, row)
-    self.answer_cells(true).find(:first, :conditions => ['row = ? AND col = ?', row, col] )
+    self.answer_cells(true).where(:row => row, :col => col).first # find(:first, :conditions => ['row = ? AND col = ?', row, col] )
   end
 
   def cell_values(prefix = nil)
@@ -296,7 +296,7 @@ class Answer < ActiveRecord::Base
   def set_missing_items
     q_cells = question.rows_of_cols # TODO: cache # cache_fetch("question_cells_#{self.question_id}") { self.question.rows_of_cols }
     counter = 0
-    a_cells = self.answer_cells.find(:all, :conditions => ['item IS NULL'])
+    a_cells = self.answer_cells.where("item IS NULL").all # find(:all, :conditions => ['item IS NULL'])
     a_cells.each do |a_cell|
       q_cell = q_cells[a_cell.row][a_cell.col]
       if q_cell && q_cell.answer_item

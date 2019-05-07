@@ -92,7 +92,7 @@ class SurveysController < ApplicationController
       @survey_answer_json = @survey_fast_answer.answers.map {|a| a.answer_cells.map {|cell| CellJson.new(cell) } }.flatten.to_json
       # puts "#{@survey_answer_json.inspect}"
     else  # survey_answer was started/created, so a draft is saved
-      survey_answer = SurveyAnswer.and_answer_cells.and_questions.find(@journal_entry.survey_answer_id, :include => {:survey => :questions}) # removed .and_answers
+      survey_answer = SurveyAnswer.and_answer_cells.and_questions.includes(:survey => :questions).where(:id => @journal_entry.survey_answer_id).first # removed .and_answers
       @survey_answer_json = survey_answer.answers.map {|a| a.answer_cells.map {|cell| CellJson.new(cell) } }.flatten.to_json
       # puts "#{@survey_answer_json.inspect}"
     end
