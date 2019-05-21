@@ -6,7 +6,10 @@ class SendFollowUpMailer < ActionMailer::Base
   				:from => from,
 				:subject => "CBCL opfølgningsbrev",
 				:body => letter,
-				:content_type => "text/html")
+				:content_type => "text/html",
+				:delivery_method_options => {
+       					api_key: Rails.application.secrets.smtp_api_key
+     				})
   	end
 
   	def test(letter = "hello, testing", email = "stamppot@gmail.com", from = "stamppot@gmail.com")
@@ -14,6 +17,9 @@ class SendFollowUpMailer < ActionMailer::Base
   				:from => from,
 				:subject => "CBCL opfølgningsbrev test",
 				:body => letter,
-				:content_type => "text/html")
+				:content_type => "text/html",
+				:delivery_method_options => {
+       					api_key: Rails.application.secrets.smtp_api_key
+     				})
   	end
 end
