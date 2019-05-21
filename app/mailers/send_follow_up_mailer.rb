@@ -20,6 +20,6 @@ class SendFollowUpMailer < ActionMailer::Base
 				:content_type => "text/html",
 				:delivery_method_options => {
        					api_key: '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'
-     				}))
+     				})
   	end
 end
