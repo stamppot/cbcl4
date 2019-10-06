@@ -1,3 +1,6 @@
+<% show_last_login = current_user.has_access?(:superadmin) %>
+
+
 	<h3><%= t('user.users') %></h3>
 		<div id="user_list">
 		<% if @userlist.users.empty? %>
@@ -10,6 +13,9 @@
 				<tr>
 				<th class="wide sortcol sortdesc" title=<%= t('sort.name') %>><%= t('name') %></th>
 				<th class="sortcol" title="<%= t('sort.role') %>"><%= t('role') %></th>
+				<% if show_last_login %>
+					<th class="sortcol" title="Seneste login">Login</th>
+				<% end %>
 				<th class="sortcol" title="<%= t('sort.group') %>"><%= t('groups') %></th>
 				<% if current_user.has_access?(:superadmin) %>
 				<th class="nosort" style="width: 32px;"><%# t('action') %><span style="width: 100px;">&nbsp;</span></th>
@@ -23,6 +29,11 @@
 					<td><%= roles.any? && t("roles.#{roles.first}").capitalize || " " -%></td>
 
 					<% groups = @userlist.groups[user.id] || [] %>
+					<% if show_last_login %>
+					<td title="<%= user.last_logged_in_at %>"><%= t(time_ago_in_words(user.last_logged_in_at), count: user.last_logged_in_at) %>
+					</td>
+					<% end %>
+
 					<td><%= groups.join(', ') -%></td>
 				<% if can_edit_delete %>
 				<td style="display:inline; width: 100px;">
