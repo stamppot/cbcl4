@@ -96,11 +96,28 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('.user_activate').click(function() {
+			if(confirm('Vil du aktivere brugeren?')) { 
+				$.post($(this).href, {})
+				.done(function() { alert('hello'); })
+	// .done(function() { 
+				// 	$('.tab_canvas').style.background-color = "#fff";
+				//  	$('#content').effect("highlight", {}, 500); 
+				//  });
+			}
+			else { return false; }
+		});
+	});
+
+
+	$(document).ready(function() {
 		$('#tab-container').easytabs({  
 			animate: true,
 		  	animationSpeed: "fast"
 		});
 	});
+
+	
 //$$('.tabs').each(function(tab_group){  
 //	new Control.Tabs(tab_group);  
 //});
@@ -110,6 +127,10 @@
 <% if current_user.access? :user_edit_delete %>
 		<%= link_button t('delete'), delete_user_path(@user), 'user_delete' %>
 		<%= link_button t('edit'), edit_user_path(@user), 'user_edit' %>
+
+		<% if @user.state == 3 %>
+			<%= link_button t('user.activate'), activate_user_path(@user), 'user_activate' %>
+		<% end %>
 <% end %>
 	<%= back_button users_path %><br/>
 </div>

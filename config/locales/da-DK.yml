@@ -115,6 +115,7 @@ da-DK:
     girl: "Pige"
     user: 
       :edit: Rediger Bruger
+      :activate: Aktiver
       :user: Bruger
       :users: Brugere
       :new_in: "Opret bruger til "

@@ -190,6 +190,19 @@ class UsersController < ApplicationController # ActiveRbac::ComponentController
     render :partial => 'user_list', locals: {group: @group, user_list: @userlist}, :layout => false
   end
 
+  def activate
+    @user = User.find params[:id]
+
+    # @user.state = 2
+    @user.save
+
+    respond_to do |wants|
+      wants.html  { render(:layout => false, :success => true)}
+      wants.js    { render(:layout => false, :success => true, :template =>  "users/searchresults" )}
+    end
+  end
+
+
   protected
   before_filter :login_access
 

@@ -139,6 +139,7 @@ Cbcl4::Application.routes.draw do
   match "login" => "login#login", :as => "login", :via => [:get, :post]
   # get "signup" => "users#new", :as => "signup"
   get "/users/delete/(/:id)" => "users#delete", :as => "delete_user"
+  post "/users/activate/(/:id)" => "users#activate", :as => "activate_user"
   # get "main" => "main#index", :as => "index"
   # user
   get 'change_password/(/:id)', :to => 'user#change_password', :as => 'change_password'
