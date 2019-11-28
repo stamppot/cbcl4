@@ -17,7 +17,7 @@ class ImportJournals # AddJournalsFromCsv
  		update file, survey_ids, team_id, follow_up, couple, do_save
  	end
 
- 		# do_next couples journal_entries so one survey can be answered after the other without logging out/in
+ 		# do_next couples journal_entries so one survey can be answered after the other without logging out-in
 	def update(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)
 		puts "no survey_ids given" and return if !survey_ids.any?
 		puts "invalid follow_up: #{follow_up}" and return if follow_up.to_i < 0
@@ -39,12 +39,13 @@ class ImportJournals # AddJournalsFromCsv
 			parent_mail = row["Email"] || row["E-mail"]
 			sex = row["gender"] || row["Gender"]
 			sex = sex == "d" || sex == "M" || sex == "1" || sex == "Dreng" && 1 || 2
-
+			notes = row["Notes"] || row["Noter"] || row["notes"] || row["noter"]
 			puts "#{journal_name}: #{alt_id} #{b}  sex: #{sex}"
 			# next
 
 			has_twins = Journal.where(:alt_id => alt_id, :group_id => 9259).count > 1
 
+			puts "journal: #{journal_name}, has_twins: #{has_twins}, notes: #{notes}"
 			journal = Journal.find_by_alt_id_and_group_id(alt_id, team_id)
 			if has_twins
 				puts "TWINS: #{journal_name} #{alt_id}"
@@ -55,6 +56,7 @@ class ImportJournals # AddJournalsFromCsv
 				end
 			end
 
+			puts "birthdate: #{b}"
 			birthdate = b && get_date(b) || journal.birthdate
 
 			if birthdate.blank?
@@ -70,7 +72,12 @@ class ImportJournals # AddJournalsFromCsv
 				:birthdate => birthdate, :parent_email => parent_mail,
 				:parent_name => parent_name, :alt_id => alt_id, :nationality => "Dansk", :sex => sex
 			}
+			args[:parent_name] = parent_name unless parent_name.nil?
 			journal.sex = sex if journal
+			if notes
+				journal.notes ||= "" 
+				journal.notes += notes
+			end
 			journal.update_attributes(args) if journal
 
 			if !journal
@@ -352,7 +359,7 @@ class ImportJournals # AddJournalsFromCsv
 	end
 
 	def get_date(d)
-		# d = d.gsub("/", "-") if d.include? "/"
+		# d = d.gsub("-", "-") if d.include? "-"
 		i = d.index "-"
 		if d.length == 5    # dmmyy and ddmmyy
 			d = "0#{d}"
