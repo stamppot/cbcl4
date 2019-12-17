@@ -103,7 +103,7 @@ class Center < Group
       # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
 
       # for klinikken gaelder strenge aldersbegraensninger paa skemaer
-      age_range = if self.id == 52
+      age_range = if self.id == 1
         Range.new(0,0)
       else
         age_range = (survey.age =~ /16|17|18/) && Range.new(-4,4) || Range.new(-1,2)
