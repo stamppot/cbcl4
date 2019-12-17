@@ -65,7 +65,7 @@ class ApiKey < ActiveRecord::Base
 		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
 	end
 
-	# ap = ApiKey.second; res = []; Journal.where(:group_id => 9259).find_each(:batch_size => 500) do |j| res << ap.encrypt_token(ap, ApiKey.to_token(j)); end
+	# ap = ApiKey.second; res = []; Journal.where(:group_id => 9259).find_each(:batch_size => 500) do |j| res << ap.encrypt_tokens(ap, ApiKey.to_token(j)); end
 # def ApiKey.to_token(journal) journal.not_answered_entries.inject({}) do |h, e| if(e.login_user); h[journal.alt_id] = journal.alt_id; h[e.survey.short_name] = {"id" => journal.alt_id, "navn" => journal.title, "login" => e.login_user.login, "password" => e.password}; end; h; end; end
 
 	def ApiKey.to_token(journal)

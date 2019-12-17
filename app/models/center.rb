@@ -101,8 +101,14 @@ class Center < Group
   def subscribed_surveys_in_age_group(age) # TODO: include periods
     surveys = subscribed_surveys.select do |survey|
       # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
-      age_range = (survey.age =~ /16|17|18/) && Range.new(-4,4) || Range.new(-1,2)
-      age_range = Range.new(-(age-18),1) if survey.age =~ /18/ && age > 18  # allow persons above 18
+
+      # for klinikken gaelder strenge aldersbegraensninger paa skemaer
+      age_range = if self.id == 52
+        Range.new(0,0)
+      else
+        age_range = (survey.age =~ /16|17|18/) && Range.new(-4,4) || Range.new(-1,2)
+        age_range = Range.new(-(age-18),1) if survey.age =~ /18/ && age > 18  # allow persons above 18
+      end
       # survey.prefix != "info" && 
       (survey.age_group === age or survey.age_group === (age+age_range.last) or survey.age_group === (age+age_range.first))
     end
