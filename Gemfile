@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11'
 # gem 'rails', '4.0.1'
 
-gem 'nokogiri', '1.8.5'
+gem 'nokogiri', '1.10.4' #  '1.8.5'
 gem 'browserlog', '~> 0.0.2'
 
 # Use sqlite3 as the database for Active Record
