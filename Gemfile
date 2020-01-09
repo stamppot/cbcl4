@@ -87,7 +87,7 @@ gem 'newrelic_rpm'
 
 # gem 'aescrypt'
 
-gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-cors', '1.0.5', :require => 'rack/cors'
 
 # gem 'hash_dot'
 # gem 'rails-secrets'
