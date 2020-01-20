@@ -11,7 +11,7 @@ class Score < ActiveRecord::Base
   
   scope :for_survey, lambda { |survey_id| where("scores.survey_id = ?", survey_id) }
   scope :with_survey_and_scale, -> { includes([:survey, :score_scale]) }
-  acts_as_list :scope => :score_group
+#  acts_as_list :scope => :score_group
   
   validates_presence_of :title, :message => ': navn skal gives'
   validates_presence_of :survey, :message => ': et skema skal vælges'

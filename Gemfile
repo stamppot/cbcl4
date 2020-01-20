@@ -35,7 +35,7 @@ gem 'cacheable_flash'
 gem 'will_paginate', '~> 3.1.5'
 
 gem 'acts_as_tree_rails3'
-gem 'acts_as_list'
+#gem 'acts_as_list'
 
 gem 'protected_attributes'
 
