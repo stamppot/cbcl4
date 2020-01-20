@@ -78,9 +78,30 @@ class ApiKey < ActiveRecord::Base
 		end
 	end
 
+	def ApiKey.to_id_with_tokens(journal)
+		journal.not_answered_entries.inject({}) do |h, e| 
+			if e.login_user
+				h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+			end
+			h
+		end
+		if h.any?   # are there any entries
+			h["alt_id"] = journal.alt_id 
+			h["id"] = journal.code
+			h["tv"] = journal.title.include?("TVA") ? "TVA" : journal.title.include?("TVB") ? "TVB" : ""  
+		end
+		h
+	end
+
+	def create_token(journal)
+		tokens = ApiKey.to_token(journal)
+		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = lock(login.last.to_s); h }
+		encrypted_tokens
+	end
+
 	def create_token(api_key, journal)
 		tokens = ApiKey.to_token(journal)
-		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
+		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = lock(login.last.to_s); h }
 		encrypted_tokens
 	end
 
