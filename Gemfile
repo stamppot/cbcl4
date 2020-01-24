@@ -4,7 +4,14 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11'
 # gem 'rails', '4.0.1'
 
-gem 'nokogiri', '1.10.4' #  '1.8.5'
+gem 'nokogiri', '1.8.5'
+#<<<<<<< HEAD 
+#gem 'nokogiri', '1.10.4' #  '1.8.5'
+=#======
+gem 'tzinfo-data'
+
+#gem 'nokogiri', '1.10.7'
+#>>>>>>> 8f22d2d8cabbc6d8fa5c293ca73073a6a4b7f406
 gem 'browserlog', '~> 0.0.2'
 
 # Use sqlite3 as the database for Active Record
@@ -33,7 +40,7 @@ gem 'cacheable_flash'
 gem 'will_paginate', '~> 3.1.5'
 
 gem 'acts_as_tree_rails3'
-gem 'acts_as_list'
+#gem 'acts_as_list'
 
 gem 'protected_attributes'
 
@@ -56,6 +63,10 @@ gem 'pdfkit'
 gem 'writeexcel'
 
 gem  'awesome_print'
+
+# dependencies with specific versions to be compatible with ruby 2.3
+gem 'rdoc', '6.2.0'
+gem 'sprockets', '3.5.2'
 
 # gem "spawn", :git => 'git://github.com/rfc2822/spawn'
 # gem 'spawnling', :git => 'git://github.com/tra/spawnling'

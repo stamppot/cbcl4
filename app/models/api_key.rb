@@ -15,13 +15,7 @@ class ApiKey < ActiveRecord::Base
 		salt + ApiKey.salt
 	end
 
-	def lock(data)
-		Base64.urlsafe_encode64(
-		# CGI::escape(
-			AESCrypt::encrypt(data, salt + self.salt)
-		)
-			# )
-	end
+	def lock(data) Base64.urlsafe_encode64(AESCrypt::encrypt(data, salt + self.salt)) unless data.blank? end
 
 	def unlock(data)
 		AESCrypt::decrypt(
@@ -32,7 +26,7 @@ class ApiKey < ActiveRecord::Base
 	end
 
 
-	### params
+	### params   (for CBCL/safari: 16bbc1a0e0127770e7d62bb5a148a783)
 	## key: "13ccb7d0d0347440e7d62aa5a148f583"
 	# journal_params: {"name":"Test T", "gender":"f", "birthdate":"2015-10-15"}
 # {"api_key":"13ccb7d0d0347440e7d62aa5a148f583","journal":{"name":"Test Testesen","gender":"f","birthdate":"2015-10-15"},
@@ -71,12 +65,48 @@ class ApiKey < ActiveRecord::Base
 		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
 	end
 
-	def self.to_token(journal)
-		journal.journal_entries.inject({}) do |h, e| 
-			h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+	# ap = ApiKey.second; res = []; Journal.where(:group_id => 9259).find_each(:batch_size => 500) do |j| res << ap.encrypt_tokens(ap, ApiKey.to_token(j)); end
+# def ApiKey.to_token(journal) journal.not_answered_entries.inject({}) do |h, e| if(e.login_user); h[journal.alt_id] = journal.alt_id; h[e.survey.short_name] = {"id" => journal.alt_id, "navn" => journal.title, "login" => e.login_user.login, "password" => e.password}; end; h; end; end
+
+	def ApiKey.to_token(journal)
+		journal.not_answered_entries.inject({}) do |h, e| 
+			if e.login_user
+				h[journal.alt_id] = journal.alt_id 
+				h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+			end
 			h
 		end
 	end
+
+	def ApiKey.to_id_with_tokens(journal)
+		journal.not_answered_entries.inject({}) do |h, e| 
+			if e.login_user
+				h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+			end
+			h
+		end
+		if h.any?   # are there any entries
+			h["alt_id"] = journal.alt_id 
+			h["id"] = journal.code
+			h["tv"] = journal.title.include?("TVA") ? "TVA" : journal.title.include?("TVB") ? "TVB" : ""  
+		end
+		h
+	end
+
+	def create_token(journal)
+		tokens = ApiKey.to_token(journal)
+		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = lock(login.last.to_s); h }
+		encrypted_tokens
+	end
+
+	def create_token(api_key, journal)
+		tokens = ApiKey.to_token(journal)
+		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = lock(login.last.to_s); h }
+		encrypted_tokens
+	end
+
+
+
 
 	private
 
