@@ -7,7 +7,7 @@ gem 'rails', '4.2.11'
 gem 'nokogiri', '1.8.5'
 #<<<<<<< HEAD 
 #gem 'nokogiri', '1.10.4' #  '1.8.5'
-=#======
+
 gem 'tzinfo-data'
 
 #gem 'nokogiri', '1.10.7'
