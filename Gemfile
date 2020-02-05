@@ -104,6 +104,8 @@ gem 'rack-cors', '1.0.5', :require => 'rack/cors'
 # gem 'rails-secrets'
 # gem 'figaro'
 
+gem 'ey-core'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
