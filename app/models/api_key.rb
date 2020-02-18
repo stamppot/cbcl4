@@ -78,19 +78,27 @@ class ApiKey < ActiveRecord::Base
 		end
 	end
 
-	def ApiKey.to_id_with_tokens(journal)
-		journal.not_answered_entries.inject({}) do |h, e| 
+	def to_id_with_tokens(journal)
+		entries = journal.not_answered_entries.inject({}) do |h, e| 
 			if e.login_user
-				h[e.survey.short_name] = {"login" => e.login_user.login, "password" => e.password}
+				h[e.survey.short_name] = lock({"login" => e.login_user.login, "password" => e.password}.to_s)
 			end
 			h
 		end
-		if h.any?   # are there any entries
-			h["alt_id"] = journal.alt_id 
-			h["id"] = journal.code
-			h["tv"] = journal.title.include?("TVA") ? "TVA" : journal.title.include?("TVB") ? "TVB" : ""  
+		if entries.any?
+			entries["alt_id"] = journal.alt_id 
+			entries["id"] = journal.code
+			entries["tv"] = journal.title.include?("TVA") ? "TVA" : journal.title.include?("TVB") ? "TVB" : ""  
 		end
-		h
+		entries
+	end
+
+	def to_id_with_tokens_csv(journal) 
+		tokens = to_id_with_tokens(journal)
+		line = [] << tokens["alt_id"]
+		line << tokens["id"] << tokens["tv"]
+		line << tokens["CBCL_6-16"] << tokens["TRF_6-16"]
+		line #.join(";")
 	end
 
 	def create_token(journal)
