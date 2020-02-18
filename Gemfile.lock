@@ -120,7 +120,6 @@ GEM
     faye-websocket (0.10.9)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
-    ffi (1.12.2)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     highline (2.0.3)
@@ -198,16 +197,6 @@ GEM
     rdoc (6.2.0)
     ref (2.0.0)
     riddle (2.4.1)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.2.1)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     sdoc (1.0.0)
       rdoc (>= 5.0)
     sprockets (3.5.2)
@@ -233,7 +222,6 @@ GEM
       riddle (>= 1.5.11)
     thor (1.0.1)
     thread_safe (0.3.6)
-    tilt (2.0.10)
     tinymce-rails (5.1.5)
       railties (>= 3.1.1)
     tzinfo (1.2.6)
@@ -282,7 +270,6 @@ DEPENDENCIES
   rails-observers
   rake
   rdoc (= 6.2.0)
-  sass-rails
   sdoc
   sprockets (= 3.5.2)
   sqlite3
