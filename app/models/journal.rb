@@ -304,6 +304,10 @@ class Journal < ActiveRecord::Base #< Group
     ( (Date.today - self.birthdate).to_i / 365.25).floor
   end
 
+  def age_f  # float
+    ( (Date.today - self.birthdate).to_i / 365.25)
+  end
+
   def get_age(birth_date, end_date)
     ( (end_date.to_datetime - birth_date).to_i / 365.25).floor
   end

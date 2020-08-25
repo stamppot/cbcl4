@@ -30,7 +30,9 @@ class ApiLoginController < ApiController
   		logger.info "Return to: #{api_key.return_to}"
 		goto = "#{api_key.return_to}?#{params[:token]}" 
 		logger.info "goto: #{goto}"
- 		redirect_to goto
+ 		flash[:notice] = "Du er blevet logget ud."
+ 	    # redirect_to goto
+ 		render file: 'start/finish'
 		
 		ensure
 		session[:rbac_user_id] = nil
