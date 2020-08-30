@@ -30,5 +30,5 @@ Du skal besvare nedenstående spørgeskema.
 	<% if @token.blank? %>
 		<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
 	<% else %>
-		<% link_button "Gå tilbage til #{@center.title}", api_logout_path(@api_key, @token), 'logout', :title => 'Afslut' %>
+		<% link_button "Gå tilbage til #{@center.title}", api_logout_path(@@token), 'logout', :title => 'Afslut' %>
 	<% end %>

@@ -9,7 +9,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   #        :only         => [ :remove, :remove_answer, :destroy_login ]
 
   def show
-    journal_entry = JournalEntry.includes(:journal).find(params[:id])
+    journal_entry = JournalEntry.includes(:journal).find(params[:id] || session[:journal_entry])
     session[:journal_entry] = journal_entry.id
     session[:journal_id] = journal_entry.journal_id
     cookies[:journal_entry] = journal_entry.id
@@ -115,15 +115,25 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   protected
   
   def check_access
-    if current_user and ((current_user.access?(:all_users) || current_user.access?(:login_user))) and params[:id]
+    if current_user and ((current_user.access?(:all_users) || current_user.access?(:login_user))) and (params[:id] || session[:journal_entry])
       # j_id = JournalEntry.find(params[:id]).journal_id
-      access = current_user.has_journal_entry? params[:id]
+      session_entry_id = session[:journal_entry]
+      ids = [params[:id], session_entry_id].compact
+
+      access = ids.all? {|id| current_user.has_journal_entry?(id)}
+      if !access
+        logger.info "check_access: NO ACCESS journal_entry: #{current_user.inspect} HACKING params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
+        flash[:error] = "Ikke tilladt adgang"
+        redirect_to login_path and return false
+      end
       # puts "journal_entries: #{params[:action]} access? #{access}"
       # access
       # # access = journal_ids.include? j_id
     end  # cookie and session are not set before after this check, so it's old/wrong data
+    
     logger.info "check_access: params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
-    redirect_to login_path if !current_user
+    redirect_to login_path and return false if !current_user
+    return true
   end
 
   private

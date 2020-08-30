@@ -424,6 +424,14 @@ class User < ActiveRecord::Base
 
   def has_journal_entry?(journal_entry_id)
     return true if admin?
+    if login_user?
+      entry = JournalEntry.find(journal_entry_id)
+      journal = entry.journal
+      allowed_user_ids = journal.journal_entries.map {|e| e.user_id }
+      allowed_entry_ids = journal.journal_entries.map {|e| e.id }
+      return allowed_user_ids.include?(self.id) && allowed_entry_ids.include?(journal_entry_id)
+    end
+
     group_ids = []
     group_ids += (center_id && [center_id] || centers.map(&:id))
     group_ids += teams.map(&:id)

@@ -184,6 +184,7 @@ Cbcl4::Application.routes.draw do
 
   # journal entries
   get 'journal_entries/show_answer/(/:id)', :to => 'journal_entries#show_answer', :as => 'entry_show_answer'
+  get 'journal_entries/show/(/:id)', :to => 'journal_entries#show', :as => 'show_entry_answer'
   post 'journal_entries/update_notes/(/:id)', :to => 'journal_entries#update_notes', :as => 'update_notes', :only => :post
   post 'journal_entries/remove/(/:id)', :to => 'journal_entries#remove', :as => 'entry_remove', :only => :post
   post 'journal_entries/remove_answer/(/:id)', :to => 'journal_entries#remove_answer', :as => 'entry_remove_answer', :only => :post
@@ -204,13 +205,13 @@ Cbcl4::Application.routes.draw do
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   # get '/start/(/:api_key)/(/:token)', :to => 'login#start', :as => 'api_login_survey_start'
-  get '/logout/(:api_key)/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
+  get '/logout/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
   get 'api/continue/(:api_key)/(:token)', :to => 'api_start#continue', :as => 'api_survey_continue'
   
   get 'start/(:api_key)/(:token)', :to => 'start#start', :as => 'survey_start'
-  get 'continue/(:api_key)/(:token)', :to => 'start#continue', :as => 'survey_continue'
-  get 'next/:id/(:api_key)/(:token)', :to => 'start#next', :as => 'survey_next'      # :id is login_user
-  get 'finish/(/:id)/(:api_key)/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
+  get 'continue/(:token)', :to => 'start#continue', :as => 'survey_continue'
+  get 'next/(:token)', :to => 'start#next', :as => 'survey_next'      # :id is login_user
+  get 'finish/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
 
   # get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
@@ -221,6 +222,7 @@ Cbcl4::Application.routes.draw do
   get 'survey_answers/done/(/:id)', :to => 'survey_answers#done', :as => 'survey_answer_done' # :id is entry
   get 'survey_answers/edit_date/(/:id)', :to => 'survey_answers#edit_date', :as => 'edit_date_survey_answers'
   post 'survey_answers/update_date/(/:id)', :to => 'survey_answers#update_date', :as => 'update_date_survey_answers'
+  get 'survey_answers/show', :to => 'survey_answers#show', :as => 'show_survey_answer'
 
   post 'survey_answers/json_draft_data/(/:id)', :to => 'survey_answers#json_draft_data', :as => 'json_draft_data', :format => 'json'
   post 'survey_answers/json_dynamic_data/(/:id)', :to => 'survey_answers#json_dynamic_data', :as => 'json_dynamic_data', :format => 'json'

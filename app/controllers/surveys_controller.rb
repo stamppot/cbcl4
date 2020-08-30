@@ -163,17 +163,29 @@ class SurveysController < ApplicationController
   
   def check_access
     redirect_to login_path and return unless current_user
-    if current_user.access?(:all_users) || current_user.login_user?
-      id = params[:id].to_i
+    id = params[:id].to_i
+
+    access = false
+    if current_user.access?(:all_users) || current_user.login_user?  
       access = if params[:action] =~ /show_only/
-        current_user.surveys.map {|s| s.id }.include? id
+        current_user.surveys.map {|s| s.id }.include?(id)
       elsif current_user.access? :superadmin # don't do check for superadmin
         true
-      else
-        current_user.has_journal_entry?(id)
       end
     end
-  end
-  
 
+    if id < 12  # survey_id
+      access = true
+    end
+
+    if current_user.login_user?
+      journal_entry_id = id < 12 && session[:journal_entry] || params[:id]  # if survey_id, use session_id 
+      access = current_user.has_journal_entry?(journal_entry_id)
+      if !access
+        logger.info "check_access NO ACCESS survey: current_user: #{current_user.inspect} params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
+        redirect_to login_path
+      end
+    end
+    return access
+  end
 end
