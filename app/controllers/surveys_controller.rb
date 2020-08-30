@@ -179,7 +179,7 @@ class SurveysController < ApplicationController
     end
 
     if current_user.login_user?
-      journal_entry_id = id < 12 && session[:journal_entry] || params[:id]  # if survey_id, use session_id 
+      journal_entry_id = id <= 210 && session[:journal_entry] || params[:id]  # if survey_id, use session_id 
       access = current_user.has_journal_entry?(journal_entry_id)
       if !access
         logger.info "check_access NO ACCESS survey: current_user: #{current_user.inspect} params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
