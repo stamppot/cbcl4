@@ -436,10 +436,9 @@ class User < ActiveRecord::Base
     group_ids += (center_id && [center_id] || centers.map(&:id))
     group_ids += teams.map(&:id)
 
-    query = "select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}"
-    result = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
-      # puts r.inspect
-      # logger.info "has_journal_entry?: #{r.inspect}"
+    query = "select count(id) as count from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}"
+    result = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject([]) do |col,r|
+      col << r["count"]
       col
     end
 

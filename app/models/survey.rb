@@ -110,7 +110,7 @@ class Survey < ActiveRecord::Base
   # age is fx "4-10"
   def age_group
     years = age.split("-")
-    return Range.new(years.first.to_f, years.last.to_f)
+    return Range.new(years.first.to_f, (years.last.to_f + 0.99))
   end
 
   # set variable values in survey's question cells. Use vars when they exist, otherwise create a value

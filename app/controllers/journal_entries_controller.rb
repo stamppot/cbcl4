@@ -121,7 +121,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
       ids = [params[:id], session_entry_id].compact
 
       access = ids.all? {|id| current_user.has_journal_entry?(id)}
-      if !access
+      if !access # && current_user.login_user?
         logger.info "check_access: NO ACCESS journal_entry: #{current_user.inspect} HACKING params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
         flash[:error] = "Ikke tilladt adgang"
         redirect_to login_path and return false
