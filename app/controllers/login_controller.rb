@@ -41,6 +41,7 @@ class LoginController < ApplicationController
         # user = User.find_with_credentials(params[:username], params[:password])
         # flash[:notice] = "#{current_user.name}, du er allerede logget ind."
         if current_user.login_user?
+          logger.info "44: login #{current_user.inspect}"
           redirect_to survey_start_path
         else
           redirect_to session[:return_to] || main_path
@@ -64,15 +65,21 @@ class LoginController < ApplicationController
       raise ActiveRecord::RecordNotFound if user.nil?    # Check whether a user with these credentials could be found.
       
       # raise ActiveRecord::RecordNotFound unless User.state_allows_login?(user.state)    # Check that the user has the correct state
+      logger.info "write user to session: #{user.inspect}"
       write_user_to_session(user)    # Write the user into the session object.
       
       # journal_entry = JournalEntry.find_by_user_id(user.id)
-      if user.login_user
+      if user.login_user?
         journal_entry = JournalEntry.find_by(:user_id => user)
         # set session correctly when chained with next or previous entry. If next, then next. If prev_survey, then prev_survey. Else current entry
         goto_entry = journal_entry.chained_survey_entry
-         
-        session[:journal_entry] = goto_entry && goto_entry.id || journal_entry.id
+        if goto_entry  # login as the next login_user
+          logger.info "login: goto #{goto_entry.id} user: #{goto_entry.user_id}  logged_in_user: #{user.id}"
+          user = goto_entry.login_user
+          write_user_to_session(user)
+          journal_entry = goto_entry
+        end 
+        session[:journal_entry] = journal_entry.id
         session[:journal_id] = journal_entry.journal_id
       end
 
@@ -86,11 +93,12 @@ class LoginController < ApplicationController
         flash[:notice] = "Husk at ændre dit password"
       end
 
-      logger.info "LOGIN #{user.name} #{params[:password].tr("A-Za-z", "N-ZA-Mn-za-m")} id: #{user.id} @ #{9.hours.from_now.to_s(:short)}: #{request.env['HTTP_USER_AGENT']}"
+      logger.info "LOGIN start logged in #{user.name} #{params[:password].tr("A-Za-z", "N-ZA-Mn-za-m")} id: #{user.id} @ #{9.hours.from_now.to_s(:short)}: #{request.env['HTTP_USER_AGENT']}"
 
       # TODO: DRY up. Duplicate from line 27
       # if user is superadmin, redirect to login_page. Post to this method with some special parameter
-			if user.login_user?  
+			if user.login_user?
+        logger.info "goto survey_start: #{user.inspect} entry: #{session[:journal_entry]}"
         redirect_to survey_start_path
       else
         redirect_to main_url
