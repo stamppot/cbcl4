@@ -1,18 +1,3 @@
-# HeidiSQL Dump 
-#
-# --------------------------------------------------------
-# Host:                 localhost
-# Database:             cbcl_development
-# Server version:       4.1.22-community-log
-# Server OS:            Win32
-# HeidiSQL version:     3.0 RC3 Revision: 111
-# --------------------------------------------------------
--- SET CHARACTER SET utf8;
-#
-# Database structure for database 'cbcl_development'
-#
-#CREATE DATABASE IF NOT EXISTS `cbcl_development`;
-#USE `cbcl_development`;
 DROP TABLE IF EXISTS user_registrations;
 DROP TABLE IF EXISTS roles_users;
 DROP TABLE IF EXISTS roles_static_permissions;
@@ -22,8 +7,6 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS static_permissions;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS groups;
-# This is database creation SQL script in MySQL dialect.
-
 #----------------------------
 # Table structure for groups
 #  code and type were added

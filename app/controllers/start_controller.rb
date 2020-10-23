@@ -199,7 +199,7 @@ class StartController < ApplicationController
       else
         journal_entry_id = session[:journal_entry]
         entry = JournalEntry.find(journal_entry_id)
-        if entry.login_user_id != login_user.id
+        if entry.user_id != login_user.id
           logger.info "INVALID LOGIN_USER: #{login_user.inspect}  journal_entry: #{journal_entry.inspect}"
           cookies.delete :journal_entry
           cookies.delete :journal_id

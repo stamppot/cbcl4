@@ -31,7 +31,7 @@ CREATE TABLE `login_users` (
   `updated_at` timestamp NOT NULL default '0000-00-00 00:00:00',
   `last_logged_in_at` timestamp NOT NULL default '0000-00-00 00:00:00',
   `login_failure_count` int(10) unsigned NOT NULL default '0',
-  `login` varchar(100) NOT NULL collate utf8_danish_ci_danish_ci default '',
+  `login` varchar(100) NOT NULL collate utf8_general_ci default '',
   `email` varchar(200) NOT NULL default '',
   `password` varchar(100) NOT NULL default '',
   `password_hash_type` varchar(20) NOT NULL default '',
@@ -40,4 +40,4 @@ CREATE TABLE `login_users` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_login_index` (`login`),
   KEY `users_password_index` (`password`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

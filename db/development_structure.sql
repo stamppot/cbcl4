@@ -11,7 +11,7 @@ CREATE TABLE `answer_cells` (
   `value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_answer_cells_on_answer_id` (`answer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1232908 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1232908 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `answers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE `answers` (
   `ratings_count` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_answers_on_survey_answer_id` (`survey_answer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76810 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76810 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `center_infos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,7 +33,7 @@ CREATE TABLE `center_infos` (
   `ean` varchar(255) DEFAULT NULL,
   `person` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `center_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,7 @@ CREATE TABLE `center_settings` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `copies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -56,7 +56,7 @@ CREATE TABLE `copies` (
   `updated_on` datetime DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `csv_answers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -72,12 +72,12 @@ CREATE TABLE `csv_answers` (
   PRIMARY KEY (`id`),
   KEY `index_csv_answers_on_journal_id` (`journal_id`),
   KEY `index_csv_answers_on_survey_id` (`survey_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31021 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31021 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `engine_schema_info` (
-  `engine_name` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL,
+  `engine_name` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
   `version` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `export_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -87,14 +87,14 @@ CREATE TABLE `export_files` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `faq_sections` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `position` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `faqs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -104,22 +104,22 @@ CREATE TABLE `faqs` (
   `answer` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `group_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) DEFAULT NULL,
   `permission_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `title` varchar(200) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `title` varchar(200) COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `code` int(4) unsigned DEFAULT NULL,
-  `type` varchar(16) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `type` varchar(16) COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `parent_id` int(10) unsigned DEFAULT NULL,
   `center_id` int(10) unsigned DEFAULT NULL,
   `delta` tinyint(1) NOT NULL DEFAULT '1',
@@ -131,7 +131,7 @@ CREATE TABLE `groups` (
   KEY `index_groups_on_code` (`code`),
   CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION,
   CONSTRAINT `groups_ibfk_2` FOREIGN KEY (`center_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4772 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4772 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `groups_roles` (
   `group_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -141,7 +141,7 @@ CREATE TABLE `groups_roles` (
   KEY `role_id` (`role_id`),
   CONSTRAINT `groups_roles_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `groups_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `groups_users` (
   `group_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -152,7 +152,7 @@ CREATE TABLE `groups_users` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `groups_users_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `groups_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `journal_entries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -170,7 +170,7 @@ CREATE TABLE `journal_entries` (
   KEY `index_journal_entries_on_survey_id` (`survey_id`),
   KEY `index_journal_entries_on_survey_answer_id` (`survey_answer_id`),
   KEY `index_journal_entries_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8893 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8893 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `letters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -182,14 +182,14 @@ CREATE TABLE `letters` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_letters_on_group_id` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `nationalities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `country` varchar(40) DEFAULT NULL,
   `country_code` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `periods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -202,7 +202,7 @@ CREATE TABLE `periods` (
   `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_periods_on_subscription_id` (`subscription_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=314 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=314 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `person_infos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -217,12 +217,12 @@ CREATE TABLE `person_infos` (
   KEY `index_person_infos_on_cpr` (`cpr`),
   KEY `index_person_infos_on_delta` (`delta`),
   KEY `index_person_infos_on_journal_id` (`journal_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4664 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4664 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `plugin_schema_info` (
   `plugin_name` varchar(255) DEFAULT NULL,
   `version` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -232,20 +232,20 @@ CREATE TABLE `posts` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `question_cells` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `question_id` int(11) NOT NULL,
-  `type` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL,
+  `type` varchar(20) COLLATE utf8_general_ci DEFAULT NULL,
   `col` int(11) DEFAULT NULL,
   `row` int(11) DEFAULT NULL,
-  `answer_item` varchar(5) COLLATE utf8_danish_ci DEFAULT NULL,
-  `items` text COLLATE utf8_danish_ci,
-  `preferences` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL,
-  `var` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL,
+  `answer_item` varchar(5) COLLATE utf8_general_ci DEFAULT NULL,
+  `items` text COLLATE utf8_general_ci,
+  `preferences` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
+  `var` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2040 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2040 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -253,19 +253,19 @@ CREATE TABLE `questions` (
   `number` int(11) NOT NULL,
   `ratings_count` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `roles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `identifier` varchar(50) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `identifier` varchar(50) COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `title` varchar(100) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `title` varchar(100) COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `parent_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `roles_parent_id_index` (`parent_id`),
   CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `roles` (`id`) ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `roles_static_permissions` (
   `role_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -275,7 +275,7 @@ CREATE TABLE `roles_static_permissions` (
   KEY `role_id` (`role_id`),
   CONSTRAINT `roles_static_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `roles_static_permissions_ibfk_2` FOREIGN KEY (`static_permission_id`) REFERENCES `static_permissions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `roles_users` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -284,23 +284,23 @@ CREATE TABLE `roles_users` (
   UNIQUE KEY `roles_users_all_index` (`user_id`,`role_id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `schema_info` (
   `version` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL DEFAULT '',
   UNIQUE KEY `unique_schema_migrations` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `score_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `score_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -312,7 +312,7 @@ CREATE TABLE `score_items` (
   `number` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_score_items_on_score_id` (`score_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `score_rapports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -329,7 +329,7 @@ CREATE TABLE `score_rapports` (
   `age` int(11) DEFAULT NULL,
   `center_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11951 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11951 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `score_refs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -341,7 +341,7 @@ CREATE TABLE `score_refs` (
   `percent98` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_score_refs_on_score_id` (`score_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `score_results` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -365,14 +365,14 @@ CREATE TABLE `score_results` (
   KEY `index_score_results_on_score_rapport_id` (`score_rapport_id`),
   KEY `index_score_results_on_score_id` (`score_id`),
   KEY `index_score_results_on_score_id_and_score_rapport_id` (`score_id`,`score_rapport_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=123377 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=123377 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `score_scales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `position` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `scores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -388,29 +388,29 @@ CREATE TABLE `scores` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `scores_surveys` (
   `score_id` int(11) DEFAULT NULL,
   `survey_id` int(11) DEFAULT NULL,
   KEY `index_scores_surveys_on_score_id` (`score_id`),
   KEY `index_scores_surveys_on_survey_id` (`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `sph_counter` (
   `last_id` int(11) NOT NULL,
   `table_name` varchar(50) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `static_permissions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `identifier` varchar(50) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `title` varchar(200) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `identifier` varchar(50) COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `title` varchar(200) COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `static_permissions_title_index` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `subscriptions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -426,7 +426,7 @@ CREATE TABLE `subscriptions` (
   `most_recent_payment` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_subscriptions_on_center_id` (`center_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `survey_answers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -446,19 +446,19 @@ CREATE TABLE `survey_answers` (
   KEY `index_survey_answers_on_survey_id` (`survey_id`),
   KEY `index_survey_answers_on_journal_entry_id` (`journal_entry_id`),
   KEY `index_survey_answers_on_journal_id` (`journal_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8116 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8116 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `surveys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) COLLATE utf8_danish_ci DEFAULT NULL,
-  `category` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL,
-  `description` text COLLATE utf8_danish_ci,
-  `age` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL,
-  `surveytype` varchar(15) COLLATE utf8_danish_ci DEFAULT NULL,
-  `color` varchar(7) COLLATE utf8_danish_ci DEFAULT NULL,
+  `title` varchar(40) COLLATE utf8_general_ci DEFAULT NULL,
+  `category` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
+  `description` text COLLATE utf8_general_ci,
+  `age` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
+  `surveytype` varchar(15) COLLATE utf8_general_ci DEFAULT NULL,
+  `color` varchar(7) COLLATE utf8_general_ci DEFAULT NULL,
   `position` int(11) DEFAULT '99',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -467,19 +467,19 @@ CREATE TABLE `tasks` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8_general_ci;
 
 CREATE TABLE `user_registrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `token` text COLLATE utf8_danish_ci NOT NULL,
+  `token` text COLLATE utf8_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `expires_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_registrations_user_id_index` (`user_id`),
   KEY `user_registrations_expires_at_index` (`expires_at`),
   CONSTRAINT `user_registrations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -487,12 +487,12 @@ CREATE TABLE `users` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_logged_in_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `login_failure_count` int(10) unsigned NOT NULL DEFAULT '0',
-  `login` varchar(100) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `name` varchar(100) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `email` varchar(200) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `password` varchar(128) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `password_hash_type` varchar(10) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `password_salt` varchar(100) COLLATE utf8_danish_ci NOT NULL DEFAULT '1234512345',
+  `login` varchar(100) COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `name` varchar(100) COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `email` varchar(200) COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `password` varchar(128) COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `password_hash_type` varchar(10) COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `password_salt` varchar(100) COLLATE utf8_general_ci NOT NULL DEFAULT '1234512345',
   `state` int(10) unsigned NOT NULL DEFAULT '1',
   `center_id` int(10) unsigned DEFAULT NULL,
   `login_user` tinyint(1) unsigned DEFAULT '0',
@@ -501,7 +501,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_login_index` (`login`),
   KEY `users_password_index` (`password`),
   KEY `users_center_id_index` (`center_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8835 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8835 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `variables` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -514,7 +514,7 @@ CREATE TABLE `variables` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8_danish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8_general_ci;
 
 INSERT INTO schema_migrations (version) VALUES ('1');
 
