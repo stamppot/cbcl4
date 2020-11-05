@@ -394,6 +394,13 @@ class SurveyAnswersController < ApplicationController
    end
 	
   def check_access
+
+    if token = session[:token]
+      api = ApiKey.find_by_api_key(session[:api_key])
+      logger.info "Check access (key/token): #{params.inspect} from survey_answers/create"
+      redirect_to api_finish_url(session[:api_key], token) and return
+    end
+    
     redirect_to login_path and return unless current_user
 		return true if current_user.admin?
     if current_user.access?(:all_users) || current_user.login_user?
