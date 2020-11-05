@@ -33,7 +33,7 @@ class StartController < ApplicationController
 
     if journal_entry.answered?
       # if chained, 
-      redirect_to survey_finish_path(@token) and return if journal_entry.answered?
+      redirect_to survey_finish_path(@api_key, @token) and return if journal_entry.answered?
     end
 
     @survey = journal_entry.survey
@@ -129,7 +129,7 @@ class StartController < ApplicationController
   def finish
     journal_entry_id = session[:journal_entry]
     @journal_entry = JournalEntry.find_by_id_and_user_id(journal_entry_id, current_user.id)
-    redirect_to login_path and return if journal_entry_id.nil? || @journal_entry.nil?
+    render and return if journal_entry_id.nil? || @journal_entry.nil?
     
     if @journal_entry.answered? && (chained = @journal_entry.chained_survey_entry)
       if chained && !chained.answered?
@@ -154,7 +154,7 @@ class StartController < ApplicationController
     cookies.delete :journal_entry
     cookies.delete :journal_id
     session.delete :journal_entry
-    puts "token: #{@token}"
+    # puts "token: #{@token}"
     survey_answer = @journal_entry.survey_answer
     weeks_to_answer = CenterSetting.get(@center, "edit_answer_in_weeks", 2)
     @update_date = survey_answer && (survey_answer.created_at.end_of_day + weeks_to_answer.weeks) || Date.today
@@ -229,9 +229,9 @@ class StartController < ApplicationController
     # logger.info "session_entry: '#{session.inspect}' @journal_entry: #{@journal}"
     if @journal_entry.journal_id != session_entry.journal_id
       logger.info "Start checkaccess: different journals, hack? #{@journal_entry.inspect} vs #{session_entry.inspect} current_user: #{current_user.inspect}"
-      redirect_login_path and return
+      redirect_to 'errors/log' and return
     end
-    redirect_to login_path and return if @journal_entry.nil? 
+    redirect_to 'errors/log' and return if @journal_entry.nil? 
   end
 
   def write_user_to_session(user)

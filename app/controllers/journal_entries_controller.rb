@@ -124,7 +124,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
       if !access # && current_user.login_user?
         logger.info "check_access: NO ACCESS journal_entry: #{current_user.inspect} HACKING params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
         flash[:error] = "Ikke tilladt adgang"
-        redirect_to login_path and return false
+        redirect_to 'errors/log' and return false
       end
       # puts "journal_entries: #{params[:action]} access? #{access}"
       # access
@@ -132,7 +132,7 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
     end  # cookie and session are not set before after this check, so it's old/wrong data
     
     logger.info "check_access: params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
-    redirect_to login_path and return false if !current_user
+    redirect_to 'errors/log' and return false if !current_user
     return true
   end
 

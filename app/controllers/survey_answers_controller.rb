@@ -295,11 +295,10 @@ class SurveyAnswersController < ApplicationController
       if session[:token] && session[:api_key]
         token = session[:token]
         api = ApiKey.find_by_api_key(session[:api_key])
-	      return_to = "#{api.return_to}?#{api.api_key}/#{token}"
-        logger.info "Return to: #{return_to}"
-        remove_user_from_session!
-        redirect_to return_to and return
-      else
+	      return_to = api.return_to.blank? && "#{api.api_key}/#{token}" || "#{api.return_to}?#{api.api_key}/#{token}"
+        logger.info "Return to (key/token): #{return_to} from survey_answers/create"
+        redirect_to api_finish_url(session[:api_key], token) and return
+      else  # Non-API users
         if journal_entry.chained_survey_entry && !journal_entry.chained_survey_entry.answered?  # infoskema or other chain
           next_entry = journal_entry.chained_survey_entry
           next_luser = next_entry.login_user
@@ -308,13 +307,18 @@ class SurveyAnswersController < ApplicationController
           logger.info "Redirecting to next survey: #{next_entry.id}  #{session[:pw_hash]}"
           redirect_to survey_next_path(journal_entry.chained_survey_entry) and return
         else
-          redirect_to survey_finish_path(journal_entry) and return
+          redirect_to survey_finish_path and return
         end
       end
     end
   rescue RuntimeError
     flash[:error] = survey_answer.print
-    redirect_to journal_path(journal_entry.journal) and return
+
+    if current_user.login_user?
+      redirect_to api_finish_url and return
+    else
+      redirect_to journal_path(journal_entry.journal) and return
+    end
   end
   
   def update

@@ -205,13 +205,13 @@ Cbcl4::Application.routes.draw do
 
   get 'upgrade', :to => 'start#upgrade', :as => 'upgrade_browser'
   # get '/start/(/:api_key)/(/:token)', :to => 'login#start', :as => 'api_login_survey_start'
-  get '/logout/(/:token)', :to => 'api_login#logout', :as => 'api_logout'
+  get '/logout/(:api_key)/(:token)', :to => 'api_login#logout', :as => 'api_logout'
   get 'api/continue/(:api_key)/(:token)', :to => 'api_start#continue', :as => 'api_survey_continue'
   
   get 'start/(:api_key)/(:token)', :to => 'start#start', :as => 'survey_start'
   get 'continue/(:token)', :to => 'start#continue', :as => 'survey_continue'
   get 'next/(:token)', :to => 'start#next', :as => 'survey_next'      # :id is login_user
-  get 'finish/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
+  get 'finish/(:api_key)/(:token)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
 
   # get 'finish/(/:id)', :to => 'start#finish', :as => 'survey_finish'      # :id is login_user
   get 'surveys/show_fast/(/:id)', :to => 'surveys#show_fast', :as => 'survey_show_fast' # :id is entry
@@ -356,6 +356,7 @@ Cbcl4::Application.routes.draw do
   get '/api/surveys/:api_key', :to => 'api_login#index'
   post '/api/surveys/index/', :to => 'api_login#index'
   post '/api/surveys/token/', :to => 'api_login#get'
+  get '/finish/(:api_key)/(:token)', :to => 'api_login#finish', :as => 'api_finish'
 
 
   get 'main', :to => 'main#index', :as => 'main'

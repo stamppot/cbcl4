@@ -10,6 +10,10 @@ class LoginController < ApplicationController
     # render :maintenance and return
     redirect_to survey_start_path and return if current_user && current_user.login_user
     redirect_to main_path and return if current_user
+    if params.any? 
+      logger.info "Render finish besvarelse. Params: #{params.inspect}"
+      render api_finish_url and return
+    end
   end
 
   def maintenance
@@ -106,9 +110,16 @@ class LoginController < ApplicationController
     end
   rescue ActiveRecord::RecordNotFound
     flash[:error] = t('login.wrong')
-    redirect_to login_path and return 
+
+    if params.any?
+      redirect_to api_finish_url and return
+    else
+      logger.info "Login/logout goto login_url"
+      redirect_to login_path and return 
+    end
   end
-  
+
+
   # Expects the "yes" parameter to be set. If this is the case, the 
   # user's authentication state is clear. If it is not the case, the use will
   # be redirected to '/'. User must be logged in
@@ -127,7 +138,13 @@ class LoginController < ApplicationController
 		self.remove_user_from_session!
 
     flash[:notice] = "Du er blevet logget ud."
-    redirect_to login_url
+    
+    if params.any?
+      redirect_to api_finish_url and return
+    else
+      logger.info "Login/logout goto login_url" 
+      redirect_to login_url
+    end
   end
 
   def shadow_logout

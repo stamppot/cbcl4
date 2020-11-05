@@ -21,9 +21,9 @@
    <div align="center">
 		<%= submit_tag "Login", :name => "login", :class => "button login"  %>
 
-     <br><small>
+     <br><!-- <small>
      Har du mistet dit password? <%= link_to 'Få et nyt her.', lostpassword_url %>
-    </small>
+    </small> -->
    </div>
 	  <p style="color: green"><%= flash[:notice] %></p>
   	<%= render :partial => 'layouts/error_messages_flash' %>

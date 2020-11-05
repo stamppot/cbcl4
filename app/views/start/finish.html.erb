@@ -63,12 +63,12 @@
 	</p>
 </div>
 
-<p>Du kan nu logge af.<p/>
+<p>Du kan nu lukke vinduet.<p/>
 <br>
 <span style="font-size: 14pt; ">
 	<% if @token.blank? %>
 		<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
 	<% else %>
-		<%= link_button "Gå tilbage til #{@center.title}", api_logout_path(@token), 'logout', :title => 'Afslut' %>
+		<%= link_button "Gå tilbage til #{@center.title}", api_logout_path(@api_key, @token), 'logout', :title => 'Afslut' %>
 	<% end %>
 </span>
