@@ -288,7 +288,7 @@ class User < ActiveRecord::Base
   def assigned_centers_and_teams
     # vis ikke alle breve til admin, kun i dennes center
     if(self.has_access?(:admin))
-      c = Center.center
+      c = self.center
       groups = [c] + c.teams
     else
       self.center_and_teams
