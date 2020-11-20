@@ -114,7 +114,8 @@ def subscribed_surveys_in_age_group(age) # TODO: include periods
                             end
                         end
                 survey_age_group_begin = survey.age_group
-                
+                survey = surveys.select {|s| s.surveytype == "parent"}.first
+
                 survey_age_group = 
                         (survey.age_group === age or survey.age_group === (age+age_range.last) or survey.age_group === (age+age_range.first))
             end

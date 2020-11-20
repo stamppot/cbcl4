@@ -15,7 +15,7 @@ class ChainInfoSurvey
 		survey = surveys.select {|s| s.surveytype == "parent"}.first
 
 		puts "found parent survey: #{survey.inspect}"
-		is_valid = survey && create_chain?(journal, survey, follow_up)
+		is_valid = survey && create_chain_buph?(journal, surveys, follow_up)
 		puts "do create_chain #{is_valid.inspect}"
 
 		if is_valid
@@ -30,7 +30,8 @@ class ChainInfoSurvey
 		end
 	end
 
-	def create_chain_buph?(journal, survey, follow_up)
+	def create_chain_buph?(journal, surveys, follow_up)
+		survey = surveys.select {|s| s.surveytype == "parent"}.first
 		puts "create_chain?  follow_up: #{follow_up},  journal: #{journal.inspect}, survey: #{survey.inspect}  center: #{journal.center_id}"
 		return false unless journal.center_id == 1 || journal.center_id == 52 || journal.center_id == 9754 || journal.center_id == 9753 || journal.center_id == 9755 || journal.center_id == 8888 # BPUH, Testcenter
 		puts "center is bpuh"
@@ -54,7 +55,8 @@ class ChainInfoSurvey
 
 	def create_chain_bupeav(journal, surveys, follow_up)
 		puts "create_chain_bupeav: journal: #{journal.inspect}, surveys: #{surveys.inspect}, follow_up: #{follow_up}"
-		
+		age = journal.age
+
 		surveys.each do |survey|
 
 			puts "curr survey: #{survey.inspect}"
@@ -67,13 +69,13 @@ class ChainInfoSurvey
 				when 1
 				     [Survey.find(210)]   # CBCL børn forældre
 				when 2
-				 	[Survey.find(210)]   # CBCL 6-16 parent
+				 	age >= 11 && [Survey.find(210)] || []   # CBCL 6-16 parent
 				when 3
 				 	[]   # C-TRF pædagog
 				when 4
 				 	[]   # TRF teacher 
 				when 5
-				  	[Survey.find(11)]   # YSR youth
+				  	[]   # ingen kobling [Survey.find(11)]   # YSR youth
 				else
 				 	[]
 				end
