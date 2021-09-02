@@ -65,7 +65,7 @@ gem 'writeexcel'
 gem  'awesome_print'
 
 # dependencies with specific versions to be compatible with ruby 2.3
-gem 'rdoc', '6.2.0'
+gem 'rdoc', '6.3.1'
 gem 'sprockets', '3.5.2'
 
 # gem "spawn", :git => 'git://github.com/rfc2822/spawn'
