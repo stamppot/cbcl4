@@ -128,7 +128,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (13.0.1)
-    rdoc (6.2.0)
+    rdoc (6.3.1)
     ref (2.0.0)
     riddle (2.4.1)
     sdoc (1.0.0)
@@ -197,7 +197,7 @@ DEPENDENCIES
   rails (= 4.2.11)
   rails-observers
   rake
-  rdoc (= 6.2.0)
+  rdoc (= 6.3.1)
   sdoc
   sprockets (= 3.5.2)
   sqlite3
