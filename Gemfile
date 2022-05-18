@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11'
 # gem 'rails', '4.0.1'
 
-gem 'nokogiri', '1.8.5'
+gem 'nokogiri', '1.13.5'
 #<<<<<<< HEAD 
 #gem 'nokogiri', '1.10.4' #  '1.8.5'
 
