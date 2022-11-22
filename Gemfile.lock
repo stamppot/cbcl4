@@ -62,7 +62,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     crass (1.0.6)
-    dalli (2.7.10)
+    dalli (3.2.3)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     execjs (2.7.0)
