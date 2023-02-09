@@ -10,10 +10,11 @@ class SurveyAnswersController < ApplicationController
     cookies.delete :journal_entry
     @options = {:answers => true, :disabled => false, :action => "show"}
     @journal_entry = JournalEntry.and_survey_answer.find(params[:id])
-    cookies[:journal_entry] = @journal_entry.id
-    cookies[:journal_id] = @journal_entry.journal_id
-    @survey_answer = SurveyAnswer.and_answer_cells.find(@journal_entry.survey_answer_id)
-    # @@surveys[@journal_entry.survey_id] ||= Survey.and_questions.find(@survey_answer.survey_id)
+   # cookies[:journal_entry] = @journal_entry.id
+   # cookies[:journal_id] = @journal_entry.journal_id
+    session[:journal_entry] = @journal_entry.id      
+    session[:journal_id] = @journal_entry.journal_id # @@surveys[@journal_entry.survey_id] ||= Survey.and_questions.find(@survey_answer.survey_id)
+    @survey_answer = SurveyAnswer.and_answer_cells.find(@journal_entry.survey_answer_id) 
     @survey = Survey.and_questions.find(@survey_answer.survey_id)
     @survey.reload
     @survey.merge_survey_answer(@survey_answer)
@@ -111,8 +112,9 @@ class SurveyAnswersController < ApplicationController
   # end
   
   def draft_data
-		@response = journal_entry = JournalEntry.find(params[:id], :include => {:survey_answer => {:answers => :answer_cells}})
-		show_fast = params[:fast] || false
+    id = session[:journal_entry] || params[:id]
+    @response = journal_entry = JournalEntry.find(id, :include => {:survey_answer => {:answers => :answer_cells}})
+    show_fast = params[:fast] || false
 
     cell_count = 0
 		@response = if journal_entry.survey_answer
@@ -135,16 +137,17 @@ class SurveyAnswersController < ApplicationController
 	end
   
   def json_dynamic_data
-    journal_id = params[:journal_id]
-    if journal_id.nil? || journal_id == "null"
-      Rails.logger("json_dynamic_data, journal_id is bad: #{params.inspect}")
-      entry = JournalEntry.find params[:id]
+    journal_id = params[:journal_id] || session[:journal_id]
+    if journal_id.nil? || journal_id == "null" || journal_id == ""
+      logger.info("json_dynamic_data, journal_id is bad: #{params.inspect}")
+      entry = JournalEntry.find(params[:id] || session[:journal_entry])
       journal_id = entry.journal_id
     end
-    @journal_entry = JournalEntry.where('id = ? AND journal_id = ?', params[:id], journal_id).includes(:journal).first
+    id = session[:journal_entry]
+    @journal_entry = JournalEntry.where('id = ?', id).includes(:journal).first
    
     save_interval = current_user && current_user.login_user && 30 || 20 # change to 900, 60
-    save_draft_url = "/survey_answers/save_draft/#{journal_id}/#{@journal_entry.id}"
+    save_draft_url = "/survey_answers/save_draft/#{journal_id}/#{@journal_entry || id}"
     @journal = @journal_entry.journal
     
     # logger.info "dynamic json: current_user: #{current_user.inspect} center: #{@journal.center.get_title} entry: #{@journal_entry.inspect}  journal: #{@journal.inspect}"
@@ -155,7 +158,7 @@ class SurveyAnswersController < ApplicationController
     json[:show_save_draft] = !current_user.nil?
     json[:show_submit] = !current_user.nil?
     json[:save_draft_url] = save_draft_url
-    json[:journal_entry_id] = params[:id]
+    json[:journal_entry_id] = id
 
     if current_user && !current_user.login_user
       json[:journal_info] = @journal.name
@@ -178,7 +181,7 @@ class SurveyAnswersController < ApplicationController
   end
 
   def json_draft_data
-    journal_id = params[:journal_id]
+    journal_id = params[:journal_id] || session[:journal_id]
     journal_entry = JournalEntry.where('id = ? AND journal_id = ?', params[:id], journal_id).includes(:survey_answer => {:answers => :answer_cells}).first
     journal_entry ||= JournalEntry.find params[:id]  # in some cases journal_id can be null?! browser issue?
     show_fast = params[:fast] || false
@@ -210,9 +213,10 @@ class SurveyAnswersController < ApplicationController
   def save_draft
     puts "PARAMETERS: #{params.inspect}"
     return if request.get?
-    journal_id = params[:journal_id]
-    journal_entry = JournalEntry.and_survey_answer.where('id = ? AND journal_id = ?', params[:id], journal_id).first
-    journal_entry ||= JournalEntry.find params[:id]
+    id = params.key?(:id) && params[:id] || session[:journal_entry]
+    journal_id = session[:journal_entry] || params[:journal_id]
+    journal_entry = JournalEntry.and_survey_answer.where('id = ? AND journal_id = ?', id, journal_id).first
+    journal_entry ||= JournalEntry.find id
     journal_entry.center_id ||= Group.find(journal_entry.group_id).center_id
 
     journal_entry.draft! unless journal_entry.answered? && (journal_entry.answered_at || DateTime.now) > 1.minutes.ago
@@ -250,7 +254,7 @@ class SurveyAnswersController < ApplicationController
     if current_user.login_user && (journal_entry = session[:journal_entry])
       params[:id] = journal_entry # login user can access survey with survey_id instead of journal_entry_id
     end
-    id = params.delete("id")
+    id = session[:journal_entry] || params.key?("id") && params.delete("id") 
     logger.info "session je_id: #{session[:journal_entry]} journal_id: #{params[:journal_id]}"
     journal_id = params[:journal_id] || params["journal_id"]
     journal_entry = JournalEntry.by_id_and_journal(id, journal_id).first
@@ -295,25 +299,30 @@ class SurveyAnswersController < ApplicationController
       if session[:token] && session[:api_key]
         token = session[:token]
         api = ApiKey.find_by_api_key(session[:api_key])
-	      return_to = "#{api.return_to}?#{api.api_key}/#{token}"
-        logger.info "Return to: #{return_to}"
-        remove_user_from_session!
-        redirect_to return_to and return
-      else
+	      return_to = api.return_to.blank? && "#{api.api_key}/#{token}" || "#{api.return_to}?#{api.api_key}/#{token}"
+        logger.info "Return to (key/token): #{return_to} from survey_answers/create"
+        redirect_to api_finish_url(session[:api_key], token) and return
+      else  # Non-API users
         if journal_entry.chained_survey_entry && !journal_entry.chained_survey_entry.answered?  # infoskema or other chain
           next_entry = journal_entry.chained_survey_entry
           next_luser = next_entry.login_user
+          logger.info "Next entry, luser: #{next_entry.inspect}, #{next_luser.inspect}"
           session[:pw_hash] = Digest::MD5.hexdigest(next_entry.password + next_luser.password_salt)
           logger.info "Redirecting to next survey: #{next_entry.id}  #{session[:pw_hash]}"
           redirect_to survey_next_path(journal_entry.chained_survey_entry) and return
         else
-          redirect_to survey_finish_path(journal_entry) and return
+          redirect_to survey_finish_path and return
         end
       end
     end
   rescue RuntimeError
     flash[:error] = survey_answer.print
-    redirect_to journal_path(journal_entry.journal) and return
+
+    if current_user.login_user?
+      redirect_to api_finish_url and return
+    else
+      redirect_to journal_path(journal_entry.journal) and return
+    end
   end
   
   def update
@@ -389,6 +398,26 @@ class SurveyAnswersController < ApplicationController
    end
 	
   def check_access
+
+    if token = session[:token]
+      api = ApiKey.find_by_api_key(session[:api_key])
+      logger.info "Check access (key/token): #{params.inspect} from survey_answers/create"
+
+      if current_user and ((current_user.access?(:all_users) || current_user.access?(:login_user))) and (params[:id] || session[:journal_entry])
+        logger.info "Check access current_user: #{curr} from survey_answers"
+      
+        session_entry_id = session[:journal_entry]
+        ids = [params[:id], session_entry_id].compact
+        access = ids.all? {|id| current_user.has_journal_entry?(id)}
+  
+        if !access # && current_user.login_user?
+          logger.info "check_access survey_answers: NO ACCESS journal_entry: #{current_user.inspect} HACKING params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
+          flash[:error] = "Ikke tilladt adgang"
+          redirect_to api_finish_url(session[:api_key], token) and return false
+        end
+      end
+    end
+    
     redirect_to login_path and return unless current_user
 		return true if current_user.admin?
     if current_user.access?(:all_users) || current_user.login_user?

@@ -6,6 +6,9 @@ class MainController < ApplicationController
   # caches_action :index, :cache_path => :index_cache_path.to_proc
 
   def index
+    if request.query_string.present? 
+          render :view => 'start/finish' and return
+    end
     redirect_to login_path if current_user.nil?
   end
 

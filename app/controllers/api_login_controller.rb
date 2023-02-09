@@ -27,10 +27,11 @@ class ApiLoginController < ApiController
   	def logout
   		logger.info "find api_key: #{params[:api_key] || session[:api_key]}"
   		api_key = ApiKey.find_by_api_key (params[:api_key] || session[:api_key])
-  		logger.info "Return to: #{api_key.return_to}"
+  		logger.info "ApiLogin:: Return to: #{api_key.return_to}"
 		goto = "#{api_key.return_to}?#{params[:token]}" 
 		logger.info "goto: #{goto}"
- 		redirect_to goto
+ 		flash[:notice] = "Du er blevet logget ud."
+ 	    # redirect_to goto
 		
 		ensure
 		session[:rbac_user_id] = nil
@@ -99,7 +100,7 @@ class ApiLoginController < ApiController
 		# check api_key
 		api_key = ApiKey.find_by_api_key(key)
 		if api_key.nil?
-			render :text => "Not found" and return
+			render :text => "API key not found" and return
 		end
 
 		puts "current_user: #{current_user.inspect}"
@@ -184,6 +185,49 @@ class ApiLoginController < ApiController
 		response = center.journals.map {|j| {j.title => encrypt_tokens(api_key, to_token(j))}}.join("<br/>")
 		render :text => response
 	end
+
+
+  def finish  # token is passed
+  	token = params[:token]
+
+    journal_entry_id = session[:journal_entry]
+    @journal_entry = JournalEntry.find_by_id_and_user_id(journal_entry_id, current_user.id)
+    render and return if journal_entry_id.nil? || @journal_entry.nil?
+    
+    if @journal_entry.answered? && (chained = @journal_entry.chained_survey_entry)
+      if chained && !chained.answered?
+        # check access
+        if @journal_entry.journal.id != chained.journal.id
+          logger.info "JournalEntry and chained do not have same journal: #{@journal_entry.inspect} vs #{chained.inspect}"
+          redirect_to login_path
+        end
+        session[:journal_entry] = chained.id
+        logger.info "Redirecting to next with entry #{chained.id} from #{journal_entry_id}"
+        redirect_to survey_next_path and return
+      end
+    end
+    # redirect_to survey_continue_path and return unless @journal_entry.answered?
+    @survey = @journal_entry.survey
+    @center = @journal_entry.journal.center
+    Rails.cache.delete("j_#{@journal_entry.id}")
+    @token = session[:token]
+    @api_key = session[:api_key]
+    # session.delete "token"
+    # session.clear
+    cookies.delete :journal_entry
+    cookies.delete :journal_id
+    session.delete :journal_entry
+    # puts "token: #{@token}"
+    survey_answer = @journal_entry.survey_answer
+    weeks_to_answer = CenterSetting.get(@center, "edit_answer_in_weeks", 2)
+    @update_date = survey_answer && (survey_answer.created_at.end_of_day + weeks_to_answer.weeks) || Date.today
+    @can_update_answer = @update_date >= Date.today
+
+    @edit_chained = @journal_entry.chained_survey_entry
+    logger.info "Editable until: #{@update_date.inspect}"
+
+    render :layout => 'login'
+  end
 
 	def check_access
 		return true

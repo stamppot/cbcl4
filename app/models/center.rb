@@ -118,6 +118,37 @@ class Center < Group
     surveys
   end
     
+  def subscribed_surveys_in_age_group(age) # TODO: include periods
+      age_range = Range.new(0,0)
+      surveys = subscribed_surveys.select do |survey|
+            # be a bit flexible in which surveys can be used for which age groups, fx 11-16 can be used up to 18 years
+	    #
+	    #       # for klinikken gaelder strenge aldersbegraensninger paa skemaer
+	    age_range = if self.id == 1 # || self.id == 52
+	                    Range.new(0,0)
+	                else
+			    if survey.age =~ /18/ && age > 18 # allow persons above 18
+			        Range.new(-(age-18),1)
+			    else
+	                        (survey.age =~ /16|17|18/) && Range.new(-4,4) || Range.new(-1,2)
+			    end
+	                end
+	                                                           # survey.prefix != "info" && 
+	                (survey.age_group === age or survey.age_group === (age+age_range.last) or survey.age_group === (age+age_range.first))
+	    end
+	    
+	                          if (self.id == 1 || self.id == 52) && age >= 18
+	                                                                    # do nothing, info-skema is included
+	                               surveys = surveys.select {|s| s.id != 10} 
+				  elsif [14060, 14050, 14065].include?(self.id) # Børne- og Ungdomspsykiatri Esbjerg, Aabenraa, Vejle
+				       surveys  # do nothing, info-skema is included
+			          elsif self.id != 1 && self.id != 52
+	                               surveys = surveys.select {|s| s.id < 10}  # don't show Oplysningsskema for other centers (and below 18 years of age)
+	                   	  end
+	    
+	                                                                                            	        surveys.reject! {|s| s.prefix == "info" } if age >= 18  # when person is 18, they must answer oplysningsskema themselves (info18)
+           surveys
+	                                             	              end
   # increment subscription count - move to journal_entry, higher abstraction
   # def use_subscribed(survey) # TODO: include periods
   #   # find subscription to increment, must be same as is journal_entry

@@ -66,9 +66,9 @@
 <div class="team_journals" id="team_journals">
 	<h3>Journaler</h3>
 	</p>
-	
+	Antal: <%= @journal_entries_count %>
 	<% if @journal_entries.empty? %>
-	<%= t('none') %>
+	<%#= t('none') %>
 	<% elsif @journal_entries.nil? %>
 		Antal: <%= @journal_entries_count %>
 	<% else %>

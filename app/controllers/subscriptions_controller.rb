@@ -95,7 +95,7 @@ class SubscriptionsController < ApplicationController
 
   def new
     @group = Group.find(params[:id])
-    @surveys = Survey.find(:all)
+    @surveys = Survey.all
     @subscribed = Subscription.active.in_center(@group)
   end
 

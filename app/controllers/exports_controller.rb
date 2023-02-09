@@ -34,16 +34,18 @@ class ExportsController < ApplicationController
   end
   
   def filter
-    params[:center] = params[:id].to_i
+    params[:center] = params[:id].to_i if params[:id].to_i > 0
     center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
+    center ||= Center.find params[:center]
     center = current_user.center if current_user.all_centers.size == 1
+    params.delete :team if params[:center] == params[:team]
     args = params.clone
     params = filter_date(args)
     params = FilterArgs.filter_age(params)
     # params[:team] = params[:team].delete :id if params[:team] && params[:team][:id]
 
-    journals = if params[:team] && !["null", "team", ""].include?(params[:team])
-      team = Team.find params[:team]
+    journals = if false && params[:team] && center.id != params[:team].to_i && !["null", "team", ""].include?(params[:team])
+      team = Team.find(params[:team])
       journals = team.journals.count
     else
       params.delete :team
@@ -56,9 +58,11 @@ class ExportsController < ApplicationController
   end
 
   def download
-    params[:center] = params[:id]
+    params[:center] = params[:id] if params[:id].to_i > 0
     center = Center.find params[:id] unless params[:id].blank? || params[:id] == '0'
     center = current_user.center if current_user.centers.size == 1
+    params[:center] = center.id if current_user.centers.size == 1
+    params.delete :team # if params[:center] == params[:team]
     args = params.clone
     params = filter_date(args)
     params = FilterArgs.filter_age(params)

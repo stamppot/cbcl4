@@ -34,6 +34,7 @@ class WideExportsController < ApplicationController
   end
   
   def filter
+    params[:id] = params[:center] if params[:id] == '0'
     params[:center] = params[:id].to_i
     params[:surveys] = params[:survey].select { |k,v| v.to_i == 1 }.map &:first
     # puts "surveys: #{params[:surveys].inspect}"

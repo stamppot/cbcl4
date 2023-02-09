@@ -243,8 +243,18 @@ class Journal < ActiveRecord::Base #< Group
   # creates entries with logins
   def add_journal_entries(surveys, follow_up = 0, save = true)
     return [] if surveys.empty?
-    surveys.map do |survey|
-      entry = JournalEntry.new({:survey => survey, :state => 2, :journal => self, :follow_up => follow_up})
+    entries = surveys.map do |survey|
+      p = {:survey => survey, :state => 2, :journal => self, :follow_up => follow_up}
+
+      d1 = 10.seconds.ago
+      d2 = 1.seconds.from_now
+      exists = JournalEntry.where(p).any? {|e| e.updated_at.between?(d1, d2) }
+      if exists
+        logger.error "journal_entry already exists; double-clicked?"
+        next
+      end
+      entry = JournalEntry.new(p)
+      
       entry.group_id = self.group_id || self.center_id
       entry.journal_id = self.id
       entry.center_id = self.center_id
@@ -261,7 +271,7 @@ class Journal < ActiveRecord::Base #< Group
       # end
       # entry.expire_cache(current_user) # expire journal_entry_ids
     end
-    # return self
+    entries.compact
   end
   
   def survey_answers_answered?(follow_up = 1, surveys = [1,3,9])
@@ -302,6 +312,10 @@ class Journal < ActiveRecord::Base #< Group
   
   def age
     ( (Date.today - self.birthdate).to_i / 365.25).floor
+  end
+
+  def age_f  # float
+    ( (Date.today - self.birthdate).to_i / 365.25)
   end
 
   def get_age(birth_date, end_date)

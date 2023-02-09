@@ -65,7 +65,7 @@ class CsvSurveyAnswer < ActiveRecord::Base
     # puts "survey_id: #{survey_id} -- #{o[:survey][:id].inspect}"
     options.delete(:team) if options[:team].blank?
 
-    query = if !options[:team].blank?
+    query = if !options[:team].blank? && !["null", "team", ""].include?(options[:team])
       # puts "with_options for_team: #{options[:team]}"
       CsvSurveyAnswer.between(o[:start_date], o[:stop_date])
         .aged_between(o[:age_start], o[:age_stop])

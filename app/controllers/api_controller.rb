@@ -11,7 +11,7 @@ class ApiController < ActionController::Base
   before_filter :configure_charsets
   # before_filter :set_permissions, :except => [:dynamic_data, :logout, :finish]
 	before_filter :check_api_key
-  before_filter :url_token_login, :if => Proc.new {|c| request.get? } #, :except => [:login]
+  before_filter :url_token_login, :if => Proc.new {|c| request.get? || params[:token] } #, :except => [:login]
   # before_filter :post_token_login, :if => Proc.new {|c| request.post? }
   # before_filter :check_access, :except => [:dynamic_data, :finish, :logout, :shadow_logout, :check_controller_access]
   before_filter :center_title, :except => [:dynamic_data, :logout, :login]
@@ -31,8 +31,11 @@ class ApiController < ActionController::Base
   	
 		api_key = ApiKey.find_by_api_key(key)
 		
-		render :text => "Not found" and return if api_key.nil?
-		return true
+    if api_key.nil?
+      logger.info "Not found api_key (check_api_key): #{params.inspect}"
+		  render :text => "check: API key not found" and return 
+		end
+    return true
 	end
 
  	def url_token_login  # check api_key and token
@@ -77,7 +80,7 @@ class ApiController < ActionController::Base
 		key = param["api_key"]
 
 		puts "key: #{key}"
-		api_key = ApiKey.find_by_api_key(key)
+		api_key = key.blank? && ApiKey.first || ApiKey.find_by_api_key(key)
 		if api_key.nil?
 			render :text => "Not found" and return
 		else

@@ -142,8 +142,8 @@ class RemindersController < ApplicationController
       entries_relation = entries_relation.where(follow_up: @follow_up)
     end
     @journal_entries_count = entries_relation.count
-    @journal_entries = entries_relation.includes(:journal).order('journals.title asc').all unless @state.empty?
-    @stop_date = @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
+    @journal_entries = [] # entries_relation.includes(:journal).order('journals.title asc').all unless @state.empty?
+    @stop_date = entries_relation.last.created_at || DateTime.now # @journal_entries.any? && @journal_entries.last.created_at || DateTime.now
   end
 
   def check_access

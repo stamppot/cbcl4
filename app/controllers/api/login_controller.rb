@@ -73,16 +73,16 @@ module Api
       cookies.delete :journal_entry
   
       # Do not log out if the user did not press the "Yes" button
-      if params[:yes].nil?
-        redirect_to survey_start_url and return if current_user.login_user
-        redirect_to main_url and return
-      end
+      #if params[:yes].nil?
+      #  redirect_to survey_start_url and return if current_user.login_user
+      #  redirect_to main_url and return
+      #end
   
       # Otherwise delete the user from the session
   		self.remove_user_from_session!
   
       flash[:notice] = "Du er blevet logget ud."
-      redirect_to login_url
+      render file: 'start/finish' #redirect_to login_url
     end
   
     def shadow_logout

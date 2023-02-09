@@ -9,7 +9,7 @@ class AnswerChartsController < ApplicationController
     end
 
     answers = params[:answers].select {|k,v| v == "1"}.keys
-    entries = JournalEntry.find(answers, :include => [ :journal, {:survey => {:scores => [:score_items, :score_refs]}} ] )
+    entries = JournalEntry.includes([:journal, :survey]).find(answers) # {:scores => [:score_items, :score_refs]}} ] )
     journal_id = params[:journal_id]
 
     # if no entries are chosen, show the first three

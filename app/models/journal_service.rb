@@ -2,14 +2,16 @@ class JournalService
 
 	# gets or creates journal, then adds new entries
 	def create_journal(center, journal_params, surveys, follow_up = 0, save = true)
-		title = journal_params["name"]
-		journal = Journal.where(center_id: center.id, title: title, cpr: get_cpr(journal_params["birthdate"])).first
+		title = journal_params[:name] || journal_params["name"]
+		birthdate = journal_params[:birthdate] || journal_params["birthdate"]
+		puts "title: #{title} birthdate: #{birthdate} journal_params: #{journal_params.inspect}"
+		journal = Journal.where(center_id: center.id, title: title, cpr: get_cpr(birthdate)).first
 
 		if !journal
 			puts "create_journal #{journal_params.inspect}"
-			date = DateTime.parse(journal_params["birthdate"])
+			date = DateTime.parse(birthdate)
 			puts "birthdate: #{date.inspect}"
-			gender = journal_params["gender"]
+			gender = journal_params[:gender] || journal_params["gender"]
 
 			journal = Journal.new(title: title, sex: Journal.sexes[gender], birthdate: date, 
 				nationality: "Dansk")

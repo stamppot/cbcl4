@@ -77,7 +77,7 @@
 			<div id="teams">
 				<h2>Team</h2>
 				<select name='team' id='team_selector'>
-					<%= options_for_select @center.teams.map {|t| [t.title, t.id]} %>
+					<%= options_for_select (@center.teams).map {|t| [t.title, t.id]} %>
 				</select>
 			</div>
 	<% end %>

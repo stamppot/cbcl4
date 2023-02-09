@@ -108,6 +108,50 @@ class ImportJournals # AddJournalsFromCsv
 		update_email(file, team_id, do_save)
 	end
 
+		def read(file, survey_ids = [2,4], team_id = 9259, follow_up = 0, couple = {}, do_save = false)
+				surveys = Survey.find(survey_ids)
+						group = Group.find(team_id)
+								center = group.center
+
+										i = 1
+												CSV.foreach(file, :headers => true, :col_sep => ",", :row_sep => :auto) do |row|
+															puts "Row: #{i} #{row}"
+																		next if row.blank?
+
+																					alt_id = row["alt_id"]
+																								code = row["id"]
+																											puts "alt_id: #{alt_id} code: #{code}"
+																													end
+																														end
+
+
+
+        def add_entries_to_existing(file, survey_ids, team_id, follow_up = 0, couple = {}, do_save = false)
+		puts "no survey_ids given" and return if !survey_ids.any?
+				puts "invalid follow_up: #{follow_up}" and return if follow_up.to_i < 0
+						puts "invalid coupling: #{couple.inspect}" and return if !couple.is_a?(Hash)
+								
+										surveys = Survey.find(survey_ids)
+												group = Group.find(team_id)
+														center = group.center
+
+																i = 1
+																		CSV.foreach(file, :headers => true, :col_sep => ";", :row_sep => :auto) do |row|
+																					puts "Row: #{i} #{row}"
+																								next if row.blank?
+
+																											alt_id = row["alt_id"] || row["Graviditetsid"]
+																														code = row["id"]
+
+																																							journal = Journal.find_by_alt_id_and_code_and_group_id(alt_id, code, team_id)
+																																										new_entries = add_surveys_and_entries(journal, surveys, follow_up, do_save)
+																																																connect_entries(new_entries, couple, do_save) unless couple.blank? && do_save
+
+																																																			i = i + 1
+																																																					end
+																																																						end
+
+
  		# update parent_email
  	def list
     	puts "update(file, [survey_ids], team_id, follow_up, {couple}, do_save)"

@@ -53,7 +53,7 @@ class WideAnswersExport
   
   # a table with variables and values for the given surveys in one row
   def wide_table(survey_answers, survey_ids = [])
-    vars = Variable.find_all_by_survey_id(survey_ids).map { |v| v.var.to_sym}
+    vars = Variable.where(:survey_id => survey_ids).map { |v| v.var.to_sym}
     # puts "vars: #{vars.inspect}"
     vars.unshift :title
     # TODO: must have same followup

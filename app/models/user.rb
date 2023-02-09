@@ -165,7 +165,7 @@ class User < ActiveRecord::Base
     group_ids = params.delete(:groups) || []
 
     # puts "params: #{params.inspect}\n"
-    state = (params[:state] ||= params[:state] || user.state)
+    state = params.delete(:state) || user.state # (params[:state] ||= params[:state] || user.state)
     user.state = state if self.has_access? :superadmin 
     
     # TODO: needed? check user/edit
@@ -288,7 +288,7 @@ class User < ActiveRecord::Base
   def assigned_centers_and_teams
     # vis ikke alle breve til admin, kun i dennes center
     if(self.has_access?(:admin))
-      c = Center.find(1)
+      c = self.center
       groups = [c] + c.teams
     else
       self.center_and_teams
@@ -424,14 +424,21 @@ class User < ActiveRecord::Base
 
   def has_journal_entry?(journal_entry_id)
     return true if admin?
+    if login_user?
+      entry = JournalEntry.find(journal_entry_id)
+      journal = entry.journal
+      allowed_user_ids = journal.journal_entries.map {|e| e.user_id }
+      allowed_entry_ids = journal.journal_entries.map {|e| e.id }
+      return allowed_user_ids.include?(self.id) && allowed_entry_ids.include?(journal_entry_id)
+    end
+
     group_ids = []
     group_ids += (center_id && [center_id] || centers.map(&:id))
     group_ids += teams.map(&:id)
 
-    query = "select count(id) from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}"
-    result = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject({}) do |col,r|
-      # puts r.inspect
-      # logger.info "has_journal_entry?: #{r.inspect}"
+    query = "select count(id) as count from journal_entries je where je.group_id in (#{group_ids.join(',')}) and je.id = #{journal_entry_id}"
+    result = ActiveRecord::Base.connection.execute(query).each(:as => :hash).inject([]) do |col,r|
+      col << r["count"]
       col
     end
 

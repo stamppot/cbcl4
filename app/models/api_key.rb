@@ -58,7 +58,7 @@ class ApiKey < ActiveRecord::Base
 		end
 
 		puts "tokens: #{tokens.inspect}"
-		encrypted_tokens = encrypt_tokens(api_key, tokens)
+		encrypted_tokens = api_key.encrypt_tokens(api_key, tokens)
 	end
 
 	def encrypt_tokens(api_key, tokens)
@@ -78,10 +78,55 @@ class ApiKey < ActiveRecord::Base
 		end
 	end
 
+	def to_id_with_tokens(journal)
+			entries = journal.not_answered_entries.inject({}) do |h, e| 
+		  		if e.login_user
+					h[e.survey.short_name] = lock({"login" => e.login_user.login, "password" => e.password}.to_s)
+				end
+				h
+			end
+																		if entries.any?
+				entries["alt_id"] = journal.alt_id 
+				entries["id"] = journal.code
+				entries["tv"] = journal.title.include?("TVA") ? "TVA" : journal.title.include?("TVB") ? "TVB" : ""  
+			end
+		entries
+	end
+
+	def to_id_with_tokens_csv(journal) 
+		tokens = to_id_with_tokens(journal)
+		line = [] << tokens["alt_id"]
+		line << tokens["id"] << tokens["tv"]
+		line << tokens["CBCL_6-16"] << tokens["TRF_6-16"]
+		line# .join(";")
+	end
+
 	def create_token(api_key, journal)
 		tokens = ApiKey.to_token(journal)
 		encrypted_tokens = tokens.inject({}) {|h,login| h[login.first] = api_key.lock(login.last.to_s); h }
 		encrypted_tokens
+	end
+
+	
+	def create_tokens_for_list(csv_file)
+		journal_titles = CSV.read(csv_file)
+		puts journal_titles
+		journal_titles.delete "title"
+		surveys = ["CBCL_6-16", "TRF_6-16"]
+		journal_titles.inject({}) do |h, title|
+			#next if title.first == "title"
+			name = title.first
+			#puts "name: #{name.inspect}" 
+			puts journal_titles
+			# j = Journal.find_by_title(title)
+			j_params = {"name":name, "gender":"f", "birthdate":"2011-11-17"}
+			#puts j_params
+			token = ApiKey.create(self.api_key, j_params, surveys).compact
+			puts "token: #{token.inspect}"
+			next if name.nil? || token.nil?
+			h[name] = token
+			h
+		end							
 	end
 
 

@@ -3,7 +3,7 @@
 
 <% if @is_first_of_chained_survey %>
 	Velkommen til  besvarelse af spørgeskemaer i CBCL-database.
-	Du skal besvare 2 spørgeskemaer. Det 1. spørgeskema omhandler barnets adfærd (forældreskema).
+	Du skal besvare 2 spørgeskemaer. Det 1. spørgeskema omhandler barnets sundhed og sociale forhold (forældreskema).
 <% else %>
 Du skal besvare nedenstående spørgeskema.
 <% end %>
@@ -30,5 +30,5 @@ Du skal besvare nedenstående spørgeskema.
 	<% if @token.blank? %>
 		<%= link_button t('finish'), logout_path, 'logout', :title => 'Log ud af systemet' %>
 	<% else %>
-		<% link_button "Gå tilbage til #{@center.title}", api_logout_path(@api_key, @token), 'logout', :title => 'Afslut' %>
+		<% link_button "Gå tilbage til #{@center.title}", api_logout_path(@token), 'logout', :title => 'Afslut' %>
 	<% end %>

@@ -13,7 +13,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td><%= @message %><br/>Exception: <%= @exception %> <br/> Backtrace<%= @backtrace %>
+			<td><%= @message %><br/>Exception: <%= @exception if @exception %> <br/> Backtrace<%= @backtrace if @backtrace %>
 			</td>
 		</tr>
 	</table><br>

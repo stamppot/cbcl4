@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
   # include CacheableFlash
   # include ExceptionNotification::Notifiable
   layout 'cbcl'
+  
+  rescue_from ActiveRecord::RecordNotFound, with: :page_not_found
 
   before_filter :configure_charsets
   before_filter :set_permissions, :except => [:dynamic_data, :logout, :finish]
@@ -66,6 +68,13 @@ class ApplicationController < ActionController::Base
   end
 
   def page_not_found
+    browser = request.env['HTTP_USER_AGENT']
+    p = params && params.inspect || "<empty>"
+    logger.info "application/page_not_found current_user: #{current_user.inspect} #{request.remote_ip} browser: #{browser} params: #{p}"
+    user = current_user && "#{current_user.login}, #{current_user.email}, last_login: #{current_user.last_logged_in_at}, center_id: #{current_user.center_id} roles: #{current_user.role_ids_str}"
+    user_id = current_user && current_user.id || nil 
+    ErrorLog.create(user_id: user_id, user: user, controller: params[:controller], action: params[:action], parameters: p, ip: request.remote_ip, browser: browser)
+    logger.info "Error logged!"
     respond_to do |format|
       format.html { render template: 'errors/404', layout: 'layouts/application', status: 404 }
       format.all  { render nothing: true, status: 404 }
@@ -84,6 +93,7 @@ class ApplicationController < ActionController::Base
   end
 
   def rescue_action_in_public(exception)
+    logger.info "application/rescue_action_in_public exception: #{exception.inspect} current_user: #{current_user.inspect}"
     case exception
     when ActiveRecord::RecordNotFound, ActionController::RoutingError #ActionController::UnknownAction, 
       redirect_to errors_path(404), :status=>301

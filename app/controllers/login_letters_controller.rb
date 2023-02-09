@@ -85,7 +85,7 @@ class LoginLettersController < ApplicationController
   def update
     @letter = LoginLetter.find(params[:id])
     params[:letter][:letter] = params[:letter_contents]
-
+    @letter.group_id = params[:letter][:group_id]
     @letter.letter = params[:letter][:letter]
 
     if @letter.save

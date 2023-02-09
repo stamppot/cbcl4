@@ -9,19 +9,16 @@ class StartController < ApplicationController
     end
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
-    @journal_entry = JournalEntry.find_by_user_id(current_user.id)
-    @is_first_of_chained_survey = true if chained = @journal_entry.chained_survey_entry
-    #   @journal_entry = chained unless chained.answered?
-    # end
-    # logger.info "Start: current_user: #{current_user.inspect} journal_entry: #{@journal_entry.inspect}"
-    @name = @journal_entry.journal.title
-    @center = @journal_entry.journal.center
-    session[:journal_entry] ||= @journal_entry.id
-    session[:journal_id] ||= @journal_entry.journal_id
+    journal_entry = JournalEntry.find_by_user_id(current_user.id)
+    @is_first_of_chained_survey = true if chained = journal_entry.chained_survey_entry
+    @name = journal_entry.journal.title
+    @center = journal_entry.journal.center
+    session[:journal_entry] = journal_entry.id
+    session[:journal_id] ||= journal_entry.journal_id
     session[:api_key] = params[:api_key]
     session[:token] = params[:token]
-    j = @journal_entry.journal
-    je = @journal_entry
+    j = journal_entry.journal
+    je = journal_entry
     time = 9.hours.from_now.to_s(:short)
     if session[:journal_entry].to_i != je.id  # MUST be the same entry, or a wrong survey will be opened
       logger.info "WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
@@ -30,55 +27,45 @@ class StartController < ApplicationController
     logger.info "LOGIN_USER start #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} journal session: #{session[:journal_id]} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: #{je.survey_id} luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
     @token = session[:token] || params[:token]
     @api_key = session[:api_key] || params[:api_key]
-    cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
-    cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
+   # cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
+   # cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
+    redirect_to survey_continue_path(@token) if journal_entry.draft?
 
-    redirect_to survey_continue_path(@api_key, @token) if @journal_entry.draft?
-
-    if @journal_entry.answered?
+    if journal_entry.answered?
       # if chained, 
-      redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
+      redirect_to survey_finish_path(@api_key, @token) and return if journal_entry.answered?
     end
 
-    @survey = @journal_entry.survey
+    @survey = journal_entry.survey
     cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
   end
 
   def continue
-    # if !current_user.name.include? 'Jens'
-    #   flash[:notice] = "System er under vedligeholdelse. Kom tilbage senere."
-    #   redirect_to maintenance_path and return
-    # end
-    # @token = session[:token]
-    # @api_key = session[:api]
     @token = params[:token]
-    @api_key = params[:api_key]
-    @journal_entry = JournalEntry.find_by_user_id(current_user.id)
+    @api_key = session[:api_key]
+    journal_entry = JournalEntry.find_by_user_id(current_user.id)
     je = @journal_entry
     @journal = je.journal
     @center = @journal.center
-    cookies[:journal_entry] = @journal_entry.id # session[:journal_entry]
-    cookies[:journal_id] = @journal_entry.journal_id
+   # cookies[:journal_entry] = journal_entry.id # session[:journal_entry]
+   # cookies[:journal_id] = journal_entry.journal_id
     user_name = je.login_user.name
     logger.info "LOGIN_USER conti #{user_name} journal: #{@journal.title} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' luser: '#{je.user_id}' @ #{9.hours.from_now.to_s(:short)}: #{request.env['HTTP_USER_AGENT']}"
-    @survey = @journal_entry.survey
+    @survey = journal_entry.survey
     cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
   end
 
   def next
     logger.info "Next 0: params: #{params.inspect}"
-    @journal_entry = JournalEntry.find(params[:id])
+    journal_entry_id = session[:journal_entry]
+    @journal_entry = JournalEntry.find_by_id(journal_entry_id)
+    @is_research_unit = @journal_entry.center_id == 52  # Forskningsenheden
     if @journal_entry.next    # has next, but should be this one
 	    logger.info "Next problem: (pw) entry has next, should be this one?  params: #{params.inspect}  entry: #{@journal_entry.inspect}"
-	    # jenext = JournalEntry.find @journal_entry.next
-      # logger.info "Next #{jenext.id} already answered: #{jenext.survey_answer_id} #{jenext.answered_at}" if jenext.answered?
-      # if !jenext.answered?
-        # jenextpw = jenext.password
-      # end
+      # session[:journal_entry] = journal_entry.next
     end
     
     # login_user = @journal_entry.login_user
-	  
     pw_hash = session[:pw_hash]
     if pw_hash
       if Digest::MD5.hexdigest(@journal_entry.password + @journal_entry.login_user.password_salt) == pw_hash
@@ -111,44 +98,54 @@ class StartController < ApplicationController
     session[:journal_entry] = @journal_entry.id
     session[:journal_id] = @journal_entry.journal_id
     @token = session[:token]
-    @api_key = session[:api_key]
+    api_key = session[:api_key]
     user_name = cookies[:user_name]
     cookies.delete :user_name # if current_user.login_user?
     j = @journal_entry.journal
     je = @journal_entry
     time = 9.hours.from_now.to_s(:short)
     logger.info "LOGIN_USER next #{user_name} journal: #{j.id} #{j.title} kode: #{j.code} entry session: '#{session[:journal_entry]}' entry: '#{je.id}' survey: #{je.survey_id} luser: '#{je.user_id}' @ #{time}: #{request.env['HTTP_USER_AGENT']}"
-    if session[:journal_entry].to_i != je.id  # MUST be the same entry, or a wrong survey will be opened
+    session_entry = JournalEntry.find session[:journal_entry].to_i
+
+    if !(session[:journal_entry].to_i == je.id || session_entry.next == je.id)  # MUST be the same entry, or a wrong survey will be opened
       logger.info "WRONG next entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
       raise RunTimeError "Bad next entry in session: WRONG entry: in session[:journal_entry] #{session[:journal_entry]}, loaded: #{je.id}"
     end
     # @token = session[:token]
     @continue_from_infosurvey = je.chained_survey_entry && je.is_infosurvey?
-    @api_key = session[:api_key]
-    cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
-    cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
+    logger.info "continue_from_infosurvey: #{@continue_from_infosurvey} changed: #{je.chained_survey_entry.inspect}"
+    api_key = session[:api_key]
+  #  cookies[:journal_entry] = { :value => session[:journal_entry], :expires => 5.hour.from_now }
+  #  cookies[:journal_id] = { :value => session[:journal_id], :expires => 5.hour.from_now }
     # session.delete "token"
 
     @survey = @journal_entry.survey
     cookies[:show_only_question] = { :value => @survey.question_with_problem_items.id, :expires => 2.hour.from_now } if session[:token]
 
-    redirect_to survey_continue_path(@token, @api_key) if @journal_entry.draft?
-    redirect_to survey_finish_path(@journal_entry, @api_key, @token) and return if @journal_entry.answered?
+    redirect_to survey_continue_path(@token) if @journal_entry.draft?
+    redirect_to survey_finish_path(@token) and return if @journal_entry.answered?
   end
 
   def finish
-    @journal_entry = JournalEntry.find_by_id_and_user_id(params[:id], current_user.id)
+    journal_entry_id = session[:journal_entry]
+    @journal_entry = JournalEntry.find_by_id_and_user_id(journal_entry_id, current_user.id)
+    render and return if journal_entry_id.nil? || @journal_entry.nil?
+    
     if @journal_entry.answered? && (chained = @journal_entry.chained_survey_entry)
       if chained && !chained.answered?
+        # check access
+        if @journal_entry.journal.id != chained.journal.id
+          logger.info "JournalEntry and chained do not have same journal: #{@journal_entry.inspect} vs #{chained.inspect}"
+          redirect_to login_path
+        end
         session[:journal_entry] = chained.id
-        redirect_to survey_next_path(chained) and return
+        logger.info "Redirecting to next with entry #{chained.id} from #{journal_entry_id}"
+        redirect_to survey_next_path and return
       end
     end
     redirect_to survey_continue_path and return unless @journal_entry.answered?
     @survey = @journal_entry.survey
     @center = @journal_entry.journal.center
-    # session.delete "journal_entry"
-    # session.delete "journal_id"
     Rails.cache.delete("j_#{@journal_entry.id}")
     @token = session[:token]
     @api_key = session[:api_key]
@@ -157,7 +154,7 @@ class StartController < ApplicationController
     cookies.delete :journal_entry
     cookies.delete :journal_id
     session.delete :journal_entry
-    puts "token: #{@token}"
+    # puts "token: #{@token}"
     survey_answer = @journal_entry.survey_answer
     weeks_to_answer = CenterSetting.get(@center, "edit_answer_in_weeks", 2)
     @update_date = survey_answer && (survey_answer.created_at.end_of_day + weeks_to_answer.weeks) || Date.today
@@ -176,11 +173,11 @@ class StartController < ApplicationController
   end
 
   def check_access
-  	logger.info "start check_access: #{params.inspect}"
+  	logger.info "start check_access: #{params.inspect} session[:journal_entry]: #{session[:journal_entry]} current_user: #{current_user.inspect}"
     token = params[:token]
 
     if token
-      key = params[:api_key]
+      key = session[:api_key]
 
       api_key = ApiKey.find_by_api_key(key)
       if api_key.nil?
@@ -196,27 +193,45 @@ class StartController < ApplicationController
       login_user = LoginUser.where(center_id: api_key.center_id, login: login["login"]).first
       user = User.find_with_credentials(login["login"], login["password"])
     
-      if login_user.nil?
+      if login_user.nil? 
         logger.info "User not found" 
         return false
+      else
+        journal_entry_id = session[:journal_entry]
+        entry = JournalEntry.find(journal_entry_id)
+        if entry.user_id != login_user.id
+          logger.info "INVALID LOGIN_USER: #{login_user.inspect}  journal_entry: #{journal_entry.inspect}"
+          cookies.delete :journal_entry
+          cookies.delete :journal_id
+          # cookies.delete :journal_entry_id
+          # current_user = nil
+          return false
+        end
       end
       puts "login_user: #{login_user.inspect}  user: #{user.inspect} #{user.nil?}"
       write_user_to_session(user)
- 	@current_user_cached = user
-	current_user
+   	  @current_user_cached = user
+	    
       entry = login_user.journal_entry
       puts "entry: #{entry.inspect}"
       session[:journal_entry] = entry.id
       session[:journal_id] = entry.journal_id
-    end
+    end # end of token check access
 
-    if !current_user
-	logger.info "Startcontroller: User not logged in. Params #{params.inspect}"
-	return false
+    if session[:rbac_user_id].nil?
+	    logger.info "Startcontroller: User not logged in. Params #{params.inspect}"
+	    return false
     end
 	    
-    @journal_entry = JournalEntry.find_by_user_id(current_user.id)
-    redirect_to login_path and return if @journal_entry.nil? 
+    # logger.info "je userId: #{session[:rbac_user_id]}, se: #{session[:journal_entry]}"
+    @journal_entry = JournalEntry.find_by_user_id(session[:rbac_user_id])
+    session_entry = JournalEntry.find(session[:journal_entry])
+    # logger.info "session_entry: '#{session.inspect}' @journal_entry: #{@journal}"
+    if @journal_entry.journal_id != session_entry.journal_id
+      logger.info "Start checkaccess: different journals, hack? #{@journal_entry.inspect} vs #{session_entry.inspect} current_user: #{current_user.inspect}"
+      redirect_to 'errors/log' and return
+    end
+    redirect_to 'errors/log' and return if @journal_entry.nil? 
   end
 
   def write_user_to_session(user)

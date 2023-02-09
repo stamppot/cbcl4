@@ -9,12 +9,11 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   #        :only         => [ :remove, :remove_answer, :destroy_login ]
 
   def show
-    journal_entry = JournalEntry.includes(:journal).find(params[:id])
+    journal_entry = JournalEntry.includes(:journal).find(params[:id] || session[:journal_entry])
     session[:journal_entry] = journal_entry.id
     session[:journal_id] = journal_entry.journal_id
-    cookies[:journal_entry] = journal_entry.id
     cookies[:journal_id] = journal_entry.journal_id
-    # logger.info "Setting session[:journal_entry] to #{journal_entry.id} for #{journal_entry.journal.title}"
+   # logger.info "Setting session[:journal_entry] to #{journal_entry.id} for #{journal_entry.journal.title}"
     
     if params[:fast]
       redirect_to survey_show_fast_path(journal_entry.id) and return # caching disabled, so not .survey_id
@@ -115,15 +114,30 @@ class JournalEntriesController < ApplicationController # < ActiveRbac::Component
   protected
   
   def check_access
-    if current_user and ((current_user.access?(:all_users) || current_user.access?(:login_user))) and params[:id]
+    if current_user and ((current_user.access?(:all_users) || current_user.access?(:login_user))) and (params[:id] || session[:journal_entry])
       # j_id = JournalEntry.find(params[:id]).journal_id
-      access = current_user.has_journal_entry? params[:id]
+      session_entry_id = session[:journal_entry]
+      ids = [params[:id], session_entry_id].compact
+
+      access = ids.all? {|id| current_user.has_journal_entry?(id)}
+      if !access # && current_user.login_user?
+        logger.info "check_access: NO ACCESS journal_entry: #{current_user.inspect} HACKING params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
+        user = current_user && "NO ACCESS #{current_user.id} #{current_user.login}, #{current_user.email}, last_login: #{current_user.last_logged_in_at}, center_id: #{current_user.center_id} roles: #{current_user.role_ids_str}"
+	user_id = current_user && current_user.id || nil
+	params[:ids] = ids
+	ErrorLog.create(user_id: user_id, user: user, session_entry: session[:journal_entry], controller: params[:controller], action: params[:action], parameters: params.inspect, ip: request.remote_ip, browser: request.env['HTTP_USER_AGENT'])
+
+	flash[:error] = "Ikke tilladt adgang"
+        redirect_to 'errors/log' and return false
+      end
       # puts "journal_entries: #{params[:action]} access? #{access}"
       # access
       # # access = journal_ids.include? j_id
     end  # cookie and session are not set before after this check, so it's old/wrong data
+    
     logger.info "check_access: params: #{params.inspect} cookie: #{cookies[:journal_entry]} session: #{session[:journal_entry]}"
-    redirect_to login_path if !current_user
+    redirect_to 'errors/log' and return false if !current_user
+    return true
   end
 
   private
